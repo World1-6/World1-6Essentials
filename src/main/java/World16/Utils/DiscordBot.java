@@ -32,7 +32,7 @@ public class DiscordBot implements Runnable {
 
     public boolean setup() {
         try {
-            socket = new Socket("192.168.1.26", 2020);
+            socket = new Socket("76.182.18.245", 2020);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             inSc = new Scanner(socket.getInputStream());

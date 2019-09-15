@@ -10,6 +10,7 @@ public class CustomConfigManager {
     private CustomYmlManager eRamYml;
     private CustomYmlManager jailsYml;
     private CustomYmlManager elevatorsYml;
+    private CustomYmlManager tempYml;
 
     public CustomConfigManager(Main plugin) {
         this.plugin = plugin;
@@ -44,6 +45,13 @@ public class CustomConfigManager {
         this.elevatorsYml.reloadConfig();
         //...
 
+        //temp.yml
+        this.tempYml = new CustomYmlManager(this.plugin);
+        this.tempYml.setup("temp.yml");
+        this.tempYml.saveConfig();
+        this.tempYml.reloadConfig();
+        //...
+
     }
 
     public CustomYmlManager getShitYml() {
@@ -60,5 +68,9 @@ public class CustomConfigManager {
 
     public CustomYmlManager getElevatorsYml() {
         return elevatorsYml;
+    }
+
+    public CustomYmlManager getTempYml() {
+        return tempYml;
     }
 }
