@@ -50,6 +50,7 @@ commands:
       - homes
   sethome:
   elevator:
+  lastjoin:
 
   gmc:
     aliases:
@@ -211,4 +212,7 @@ permissions:
     default: true
   world16.elevator:
     description: Allows to do elevator
+    default: true
+  world16.lastjoin:
+    description: Allows to do lastjoin
     default: true
