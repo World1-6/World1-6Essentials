@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -286,6 +287,13 @@ public class API {
 
     public Block getBlockPlayerIsLookingAt(Player player) {
         return player.getTargetBlock((Set<Material>) null, 5);
+    }
+
+    public ConfigurationSection getPlayerTempYml(CustomConfigManager customConfigManager, Player player) {
+        ConfigurationSection configurationSection = customConfigManager.getTempYml().getConfig().getConfigurationSection("Name." + player.getDisplayName());
+        if (configurationSection == null)
+            configurationSection = customConfigManager.getTempYml().getConfig().createSection("Name." + player.getDisplayName());
+        return configurationSection;
     }
 
     public void PermissionErrorMessage(Player p) {
