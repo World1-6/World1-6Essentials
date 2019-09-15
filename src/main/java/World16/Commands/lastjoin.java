@@ -10,6 +10,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class lastjoin implements CommandExecutor {
 
     private Main plugin;
@@ -43,10 +45,17 @@ public class lastjoin implements CommandExecutor {
             p.sendMessage(Translate.chat("&cUsage: /lastjoin <Player>"));
             return true;
         } else if (args.length == 1) {
-            OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(this.api.getUUIDFromMojangAPI(args[0]));
+            UUID uuid = this.api.getUUIDFromMojangAPI(args[0]);
+
+            if (uuid == null) {
+                p.sendMessage(Translate.chat("Looks like that isn't a player."));
+                return true;
+            }
+
+            OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(uuid);
 
             if (!offlinePlayer.hasPlayedBefore()) {
-                p.sendMessage(Translate.chat("Looks like that player doesn't exist."));
+                p.sendMessage(Translate.chat("Looks like that player has never joined the server."));
                 return true;
             }
 
