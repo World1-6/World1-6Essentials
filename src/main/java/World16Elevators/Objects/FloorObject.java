@@ -4,6 +4,7 @@ package World16Elevators.Objects;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.util.BoundingBox;
 
 import java.util.HashMap;
 import java.util.Map;
