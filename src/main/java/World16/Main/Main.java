@@ -116,6 +116,7 @@ public class Main extends JavaPlugin {
         new xyzdxdydz(this);
         new workbench(this, this.customConfigManager);
         new elevator(this, this.customConfigManager);
+        new lastjoin(this, this.customConfigManager);
 
         //Homes
         new delhome(this.plugin);

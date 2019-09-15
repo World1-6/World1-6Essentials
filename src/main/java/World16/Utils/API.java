@@ -6,6 +6,7 @@ import World16.Managers.CustomYmlManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -16,12 +17,12 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The Bass API for World1-6Ess
@@ -170,6 +171,12 @@ public class API {
         return time.format(myFormatObj);
     }
 
+    public String convertTime(OfflinePlayer target) {
+        Format format = new SimpleDateFormat("MM-dd-YYYY-HH:mm:ss z");
+        Date date = new Date(TimeUnit.SECONDS.toMillis(target.getLastPlayed()));
+        return format.format(date);
+    }
+
     public String getServerVersion() {
         String version = plugin.getServer().getVersion();
         if (version.contains("1.14") || version.contains("1.14.1") || version.contains("1.14.2") || version.contains("1.14.3") || version.contains("1.14.4"))
@@ -293,6 +300,13 @@ public class API {
         ConfigurationSection configurationSection = customConfigManager.getTempYml().getConfig().getConfigurationSection("Name." + player.getDisplayName());
         if (configurationSection == null)
             configurationSection = customConfigManager.getTempYml().getConfig().createSection("Name." + player.getDisplayName());
+        return configurationSection;
+    }
+
+    public ConfigurationSection getPlayerTempYml(CustomConfigManager customConfigManager, String player) {
+        ConfigurationSection configurationSection = customConfigManager.getTempYml().getConfig().getConfigurationSection("Name." + player);
+        if (configurationSection == null)
+            configurationSection = customConfigManager.getTempYml().getConfig().createSection("Name." + player);
         return configurationSection;
     }
 
