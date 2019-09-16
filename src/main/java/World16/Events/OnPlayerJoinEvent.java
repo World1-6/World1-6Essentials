@@ -75,8 +75,9 @@ public class OnPlayerJoinEvent implements Listener {
         event.setJoinMessage("");
 
         GameMode gameMode = null;
+        String gamemode = this.api.getPlayerTempYml(this.customConfigManager, p).getString("Gamemode");
         try {
-            gameMode = GameMode.valueOf(this.api.getPlayerTempYml(this.customConfigManager, p).getString("Gamemode"));
+            if (gamemode != null) gameMode = GameMode.valueOf(gamemode);
         } catch (Exception ex) {
             p.sendMessage(Translate.chat("Error in OnPlayerJoinEvent send this text to Andrew121410#2035 on discord."));
         }
