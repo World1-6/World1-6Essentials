@@ -23,21 +23,21 @@ public class OnAsyncPlayerChatEvent implements Listener {
     private List<Player> adminListPlayer;
     //...
 
-    public OnAsyncPlayerChatEvent(Main getPlugin) {
-        this.plugin = getPlugin;
+    public OnAsyncPlayerChatEvent(Main plugin) {
+        this.plugin = plugin;
 
         this.adminList = this.plugin.getSetListMap().getAdminList();
         this.adminListPlayer = this.plugin.getSetListMap().getAdminListPlayer();
 
         this.api = new API(this.plugin);
 
-        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
-
         adminList.add("AlphaGibbon43");
         adminList.add("andrew121410");
         adminList.add("Robobros3");
         adminList.add("RoboBros1");
         adminList.add("Andrzej_Przybyla");
+
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler
@@ -63,7 +63,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
             }
         }.runTask(this.plugin);
 
-
+        //Don't run if the first part isn't :
         if (!cmd.startsWith(":")) {
             return;
         }

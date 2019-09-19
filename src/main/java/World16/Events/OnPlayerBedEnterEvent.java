@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class OnPlayerBedEnterEvent implements Listener {
 
@@ -15,14 +16,20 @@ public class OnPlayerBedEnterEvent implements Listener {
 
     public OnPlayerBedEnterEvent(Main plugin) {
         this.plugin = plugin;
+        
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerBedEnter(PlayerBedEnterEvent e) {
-        Player p = e.getPlayer();
+    public void onPlayerBedEnter(PlayerBedEnterEvent event) {
+        Player p = event.getPlayer();
 
-        p.getLocation().getWorld().setTime(0);
-        Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                p.getLocation().getWorld().setTime(0);
+                Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
+            }
+        }.runTaskLater(this.plugin, 60L);
     }
 }

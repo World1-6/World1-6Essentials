@@ -18,12 +18,12 @@ public class OnPlayerDeathEvent implements Listener {
     private Map<UUID, LocationObject> backm;
     //...
 
-    public OnPlayerDeathEvent(Main getPlugin) {
-        plugin = getPlugin;
+    public OnPlayerDeathEvent(Main plugin) {
+        this.plugin = plugin;
 
         this.backm = this.plugin.getSetListMap().getBackM();
 
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler
@@ -31,7 +31,9 @@ public class OnPlayerDeathEvent implements Listener {
         Player p = event.getEntity();
 
         if (backm.get(p.getUniqueId()) == null) {
-            backm.put(p.getUniqueId(), new LocationObject());
+            LocationObject locationObject = new LocationObject();
+            locationObject.setLocation("death", 1, p.getLocation());
+            backm.put(p.getUniqueId(), locationObject);
         } else {
             backm.get(p.getUniqueId()).setLocation("death", 1, p.getLocation());
         }
