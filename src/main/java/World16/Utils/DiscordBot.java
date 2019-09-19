@@ -24,28 +24,26 @@ public class DiscordBot implements Runnable {
 
     private Socket socket;
 
-    private boolean notOn;
+    private boolean isOn;
     private boolean tryToReconnect;
-    private boolean keepChecking;
 
     public DiscordBot(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
         tryToReconnect = false;
-        keepChecking = false;
     }
 
     public boolean setup() {
         try {
             socket = new Socket("76.182.18.245", 2020);
-            out = new PrintWriter(socket.getOutputStream(), false);
+            out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             inSc = new Scanner(socket.getInputStream());
         } catch (IOException e) {
             if (tryToReconnect) {
                 this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cDiscord bot server socket failed to reconnect."));
             }
-            this.notOn = true;
+            this.isOn = false;
             return false;
         }
 
@@ -54,9 +52,8 @@ public class DiscordBot implements Runnable {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " &aDiscord bot Socket has successfully reconnected."));
         }
 
-        this.notOn = false;
+        this.isOn = true;
         this.sendServerStartMessage();
-        keepChecking();
         return true;
     }
 
@@ -108,25 +105,10 @@ public class DiscordBot implements Runnable {
     }
 
     private void jsonPrintOut(JSONObject jsonObject) {
-        if (notOn) return;
+        if (!isOn) return;
         jsonObject.put("WHO", "World1-6");
         out.println(jsonObject.toJSONString());
         ourCheckError();
-    }
-
-    private void keepChecking() {
-        if (!keepChecking) {
-            keepChecking = true;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (!notOn && !tryToReconnect) {
-                        out.println("1");
-                        ourCheckError();
-                    }
-                }
-            }.runTaskTimer(plugin, 40L, 2400L);
-        }
     }
 
     private void close() {
