@@ -17,12 +17,12 @@ public class OnPlayerTeleportEvent implements Listener {
 
     private Map<UUID, LocationObject> backm;
 
-    public OnPlayerTeleportEvent(Main getPlugin) {
-        plugin = getPlugin;
+    public OnPlayerTeleportEvent(Main plugin) {
+        this.plugin = plugin;
 
         this.backm = this.plugin.getSetListMap().getBackM();
 
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler
@@ -34,12 +34,10 @@ public class OnPlayerTeleportEvent implements Listener {
 
         if (backm.get(p.getUniqueId()) == null) {
             backm.put(p.getUniqueId(), new LocationObject());
-        } else {
+        }
             // Only save location if teleporting more than 5 blocks.
             if (!to.getWorld().equals(from.getWorld()) || to.distanceSquared(from) > 25) {
                 backm.get(p.getUniqueId()).setLocation("tp", 2, from);
             }
-        }
-
     }
 }
