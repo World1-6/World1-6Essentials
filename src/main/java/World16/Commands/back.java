@@ -25,10 +25,13 @@ public class back implements CommandExecutor {
     private Map<UUID, LocationObject> backm;
     //...
 
-    public back(Main getPlugin) {
-        this.plugin = getPlugin;
+    public back(Main plugin) {
+        this.plugin = plugin;
+
         this.api = new API(this.plugin);
+        
         this.backm = this.plugin.getSetListMap().getBackM();
+
         this.plugin.getCommand("back").setExecutor(this);
         this.plugin.getCommand("back").setTabCompleter(new BackTab(this.plugin));
     }
