@@ -30,12 +30,12 @@ public class OnPlayerDeathEvent implements Listener {
     public void OnDeath(PlayerDeathEvent event) {
         Player p = event.getEntity();
 
-        if (backm.get(p.getUniqueId()) == null) {
+        if (backm.get(p.getUniqueId()) != null) {
+            backm.get(p.getUniqueId()).setLocation("death", 1, p.getLocation());
+        } else {
             LocationObject locationObject = new LocationObject();
             locationObject.setLocation("death", 1, p.getLocation());
             backm.put(p.getUniqueId(), locationObject);
-        } else {
-            backm.get(p.getUniqueId()).setLocation("death", 1, p.getLocation());
         }
     }
 }
