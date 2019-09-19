@@ -29,7 +29,7 @@ public class back implements CommandExecutor {
         this.plugin = plugin;
 
         this.api = new API(this.plugin);
-        
+
         this.backm = this.plugin.getSetListMap().getBackM();
 
         this.plugin.getCommand("back").setExecutor(this);

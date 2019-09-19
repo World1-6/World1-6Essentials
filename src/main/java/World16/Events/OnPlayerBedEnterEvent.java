@@ -16,7 +16,7 @@ public class OnPlayerBedEnterEvent implements Listener {
 
     public OnPlayerBedEnterEvent(Main plugin) {
         this.plugin = plugin;
-        
+
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
@@ -24,7 +24,7 @@ public class OnPlayerBedEnterEvent implements Listener {
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         Player p = event.getPlayer();
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             @Override
             public void run() {
                 p.getLocation().getWorld().setTime(0);
