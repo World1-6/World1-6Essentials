@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Map;
 
@@ -17,19 +18,19 @@ public class OnPlayerInteractEvent implements Listener {
 
     private Main plugin;
 
-    public OnPlayerInteractEvent(Main getPlugin) {
-        plugin = getPlugin;
+    public OnPlayerInteractEvent(Main plugin) {
+        this.plugin = plugin;
 
         this.latestClickedBlocked = this.plugin.getSetListMap().getLatestClickedBlocked();
 
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
-    public void playeract(org.bukkit.event.player.PlayerInteractEvent event) {
-        org.bukkit.event.player.PlayerInteractEvent e = event;
+    public void playeract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
 
+        //Get's the latest clicked block and stores it in HashMap.
         Action action = event.getAction();
         if (action == Action.RIGHT_CLICK_BLOCK) {
             latestClickedBlocked.remove(p.getDisplayName()); //Removes old block
