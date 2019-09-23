@@ -31,6 +31,7 @@ public class ElevatorMain {
             return;
         }
 
+        //Only runs when elevator.yml is first being created.
         ConfigurationSection cs = this.eleYml.getConfig().getConfigurationSection("Elevators");
         if (cs == null) {
             this.eleYml.getConfig().createSection("Elevators");
@@ -39,11 +40,12 @@ public class ElevatorMain {
             return;
         }
 
+        //For each elevator do.
         for (String elevator : cs.getKeys(false)) {
             ConfigurationSection elevatorConfig = cs.getConfigurationSection(elevator);
             ElevatorObject elevatorObject = (ElevatorObject) elevatorConfig.get("ElevatorObject");
 
-            //Floors
+            //For each elevator floor do.
             ConfigurationSection elevatorFloors = elevatorConfig.getConfigurationSection("Floors");
             if (elevatorFloors != null) {
                 for (String floorNumber : elevatorFloors.getKeys(false)) {
@@ -63,6 +65,7 @@ public class ElevatorMain {
             return;
         }
 
+        //For each elevator do.
         for (Map.Entry<String, ElevatorObject> entry : elevatorObjectMap.entrySet()) {
             String k = entry.getKey();
             ElevatorObject v = entry.getValue();
@@ -77,12 +80,14 @@ public class ElevatorMain {
 
             elevator.set("ElevatorObject", v);
 
+            //Floors
             ConfigurationSection elevatorFloors = elevator.getConfigurationSection("Floors");
             if (elevatorFloors == null) {
                 elevatorFloors = elevator.createSection("Floors");
                 this.eleYml.saveConfigSilent();
             }
 
+            //For each floor do.
             for (Map.Entry<Integer, FloorObject> e : v.getFloorsMap().entrySet()) {
                 Integer k2 = e.getKey();
                 FloorObject v2 = e.getValue();
