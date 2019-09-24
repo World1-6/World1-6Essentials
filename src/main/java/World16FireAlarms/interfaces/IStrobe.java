@@ -1,4 +1,4 @@
-package World16FireAlarms;
+package World16FireAlarms.interfaces;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;

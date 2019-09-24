@@ -1,4 +1,4 @@
-package World16FireAlarms;
+package World16FireAlarms.Objects;
 
 public enum TroubleReason {
 

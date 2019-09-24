@@ -1,6 +1,11 @@
-package World16FireAlarms;
+package World16FireAlarms.Objects.Simple;
 
 import World16.Main.Main;
+import World16FireAlarms.Objects.FireAlarmStatus;
+import World16FireAlarms.Objects.TroubleReason;
+import World16FireAlarms.Objects.Zone;
+import World16FireAlarms.interfaces.IFireAlarm;
+import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.scheduler.BukkitRunnable;

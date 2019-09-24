@@ -3,10 +3,14 @@ package World16.Commands;
 import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
 import World16.Utils.API;
+import World16FireAlarms.Screen.FireAlarmScreen;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Map;
 
 public class firealarm implements CommandExecutor {
 
@@ -15,11 +19,17 @@ public class firealarm implements CommandExecutor {
 
     private CustomConfigManager customConfigManager;
 
+    //Maps
+    private Map<Location, FireAlarmScreen> fireAlarmScreenMap;
+    //...
+
     public firealarm(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
 
         this.customConfigManager = customConfigManager;
         this.api = new API(this.plugin);
+
+        this.fireAlarmScreenMap = this.plugin.getSetListMap().getFireAlarmScreenMap();
 
         this.plugin.getCommand("firealarm").setExecutor(this);
     }
@@ -38,7 +48,8 @@ public class firealarm implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            //SOMETHING HERE
+            return true;
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("sign")) {
             return true;
         } else {
             //SOMETHING HERE

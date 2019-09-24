@@ -1,4 +1,4 @@
-package World16FireAlarms;
+package World16FireAlarms.Objects;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;

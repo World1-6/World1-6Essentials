@@ -3,8 +3,8 @@ package World16.Utils;
 import World16.Objects.KeyObject;
 import World16.Objects.LocationObject;
 import World16Elevators.Objects.ElevatorObject;
-import World16FireAlarms.FireAlarmScreen;
-import World16FireAlarms.IFireAlarm;
+import World16FireAlarms.Screen.FireAlarmScreen;
+import World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

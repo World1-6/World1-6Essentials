@@ -4,6 +4,9 @@ import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
 import World16.Managers.CustomYmlManager;
 import World16.Utils.Translate;
+import World16FireAlarms.Objects.Zone;
+import World16FireAlarms.interfaces.IFireAlarm;
+import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Map;

@@ -1,4 +1,4 @@
-package World16FireAlarms;
+package World16FireAlarms.Screen;
 
 import World16.Main.Main;
 import org.bukkit.block.Sign;

@@ -1,4 +1,4 @@
-package World16FireAlarms;
+package World16FireAlarms.Screen;
 
 import World16.Main.Main;
 import org.bukkit.Location;
@@ -51,5 +51,46 @@ public class FireAlarmScreen {
             return (Sign) location.getBlock().getState();
         }
         return null;
+    }
+
+    //GETTERS AND SETTERS
+    public Main getPlugin() {
+        return plugin;
+    }
+
+    public void setPlugin(Main plugin) {
+        this.plugin = plugin;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public FireScreenTech getFireScreenTech() {
+        return fireScreenTech;
+    }
+
+    public void setFireScreenTech(FireScreenTech fireScreenTech) {
+        this.fireScreenTech = fireScreenTech;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
     }
 }

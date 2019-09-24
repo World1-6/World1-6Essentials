@@ -1,5 +1,6 @@
-package World16FireAlarms;
+package World16FireAlarms.Objects.Simple;
 
+import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

@@ -1,7 +1,7 @@
 package World16.Events;
 
 import World16.Main.Main;
-import World16FireAlarms.FireAlarmScreen;
+import World16FireAlarms.Screen.FireAlarmScreen;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
