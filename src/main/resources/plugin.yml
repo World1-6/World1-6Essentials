@@ -50,6 +50,7 @@ commands:
   sethome:
   elevator:
   lastjoin:
+  firealarm:
 
   gmc:
     aliases:
@@ -214,4 +215,7 @@ permissions:
     default: true
   world16.lastjoin:
     description: Allows to do lastjoin
+    default: true
+  world16.firealarm:
+    description: Allows to do firealarm
     default: true

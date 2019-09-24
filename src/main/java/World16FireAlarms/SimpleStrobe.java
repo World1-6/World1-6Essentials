@@ -1,6 +1,7 @@
 package World16FireAlarms;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -26,15 +27,14 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
     }
 
     public void on() {
-
+        this.location.getBlock().setType(Material.REDSTONE_LAMP_ON);
     }
 
     public void off() {
-
+        this.location.getBlock().setType(Material.REDSTONE_LAMP_OFF);
     }
 
     public void sound() {
-
     }
 
     public Location getLocation() {

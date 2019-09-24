@@ -1,7 +1,9 @@
 package World16.Events;
 
 import World16.Main.Main;
+import World16FireAlarms.FireAlarmScreen;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +16,7 @@ public class OnPlayerInteractEvent implements Listener {
 
     //Maps
     private Map<String, Location> latestClickedBlocked;
+    private Map<Location, FireAlarmScreen> fireAlarmScreenMap;
     //...
 
     private Main plugin;
@@ -22,19 +25,27 @@ public class OnPlayerInteractEvent implements Listener {
         this.plugin = plugin;
 
         this.latestClickedBlocked = this.plugin.getSetListMap().getLatestClickedBlocked();
+        this.fireAlarmScreenMap = this.plugin.getSetListMap().getFireAlarmScreenMap();
 
-        this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler
-    public void playeract(PlayerInteractEvent event) {
+    public void playerinteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
+        Block block = event.getClickedBlock();
 
         //Get's the latest clicked block and stores it in HashMap.
         Action action = event.getAction();
-        if (action == Action.RIGHT_CLICK_BLOCK) {
+        if (action == Action.RIGHT_CLICK_BLOCK && !p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals("DOWN")) {
             latestClickedBlocked.remove(p.getDisplayName()); //Removes old block
             latestClickedBlocked.put(p.getDisplayName(), event.getClickedBlock().getLocation());
+
+            FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
+            if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).onClick();
+        } else if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals("DOWN")) {
+            FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
+            if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).changeLines();
         }
     }
 }

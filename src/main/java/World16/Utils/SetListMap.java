@@ -3,6 +3,7 @@ package World16.Utils;
 import World16.Objects.KeyObject;
 import World16.Objects.LocationObject;
 import World16Elevators.Objects.ElevatorObject;
+import World16FireAlarms.FireAlarmScreen;
 import World16FireAlarms.IFireAlarm;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -27,7 +28,8 @@ public class SetListMap {
     private Map<String, Location> jails; //1
     private Map<String, List<String>> tabCompleteMap; //1
     private Map<String, ElevatorObject> elevatorObjectMap; //1
-    private Map<String, IFireAlarm> fireAlarmMap; // 1
+    private Map<String, IFireAlarm> fireAlarmMap; //1
+    private Map<Location, FireAlarmScreen> fireAlarmScreenMap; //1
 
     private List<String> flyList; //0
     private List<String> godmList; //0
@@ -51,6 +53,7 @@ public class SetListMap {
         this.tabCompleteMap = new HashMap<>();
         this.elevatorObjectMap = new HashMap<>();
         this.fireAlarmMap = new HashMap<>();
+        this.fireAlarmScreenMap = new HashMap<>();
 
         //Lists
         this.flyList = new ArrayList<>();
@@ -103,6 +106,7 @@ public class SetListMap {
         homesMap.clear();
         elevatorObjectMap.clear();
         fireAlarmMap.clear();
+        fireAlarmScreenMap.clear();
     }
 
     public void clearAllLists(Player p) {
@@ -190,5 +194,9 @@ public class SetListMap {
 
     public Map<String, IFireAlarm> getFireAlarmMap() {
         return fireAlarmMap;
+    }
+
+    public Map<Location, FireAlarmScreen> getFireAlarmScreenMap() {
+        return fireAlarmScreenMap;
     }
 }
