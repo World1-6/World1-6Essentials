@@ -1,6 +1,6 @@
 package World16FireAlarms;
 
-public enum TroubleReason{
+public enum TroubleReason {
 
     FIRE,
     PULL_STATION,
