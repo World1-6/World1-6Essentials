@@ -1,8 +1,9 @@
 package World16FireAlarms;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-public interface IStrobe {
+public interface IStrobe extends ConfigurationSerializable {
 
     void on();
 
@@ -11,8 +12,6 @@ public interface IStrobe {
     void sound();
 
     String getName();
-
-    Zone getZone();
 
     Location getLocation();
 }

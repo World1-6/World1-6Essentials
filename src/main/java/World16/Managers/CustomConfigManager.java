@@ -11,6 +11,7 @@ public class CustomConfigManager {
     private CustomYmlManager jailsYml;
     private CustomYmlManager elevatorsYml;
     private CustomYmlManager tempYml;
+    private CustomYmlManager firealarmsYml;
 
     public CustomConfigManager(Main plugin) {
         this.plugin = plugin;
@@ -52,6 +53,13 @@ public class CustomConfigManager {
         this.tempYml.reloadConfig();
         //...
 
+        //firealarms.yml
+        this.firealarmsYml = new CustomYmlManager(this.plugin);
+        this.firealarmsYml.setup("firealarms.yml");
+        this.firealarmsYml.saveConfig();
+        this.firealarmsYml.reloadConfig();
+        //...
+
     }
 
     public CustomYmlManager getShitYml() {
@@ -72,5 +80,9 @@ public class CustomConfigManager {
 
     public CustomYmlManager getTempYml() {
         return tempYml;
+    }
+
+    public CustomYmlManager getFireAlarmsYml() {
+        return firealarmsYml;
     }
 }

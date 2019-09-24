@@ -2,21 +2,27 @@ package World16FireAlarms;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 
-public class SimpleStrobe implements IStrobe {
+import java.util.HashMap;
+import java.util.Map;
+
+@SerializableAs("IStrobe")
+public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
 
     private String name;
     private Location location;
-    private Zone zone;
+    private String zone;
 
-    public SimpleStrobe(Location block, String name, Zone zone) {
+    public SimpleStrobe(Location block, String name, String zoneName) {
         this.location = block;
-        this.zone = zone;
+        this.zone = zoneName;
         this.name = name;
     }
 
-    public SimpleStrobe(Block block, String name, Zone zone) {
-        this(block.getLocation(), name, zone);
+    public SimpleStrobe(Block block, String name, String zoneName) {
+        this(block.getLocation(), name, zoneName);
     }
 
     public void on() {
@@ -39,7 +45,16 @@ public class SimpleStrobe implements IStrobe {
         return this.name;
     }
 
-    public Zone getZone() {
-        return this.zone;
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("Location", this.location);
+        map.put("Name", this.name);
+        map.put("Zone", this.zone);
+        return map;
+    }
+
+    public static SimpleStrobe deserialize(Map<String, Object> map) {
+        return new SimpleStrobe((Location) map.get("Location"), (String) map.get("Name"), (String) map.get("Zone"));
     }
 }

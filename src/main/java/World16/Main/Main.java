@@ -19,6 +19,7 @@ import World16Elevators.Objects.BoundingBox;
 import World16Elevators.Objects.ElevatorObject;
 import World16Elevators.Objects.FloorObject;
 import World16Elevators.Objects.SignObject;
+import World16FireAlarms.FireAlarmManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -45,6 +46,7 @@ public class Main extends JavaPlugin {
     private CustomConfigManager customConfigManager;
     private JailManager jailManager;
     private ElevatorMain elevatorMain;
+    private FireAlarmManager fireAlarmManager;
 
     private API api;
     private OtherPlugins otherPlugins;
@@ -57,8 +59,6 @@ public class Main extends JavaPlugin {
 
         regCustomManagers();
         regFileConfigGEN();
-        regDiscordBot();
-        regElevators();
         regEvents();
         regCommands();
         regBStats();
@@ -157,6 +157,12 @@ public class Main extends JavaPlugin {
 
         this.jailManager = new JailManager(this.customConfigManager, this);
         this.jailManager.getAllJailsFromConfig();
+
+        regDiscordBot();
+        regElevators();
+
+        this.fireAlarmManager = new FireAlarmManager(this, this.customConfigManager);
+        this.fireAlarmManager.loadFireAlarms();
     }
 
     private void regBStats() {
@@ -226,5 +232,9 @@ public class Main extends JavaPlugin {
 
     public DiscordBot getDiscordBot() {
         return discordBot;
+    }
+
+    public FireAlarmManager getFireAlarmManager() {
+        return fireAlarmManager;
     }
 }

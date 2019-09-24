@@ -13,16 +13,14 @@ import java.util.Map;
 public class ElevatorMain {
 
     private Main plugin;
-    private CustomConfigManager customConfigManager;
     private CustomYmlManager eleYml;
 
     private Map<String, ElevatorObject> elevatorObjectMap;
 
     public ElevatorMain(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
-        this.customConfigManager = customConfigManager;
         this.elevatorObjectMap = this.plugin.getSetListMap().getElevatorObjectMap();
-        this.eleYml = this.customConfigManager.getElevatorsYml();
+        this.eleYml = customConfigManager.getElevatorsYml();
     }
 
     public void loadAllElevators() {
