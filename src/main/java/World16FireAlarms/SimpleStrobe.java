@@ -5,14 +5,18 @@ import org.bukkit.block.Block;
 
 public class SimpleStrobe implements IStrobe{
 
+    private String name;
     private Location location;
+    private Zone zone;
 
-    public SimpleStrobe(Location block){
+    public SimpleStrobe(Location block,String name, Zone zone){
         this.location = block;
+        this.zone = zone;
+        this.name = name;
     }
 
-    public SimpleStrobe(Block block){
-        this(block.getLocation());
+    public SimpleStrobe(Block block,String name, Zone zone){
+        this(block.getLocation(), name, zone);
     }
 
     public void on(){
@@ -28,6 +32,14 @@ public class SimpleStrobe implements IStrobe{
     }
 
     public Location getLocation(){
-        return null;
+        return this.location;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public Zone getZone(){
+        return this.zone;
     }
 }

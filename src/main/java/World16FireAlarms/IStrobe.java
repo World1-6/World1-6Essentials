@@ -8,5 +8,7 @@ public interface IStrobe {
     void off();
     void sound();
 
+    String getName();
+    Zone getZone();
     Location getLocation();
 }
