@@ -1,7 +1,5 @@
 package World16FireAlarms.Screen;
 
-import World16.Commands.elevator;
-import World16.Commands.sign;
 import World16.Main.Main;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,8 +29,9 @@ public class FireAlarmScreen {
     }
 
     public void onClick() {
-        if (getSign() != null) {
-            this.fireScreenTech.onLine(getSign(), line);
+        Sign sign = getSign();
+        if (sign != null) {
+            this.fireScreenTech.onLine(sign, line);
         }
     }
 
@@ -43,43 +42,47 @@ public class FireAlarmScreen {
             line = 0;
         }
 
-        if(this.isTickerRunning == true){
-        this.hasLineChanged = true;
-        }else{
+        if (this.isTickerRunning) {
+            this.hasLineChanged = true;
+        } else {
             tick();
         }
     }
 
-    private void tick(){
-        if(!isTickerRunning){
-        Sign sign = getSign();
-        if(sign != null){
-            String text = sign.getLine(this.line);
-            String first = "> ";
-            String last = " <";
-            int oldLine = this.line;
-            new BukkitRunnable(){
-                int temp = 0;
-                @Override
-                public void run() {
-                    if(temp == 0 && !hasLineChanged){
-                    sign.setLine(oldLine, first + text + last);
-                    temp++;
-                    }else if(temp > 0 && !hasLineChanged){
-                        sign.setLine(oldLine, text);
-                        sign.update();
-                        temp = 0;
-                    }else if (hasLineChanged){
-                        sign.setLine(oldLine, text);
-                        sign.update();
-                        temp = 0;
-                        hasLineChanged = false;
-                        isTickerRunning = false;
-                        this.cancel();
+    private void tick() {
+        if (!this.isTickerRunning) {
+            this.isTickerRunning = true;
+            Sign sign = getSign();
+            if (sign != null) {
+                String first = "> ";
+                String last = " <";
+                new BukkitRunnable() {
+                    int temp = 0;
+                    String text = sign.getLine(line);
+                    SignCache signCache = new SignCache(sign);
+                    int oldLine = line;
+
+                    @Override
+                    public void run() {
+                        oldLine = line;
+                        if (temp == 0 && !hasLineChanged) {
+                            signCache.fromSign(sign);
+                            text = sign.getLine(line);
+                            sign.setLine(line, first + text + last);
+                            sign.update();
+                            temp++;
+                        } else if (temp > 0 && !hasLineChanged) {
+                            sign.setLine(line, text);
+                            sign.update();
+                            temp = 0;
+                        } else if (hasLineChanged) {
+                            sign.setLine(oldLine, text);
+                            temp = 0;
+                            hasLineChanged = false;
+                        }
                     }
-                }
-            }.runTaskTimer(this.plugin, 20L, 20L);
-        }
+                }.runTaskTimer(this.plugin, 15L, 15L);
+            }
         }
     }
 

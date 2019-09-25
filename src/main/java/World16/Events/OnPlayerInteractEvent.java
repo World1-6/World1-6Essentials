@@ -3,12 +3,14 @@ package World16.Events;
 import World16.Main.Main;
 import World16FireAlarms.Screen.FireAlarmScreen;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
@@ -37,15 +39,24 @@ public class OnPlayerInteractEvent implements Listener {
 
         //Get's the latest clicked block and stores it in HashMap.
         Action action = event.getAction();
-        if (action == Action.RIGHT_CLICK_BLOCK && !p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals("DOWN")) {
+
+        if (action == Action.RIGHT_CLICK_BLOCK) {
             latestClickedBlocked.remove(p.getDisplayName()); //Removes old block
             latestClickedBlocked.put(p.getDisplayName(), event.getClickedBlock().getLocation());
+        }
 
-            FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
-            if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).onClick();
-        } else if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals("DOWN")) {
-            FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
-            if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).changeLines();
+        ItemStack itemStack = p.getInventory().getItemInMainHand();
+        if (itemStack != null) {
+            if (itemStack.getType() != Material.AIR) {
+                if (action == Action.RIGHT_CLICK_BLOCK && itemStack.getItemMeta().hasDisplayName()) {
+                    FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
+                    if (fireAlarmScreen != null && itemStack.getItemMeta().getDisplayName().equalsIgnoreCase("DOWN"))
+                        this.fireAlarmScreenMap.get(block.getLocation()).changeLines();
+                } else {
+                    FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
+                    if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).onClick();
+                }
+            }
         }
     }
 }
