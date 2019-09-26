@@ -11,9 +11,7 @@ enum Menu {
     OFF,
     MAIN_MENU,
     //1
-    LIST_MENU,
-    STROBES_MENU;
-    //...
+    SETTINGS_MENU;
 }
 
 public class FireAlarmSignScreen implements IScreenTech {
@@ -32,11 +30,20 @@ public class FireAlarmSignScreen implements IScreenTech {
         //Loads for the first time.
         if (this.currentMenu == Menu.OFF) {
             loadFirstTime(fireAlarmScreen, sign);
+            //Settings
         } else if (this.currentMenu == Menu.MAIN_MENU && line == 1) {
-
-        }
+            settings_menu(fireAlarmScreen, sign);
+        } else if (this.currentMenu == Menu.SETTINGS_MENU && line == 0)
+            backReverse(currentMenu, fireAlarmScreen, sign, line);
 
         return true;
+    }
+
+    private void backReverse(Menu menu, FireAlarmScreen fireAlarmScreen, Sign sign, int line) {
+        switch (menu) {
+            case SETTINGS_MENU:
+                main_menu(fireAlarmScreen, sign);
+        }
     }
 
     private void resetSign(FireAlarmScreen fireAlarmScreen, Sign sign, boolean backToMainMenu) {
@@ -68,9 +75,22 @@ public class FireAlarmSignScreen implements IScreenTech {
     private void main_menu(FireAlarmScreen fireAlarmScreen, Sign sign) {
         this.currentMenu = Menu.MAIN_MENU;
         sign.setLine(0, "Fire Alarm V.01");
-        sign.setLine(1, "-Lists");
-        sign.setLine(2, "-Actvation Points");
-        sign.setLine(3, "-");
+        sign.setLine(1, "-Settings");
+        sign.setLine(2, "");
+        sign.setLine(3, "");
+        fireAlarmScreen.setMin(1);
+        fireAlarmScreen.setLine(1);
+        fireAlarmScreen.updateSign(sign);
+    }
+
+    private void settings_menu(FireAlarmScreen fireAlarmScreen, Sign sign) {
+        this.currentMenu = Menu.SETTINGS_MENU;
+        sign.setLine(0, "Settings/MENU");
+        sign.setLine(1, "-Test Fire Alarm");
+        sign.setLine(2, "");
+        sign.setLine(3, "");
+        fireAlarmScreen.setMin(0);
+        fireAlarmScreen.setLine(0);
         fireAlarmScreen.updateSign(sign);
     }
 

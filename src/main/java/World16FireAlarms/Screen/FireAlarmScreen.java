@@ -23,7 +23,6 @@ public class FireAlarmScreen {
     private int max = 3;
 
     private SignCache signCache1;
-    private boolean hasLineChanged = false;
     private boolean hasTextChanged = false;
 
     private boolean isTickerRunning = false;
@@ -52,11 +51,8 @@ public class FireAlarmScreen {
             line = min;
         }
 
-        if (this.isTickerRunning) {
-            this.hasLineChanged = true;
-        } else {
+        if (!this.isTickerRunning)
             tick();
-        }
     }
 
     private void tick() {
@@ -94,7 +90,6 @@ public class FireAlarmScreen {
                         } else if (hasTextChanged) {
                             signCache1.update(sign);
                             oldLine = line;
-                            line = 0;
                             temp = 0;
                             hasTextChanged = false;
                         }
@@ -187,14 +182,6 @@ public class FireAlarmScreen {
 
     public void setSignCache1(SignCache signCache1) {
         this.signCache1 = signCache1;
-    }
-
-    public boolean isHasLineChanged() {
-        return hasLineChanged;
-    }
-
-    public void setHasLineChanged(boolean hasLineChanged) {
-        this.hasLineChanged = hasLineChanged;
     }
 
     public boolean isHasTextChanged() {
