@@ -1,9 +1,11 @@
 package World16FireAlarms.Screen;
 
 import World16.Main.Main;
+import World16FireAlarms.interfaces.IScreenTech;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class FireAlarmScreen {
@@ -13,15 +15,19 @@ public class FireAlarmScreen {
     private String name;
     private Location location;
 
-    private FireScreenTech fireScreenTech;
+    private IScreenTech iScreenTech;
 
-    private int line = 0;
+    private int line = -0;
+
+    private int min = 0;
+    private int max = 3;
 
     private SignCache signCache1;
     private boolean hasLineChanged = false;
     private boolean hasTextChanged = false;
 
     private boolean isTickerRunning = false;
+    private boolean stop = false;
 
 
     public FireAlarmScreen(Main plugin, String name, Location location) {
@@ -29,21 +35,21 @@ public class FireAlarmScreen {
         this.name = name;
         this.location = location;
 
-        this.fireScreenTech = new FireScreenTech(this.plugin);
+        this.iScreenTech = new FireAlarmSignScreen(this.plugin);
     }
 
-    public void onClick() {
+    public void onClick(Player player) {
         Sign sign = getSign();
         if (sign != null) {
-            this.fireScreenTech.onLine(this, sign, line);
+            this.iScreenTech.onLine(this, player, sign, line);
         }
     }
 
     public void changeLines() {
-        if (line < 3) {
+        if (this.min <= this.line && this.line < this.max && this.isTickerRunning) {
             line++;
         } else {
-            line = 0;
+            line = min;
         }
 
         if (this.isTickerRunning) {
@@ -68,16 +74,22 @@ public class FireAlarmScreen {
 
                     @Override
                     public void run() {
+                        if (stop) {
+                            iScreenTech = null;
+                            this.cancel();
+                            plugin.getSetListMap().getFireAlarmScreenMap().remove(location);
+                        }
+
                         if (temp == 0 && !hasTextChanged) {
                             oldLine = line;
                             signCache.fromSign(sign);
                             text = sign.getLine(line);
                             sign.setLine(line, first + text + last);
-                            sign.update();
+                            if (!sign.update()) stop = true;
                             temp++;
                         } else if (temp > 0 && !hasTextChanged) {
                             sign.setLine(oldLine, text);
-                            sign.update();
+                            if (!sign.update()) stop = true;
                             temp = 0;
                         } else if (hasTextChanged) {
                             signCache1.update(sign);
@@ -137,12 +149,12 @@ public class FireAlarmScreen {
         this.location = location;
     }
 
-    public FireScreenTech getFireScreenTech() {
-        return fireScreenTech;
+    public IScreenTech getiScreenTech() {
+        return iScreenTech;
     }
 
-    public void setFireScreenTech(FireScreenTech fireScreenTech) {
-        this.fireScreenTech = fireScreenTech;
+    public void setiScreenTech(IScreenTech iScreenTech) {
+        this.iScreenTech = iScreenTech;
     }
 
     public int getLine() {
@@ -151,5 +163,61 @@ public class FireAlarmScreen {
 
     public void setLine(int line) {
         this.line = line;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+    public SignCache getSignCache1() {
+        return signCache1;
+    }
+
+    public void setSignCache1(SignCache signCache1) {
+        this.signCache1 = signCache1;
+    }
+
+    public boolean isHasLineChanged() {
+        return hasLineChanged;
+    }
+
+    public void setHasLineChanged(boolean hasLineChanged) {
+        this.hasLineChanged = hasLineChanged;
+    }
+
+    public boolean isHasTextChanged() {
+        return hasTextChanged;
+    }
+
+    public void setHasTextChanged(boolean hasTextChanged) {
+        this.hasTextChanged = hasTextChanged;
+    }
+
+    public boolean isTickerRunning() {
+        return isTickerRunning;
+    }
+
+    public void setTickerRunning(boolean tickerRunning) {
+        isTickerRunning = tickerRunning;
+    }
+
+    public boolean isStop() {
+        return stop;
+    }
+
+    public void setStop(boolean stop) {
+        this.stop = stop;
     }
 }

@@ -54,7 +54,7 @@ public class OnPlayerInteractEvent implements Listener {
                         this.fireAlarmScreenMap.get(block.getLocation()).changeLines();
                 } else {
                     FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
-                    if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).onClick();
+                    if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).onClick(p);
                 }
             }
         }
