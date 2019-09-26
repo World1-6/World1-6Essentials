@@ -46,7 +46,7 @@ public class OnPlayerInteractEvent implements Listener {
         }
 
         ItemStack itemStack = p.getInventory().getItemInMainHand();
-        if (itemStack != null && block != null) {
+        if (this.plugin.getApi().isFireAlarmsEnabled() && itemStack != null && block != null) {
             if (itemStack.getType() != Material.AIR) {
                 if (action == Action.RIGHT_CLICK_BLOCK && itemStack.getItemMeta().hasDisplayName()) {
                     FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());

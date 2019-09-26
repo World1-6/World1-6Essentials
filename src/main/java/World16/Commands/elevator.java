@@ -133,6 +133,11 @@ public class elevator implements CommandExecutor {
             return true;
         }
 
+        if (!this.plugin.getApi().isElevatorsEnabled() || !this.plugin.getOtherPlugins().hasWorldEdit()) {
+            p.sendMessage(Translate.chat("Looks like elevators aren't enabled!"));
+            return true;
+        }
+
         if (args.length == 0) {
             p.sendMessage(Translate.chat("Elevator Help"));
             p.sendMessage(Translate.chat("/elevator create <Shows help for creation of a elevator.>"));

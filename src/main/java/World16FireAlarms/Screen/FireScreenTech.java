@@ -70,4 +70,11 @@ public class FireScreenTech implements IScreenTech {
         fireAlarmScreen.updateSign(sign);
     }
 
+    public Menu getCurrentMenu() {
+        return currentMenu;
+    }
+
+    public void setCurrentMenu(Menu currentMenu) {
+        this.currentMenu = currentMenu;
+    }
 }

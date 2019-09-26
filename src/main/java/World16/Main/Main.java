@@ -172,20 +172,24 @@ public class Main extends JavaPlugin {
 
     private void regDiscordBot() {
         this.discordBot = new DiscordBot(this, this.customConfigManager);
-        boolean discordbot = this.discordBot.setup();
-        if (discordbot) {
-            this.plugin.getServer().getScheduler().runTaskAsynchronously(this, this.discordBot);
-        } else {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cDiscord Bot has not been enabled because of exception"));
+        if (this.api.isDiscordBotEnabled()) {
+            boolean discordbot = this.discordBot.setup();
+            if (discordbot) {
+                this.plugin.getServer().getScheduler().runTaskAsynchronously(this, this.discordBot);
+            } else {
+                this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cDiscord Bot has not been enabled because of exception"));
+            }
         }
     }
 
     private void regElevators() {
         this.elevatorMain = new ElevatorMain(this, this.customConfigManager);
-        if (this.otherPlugins.hasWorldEdit()) {
-            this.elevatorMain.loadAllElevators();
-        } else {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cElevator's won't be working since there's no WorldEdit."));
+        if (this.api.isElevatorsEnabled()) {
+            if (this.otherPlugins.hasWorldEdit()) {
+                this.elevatorMain.loadAllElevators();
+            } else {
+                this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cElevator's won't be working since there's no WorldEdit."));
+            }
         }
     }
 

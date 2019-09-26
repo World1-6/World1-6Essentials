@@ -49,6 +49,11 @@ public class firealarm implements CommandExecutor {
             return true;
         }
 
+        if (!this.plugin.getApi().isFireAlarmsEnabled()) {
+            p.sendMessage(Translate.chat("Looks like fire alarms aren't enabled!"));
+            return true;
+        }
+
         if (args.length == 0) {
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("sign")) {
