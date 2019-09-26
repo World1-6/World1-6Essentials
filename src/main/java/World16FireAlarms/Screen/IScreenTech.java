@@ -4,5 +4,5 @@ import org.bukkit.block.Sign;
 
 public interface IScreenTech {
 
-    boolean onLine(Sign sign, int line);
+    boolean onLine(FireAlarmScreen fireAlarmScreen, Sign sign, int line);
 }

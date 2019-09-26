@@ -16,9 +16,13 @@ public class FireAlarmScreen {
     private FireScreenTech fireScreenTech;
 
     private int line = 0;
+
+    private SignCache signCache1;
     private boolean hasLineChanged = false;
+    private boolean hasTextChanged = false;
 
     private boolean isTickerRunning = false;
+
 
     public FireAlarmScreen(Main plugin, String name, Location location) {
         this.plugin = plugin;
@@ -31,7 +35,7 @@ public class FireAlarmScreen {
     public void onClick() {
         Sign sign = getSign();
         if (sign != null) {
-            this.fireScreenTech.onLine(sign, line);
+            this.fireScreenTech.onLine(this, sign, line);
         }
     }
 
@@ -64,26 +68,33 @@ public class FireAlarmScreen {
 
                     @Override
                     public void run() {
-                        oldLine = line;
-                        if (temp == 0 && !hasLineChanged) {
+                        if (temp == 0 && !hasTextChanged) {
+                            oldLine = line;
                             signCache.fromSign(sign);
                             text = sign.getLine(line);
                             sign.setLine(line, first + text + last);
                             sign.update();
                             temp++;
-                        } else if (temp > 0 && !hasLineChanged) {
-                            sign.setLine(line, text);
+                        } else if (temp > 0 && !hasTextChanged) {
+                            sign.setLine(oldLine, text);
                             sign.update();
                             temp = 0;
-                        } else if (hasLineChanged) {
-                            sign.setLine(oldLine, text);
+                        } else if (hasTextChanged) {
+                            signCache1.update(sign);
+                            oldLine = line;
+                            line = 0;
                             temp = 0;
-                            hasLineChanged = false;
+                            hasTextChanged = false;
                         }
                     }
-                }.runTaskTimer(this.plugin, 15L, 15L);
+                }.runTaskTimer(this.plugin, 10L, 10L);
             }
         }
+    }
+
+    public void updateSign(Sign sign) {
+        this.signCache1 = new SignCache(sign);
+        this.hasTextChanged = true;
     }
 
     public boolean isSign() {

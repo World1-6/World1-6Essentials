@@ -25,49 +25,49 @@ public class FireScreenTech implements IScreenTech {
         this.currentMenu = Menu.OFF;
     }
 
-    public boolean onLine(Sign sign, int line) {
+    public boolean onLine(FireAlarmScreen fireAlarmScreen, Sign sign, int line) {
 
         //Loads for the first time.
         if (this.currentMenu == Menu.OFF) {
-            loadFirstTime(sign);
+            loadFirstTime(fireAlarmScreen, sign);
         }
 
         return true;
     }
 
-    private void resetSign(Sign sign, boolean backToMainMenu) {
+    private void resetSign(FireAlarmScreen fireAlarmScreen, Sign sign, boolean backToMainMenu) {
         sign.setLine(0, "");
         sign.setLine(1, "");
         sign.setLine(2, "");
         sign.setLine(3, "");
-        sign.update();
+        fireAlarmScreen.updateSign(sign);
 
-        if (backToMainMenu) main_menu(sign);
+        if (backToMainMenu) main_menu(fireAlarmScreen, sign);
     }
 
-    private void loadFirstTime(Sign sign) {
+    private void loadFirstTime(FireAlarmScreen fireAlarmScreen, Sign sign) {
         this.currentMenu = Menu.WAITING;
 
         sign.setLine(0, "Fire Alarm 0.1V");
         sign.setLine(1, "Loading data...");
         sign.setLine(2, "Please wait...");
-        sign.update();
+        fireAlarmScreen.updateSign(sign);
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                resetSign(sign, true);
+                resetSign(fireAlarmScreen, sign, true);
             }
         }.runTaskLater(this.plugin, 100L);
     }
 
-    private void main_menu(Sign sign) {
+    private void main_menu(FireAlarmScreen fireAlarmScreen, Sign sign) {
         this.currentMenu = Menu.MAIN_MENU;
         sign.setLine(0, "--Fire Alarm V.01--");
         sign.setLine(1, "-Lists-");
         sign.setLine(2, "-Actvation Points-");
         sign.setLine(3, "");
-        sign.update();
+        fireAlarmScreen.updateSign(sign);
     }
 
 }
