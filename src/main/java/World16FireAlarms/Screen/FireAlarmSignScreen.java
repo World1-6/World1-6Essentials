@@ -62,6 +62,7 @@ public class FireAlarmSignScreen implements IScreenTech {
         sign.setLine(0, "Fire Alarm 0.1V");
         sign.setLine(1, "Loading data...");
         sign.setLine(2, "Please wait...");
+        sign.setLine(3, "");
         fireAlarmScreen.updateSign(sign);
 
         new BukkitRunnable() {
@@ -92,13 +93,5 @@ public class FireAlarmSignScreen implements IScreenTech {
         fireAlarmScreen.setMin(0);
         fireAlarmScreen.setLine(0);
         fireAlarmScreen.updateSign(sign);
-    }
-
-    public Menu getCurrentMenu() {
-        return currentMenu;
-    }
-
-    public void setCurrentMenu(Menu currentMenu) {
-        this.currentMenu = currentMenu;
     }
 }

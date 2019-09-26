@@ -14,7 +14,7 @@ import World16.Managers.CustomConfigManager;
 import World16.Managers.JailManager;
 import World16.Utils.*;
 import World16.test.test1;
-import World16Elevators.ElevatorMain;
+import World16Elevators.ElevatorManager;
 import World16Elevators.Objects.BoundingBox;
 import World16Elevators.Objects.ElevatorObject;
 import World16Elevators.Objects.FloorObject;
@@ -45,7 +45,7 @@ public class Main extends JavaPlugin {
     //Managers
     private CustomConfigManager customConfigManager;
     private JailManager jailManager;
-    private ElevatorMain elevatorMain;
+    private ElevatorManager elevatorManager;
     private FireAlarmManager fireAlarmManager;
 
     private API api;
@@ -68,7 +68,8 @@ public class Main extends JavaPlugin {
 
     public void onDisable() {
         this.discordBot.sendServerQuitMessage();
-        this.getElevatorMain().saveAllElevators();
+        this.elevatorManager.saveAllElevators();
+        this.fireAlarmManager.saveFireAlarms();
         this.setListMap.clearSetListMap();
         getLogger().info("[World1-6Essentials] is now disabled.");
     }
@@ -161,9 +162,7 @@ public class Main extends JavaPlugin {
 
         regDiscordBot();
         regElevators();
-
-        this.fireAlarmManager = new FireAlarmManager(this, this.customConfigManager);
-        this.fireAlarmManager.loadFireAlarms();
+        regFireAlarms();
     }
 
     private void regBStats() {
@@ -183,14 +182,17 @@ public class Main extends JavaPlugin {
     }
 
     private void regElevators() {
-        this.elevatorMain = new ElevatorMain(this, this.customConfigManager);
-        if (this.api.isElevatorsEnabled()) {
-            if (this.otherPlugins.hasWorldEdit()) {
-                this.elevatorMain.loadAllElevators();
-            } else {
-                this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cElevator's won't be working since there's no WorldEdit."));
-            }
+        this.elevatorManager = new ElevatorManager(this, this.customConfigManager, this.api.isElevatorsEnabled());
+        if (this.otherPlugins.hasWorldEdit()) {
+            this.elevatorManager.loadAllElevators();
+        } else {
+            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cElevator's won't be working since there's no WorldEdit."));
         }
+    }
+
+    private void regFireAlarms() {
+        this.fireAlarmManager = new FireAlarmManager(this, this.customConfigManager, this.api.isFireAlarmsEnabled());
+        this.fireAlarmManager.loadFireAlarms();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -231,8 +233,8 @@ public class Main extends JavaPlugin {
         return otherPlugins;
     }
 
-    public ElevatorMain getElevatorMain() {
-        return elevatorMain;
+    public ElevatorManager getElevatorManager() {
+        return elevatorManager;
     }
 
     public DiscordBot getDiscordBot() {

@@ -15,11 +15,16 @@ public class FireAlarmManager {
 
     private Main plugin;
 
+    private boolean on = false;
+
     private CustomYmlManager fireAlarmsYml;
 
     private Map<String, IFireAlarm> fireAlarmMap;
 
-    public FireAlarmManager(Main plugin, CustomConfigManager customConfigManager) {
+    public FireAlarmManager(Main plugin, CustomConfigManager customConfigManager, boolean on) {
+        if (!on) return;
+        this.on = true;
+
         this.plugin = plugin;
         this.fireAlarmsYml = customConfigManager.getFireAlarmsYml();
 
@@ -27,6 +32,7 @@ public class FireAlarmManager {
     }
 
     public void loadFireAlarms() {
+        if (!on) return;
 
         //Only runs when firealarms.yml is first being created.
         ConfigurationSection cs = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms");
@@ -55,6 +61,8 @@ public class FireAlarmManager {
     }
 
     public void saveFireAlarms() {
+        if (!on) return;
+
         //For each fire alarm
         for (Map.Entry<String, IFireAlarm> entry : fireAlarmMap.entrySet()) {
             String k = entry.getKey();
