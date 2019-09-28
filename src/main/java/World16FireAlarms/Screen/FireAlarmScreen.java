@@ -81,8 +81,8 @@ public class FireAlarmScreen implements ConfigurationSerializable {
             this.isTickerRunning = true;
             Sign sign = getSign();
             if (sign != null) {
-                String first = "> ";
-                String last = " <";
+                String first = ">";
+                String last = "<";
                 new BukkitRunnable() {
                     int temp = 0;
                     String text = sign.getLine(line);
@@ -100,7 +100,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
                             oldLine = line;
                             signCache.fromSign(sign);
                             text = sign.getLine(line);
-                            sign.setLine(line, first + text + last);
+                            sign.setLine(line, first + text);
                             if (!sign.update()) stop = true;
                             temp++;
                         } else if (temp > 0 && !hasTextChanged) {

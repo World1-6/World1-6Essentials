@@ -28,11 +28,11 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
     }
 
     public void on() {
-        this.location.getBlock().setType(Material.REDSTONE_LAMP_ON);
+        this.location.getBlock().setType(Material.REDSTONE_BLOCK);
     }
 
     public void off() {
-        this.location.getBlock().setType(Material.REDSTONE_LAMP_OFF);
+        this.location.getBlock().setType(Material.SOUL_SAND);
     }
 
     public void sound() {

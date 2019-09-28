@@ -82,10 +82,18 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
             public void run() {
                 if (fireAlarmStatus == FireAlarmStatus.ALARM) {
                     if (marchTime == 0) {
-                        strobesMap.forEach((k, v) -> v.on());
+                        for (Map.Entry<String, IStrobe> entry : strobesMap.entrySet()) {
+                            String k = entry.getKey();
+                            IStrobe v = entry.getValue();
+                            v.on();
+                        }
                         marchTime++;
                     } else if (marchTime >= 1) {
-                        strobesMap.forEach((k, v) -> v.off());
+                        for (Map.Entry<String, IStrobe> entry : strobesMap.entrySet()) {
+                            String k = entry.getKey();
+                            IStrobe v = entry.getValue();
+                            v.off();
+                        }
                         marchTime = 0;
                     }
                 } else {
@@ -94,7 +102,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
                     this.cancel();
                 }
             }
-        }.runTaskTimer(plugin, 15L, 15L);
+        }.runTaskTimer(plugin, 10L, 10L);
     }
 
     //GETTERS AND SETTERS
