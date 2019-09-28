@@ -1,6 +1,7 @@
 package World16FireAlarms.Screen;
 
 import World16.Main.Main;
+import World16FireAlarms.Objects.FireAlarmSignMenu;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IScreenTech;
 import org.bukkit.Location;
@@ -44,7 +45,17 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
         this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
 
-        this.iScreenTech = new FireAlarmSignScreen(this.plugin);
+        this.iScreenTech = new FireAlarmSignScreen(this.plugin, FireAlarmSignMenu.OFF);
+    }
+
+    public FireAlarmScreen(Main plugin, String name, Location location, FireAlarmSignScreen fireAlarmSignScreen) {
+        this.plugin = plugin;
+        this.name = name;
+        this.location = location;
+
+        this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
+
+        this.iScreenTech = fireAlarmSignScreen;
     }
 
     public void onClick(Player player) {
@@ -223,10 +234,11 @@ public class FireAlarmScreen implements ConfigurationSerializable {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", this.name);
         map.put("Location", this.location);
+        map.put("IScreenTech", this.iScreenTech);
         return map;
     }
 
     public static FireAlarmScreen deserialize(Map<String, Object> map) {
-        return new FireAlarmScreen(Main.getPlugin(), (String) map.get("Name"), (Location) map.get("Location"));
+        return new FireAlarmScreen(Main.getPlugin(), (String) map.get("Name"), (Location) map.get("Location"), (FireAlarmSignScreen) map.get("IScreenTech"));
     }
 }
