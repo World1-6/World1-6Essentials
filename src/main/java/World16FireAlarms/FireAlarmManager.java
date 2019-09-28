@@ -134,7 +134,7 @@ public class FireAlarmManager {
             Location k = entry.getKey();
             FireAlarmScreen v = entry.getValue();
 
-            String fireAlarmScreen = "FireAlarmScreens" + "." + v.getName();
+            String fireAlarmScreen = "FireAlarmScreens" + "." + v.getName().toLowerCase();
 
             ConfigurationSection fireAlarmScreenConfig = this.fireAlarmsYml.getConfig().getConfigurationSection(fireAlarmScreen);
             if (fireAlarmScreenConfig == null) {
@@ -143,6 +143,29 @@ public class FireAlarmManager {
             }
 
             fireAlarmScreenConfig.set("FireAlarmScreen", v);
+            this.fireAlarmsYml.saveConfigSilent();
+        }
+    }
+
+    public void deleteFireAlarm(String name) {
+        if (!on) return;
+
+        if (this.fireAlarmMap.get(name) != null) {
+            fireAlarmMap.remove(name);
+            ConfigurationSection firealarmConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms");
+            firealarmConfig.set(name.toLowerCase(), null);
+            this.fireAlarmsYml.saveConfigSilent();
+        }
+    }
+
+    public void deleteFireAlarmSignScreen(Location location) {
+        if (!on) return;
+
+        if (this.fireAlarmScreenMap.get(location) != null) {
+            String name = this.fireAlarmScreenMap.get(location).getName();
+            fireAlarmScreenMap.remove(location);
+            ConfigurationSection firealarmConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarmScreens");
+            firealarmConfig.set(name.toLowerCase(), null);
             this.fireAlarmsYml.saveConfigSilent();
         }
     }

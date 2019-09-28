@@ -153,6 +153,7 @@ public class Main extends JavaPlugin {
         new OnAsyncPlayerChatEvent(this);
         new OnPlayerInteractEvent(this);
         new OnPlayerMoveEvent(this);
+        new OnBlockBreakEvent(this);
 
         //PluginEvents
         new EasyBackupEvent(this);

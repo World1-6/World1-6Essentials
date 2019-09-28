@@ -92,9 +92,8 @@ public class FireAlarmScreen implements ConfigurationSerializable {
                     @Override
                     public void run() {
                         if (stop) {
-                            iScreenTech = null;
                             this.cancel();
-                            plugin.getSetListMap().getFireAlarmScreenMap().remove(location);
+                            return;
                         }
 
                         if (temp == 0 && !hasTextChanged) {
