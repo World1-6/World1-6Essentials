@@ -13,6 +13,7 @@ import java.util.Map;
 public class ElevatorManager {
 
     private Main plugin;
+
     private CustomYmlManager eleYml;
 
     private boolean on;
@@ -50,8 +51,6 @@ public class ElevatorManager {
                     elevatorObject.addFloor((FloorObject) elevatorFloors.get(floorNumber));
                 }
 
-                //Just a hack since i don't want nothing static.
-                elevatorObject.setPlugin(this.plugin);
             }
             elevatorObjectMap.putIfAbsent(elevator, elevatorObject);
         }

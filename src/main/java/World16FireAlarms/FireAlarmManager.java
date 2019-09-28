@@ -5,8 +5,10 @@ import World16.Managers.CustomConfigManager;
 import World16.Managers.CustomYmlManager;
 import World16.Utils.Translate;
 import World16FireAlarms.Objects.Zone;
+import World16FireAlarms.Screen.FireAlarmScreen;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Map;
@@ -20,15 +22,18 @@ public class FireAlarmManager {
     private CustomYmlManager fireAlarmsYml;
 
     private Map<String, IFireAlarm> fireAlarmMap;
+    private Map<Location, FireAlarmScreen> fireAlarmScreenMap;
 
     public FireAlarmManager(Main plugin, CustomConfigManager customConfigManager, boolean on) {
         if (!on) return;
         this.on = true;
 
         this.plugin = plugin;
+
         this.fireAlarmsYml = customConfigManager.getFireAlarmsYml();
 
         this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
+        this.fireAlarmScreenMap = this.plugin.getSetListMap().getFireAlarmScreenMap();
     }
 
     public void loadFireAlarms() {
@@ -36,27 +41,46 @@ public class FireAlarmManager {
 
         //Only runs when firealarms.yml is first being created.
         ConfigurationSection cs = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms");
-        if (cs == null) {
-            this.fireAlarmsYml.getConfig().createSection("FireAlarms");
-            this.fireAlarmsYml.saveConfigSilent();
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat("&c[FireAlarmManager]&r&6 FireAlarm section has been created."));
+        ConfigurationSection cs1 = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarmScreens");
+        if (cs == null || cs1 == null) {
+            if (cs == null) {
+                this.fireAlarmsYml.getConfig().createSection("FireAlarms");
+                this.fireAlarmsYml.saveConfigSilent();
+                this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat("&c[FireAlarmManager]&r&6 FireAlarm section has been created."));
+            }
+            if (cs1 == null) {
+                this.fireAlarmsYml.getConfig().createSection("FireAlarmScreens");
+                this.fireAlarmsYml.saveConfigSilent();
+            }
             return;
         }
 
+        //For each fire alarm.
         for (String fireAlarm : cs.getKeys(false)) {
-            ConfigurationSection fireAlarmConfig = cs.getConfigurationSection(fireAlarm);
-            IFireAlarm iFireAlarm = (IFireAlarm) fireAlarmConfig.get("IFireAlarm");
+            cs = cs.getConfigurationSection(fireAlarm);
+            IFireAlarm iFireAlarm = (IFireAlarm) cs.get("IFireAlarm");
 
-            ConfigurationSection strobesConfig = fireAlarmConfig.getConfigurationSection("Strobes");
-            for (String strobes : strobesConfig.getKeys(false)) {
-                iFireAlarm.registerStrobe((IStrobe) strobesConfig.get(strobes));
+            ConfigurationSection strobesConfig = cs.getConfigurationSection("Strobes");
+            if (strobesConfig != null) {
+                for (String strobes : strobesConfig.getKeys(false)) {
+                    iFireAlarm.registerStrobe((IStrobe) strobesConfig.get(strobes));
+                }
             }
 
-            ConfigurationSection zonesConfig = fireAlarmConfig.getConfigurationSection("Zones");
-            for (String zone : zonesConfig.getKeys(false)) {
-                iFireAlarm.registerZone((Zone) zonesConfig.get(zone));
+            ConfigurationSection zonesConfig = cs.getConfigurationSection("Zones");
+            if (zonesConfig != null) {
+                for (String zone : zonesConfig.getKeys(false)) {
+                    iFireAlarm.registerZone((Zone) zonesConfig.get(zone));
+                }
             }
             fireAlarmMap.putIfAbsent(fireAlarm, iFireAlarm);
+        }
+
+        //For each fire alarm screen
+        for (String fireAlarmScreenName : cs1.getKeys(false)) {
+            cs1 = cs1.getConfigurationSection(fireAlarmScreenName);
+            FireAlarmScreen fireAlarmScreen = (FireAlarmScreen) cs1.get("FireAlarmScreen");
+            this.fireAlarmScreenMap.putIfAbsent(fireAlarmScreen.getLocation(), fireAlarmScreen);
         }
     }
 
@@ -104,6 +128,22 @@ public class FireAlarmManager {
 
             this.fireAlarmsYml.saveConfigSilent();
         }
-        this.fireAlarmsYml.saveConfigSilent();
+
+        //For each sign screen
+        for (Map.Entry<Location, FireAlarmScreen> entry : fireAlarmScreenMap.entrySet()) {
+            Location k = entry.getKey();
+            FireAlarmScreen v = entry.getValue();
+
+            String fireAlarmScreen = "FireAlarmScreens" + "." + v.getName();
+
+            ConfigurationSection fireAlarmScreenConfig = this.fireAlarmsYml.getConfig().getConfigurationSection(fireAlarmScreen);
+            if (fireAlarmScreenConfig == null) {
+                fireAlarmScreenConfig = this.fireAlarmsYml.getConfig().createSection(fireAlarmScreen);
+                this.fireAlarmsYml.saveConfigSilent();
+            }
+
+            fireAlarmScreenConfig.set("FireAlarmScreen", v);
+            this.fireAlarmsYml.saveConfigSilent();
+        }
     }
 }

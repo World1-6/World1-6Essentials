@@ -20,6 +20,10 @@ import World16Elevators.Objects.ElevatorObject;
 import World16Elevators.Objects.FloorObject;
 import World16Elevators.Objects.SignObject;
 import World16FireAlarms.FireAlarmManager;
+import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
+import World16FireAlarms.Objects.Simple.SimpleStrobe;
+import World16FireAlarms.Objects.Zone;
+import World16FireAlarms.Screen.FireAlarmScreen;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -34,9 +38,14 @@ public class Main extends JavaPlugin {
         ConfigurationSerialization.registerClass(SignObject.class, "SignObject");
         ConfigurationSerialization.registerClass(FloorObject.class, "FloorObject");
         ConfigurationSerialization.registerClass(ElevatorObject.class, "ElevatorObject");
+        //Fire Alarms
+        ConfigurationSerialization.registerClass(Zone.class, "Zone");
+        ConfigurationSerialization.registerClass(SimpleStrobe.class, "IStrobe");
+        ConfigurationSerialization.registerClass(SimpleFireAlarm.class, "IFireAlarm");
+        ConfigurationSerialization.registerClass(FireAlarmScreen.class, "FireAlarmScreen");
     }
 
-    private Main plugin;
+    private static Main plugin;
 
     private SetListMap setListMap;
 
@@ -52,7 +61,7 @@ public class Main extends JavaPlugin {
     private OtherPlugins otherPlugins;
 
     public void onEnable() {
-        this.plugin = this;
+        plugin = this;
         this.otherPlugins = new OtherPlugins(this);
         this.setListMap = new SetListMap();
         this.api = new API(plugin);
@@ -121,10 +130,10 @@ public class Main extends JavaPlugin {
         new firealarm(this, this.customConfigManager);
 
         //Homes
-        new delhome(this.plugin);
-        new home(this.plugin);
-        new homelist(this.plugin);
-        new sethome(this.plugin);
+        new delhome(plugin);
+        new home(plugin);
+        new homelist(plugin);
+        new sethome(plugin);
     }
 
     private void regEvents() {
@@ -174,9 +183,9 @@ public class Main extends JavaPlugin {
         if (this.api.isDiscordBotEnabled()) {
             boolean discordbot = this.discordBot.setup();
             if (discordbot) {
-                this.plugin.getServer().getScheduler().runTaskAsynchronously(this, this.discordBot);
+                plugin.getServer().getScheduler().runTaskAsynchronously(this, this.discordBot);
             } else {
-                this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cDiscord Bot has not been enabled because of exception"));
+                plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cDiscord Bot has not been enabled because of exception"));
             }
         }
     }
@@ -186,7 +195,7 @@ public class Main extends JavaPlugin {
         if (this.otherPlugins.hasWorldEdit()) {
             this.elevatorManager.loadAllElevators();
         } else {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cElevator's won't be working since there's no WorldEdit."));
+            plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cElevator's won't be working since there's no WorldEdit."));
         }
     }
 
@@ -209,7 +218,7 @@ public class Main extends JavaPlugin {
 
     //Getters
 
-    public Main getPlugin() {
+    public static Main getPlugin() {
         return plugin;
     }
 

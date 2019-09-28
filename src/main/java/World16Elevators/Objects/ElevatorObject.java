@@ -615,6 +615,6 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     public static ElevatorObject deserialize(Map<String, Object> map) {
-        return new ElevatorObject(null, (String) map.get("world"), (String) map.get("name"), (FloorObject) map.get("shaft"), (BoundingBox) map.get("shaftPlus"));
+        return new ElevatorObject(Main.getPlugin(), (String) map.get("world"), (String) map.get("name"), (FloorObject) map.get("shaft"), (BoundingBox) map.get("shaftPlus"));
     }
 }

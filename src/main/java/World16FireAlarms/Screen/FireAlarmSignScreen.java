@@ -1,6 +1,7 @@
 package World16FireAlarms.Screen;
 
 import World16.Main.Main;
+import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IScreenTech;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -22,10 +23,11 @@ public class FireAlarmSignScreen implements IScreenTech {
 
     public FireAlarmSignScreen(Main plugin) {
         this.plugin = plugin;
+
         this.currentMenu = Menu.OFF;
     }
 
-    public boolean onLine(FireAlarmScreen fireAlarmScreen, Player player, Sign sign, int line) {
+    public boolean onLine(FireAlarmScreen fireAlarmScreen, IFireAlarm iFireAlarm, Player player, Sign sign, int line) {
 
         //Loads for the first time.
         if (this.currentMenu == Menu.OFF) {

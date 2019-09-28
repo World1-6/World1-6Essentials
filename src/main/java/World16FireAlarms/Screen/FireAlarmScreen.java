@@ -1,14 +1,21 @@
 package World16FireAlarms.Screen;
 
 import World16.Main.Main;
+import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IScreenTech;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class FireAlarmScreen {
+import java.util.HashMap;
+import java.util.Map;
+
+@SerializableAs("FireAlarmScreen")
+public class FireAlarmScreen implements ConfigurationSerializable {
 
     private Main plugin;
 
@@ -28,11 +35,14 @@ public class FireAlarmScreen {
     private boolean isTickerRunning = false;
     private boolean stop = false;
 
+    private Map<String, IFireAlarm> fireAlarmMap;
 
     public FireAlarmScreen(Main plugin, String name, Location location) {
         this.plugin = plugin;
         this.name = name;
         this.location = location;
+
+        this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
 
         this.iScreenTech = new FireAlarmSignScreen(this.plugin);
     }
@@ -40,7 +50,7 @@ public class FireAlarmScreen {
     public void onClick(Player player) {
         Sign sign = getSign();
         if (sign != null) {
-            this.iScreenTech.onLine(this, player, sign, line);
+            this.iScreenTech.onLine(this, this.fireAlarmMap.get(this.name), player, sign, line);
         }
     }
 
@@ -206,5 +216,17 @@ public class FireAlarmScreen {
 
     public void setStop(boolean stop) {
         this.stop = stop;
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("Name", this.name);
+        map.put("Location", this.location);
+        return map;
+    }
+
+    public static FireAlarmScreen deserialize(Map<String, Object> map) {
+        return new FireAlarmScreen(Main.getPlugin(), (String) map.get("Name"), (Location) map.get("Location"));
     }
 }

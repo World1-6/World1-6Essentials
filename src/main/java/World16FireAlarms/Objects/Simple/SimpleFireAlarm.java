@@ -24,16 +24,10 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     private FireAlarmStatus fireAlarmStatus;
 
-    public SimpleFireAlarm(String name) {
-        this.name = name;
-
-        //Maps / Sets
-        this.strobesMap = new HashMap<>();
-        this.zones = new ArrayList<>();
-    }
-
-    public SimpleFireAlarm(Main plugin) {
+    public SimpleFireAlarm(Main plugin, String name) {
         this.plugin = plugin;
+
+        this.name = name;
 
         //Maps / Sets
         this.strobesMap = new HashMap<>();
@@ -152,6 +146,6 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     }
 
     public static SimpleFireAlarm deserialize(Map<String, Object> map) {
-        return new SimpleFireAlarm((String) map.get("Name"));
+        return new SimpleFireAlarm(Main.getPlugin(), (String) map.get("Name"));
     }
 }
