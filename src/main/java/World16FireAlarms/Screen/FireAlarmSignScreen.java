@@ -22,17 +22,19 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
     private Main plugin;
 
     private String name;
+    private String fireAlarmName;
 
     private FireAlarmSignMenu currentMenu;
 
     private Map<String, IFireAlarm> fireAlarmMap;
 
-    public FireAlarmSignScreen(Main plugin, FireAlarmSignMenu fireAlarmSignMenu, String name) {
+    public FireAlarmSignScreen(Main plugin, FireAlarmSignMenu fireAlarmSignMenu, String name, String fireAlarmName) {
         this.plugin = plugin;
 
         this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
 
         this.name = name;
+        this.fireAlarmName = fireAlarmName;
 
         this.currentMenu = fireAlarmSignMenu;
     }
@@ -60,21 +62,21 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.SETTINGS_TEST_FIREALARM) {
             if (line == 1) {
-                this.fireAlarmMap.get(this.name).alarm(Optional.empty(), TroubleReason.PANEL_TEST);
+                this.fireAlarmMap.get(this.fireAlarmName).alarm(Optional.empty(), TroubleReason.PANEL_TEST);
                 player.sendMessage(Translate.chat("Alarm should be going off currently."));
                 return true;
             } else if (line == 2) {
                 player.sendMessage(Translate.chat("NOT IMPLEMENTED."));
                 return true;
             } else if (line == 3) {
-                this.fireAlarmMap.get(this.name).reset(Optional.empty());
+                this.fireAlarmMap.get(this.fireAlarmName).reset(Optional.empty());
                 player.sendMessage(Translate.chat("Fire alarm has been reseted."));
                 return true;
             }
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.ALARM_POPUP) {
             if (line == 3) {
-                this.fireAlarmMap.get(this.name).reset(Optional.empty());
+                this.fireAlarmMap.get(this.fireAlarmName).reset(Optional.empty());
                 backReverse(this.currentMenu, fireAlarmScreen, sign, line);
                 player.sendMessage(Translate.chat("The fire alarm has been reseted."));
                 return true;
@@ -83,7 +85,7 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
         return true;
     }
 
-    public void sendPopup(TroubleReason troubleReason, Optional<Zone> optionalZone, FireAlarmScreen fireAlarmScreen, IFireAlarm iFireAlarm, Sign sign) {
+    public void sendPopup(TroubleReason troubleReason, Optional<Zone> optionalZone, FireAlarmScreen fireAlarmScreen, Sign sign) {
         if (troubleReason == TroubleReason.PANEL_TEST) {
             this.currentMenu = FireAlarmSignMenu.ALARM_POPUP;
             sign.setLine(0, "Popup/MENU");
@@ -99,10 +101,13 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
         switch (menu) {
             case SETTINGS_MENU:
                 main_menu(fireAlarmScreen, sign);
+                break;
             case ALARM_POPUP:
                 main_menu(fireAlarmScreen, sign);
+                break;
             case SETTINGS_TEST_FIREALARM:
                 settings_menu(fireAlarmScreen, sign);
+                break;
         }
     }
 
@@ -170,11 +175,12 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", this.name);
+        map.put("FireAlarmName", this.fireAlarmName);
         map.put("CurrentMenu", this.currentMenu.toString());
         return map;
     }
 
     public static FireAlarmSignScreen deserialize(Map<String, Object> map) {
-        return new FireAlarmSignScreen(Main.getPlugin(), FireAlarmSignMenu.valueOf((String) map.get("CurrentMenu")), (String) map.get("Name"));
+        return new FireAlarmSignScreen(Main.getPlugin(), FireAlarmSignMenu.valueOf((String) map.get("CurrentMenu")), (String) map.get("Name"), (String) map.get("FireAlarmName"));
     }
 }

@@ -20,6 +20,8 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     private Main plugin;
 
     private String name;
+    private String fireAlarmName;
+
     private Location location;
 
     private FireAlarmSignScreen fireAlarmSignScreen;
@@ -37,19 +39,21 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
     private Map<String, IFireAlarm> fireAlarmMap;
 
-    public FireAlarmScreen(Main plugin, String name, Location location) {
+    public FireAlarmScreen(Main plugin, String name, String fireAlarmName, Location location) {
         this.plugin = plugin;
         this.name = name;
+        this.fireAlarmName = fireAlarmName;
         this.location = location;
 
         this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
 
-        this.fireAlarmSignScreen = new FireAlarmSignScreen(this.plugin, FireAlarmSignMenu.OFF, this.name);
+        this.fireAlarmSignScreen = new FireAlarmSignScreen(this.plugin, FireAlarmSignMenu.OFF, this.name, this.fireAlarmName);
     }
 
-    public FireAlarmScreen(Main plugin, String name, Location location, FireAlarmSignScreen fireAlarmSignScreen) {
+    public FireAlarmScreen(Main plugin, String name, String fireAlarmName, Location location, FireAlarmSignScreen fireAlarmSignScreen) {
         this.plugin = plugin;
         this.name = name;
+        this.fireAlarmName = fireAlarmName;
         this.location = location;
 
         this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
@@ -155,6 +159,14 @@ public class FireAlarmScreen implements ConfigurationSerializable {
         this.name = name;
     }
 
+    public String getFireAlarmName() {
+        return fireAlarmName;
+    }
+
+    public void setFireAlarmName(String fireAlarmName) {
+        this.fireAlarmName = fireAlarmName;
+    }
+
     public Location getLocation() {
         return location;
     }
@@ -239,12 +251,13 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", this.name);
+        map.put("FireAlarmName", this.fireAlarmName);
         map.put("Location", this.location);
         map.put("FireAlarmSignScreen", this.fireAlarmSignScreen);
         return map;
     }
 
     public static FireAlarmScreen deserialize(Map<String, Object> map) {
-        return new FireAlarmScreen(Main.getPlugin(), (String) map.get("Name"), (Location) map.get("Location"), (FireAlarmSignScreen) map.get("FireAlarmSignScreen"));
+        return new FireAlarmScreen(Main.getPlugin(), (String) map.get("Name"), (String) map.get("FireAlarmName"), (Location) map.get("Location"), (FireAlarmSignScreen) map.get("FireAlarmSignScreen"));
     }
 }

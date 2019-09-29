@@ -69,7 +69,7 @@ public class firealarm implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("register")) {
             if (args.length == 1) {
                 p.sendMessage(Translate.chat("/firealarm register firealarm <Name>"));
-                p.sendMessage(Translate.chat("/firealarm register sign <Name>"));
+                p.sendMessage(Translate.chat("/firealarm register sign <FireAlarmName> <Name>"));
                 p.sendMessage(Translate.chat("/firealarm register strobe <FireAlarmName> <StrobeName>"));
                 return true;
             } else if (args.length == 3 && args[1].equalsIgnoreCase("firealarm")) {
@@ -78,18 +78,20 @@ public class firealarm implements CommandExecutor {
                 this.fireAlarmMap.putIfAbsent(name, iFireAlarm);
                 p.sendMessage(Translate.chat("Fire Alarm: " + name + " is now registered."));
                 return true;
-            } else if (args.length == 3 && args[1].equalsIgnoreCase("sign")) {
-                String name = args[2].toLowerCase();
+            } else if (args.length == 4 && args[1].equalsIgnoreCase("sign")) {
+                String fireAlarmName = args[2].toLowerCase();
+                String signName = args[3].toLowerCase();
 
-                if (this.fireAlarmMap.get(name) == null) {
-                    p.sendMessage(Translate.chat("There's no such fire alarm called: " + name));
+                if (this.fireAlarmMap.get(fireAlarmName) == null) {
+                    p.sendMessage(Translate.chat("There's no such fire alarm called: " + fireAlarmName));
                     return true;
                 }
 
                 Location location = api.getBlockPlayerIsLookingAt(p).getLocation();
-                FireAlarmScreen fireAlarmScreen = new FireAlarmScreen(plugin, name, location);
+                FireAlarmScreen fireAlarmScreen = new FireAlarmScreen(plugin, signName, fireAlarmName, location);
                 this.fireAlarmScreenMap.putIfAbsent(location, fireAlarmScreen);
-                p.sendMessage(Translate.chat("The sign: " + name + " is now registered."));
+                this.fireAlarmMap.get(fireAlarmName).registerSign(location);
+                p.sendMessage(Translate.chat("The sign: " + signName + " is now registered to " + fireAlarmName));
                 return true;
             } else if (args.length == 4 && args[1].equalsIgnoreCase("strobe")) {
                 String firealarmName = args[2].toLowerCase();

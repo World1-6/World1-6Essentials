@@ -2,6 +2,7 @@ package World16FireAlarms.interfaces;
 
 import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.Objects.Zone;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface IFireAlarm extends ConfigurationSerializable {
 
     void registerStrobe(IStrobe iStrobe);
 
+    void registerSign(Location location);
+
     void reset(Optional<Zone> zone);
 
     void trouble();
@@ -24,5 +27,7 @@ public interface IFireAlarm extends ConfigurationSerializable {
 
     Map<String, IStrobe> getStrobesMap();
 
-    public List<Zone> getZones();
+    List<Zone> getZones();
+
+    List<Location> getSigns();
 }

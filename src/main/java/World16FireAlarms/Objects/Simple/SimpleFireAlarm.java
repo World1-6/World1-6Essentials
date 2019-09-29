@@ -4,8 +4,10 @@ import World16.Main.Main;
 import World16FireAlarms.Objects.FireAlarmStatus;
 import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.Objects.Zone;
+import World16FireAlarms.Screen.FireAlarmScreen;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,6 +23,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     private Map<String, IStrobe> strobesMap;
     private List<Zone> zones;
+    private List<Location> signsList;
 
     private FireAlarmStatus fireAlarmStatus;
 
@@ -32,6 +35,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         //Maps / Sets
         this.strobesMap = new HashMap<>();
         this.zones = new ArrayList<>();
+        this.signsList = new ArrayList<>();
 
         this.fireAlarmStatus = FireAlarmStatus.READY;
     }
@@ -46,6 +50,10 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     public void registerNac() {
 
+    }
+
+    public void registerSign(Location location) {
+        this.signsList.add(location);
     }
 
     public void reset(Optional<Zone> zone) {
@@ -63,6 +71,14 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         if (!zone.isPresent()) {
             this.fireAlarmStatus = FireAlarmStatus.ALARM;
             setupMarchTime();
+            for (Location location : this.signsList) {
+                FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(location);
+                if (fireAlarmScreen != null)
+                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(location).getFireAlarmSignScreen().sendPopup(troubleReason, zone, fireAlarmScreen, fireAlarmScreen.getSign());
+                else {
+                    this.plugin.getFireAlarmManager().deleteFireAlarmSignScreen(this.name, location);
+                }
+            }
         }
     }
 
@@ -122,6 +138,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         this.name = name;
     }
 
+    @Override
     public Map<String, IStrobe> getStrobesMap() {
         return strobesMap;
     }
@@ -130,6 +147,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         this.strobesMap = strobesMap;
     }
 
+    @Override
     public List<Zone> getZones() {
         return zones;
     }
@@ -138,12 +156,28 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         this.zones = zones;
     }
 
+    public List<Location> getSigns() {
+        return signsList;
+    }
+
+    public void setSignsList(List<Location> signsList) {
+        this.signsList = signsList;
+    }
+
     public FireAlarmStatus getFireAlarmStatus() {
         return fireAlarmStatus;
     }
 
     public void setFireAlarmStatus(FireAlarmStatus fireAlarmStatus) {
         this.fireAlarmStatus = fireAlarmStatus;
+    }
+
+    public int getMarchTime() {
+        return marchTime;
+    }
+
+    public void setMarchTime(int marchTime) {
+        this.marchTime = marchTime;
     }
 
     @Override
