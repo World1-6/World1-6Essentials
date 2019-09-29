@@ -90,7 +90,7 @@ public class firealarm implements CommandExecutor {
                 Location location = api.getBlockPlayerIsLookingAt(p).getLocation();
                 FireAlarmScreen fireAlarmScreen = new FireAlarmScreen(plugin, signName, fireAlarmName, location);
                 this.fireAlarmScreenMap.putIfAbsent(location, fireAlarmScreen);
-                this.fireAlarmMap.get(fireAlarmName).registerSign(location);
+                this.fireAlarmMap.get(fireAlarmName).registerSign(signName, location);
                 p.sendMessage(Translate.chat("The sign: " + signName + " is now registered to " + fireAlarmName));
                 return true;
             } else if (args.length == 4 && args[1].equalsIgnoreCase("strobe")) {

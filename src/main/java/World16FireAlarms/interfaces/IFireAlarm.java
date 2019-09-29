@@ -17,7 +17,7 @@ public interface IFireAlarm extends ConfigurationSerializable {
 
     void registerStrobe(IStrobe iStrobe);
 
-    void registerSign(Location location);
+    void registerSign(String string, Location location);
 
     void reset(Optional<Zone> zone);
 
@@ -29,5 +29,5 @@ public interface IFireAlarm extends ConfigurationSerializable {
 
     List<Zone> getZones();
 
-    List<Location> getSigns();
+    Map<String, Location> getSigns();
 }

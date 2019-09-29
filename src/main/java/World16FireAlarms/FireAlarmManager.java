@@ -12,7 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Map;
-import java.util.UUID;
 
 public class FireAlarmManager {
 
@@ -81,7 +80,7 @@ public class FireAlarmManager {
             ConfigurationSection signsConfig = cs.getConfigurationSection("Signs");
             if (signsConfig != null) {
                 for (String sign : signsConfig.getKeys(false)) {
-                    iFireAlarm.registerSign((Location) signsConfig.get(sign));
+                    iFireAlarm.registerSign(sign, (Location) signsConfig.get(sign));
                 }
             }
             fireAlarmMap.putIfAbsent(fireAlarm, iFireAlarm);
@@ -144,8 +143,10 @@ public class FireAlarmManager {
                 this.fireAlarmsYml.saveConfigSilent();
             }
 
-            for (Location location : v.getSigns()) {
-                fireAlarmSignConfig.set(UUID.randomUUID().toString(), location);
+            for (Map.Entry<String, Location> e : v.getSigns().entrySet()) {
+                String key = e.getKey();
+                Location value = e.getValue();
+                fireAlarmSignConfig.set(key.toLowerCase(), value);
             }
 
             this.fireAlarmsYml.saveConfigSilent();
@@ -184,25 +185,28 @@ public class FireAlarmManager {
         if (!on) return;
 
         if (this.fireAlarmScreenMap.get(location) != null) {
-            String name = this.fireAlarmScreenMap.get(location).getName();
+            String signName = this.fireAlarmScreenMap.get(location).getName();
             fireAlarmScreenMap.remove(location);
             ConfigurationSection firealarmConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarmScreens");
-            firealarmConfig.set(name.toLowerCase(), null);
+            firealarmConfig.set(signName.toLowerCase(), null);
             this.fireAlarmsYml.saveConfigSilent();
         }
     }
 
-    public void deleteFireAlarmSignScreen(String name, Location location) {
+    public void deleteFireAlarmSignScreen(String name, String signName, Location location) {
         if (!on) return;
 
         if (this.fireAlarmMap.get(name.toLowerCase()) != null) {
             fireAlarmScreenMap.remove(location);
-            fireAlarmMap.get(name).getSigns().remove(location);
+            fireAlarmMap.get(name).getSigns().remove(signName);
+
             ConfigurationSection cs = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms." + name.toLowerCase());
             ConfigurationSection cs1 = cs.getConfigurationSection("Signs");
-            cs1.set(location.toString(), null);
+
+            cs1.set(signName.toLowerCase(), null);
+
             ConfigurationSection firealarmConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarmScreens");
-            firealarmConfig.set(name.toLowerCase(), null);
+            firealarmConfig.set(signName.toLowerCase(), null);
             this.fireAlarmsYml.saveConfigSilent();
         }
     }

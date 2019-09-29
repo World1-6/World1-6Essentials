@@ -23,7 +23,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     private Map<String, IStrobe> strobesMap;
     private List<Zone> zones;
-    private List<Location> signsList;
+    private Map<String, Location> signsMap;
 
     private FireAlarmStatus fireAlarmStatus;
 
@@ -35,7 +35,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         //Maps / Sets
         this.strobesMap = new HashMap<>();
         this.zones = new ArrayList<>();
-        this.signsList = new ArrayList<>();
+        this.signsMap = new HashMap<>();
 
         this.fireAlarmStatus = FireAlarmStatus.READY;
     }
@@ -52,8 +52,8 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     }
 
-    public void registerSign(Location location) {
-        this.signsList.add(location);
+    public void registerSign(String string, Location location) {
+        this.signsMap.put(string.toLowerCase(), location);
     }
 
     public void reset(Optional<Zone> zone) {
@@ -71,12 +71,15 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         if (!zone.isPresent()) {
             this.fireAlarmStatus = FireAlarmStatus.ALARM;
             setupMarchTime();
-            for (Location location : this.signsList) {
-                FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(location);
+            for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
+                String k = entry.getKey();
+                Location v = entry.getValue();
+
+                FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
                 if (fireAlarmScreen != null)
-                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(location).getFireAlarmSignScreen().sendPopup(troubleReason, zone, fireAlarmScreen, fireAlarmScreen.getSign());
+                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignScreen().sendPopup(troubleReason, zone, fireAlarmScreen, fireAlarmScreen.getSign());
                 else {
-                    this.plugin.getFireAlarmManager().deleteFireAlarmSignScreen(this.name, location);
+                    this.plugin.getFireAlarmManager().deleteFireAlarmSignScreen(this.name, k.toLowerCase(), v);
                 }
             }
         }
@@ -156,12 +159,12 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         this.zones = zones;
     }
 
-    public List<Location> getSigns() {
-        return signsList;
+    public Map<String, Location> getSigns() {
+        return signsMap;
     }
 
-    public void setSignsList(List<Location> signsList) {
-        this.signsList = signsList;
+    public void setSignsMap(Map<String, Location> signsMap) {
+        this.signsMap = signsMap;
     }
 
     public FireAlarmStatus getFireAlarmStatus() {
