@@ -1,4 +1,4 @@
-package World16FireAlarms.Screen;
+package World16FireAlarms.Objects.Screen;
 
 import World16.Main.Main;
 import World16FireAlarms.Objects.FireAlarmSignMenu;
@@ -26,7 +26,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
     private Location location;
 
-    private FireAlarmSignScreen fireAlarmSignScreen;
+    private FireAlarmSignOS fireAlarmSignOS;
 
     private int line = -0;
     private int scroll = 0;
@@ -52,10 +52,10 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
         this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
 
-        this.fireAlarmSignScreen = new FireAlarmSignScreen(this.plugin, FireAlarmSignMenu.OFF, this.name, this.fireAlarmName);
+        this.fireAlarmSignOS = new FireAlarmSignOS(this.plugin, FireAlarmSignMenu.OFF, this.name, this.fireAlarmName);
     }
 
-    public FireAlarmScreen(Main plugin, String name, String fireAlarmName, Location location, FireAlarmSignScreen fireAlarmSignScreen) {
+    public FireAlarmScreen(Main plugin, String name, String fireAlarmName, Location location, FireAlarmSignOS fireAlarmSignOS) {
         this.plugin = plugin;
         this.name = name;
         this.fireAlarmName = fireAlarmName;
@@ -63,13 +63,13 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
         this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
 
-        this.fireAlarmSignScreen = fireAlarmSignScreen;
+        this.fireAlarmSignOS = fireAlarmSignOS;
     }
 
     public void onClick(Player player) {
         Sign sign = getSign();
         if (sign != null) {
-            this.fireAlarmSignScreen.onLine(this, player, sign, line, scroll);
+            this.fireAlarmSignOS.onLine(this, player, sign, line, scroll);
         }
     }
 
@@ -225,12 +225,12 @@ public class FireAlarmScreen implements ConfigurationSerializable {
         this.location = location;
     }
 
-    public FireAlarmSignScreen getFireAlarmSignScreen() {
-        return fireAlarmSignScreen;
+    public FireAlarmSignOS getFireAlarmSignOS() {
+        return fireAlarmSignOS;
     }
 
-    public void setFireAlarmSignScreen(FireAlarmSignScreen fireAlarmSignScreen) {
-        this.fireAlarmSignScreen = fireAlarmSignScreen;
+    public void setFireAlarmSignOS(FireAlarmSignOS fireAlarmSignOS) {
+        this.fireAlarmSignOS = fireAlarmSignOS;
     }
 
     public int getLine() {
@@ -303,11 +303,11 @@ public class FireAlarmScreen implements ConfigurationSerializable {
         map.put("Name", this.name);
         map.put("FireAlarmName", this.fireAlarmName);
         map.put("Location", this.location);
-        map.put("FireAlarmSignScreen", this.fireAlarmSignScreen);
+        map.put("FireAlarmSignScreen", this.fireAlarmSignOS);
         return map;
     }
 
     public static FireAlarmScreen deserialize(Map<String, Object> map) {
-        return new FireAlarmScreen(Main.getPlugin(), (String) map.get("Name"), (String) map.get("FireAlarmName"), (Location) map.get("Location"), (FireAlarmSignScreen) map.get("FireAlarmSignScreen"));
+        return new FireAlarmScreen(Main.getPlugin(), (String) map.get("Name"), (String) map.get("FireAlarmName"), (Location) map.get("Location"), (FireAlarmSignOS) map.get("FireAlarmSignScreen"));
     }
 }

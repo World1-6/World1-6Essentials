@@ -4,7 +4,7 @@ import World16.Main.Main;
 import World16FireAlarms.Objects.FireAlarmStatus;
 import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.Objects.Zone;
-import World16FireAlarms.Screen.FireAlarmScreen;
+import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
@@ -67,7 +67,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
                 FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
                 if (fireAlarmScreen != null) {
-                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignScreen().resetSign(fireAlarmScreen, fireAlarmScreen.getSign(), true);
+                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().resetSign(fireAlarmScreen, fireAlarmScreen.getSign(), true);
                 } else {
                     //Wait 1 second before removing so it won't cause a ConcurrentModificationException
                     new BukkitRunnable() {
@@ -97,7 +97,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
                 FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
                 if (fireAlarmScreen != null)
-                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignScreen().sendPopup(troubleReason, zone, fireAlarmScreen, fireAlarmScreen.getSign());
+                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().sendPopup(troubleReason, zone, fireAlarmScreen, fireAlarmScreen.getSign());
                 else {
                     //Wait 1 second before removing so it won't cause a ConcurrentModificationException
                     new BukkitRunnable() {

@@ -23,8 +23,8 @@ import World16FireAlarms.FireAlarmManager;
 import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
 import World16FireAlarms.Objects.Simple.SimpleStrobe;
 import World16FireAlarms.Objects.Zone;
-import World16FireAlarms.Screen.FireAlarmScreen;
-import World16FireAlarms.Screen.FireAlarmSignScreen;
+import World16FireAlarms.Objects.Screen.FireAlarmScreen;
+import World16FireAlarms.Objects.Screen.FireAlarmSignOS;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -43,7 +43,7 @@ public class Main extends JavaPlugin {
         ConfigurationSerialization.registerClass(Zone.class, "Zone");
         ConfigurationSerialization.registerClass(SimpleStrobe.class, "IStrobe");
         ConfigurationSerialization.registerClass(SimpleFireAlarm.class, "IFireAlarm");
-        ConfigurationSerialization.registerClass(FireAlarmSignScreen.class, "IScreenTech");
+        ConfigurationSerialization.registerClass(FireAlarmSignOS.class, "FireAlarmSignOS");
         ConfigurationSerialization.registerClass(FireAlarmScreen.class, "FireAlarmScreen");
     }
 

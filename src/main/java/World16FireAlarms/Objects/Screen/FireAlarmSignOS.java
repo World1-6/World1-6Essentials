@@ -1,4 +1,4 @@
-package World16FireAlarms.Screen;
+package World16FireAlarms.Objects.Screen;
 
 import World16.Main.Main;
 import World16.Utils.Translate;
@@ -14,8 +14,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-@SerializableAs("FireAlarmSignScreen")
-public class FireAlarmSignScreen implements ConfigurationSerializable {
+@SerializableAs("FireAlarmSignOS")
+public class FireAlarmSignOS implements ConfigurationSerializable {
 
     private Main plugin;
 
@@ -26,7 +26,7 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
 
     private Map<String, IFireAlarm> fireAlarmMap;
 
-    public FireAlarmSignScreen(Main plugin, FireAlarmSignMenu fireAlarmSignMenu, String name, String fireAlarmName) {
+    public FireAlarmSignOS(Main plugin, FireAlarmSignMenu fireAlarmSignMenu, String name, String fireAlarmName) {
         this.plugin = plugin;
 
         this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
@@ -184,7 +184,7 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
         return map;
     }
 
-    public static FireAlarmSignScreen deserialize(Map<String, Object> map) {
-        return new FireAlarmSignScreen(Main.getPlugin(), FireAlarmSignMenu.valueOf((String) map.get("CurrentMenu")), (String) map.get("Name"), (String) map.get("FireAlarmName"));
+    public static FireAlarmSignOS deserialize(Map<String, Object> map) {
+        return new FireAlarmSignOS(Main.getPlugin(), FireAlarmSignMenu.valueOf((String) map.get("CurrentMenu")), (String) map.get("Name"), (String) map.get("FireAlarmName"));
     }
 }

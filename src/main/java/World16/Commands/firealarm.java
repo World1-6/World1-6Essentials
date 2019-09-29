@@ -7,7 +7,7 @@ import World16.Utils.Translate;
 import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
 import World16FireAlarms.Objects.Simple.SimpleStrobe;
 import World16FireAlarms.Objects.TroubleReason;
-import World16FireAlarms.Screen.FireAlarmScreen;
+import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
