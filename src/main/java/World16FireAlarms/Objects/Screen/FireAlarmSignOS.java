@@ -91,7 +91,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         return true;
     }
 
-    public void sendPopup(FireAlarmScreen fireAlarmScreen, Sign sign, TroubleReason troubleReason, Optional<Zone> optionalZone, Optional<String> pullStation) {
+    public void sendPopup(FireAlarmScreen fireAlarmScreen, Sign sign, TroubleReason troubleReason, Optional<Zone> optionalZone) {
         if (troubleReason == TroubleReason.PANEL_TEST) {
             this.currentMenu = FireAlarmSignMenu.ALARM_POPUP;
             List<String> stringList = new ArrayList<>();
@@ -102,7 +102,6 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
 
             optionalZone.ifPresent(zone -> stringList.add("Z: " + zone.getName()));
             optionalZone.ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
-            pullStation.ifPresent(string -> stringList.add("PS: " + pullStation));
             fireAlarmScreen.updateSign(sign, stringList);
         }
     }
