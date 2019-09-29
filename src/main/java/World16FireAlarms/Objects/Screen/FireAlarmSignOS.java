@@ -38,12 +38,20 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
     }
 
     public boolean onLine(FireAlarmScreen fireAlarmScreen, Player player, Sign sign, int line, int scroll) {
+        //Reverse
+        if (line == 0 && scroll == 0) {
+            backReverse(this.currentMenu, fireAlarmScreen, sign, line);
+            return true;
+        }
+
+        if (scroll >= 1) {
+//            TODO implement scrolling features.
+            return true;
+        }
+
         //Loads for the first time.
         if (this.currentMenu == FireAlarmSignMenu.OFF) {
             loadFirstTime(fireAlarmScreen, sign);
-            return true;
-        } else if (line == 0) {
-            backReverse(this.currentMenu, fireAlarmScreen, sign, line);
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.MAIN_MENU) {
             if (line == 1) {
@@ -83,20 +91,18 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         return true;
     }
 
-    public void sendPopup(TroubleReason troubleReason, Optional<Zone> optionalZone, FireAlarmScreen fireAlarmScreen, Sign sign) {
+    public void sendPopup(FireAlarmScreen fireAlarmScreen, Sign sign, TroubleReason troubleReason, Optional<Zone> optionalZone, Optional<String> pullStation) {
         if (troubleReason == TroubleReason.PANEL_TEST) {
             this.currentMenu = FireAlarmSignMenu.ALARM_POPUP;
             List<String> stringList = new ArrayList<>();
             stringList.add("Popup/MENU");
             stringList.add(troubleReason.toString());
-            stringList.add("");
-            optionalZone.ifPresent(zone -> stringList.add("Zone:" + zone.getName()));
             stringList.add("-Reset");
+            stringList.add("MORE INFO BELOW");
 
-            stringList.add("Scroll 1");
-            stringList.add("scrolling works");
-            stringList.add("Hello my boi");
-            stringList.add("KK?");
+            optionalZone.ifPresent(zone -> stringList.add("Z: " + zone.getName()));
+            optionalZone.ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
+            pullStation.ifPresent(string -> stringList.add("PS: " + pullStation));
             fireAlarmScreen.updateSign(sign, stringList);
         }
     }
