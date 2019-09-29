@@ -3,6 +3,7 @@ package World16FireAlarms.Screen;
 import World16.Main.Main;
 import World16FireAlarms.Objects.FireAlarmSignMenu;
 import World16FireAlarms.interfaces.IFireAlarm;
+import com.google.common.collect.Lists;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SerializableAs("FireAlarmScreen")
@@ -27,6 +29,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     private FireAlarmSignScreen fireAlarmSignScreen;
 
     private int line = -0;
+    private int scroll = 0;
 
     private int min = 0;
     private int max = 3;
@@ -38,6 +41,8 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     private boolean stop = false;
 
     private Map<String, IFireAlarm> fireAlarmMap;
+
+    private List<List<String>> partition = null;
 
     public FireAlarmScreen(Main plugin, String name, String fireAlarmName, Location location) {
         this.plugin = plugin;
@@ -64,7 +69,42 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     public void onClick(Player player) {
         Sign sign = getSign();
         if (sign != null) {
-            this.fireAlarmSignScreen.onLine(this, player, sign, line);
+            this.fireAlarmSignScreen.onLine(this, player, sign, line, scroll);
+        }
+    }
+
+    public void onScroll(Player player, boolean up) {
+        if (this.partition == null) {
+            return;
+        }
+
+        Sign sign = getSign();
+        if (sign != null) {
+            if (up) {
+                int upONE = this.scroll + 1;
+                if (upONE < this.partition.size()) {
+                    this.scroll++;
+                    for (int i = 0; i < this.partition.get(this.scroll).size(); i++) {
+                        String line = this.partition.get(this.scroll).get(i);
+                        sign.setLine(i, line);
+                    }
+                    this.partition = null;
+                    this.signCache1 = new SignCache(sign);
+                    this.hasTextChanged = true;
+                }
+            } else {
+                int downONE = this.scroll - 1;
+                if (downONE >= 0 && downONE <= this.partition.size()) {
+                    this.scroll--;
+                    for (int i = 0; i < this.partition.get(this.scroll).size(); i++) {
+                        String line = this.partition.get(this.scroll).get(i);
+                        sign.setLine(i, line);
+                    }
+                    this.partition = null;
+                    this.signCache1 = new SignCache(sign);
+                    this.hasTextChanged = true;
+                }
+            }
         }
     }
 
@@ -123,6 +163,16 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     }
 
     public void updateSign(Sign sign) {
+        this.signCache1 = new SignCache(sign);
+        this.hasTextChanged = true;
+    }
+
+    public void updateSign(Sign sign, List<String> stringList) {
+        this.partition = Lists.partition(stringList, 4);
+        for (int i = 0; i < this.partition.get(0).size(); i++) {
+            String line = this.partition.get(0).get(i);
+            sign.setLine(i, line);
+        }
         this.signCache1 = new SignCache(sign);
         this.hasTextChanged = true;
     }

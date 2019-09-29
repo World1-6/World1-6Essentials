@@ -12,9 +12,7 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @SerializableAs("FireAlarmSignScreen")
 public class FireAlarmSignScreen implements ConfigurationSerializable {
@@ -39,7 +37,7 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
         this.currentMenu = fireAlarmSignMenu;
     }
 
-    public boolean onLine(FireAlarmScreen fireAlarmScreen, Player player, Sign sign, int line) {
+    public boolean onLine(FireAlarmScreen fireAlarmScreen, Player player, Sign sign, int line, int scroll) {
         //Loads for the first time.
         if (this.currentMenu == FireAlarmSignMenu.OFF) {
             loadFirstTime(fireAlarmScreen, sign);
@@ -88,12 +86,18 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
     public void sendPopup(TroubleReason troubleReason, Optional<Zone> optionalZone, FireAlarmScreen fireAlarmScreen, Sign sign) {
         if (troubleReason == TroubleReason.PANEL_TEST) {
             this.currentMenu = FireAlarmSignMenu.ALARM_POPUP;
-            sign.setLine(0, "Popup/MENU");
-            sign.setLine(1, troubleReason.toString());
-            sign.setLine(2, "");
-            optionalZone.ifPresent(zone -> sign.setLine(2, "Zone:" + zone.getName()));
-            sign.setLine(3, "-Reset");
-            fireAlarmScreen.updateSign(sign);
+            List<String> stringList = new ArrayList<>();
+            stringList.add("Popup/MENU");
+            stringList.add(troubleReason.toString());
+            stringList.add("");
+            optionalZone.ifPresent(zone -> stringList.add("Zone:" + zone.getName()));
+            stringList.add("-Reset");
+
+            stringList.add("Scroll 1");
+            stringList.add("scrolling works");
+            stringList.add("Hello my boi");
+            stringList.add("KK?");
+            fireAlarmScreen.updateSign(sign, stringList);
         }
     }
 

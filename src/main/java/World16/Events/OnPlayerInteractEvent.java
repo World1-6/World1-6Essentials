@@ -53,8 +53,13 @@ public class OnPlayerInteractEvent implements Listener {
                 if (block.getType() == Material.SIGN || block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
                     if (itemMeta != null && itemMeta.hasDisplayName()) {
                         FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
-                        if (fireAlarmScreen != null && itemStack.getItemMeta().getDisplayName().equalsIgnoreCase("DOWN"))
+                        if (fireAlarmScreen != null && itemStack.getItemMeta().getDisplayName().equalsIgnoreCase("DOWN")) {
                             this.fireAlarmScreenMap.get(block.getLocation()).changeLines();
+                        } else if (fireAlarmScreen != null && itemMeta.getDisplayName().equalsIgnoreCase("SCROLL UP")) {
+                            this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, true);
+                        } else if (fireAlarmScreen != null && itemMeta.getDisplayName().equalsIgnoreCase("SCROLL DOWN")) {
+                            this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, false);
+                        }
                     } else {
                         FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
                         if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).onClick(p);
