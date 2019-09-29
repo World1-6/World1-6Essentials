@@ -60,6 +60,17 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         if (!zone.isPresent()) {
             this.fireAlarmStatus = FireAlarmStatus.READY;
             this.resetStrobes();
+            for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
+                String k = entry.getKey();
+                Location v = entry.getValue();
+
+                FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
+                if (fireAlarmScreen != null) {
+                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignScreen().resetSign(fireAlarmScreen, fireAlarmScreen.getSign(), true);
+                } else {
+                    this.plugin.getFireAlarmManager().deleteFireAlarmSignScreen(this.name, k.toLowerCase(), v);
+                }
+            }
         }
     }
 

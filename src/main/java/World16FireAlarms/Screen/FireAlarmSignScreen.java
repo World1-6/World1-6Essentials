@@ -111,7 +111,7 @@ public class FireAlarmSignScreen implements ConfigurationSerializable {
         }
     }
 
-    private void resetSign(FireAlarmScreen fireAlarmScreen, Sign sign, boolean backToMainMenu) {
+    public void resetSign(FireAlarmScreen fireAlarmScreen, Sign sign, boolean backToMainMenu) {
         sign.setLine(0, "");
         sign.setLine(1, "");
         sign.setLine(2, "");
