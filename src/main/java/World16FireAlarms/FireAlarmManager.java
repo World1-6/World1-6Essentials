@@ -88,8 +88,8 @@ public class FireAlarmManager {
 
         //For each fire alarm screen
         for (String fireAlarmScreenName : cs1.getKeys(false)) {
-            cs1 = cs1.getConfigurationSection(fireAlarmScreenName);
-            FireAlarmScreen fireAlarmScreen = (FireAlarmScreen) cs1.get("FireAlarmScreen");
+            ConfigurationSection cs2 = cs1.getConfigurationSection(fireAlarmScreenName);
+            FireAlarmScreen fireAlarmScreen = (FireAlarmScreen) cs2.get("FireAlarmScreen");
             this.fireAlarmScreenMap.putIfAbsent(fireAlarmScreen.getLocation(), fireAlarmScreen);
         }
     }
@@ -181,6 +181,18 @@ public class FireAlarmManager {
         }
     }
 
+    public void deleteFireAlarmStrobe(String fireAlarm, String strobeName) {
+        if (!on) return;
+
+        if (this.fireAlarmMap.get(fireAlarm) != null) {
+            this.fireAlarmMap.get(fireAlarm).getStrobesMap().remove(strobeName);
+            ConfigurationSection fireAlarmConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms." + fireAlarm.toLowerCase());
+            ConfigurationSection fireAlarmStrobes = fireAlarmConfig.getConfigurationSection("Strobes");
+            fireAlarmStrobes.set(strobeName.toLowerCase(), null);
+            this.fireAlarmsYml.saveConfigSilent();
+        }
+    }
+
     public void deleteFireAlarmSignScreen(Location location) {
         if (!on) return;
 
@@ -193,14 +205,14 @@ public class FireAlarmManager {
         }
     }
 
-    public void deleteFireAlarmSignScreen(String name, String signName, Location location) {
+    public void deleteFireAlarmSignScreen(String fireAlarmName, String signName, Location location) {
         if (!on) return;
 
-        if (this.fireAlarmMap.get(name.toLowerCase()) != null) {
+        if (this.fireAlarmMap.get(fireAlarmName.toLowerCase()) != null) {
             fireAlarmScreenMap.remove(location);
-            fireAlarmMap.get(name).getSigns().remove(signName);
+            fireAlarmMap.get(fireAlarmName).getSigns().remove(signName);
 
-            ConfigurationSection cs = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms." + name.toLowerCase());
+            ConfigurationSection cs = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms." + fireAlarmName.toLowerCase());
             ConfigurationSection cs1 = cs.getConfigurationSection("Signs");
 
             cs1.set(signName.toLowerCase(), null);

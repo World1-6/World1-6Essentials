@@ -60,6 +60,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         if (!zone.isPresent()) {
             this.fireAlarmStatus = FireAlarmStatus.READY;
             this.resetStrobes();
+            //Signs
             for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
                 String k = entry.getKey();
                 Location v = entry.getValue();
@@ -68,20 +69,28 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
                 if (fireAlarmScreen != null) {
                     this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignScreen().resetSign(fireAlarmScreen, fireAlarmScreen.getSign(), true);
                 } else {
-                    this.plugin.getFireAlarmManager().deleteFireAlarmSignScreen(this.name, k.toLowerCase(), v);
+                    //Wait 1 second before removing so it won't cause a ConcurrentModificationException
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, k.toLowerCase(), v);
+                        }
+                    }.runTaskLater(plugin, 20L);
                 }
             }
+            //SIGNS DONE...
         }
     }
 
     public void trouble() {
-
+        //TODO add Trouble
     }
 
     public void alarm(Optional<Zone> zone, TroubleReason troubleReason) {
         if (!zone.isPresent()) {
             this.fireAlarmStatus = FireAlarmStatus.ALARM;
             setupMarchTime();
+            //Signs
             for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
                 String k = entry.getKey();
                 Location v = entry.getValue();
@@ -90,9 +99,16 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
                 if (fireAlarmScreen != null)
                     this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignScreen().sendPopup(troubleReason, zone, fireAlarmScreen, fireAlarmScreen.getSign());
                 else {
-                    this.plugin.getFireAlarmManager().deleteFireAlarmSignScreen(this.name, k.toLowerCase(), v);
+                    //Wait 1 second before removing so it won't cause a ConcurrentModificationException
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, k.toLowerCase(), v);
+                        }
+                    }.runTaskLater(plugin, 20L);
                 }
             }
+            //Signs DONE...
         }
     }
 

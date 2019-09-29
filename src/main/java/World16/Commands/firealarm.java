@@ -9,6 +9,7 @@ import World16FireAlarms.Objects.Simple.SimpleStrobe;
 import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.Screen.FireAlarmScreen;
 import World16FireAlarms.interfaces.IFireAlarm;
+import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -112,6 +113,7 @@ public class firealarm implements CommandExecutor {
             if (args.length == 1) {
                 p.sendMessage(Translate.chat("/firealarm delete firealarm <Name>"));
                 p.sendMessage(Translate.chat("/fiealarm delete strobe <FireAlarmName> <Name>"));
+                p.sendMessage(Translate.chat("/firealarm delete strobe <FireAlarmName>"));
                 return true;
             } else if (args.length == 3 && args[1].equalsIgnoreCase("firealarm")) {
                 String fireAlarmName = args[2].toLowerCase();
@@ -138,8 +140,43 @@ public class firealarm implements CommandExecutor {
                     return true;
                 }
 
-                this.fireAlarmMap.get(fireAlarmName).getStrobesMap().remove(strobeName);
+                this.plugin.getFireAlarmManager().deleteFireAlarmStrobe(fireAlarmName, strobeName);
                 p.sendMessage(Translate.chat("The strobe: " + strobeName + " for the fire alarm: " + fireAlarmName + " has been removed."));
+                return true;
+            } else if (args.length == 3 && args[1].equalsIgnoreCase("strobe")) {
+                String fireAlarmName = args[2].toLowerCase();
+                Location location = api.getBlockPlayerIsLookingAt(p).getLocation();
+
+                if (this.fireAlarmMap.get(fireAlarmName) == null) {
+                    p.sendMessage(Translate.chat("There's no such fire alarm called: " + fireAlarmName));
+                    return true;
+                }
+
+                IStrobe iStrobe = null;
+
+                for (Map.Entry<String, IStrobe> entry : this.fireAlarmMap.get(fireAlarmName).getStrobesMap().entrySet()) {
+                    String k = entry.getKey();
+                    IStrobe v = entry.getValue();
+                    int x = v.getLocation().getBlockX();
+                    int y = v.getLocation().getBlockY();
+                    int z = v.getLocation().getBlockZ();
+
+                    int x1 = location.getBlockX();
+                    int y1 = location.getBlockY();
+                    int z1 = location.getBlockZ();
+
+                    if (x == x1 && y == y1 && z == z1) {
+                        p.sendMessage(Translate.chat("FOUND"));
+                        iStrobe = v;
+                    }
+                }
+
+                if (iStrobe == null) {
+                    p.sendMessage(Translate.chat("Could not find..."));
+                    return true;
+                }
+                this.plugin.getFireAlarmManager().deleteFireAlarmStrobe(fireAlarmName, iStrobe.getName());
+                p.sendMessage(Translate.chat("The strobe: " + iStrobe.getName() + " has been deleted from fire alarm: " + fireAlarmName));
                 return true;
             }
             return true;
