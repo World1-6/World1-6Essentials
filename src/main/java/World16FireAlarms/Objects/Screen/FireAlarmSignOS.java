@@ -81,7 +81,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             }
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.ALARM_POPUP) {
-            if (line == 3) {
+            if (line == 2) {
                 this.fireAlarmMap.get(this.fireAlarmName).reset(Optional.empty());
                 backReverse(this.currentMenu, fireAlarmScreen, sign, line);
                 player.sendMessage(Translate.chat("The fire alarm has been reseted."));
@@ -102,6 +102,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
 
             optionalZone.ifPresent(zone -> stringList.add("Z: " + zone.getName()));
             optionalZone.ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
+            resetSign(fireAlarmScreen, sign, false);
             fireAlarmScreen.updateSign(sign, stringList);
         }
     }
@@ -130,7 +131,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         if (backToMainMenu) main_menu(fireAlarmScreen, sign);
     }
 
-    private void loadFirstTime(FireAlarmScreen fireAlarmScreen, Sign sign) {
+    public void loadFirstTime(FireAlarmScreen fireAlarmScreen, Sign sign) {
         this.currentMenu = FireAlarmSignMenu.WAITING;
 
         sign.setLine(0, "Fire Alarm 0.1V");

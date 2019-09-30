@@ -1,6 +1,7 @@
 package World16FireAlarms.Objects.Screen;
 
 import World16.Main.Main;
+import World16.Utils.Translate;
 import World16FireAlarms.Objects.FireAlarmSignMenu;
 import World16FireAlarms.interfaces.IFireAlarm;
 import com.google.common.collect.Lists;
@@ -53,6 +54,15 @@ public class FireAlarmScreen implements ConfigurationSerializable {
         this.fireAlarmMap = this.plugin.getSetListMap().getFireAlarmMap();
 
         this.fireAlarmSignOS = new FireAlarmSignOS(this.plugin, FireAlarmSignMenu.OFF, this.name, this.fireAlarmName);
+
+        Sign sign = getSign();
+        if (sign != null) {
+            if (!this.isTickerRunning) {
+                tick();
+            }
+
+            this.fireAlarmSignOS.loadFirstTime(this, getSign());
+        }
     }
 
     public FireAlarmScreen(Main plugin, String name, String fireAlarmName, Location location, FireAlarmSignOS fireAlarmSignOS) {
@@ -67,6 +77,12 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     }
 
     public void onClick(Player player) {
+        if (!this.isTickerRunning) {
+            tick();
+            player.sendMessage(Translate.chat("&2Sign turned on."));
+            return;
+        }
+
         Sign sign = getSign();
         if (sign != null) {
             this.fireAlarmSignOS.onLine(this, player, sign, line, scroll);
@@ -74,6 +90,12 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     }
 
     public void onScroll(Player player, boolean up) {
+        if (!this.isTickerRunning) {
+            tick();
+            player.sendMessage(Translate.chat("&2Sign turned on."));
+            return;
+        }
+
         if (this.partition == null) {
             return;
         }
@@ -108,15 +130,18 @@ public class FireAlarmScreen implements ConfigurationSerializable {
         }
     }
 
-    public void changeLines() {
+    public void changeLines(Player player) {
+        if (!this.isTickerRunning) {
+            tick();
+            player.sendMessage(Translate.chat("&2Sign turned on."));
+            return;
+        }
+
         if (this.min <= this.line && this.line < this.max && this.isTickerRunning) {
             line++;
         } else {
             line = min;
         }
-
-        if (!this.isTickerRunning)
-            tick();
     }
 
     private void tick() {

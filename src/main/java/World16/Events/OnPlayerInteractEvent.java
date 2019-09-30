@@ -54,7 +54,7 @@ public class OnPlayerInteractEvent implements Listener {
                     if (itemMeta != null && itemMeta.hasDisplayName()) {
                         FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
                         if (fireAlarmScreen != null && itemStack.getItemMeta().getDisplayName().equalsIgnoreCase("DOWN")) {
-                            this.fireAlarmScreenMap.get(block.getLocation()).changeLines();
+                            this.fireAlarmScreenMap.get(block.getLocation()).changeLines(p);
                         } else if (fireAlarmScreen != null && itemMeta.getDisplayName().equalsIgnoreCase("SCROLL UP")) {
                             this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, true);
                         } else if (fireAlarmScreen != null && itemMeta.getDisplayName().equalsIgnoreCase("SCROLL DOWN")) {
