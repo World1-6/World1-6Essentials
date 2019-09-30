@@ -102,7 +102,11 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
 
             optionalZone.ifPresent(zone -> stringList.add("Z: " + zone.getName()));
             optionalZone.ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
-            resetSign(fireAlarmScreen, sign, false);
+
+            fireAlarmScreen.setLine(0);
+            fireAlarmScreen.setMin(0);
+            fireAlarmScreen.setMax(3);
+
             fireAlarmScreen.updateSign(sign, stringList);
         }
     }
@@ -126,6 +130,11 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         sign.setLine(1, "");
         sign.setLine(2, "");
         sign.setLine(3, "");
+
+        fireAlarmScreen.setLine(0);
+        fireAlarmScreen.setMin(0);
+        fireAlarmScreen.setMax(3);
+
         fireAlarmScreen.updateSign(sign);
 
         if (backToMainMenu) main_menu(fireAlarmScreen, sign);
@@ -154,6 +163,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         sign.setLine(1, "-Settings");
         sign.setLine(2, "");
         sign.setLine(3, "");
+
         fireAlarmScreen.setMin(1);
         fireAlarmScreen.setLine(1);
         fireAlarmScreen.updateSign(sign);
@@ -165,6 +175,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         sign.setLine(1, "-Test Fire Alarm");
         sign.setLine(2, "");
         sign.setLine(3, "");
+
         fireAlarmScreen.setMin(0);
         fireAlarmScreen.setLine(0);
         fireAlarmScreen.updateSign(sign);

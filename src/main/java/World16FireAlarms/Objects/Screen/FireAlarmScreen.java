@@ -16,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @SerializableAs("FireAlarmScreen")
 public class FireAlarmScreen implements ConfigurationSerializable {
@@ -106,6 +107,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
                 int upONE = this.scroll + 1;
                 if (upONE < this.partition.size()) {
                     this.scroll++;
+                    this.fireAlarmSignOS.resetSign(this, sign, false);
                     for (int i = 0; i < this.partition.get(this.scroll).size(); i++) {
                         String line = this.partition.get(this.scroll).get(i);
                         sign.setLine(i, line);
@@ -118,6 +120,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
                 int downONE = this.scroll - 1;
                 if (downONE >= 0 && downONE <= this.partition.size()) {
                     this.scroll--;
+                    this.fireAlarmSignOS.resetSign(this, sign, false);
                     for (int i = 0; i < this.partition.get(this.scroll).size(); i++) {
                         String line = this.partition.get(this.scroll).get(i);
                         sign.setLine(i, line);
@@ -137,7 +140,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
             return;
         }
 
-        if (this.min <= this.line && this.line < this.max && this.isTickerRunning) {
+        if (this.min <= this.line && this.line < this.max) {
             line++;
         } else {
             line = min;
@@ -266,6 +269,14 @@ public class FireAlarmScreen implements ConfigurationSerializable {
         this.line = line;
     }
 
+    public int getScroll() {
+        return scroll;
+    }
+
+    public void setScroll(int scroll) {
+        this.scroll = scroll;
+    }
+
     public int getMin() {
         return min;
     }
@@ -320,6 +331,62 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
     public void setFireAlarmMap(Map<String, IFireAlarm> fireAlarmMap) {
         this.fireAlarmMap = fireAlarmMap;
+    }
+
+    public List<List<String>> getPartition() {
+        return partition;
+    }
+
+    public void setPartition(List<List<String>> partition) {
+        this.partition = partition;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FireAlarmScreen that = (FireAlarmScreen) o;
+        return line == that.line &&
+                scroll == that.scroll &&
+                min == that.min &&
+                max == that.max &&
+                hasTextChanged == that.hasTextChanged &&
+                isTickerRunning == that.isTickerRunning &&
+                stop == that.stop &&
+                Objects.equals(plugin, that.plugin) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(fireAlarmName, that.fireAlarmName) &&
+                Objects.equals(location, that.location) &&
+                Objects.equals(fireAlarmSignOS, that.fireAlarmSignOS) &&
+                Objects.equals(signCache1, that.signCache1) &&
+                Objects.equals(fireAlarmMap, that.fireAlarmMap) &&
+                Objects.equals(partition, that.partition);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(plugin, name, fireAlarmName, location, fireAlarmSignOS, line, scroll, min, max, signCache1, hasTextChanged, isTickerRunning, stop, fireAlarmMap, partition);
+    }
+
+    @Override
+    public String toString() {
+        return "FireAlarmScreen{" +
+                "plugin=" + plugin +
+                ", name='" + name + '\'' +
+                ", fireAlarmName='" + fireAlarmName + '\'' +
+                ", location=" + location +
+                ", fireAlarmSignOS=" + fireAlarmSignOS +
+                ", line=" + line +
+                ", scroll=" + scroll +
+                ", min=" + min +
+                ", max=" + max +
+                ", signCache1=" + signCache1 +
+                ", hasTextChanged=" + hasTextChanged +
+                ", isTickerRunning=" + isTickerRunning +
+                ", stop=" + stop +
+                ", fireAlarmMap=" + fireAlarmMap +
+                ", partition=" + partition +
+                '}';
     }
 
     @Override
