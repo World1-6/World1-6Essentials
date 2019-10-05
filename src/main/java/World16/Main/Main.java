@@ -8,10 +8,14 @@ import World16.Commands.home.sethome;
 import World16.Commands.tp.tpa;
 import World16.Commands.tp.tpaccept;
 import World16.Commands.tp.tpdeny;
+import World16.Commands.warp.delwarp;
+import World16.Commands.warp.setwarp;
+import World16.Commands.warp.warp;
 import World16.Events.*;
 import World16.Events.PluginEvents.EasyBackupEvent;
 import World16.Managers.CustomConfigManager;
 import World16.Managers.JailManager;
+import World16.Managers.WarpManager;
 import World16.Utils.*;
 import World16.test.test1;
 import World16Elevators.ElevatorManager;
@@ -20,11 +24,11 @@ import World16Elevators.Objects.ElevatorObject;
 import World16Elevators.Objects.FloorObject;
 import World16Elevators.Objects.SignObject;
 import World16FireAlarms.FireAlarmManager;
+import World16FireAlarms.Objects.Screen.FireAlarmScreen;
+import World16FireAlarms.Objects.Screen.FireAlarmSignOS;
 import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
 import World16FireAlarms.Objects.Simple.SimpleStrobe;
 import World16FireAlarms.Objects.Zone;
-import World16FireAlarms.Objects.Screen.FireAlarmScreen;
-import World16FireAlarms.Objects.Screen.FireAlarmSignOS;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -56,6 +60,7 @@ public class Main extends JavaPlugin {
     //Managers
     private CustomConfigManager customConfigManager;
     private JailManager jailManager;
+    private WarpManager warpManager;
     private ElevatorManager elevatorManager;
     private FireAlarmManager fireAlarmManager;
 
@@ -79,6 +84,7 @@ public class Main extends JavaPlugin {
 
     public void onDisable() {
         this.discordBot.sendServerQuitMessage();
+        this.warpManager.saveAllWarps();
         this.elevatorManager.saveAllElevators();
         this.fireAlarmManager.saveFireAlarms();
         this.setListMap.clearSetListMap();
@@ -136,6 +142,11 @@ public class Main extends JavaPlugin {
         new home(plugin);
         new homelist(plugin);
         new sethome(plugin);
+
+        //Warps
+        new warp(plugin);
+        new setwarp(plugin);
+        new delwarp(plugin);
     }
 
     private void regEvents() {
@@ -171,6 +182,9 @@ public class Main extends JavaPlugin {
 
         this.jailManager = new JailManager(this.customConfigManager, this);
         this.jailManager.getAllJailsFromConfig();
+
+        this.warpManager = new WarpManager(this, this.customConfigManager);
+        this.warpManager.loadAllWarps();
 
         regDiscordBot();
         regElevators();
@@ -235,6 +249,10 @@ public class Main extends JavaPlugin {
 
     public JailManager getJailManager() {
         return jailManager;
+    }
+
+    public WarpManager getWarpManager() {
+        return warpManager;
     }
 
     public API getApi() {

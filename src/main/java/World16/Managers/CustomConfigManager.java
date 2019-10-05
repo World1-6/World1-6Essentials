@@ -9,6 +9,7 @@ public class CustomConfigManager {
     private CustomYmlManager shitYml;
     private CustomYmlManager eRamYml;
     private CustomYmlManager jailsYml;
+    private CustomYmlManager warpsYml;
     private CustomYmlManager elevatorsYml;
     private CustomYmlManager tempYml;
     private CustomYmlManager firealarmsYml;
@@ -37,6 +38,13 @@ public class CustomConfigManager {
         this.jailsYml.setup("jails.yml");
         this.jailsYml.saveConfig();
         this.jailsYml.reloadConfig();
+        //...
+
+        //warps.yml
+        this.warpsYml = new CustomYmlManager(this.plugin);
+        this.warpsYml.setup("warps.yml");
+        this.warpsYml.saveConfig();
+        this.warpsYml.reloadConfig();
         //...
 
         //elevators.yml
@@ -72,6 +80,10 @@ public class CustomConfigManager {
 
     public CustomYmlManager getJailsYml() {
         return jailsYml;
+    }
+
+    public CustomYmlManager getWarpsYml() {
+        return warpsYml;
     }
 
     public CustomYmlManager getElevatorsYml() {

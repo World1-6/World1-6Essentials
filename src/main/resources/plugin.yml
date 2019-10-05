@@ -51,6 +51,11 @@ commands:
   elevator:
   lastjoin:
   firealarm:
+  warp:
+    aliases:
+      - to
+  setwarp:
+  delwarp:
 
   gmc:
     aliases:
@@ -218,4 +223,13 @@ permissions:
     default: true
   world16.firealarm:
     description: Allows to do firealarm
+    default: true
+  world16.warp:
+    description: Allows to do warp
+    default: true
+  world16.setwarp:
+    description: Allows to do setwarp
+    default: true
+  world16.delwarp:
+    description: Allows to do delwarp
     default: true

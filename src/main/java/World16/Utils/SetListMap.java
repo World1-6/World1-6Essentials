@@ -30,6 +30,7 @@ public class SetListMap {
     private Map<String, ElevatorObject> elevatorObjectMap; //1
     private Map<String, IFireAlarm> fireAlarmMap; //1
     private Map<Location, FireAlarmScreen> fireAlarmScreenMap; //1
+    private Map<String, Location> warpsMap; //1
 
     private List<String> flyList; //0
     private List<String> godmList; //0
@@ -54,6 +55,7 @@ public class SetListMap {
         this.elevatorObjectMap = new HashMap<>();
         this.fireAlarmMap = new HashMap<>();
         this.fireAlarmScreenMap = new HashMap<>();
+        this.warpsMap = new HashMap<>();
 
         //Lists
         this.flyList = new ArrayList<>();
@@ -107,6 +109,7 @@ public class SetListMap {
         elevatorObjectMap.clear();
         fireAlarmMap.clear();
         fireAlarmScreenMap.clear();
+        warpsMap.clear();
     }
 
     public void clearAllLists(Player p) {
@@ -198,5 +201,9 @@ public class SetListMap {
 
     public Map<Location, FireAlarmScreen> getFireAlarmScreenMap() {
         return fireAlarmScreenMap;
+    }
+
+    public Map<String, Location> getWarpsMap() {
+        return warpsMap;
     }
 }
