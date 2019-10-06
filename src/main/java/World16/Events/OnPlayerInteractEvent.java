@@ -50,7 +50,7 @@ public class OnPlayerInteractEvent implements Listener {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (this.plugin.getApi().isFireAlarmsEnabled()) {
             if (block != null && action == Action.RIGHT_CLICK_BLOCK) {
-                if (block.getType() == Material.SIGN || block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+                if (block.getType() == Material.OAK_WALL_SIGN || block.getType() == Material.OAK_SIGN) {
                     if (itemMeta != null && itemMeta.hasDisplayName()) {
                         FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
                         if (fireAlarmScreen != null && itemStack.getItemMeta().getDisplayName().equalsIgnoreCase("DOWN")) {

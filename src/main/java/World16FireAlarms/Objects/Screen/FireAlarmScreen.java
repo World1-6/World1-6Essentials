@@ -210,7 +210,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
             return false;
         }
 
-        return location.getBlock().getType() == Material.WALL_SIGN || location.getBlock().getType() == Material.SIGN_POST;
+        return location.getBlock().getType() == Material.OAK_WALL_SIGN || location.getBlock().getType() == Material.OAK_SIGN;
     }
 
     public Sign getSign() {
