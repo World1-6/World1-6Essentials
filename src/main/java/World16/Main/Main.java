@@ -5,6 +5,9 @@ import World16.Commands.home.delhome;
 import World16.Commands.home.home;
 import World16.Commands.home.homelist;
 import World16.Commands.home.sethome;
+import World16.Commands.jail.deljail;
+import World16.Commands.jail.jail;
+import World16.Commands.jail.setjail;
 import World16.Commands.tp.tpa;
 import World16.Commands.tp.tpaccept;
 import World16.Commands.tp.tpdeny;
@@ -82,6 +85,7 @@ public class Main extends JavaPlugin {
 
     public void onDisable() {
         this.discordBot.sendServerQuitMessage();
+        this.jailManager.saveAllJails();
         this.warpManager.saveAllWarps();
         this.elevatorManager.saveAllElevators();
         this.fireAlarmManager.saveFireAlarms();
@@ -109,9 +113,7 @@ public class Main extends JavaPlugin {
         new sign(this);
         new key(this); //KEY COMMAND
         new colors(this);
-        new setjail(this, this.customConfigManager, this.jailManager);
         new setspawn(this, this.customConfigManager);
-        new jail(this, this.customConfigManager, this.jailManager);
         new afk(this);
         new flyspeed(this, this.customConfigManager);
         new isafk(this, this.customConfigManager);
@@ -136,15 +138,20 @@ public class Main extends JavaPlugin {
         new firealarm(this, this.customConfigManager);
 
         //Homes
-        new delhome(plugin);
-        new home(plugin);
-        new homelist(plugin);
-        new sethome(plugin);
+        new delhome(this);
+        new home(this);
+        new homelist(this);
+        new sethome(this);
+
+        //Jails
+        new jail(this, this.customConfigManager);
+        new setjail(this, this.customConfigManager);
+        new deljail(this, this.customConfigManager);
 
         //Warps
-        new warp(plugin);
-        new setwarp(plugin);
-        new delwarp(plugin);
+        new warp(this);
+        new setwarp(this);
+        new delwarp(this);
     }
 
     private void regEvents() {
@@ -179,7 +186,7 @@ public class Main extends JavaPlugin {
         customConfigManager.registerAllCustomConfigs();
 
         this.jailManager = new JailManager(this.customConfigManager, this);
-        this.jailManager.getAllJailsFromConfig();
+        this.jailManager.loadAllJails();
 
         this.warpManager = new WarpManager(this, this.customConfigManager);
         this.warpManager.loadAllWarps();

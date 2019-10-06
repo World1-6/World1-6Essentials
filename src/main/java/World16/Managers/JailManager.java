@@ -1,7 +1,6 @@
 package World16.Managers;
 
 import World16.Main.Main;
-import World16.Utils.Translate;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -24,43 +23,56 @@ public class JailManager {
         this.jailsMap = this.plugin.getSetListMap().getJails();
     }
 
-    public void getAllJailsFromConfig() {
+    public void loadAllJails() {
         ConfigurationSection cs = this.jailsYml.getConfig().getConfigurationSection("Jails");
         if (cs == null) {
             this.jailsYml.getConfig().createSection("Jails");
             this.jailsYml.saveConfigSilent();
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat("&c[JailManager]&r&6 Jails section has been created."));
             return;
         }
 
-        for (String jailname : cs.getKeys(false)) {
-            ConfigurationSection jail = cs.getConfigurationSection(jailname);
-            jailsMap.put(jailname, (Location) jail.get("Location"));
+        ConfigurationSection jailConfig = null;
+
+        for (String jailName : cs.getKeys(false)) {
+            jailConfig = cs.getConfigurationSection(jailName);
+
+            Location location = (Location) jailConfig.get("Location");
+
+            jailsMap.put(jailName, location);
         }
     }
 
-    public void set(String jailName, Location location) {
-        jailsMap.putIfAbsent(jailName, location);
-
-        String jailLocation = "Jails" + "." + jailName.toLowerCase();
-        ConfigurationSection jail = this.jailsYml.getConfig().getConfigurationSection(jailLocation);
-        if (jail == null) {
-            jail = this.jailsYml.getConfig().createSection(jailLocation);
+    public void saveAllJails() {
+        ConfigurationSection cs = this.jailsYml.getConfig().getConfigurationSection("Jails");
+        if (cs == null) {
+            cs = this.jailsYml.getConfig().createSection("Jails");
+            this.jailsYml.saveConfigSilent();
         }
 
-        jail.set("Location", location);
+        for (Map.Entry<String, Location> entry : this.jailsMap.entrySet()) {
+            String k = entry.getKey();
+            Location v = entry.getValue();
 
-        this.jailsYml.saveConfigSilent();
+            ConfigurationSection jailConfig = cs.getConfigurationSection(k.toLowerCase());
+            if (jailConfig == null) {
+                jailConfig = cs.createSection(k.toLowerCase());
+                this.jailsYml.saveConfigSilent();
+            }
+
+            jailConfig.set("Location", v);
+            this.jailsYml.saveConfigSilent();
+        }
     }
 
     public boolean delete(String jailName) {
-        if (jailsMap.get(jailName.toLowerCase()) != null) {
-            jailsMap.remove(jailName);
-            ConfigurationSection jails = this.jailsYml.getConfig().getConfigurationSection("Jails");
-            jails.set(jailName.toLowerCase(), null);
-            this.jailsYml.saveConfigSilent();
-            return true;
+        if (jailsMap.get(jailName.toLowerCase()) == null) {
+            return false;
         }
-        return false;
+        jailsMap.remove(jailName.toLowerCase());
+
+        ConfigurationSection jails = this.jailsYml.getConfig().getConfigurationSection("Jails");
+        jails.set(jailName.toLowerCase(), null);
+        this.jailsYml.saveConfigSilent();
+        return true;
     }
 }

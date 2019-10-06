@@ -1,6 +1,7 @@
 package World16.TabComplete;
 
 import World16.Main.Main;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -12,27 +13,16 @@ import java.util.Map;
 
 public class JailTab implements TabCompleter {
 
-    private Main plugin;
-
     //Maps
-    private Map<String, List<String>> tabCompleteMap;
+    private Map<String, Location> jailsMap;
     //...
 
-    //Lists
-    //...
+    private Main plugin;
 
     public JailTab(Main plugin) {
         this.plugin = plugin;
-        this.tabCompleteMap = this.plugin.getSetListMap().getTabCompleteMap();
 
-        tabCompleteMap.computeIfAbsent("jail", k -> new ArrayList<>());
-
-        if (tabCompleteMap.get("jail").isEmpty()) {
-            tabCompleteMap.get("jail").add("list");
-            tabCompleteMap.get("jail").add("set");
-            tabCompleteMap.get("jail").add("delete");
-//            tabCompleteMap.get("back").add("");
-        }
+        this.jailsMap = this.plugin.getSetListMap().getJails();
     }
 
     @Override
@@ -42,16 +32,14 @@ public class JailTab implements TabCompleter {
         }
         Player p = (Player) sender;
 
-        if (!cmd.getName().equalsIgnoreCase("jail")) {
-            return null;
-        }
-
         if (!p.hasPermission("world16.jail")) {
             return null;
         }
 
+        List<String> keys = new ArrayList<>(this.jailsMap.keySet());
+
         if (args.length == 1) {
-            return getContains(args[0], tabCompleteMap.get("jail"));
+            return getContains(args[0], keys);
         }
 
         return null;

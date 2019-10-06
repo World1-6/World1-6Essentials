@@ -25,6 +25,7 @@ commands:
   colors:
   setjail:
   jail:
+  deljail:
   afk:
   fs:
   isafk:
@@ -163,11 +164,6 @@ permissions:
   world16.isafk:
     description: Allows to do isafk
     default: true
-  world16.jail:
-    description: Allows to do jail
-    default: true
-    children:
-      world16.jail.delete: true
   world16.key:
     description: Allows to do key
     default: true
@@ -176,9 +172,6 @@ permissions:
     default: op
   world16.ram:
     description: Allows to do ram
-    default: op
-  world16.setjail:
-    description: Allows to do setjail
     default: op
   world16.setspawn:
     description: Allows to do setspawn
@@ -234,3 +227,12 @@ permissions:
   world16.delwarp:
     description: Allows to do delwarp
     default: true
+  world16.jail:
+    description: Allows to do jail
+    default: true
+  world16.setjail:
+    description: Allows to do setjail
+    default: op
+  world16.deljail:
+    description: Allows to do deljail
+    default: op
