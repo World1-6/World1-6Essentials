@@ -18,7 +18,7 @@ import World16.Managers.JailManager;
 import World16.Managers.WarpManager;
 import World16.Utils.*;
 import World16.test.test1;
-import World16Elevators.ElevatorMain;
+import World16Elevators.ElevatorManager;
 import World16Elevators.Objects.ElevatorObject;
 import World16Elevators.Objects.FloorObject;
 import World16Elevators.Objects.SignObject;
@@ -69,7 +69,7 @@ public class Main extends JavaPlugin {
         plugin = this;
         this.otherPlugins = new OtherPlugins(this);
         this.setListMap = new SetListMap();
-        this.api = new API(plugin);
+        this.api = new API(this);
 
         regCustomManagers();
         regFileConfigGEN();
