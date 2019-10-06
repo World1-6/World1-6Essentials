@@ -9,10 +9,8 @@ public class CustomConfigManager {
     private CustomYmlManager shitYml;
     private CustomYmlManager eRamYml;
     private CustomYmlManager jailsYml;
-    private CustomYmlManager warpsYml;
     private CustomYmlManager elevatorsYml;
     private CustomYmlManager tempYml;
-    private CustomYmlManager firealarmsYml;
 
     public CustomConfigManager(Main plugin) {
         this.plugin = plugin;
@@ -40,13 +38,6 @@ public class CustomConfigManager {
         this.jailsYml.reloadConfig();
         //...
 
-        //warps.yml
-        this.warpsYml = new CustomYmlManager(this.plugin);
-        this.warpsYml.setup("warps.yml");
-        this.warpsYml.saveConfig();
-        this.warpsYml.reloadConfig();
-        //...
-
         //elevators.yml
         this.elevatorsYml = new CustomYmlManager(this.plugin);
         this.elevatorsYml.setup("elevators.yml");
@@ -59,13 +50,6 @@ public class CustomConfigManager {
         this.tempYml.setup("temp.yml");
         this.tempYml.saveConfig();
         this.tempYml.reloadConfig();
-        //...
-
-        //firealarms.yml
-        this.firealarmsYml = new CustomYmlManager(this.plugin);
-        this.firealarmsYml.setup("firealarms.yml");
-        this.firealarmsYml.saveConfig();
-        this.firealarmsYml.reloadConfig();
         //...
 
     }
@@ -82,19 +66,11 @@ public class CustomConfigManager {
         return jailsYml;
     }
 
-    public CustomYmlManager getWarpsYml() {
-        return warpsYml;
-    }
-
     public CustomYmlManager getElevatorsYml() {
         return elevatorsYml;
     }
 
     public CustomYmlManager getTempYml() {
         return tempYml;
-    }
-
-    public CustomYmlManager getFireAlarmsYml() {
-        return firealarmsYml;
     }
 }

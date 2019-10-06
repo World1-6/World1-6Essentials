@@ -107,7 +107,6 @@ public class DiscordBot implements Runnable {
     private void jsonPrintOut(JSONObject jsonObject) {
         if (!isOn) return;
         jsonObject.put("WHO", "World1-6");
-        jsonObject.put("SV", this.plugin.getApi().getServerVersion());
         out.println(jsonObject.toJSONString());
         ourCheckError();
     }

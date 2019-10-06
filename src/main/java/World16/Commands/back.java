@@ -107,7 +107,7 @@ public class back implements CommandExecutor {
                 return true;
             }
 
-            //SET
+
         } else if (args[0].equalsIgnoreCase("set")) {
             if (!p.hasPermission("world16.back.set")) {
                 api.PermissionErrorMessage(p);
@@ -117,7 +117,6 @@ public class back implements CommandExecutor {
             p.sendMessage(Translate.chat("[&cBack&r] &aYour back location has been set."));
             return true;
 
-            //GOTO
         } else if (args[0].equalsIgnoreCase("goto")) {
             if (!p.hasPermission("world16.back.goto")) {
                 api.PermissionErrorMessage(p);
