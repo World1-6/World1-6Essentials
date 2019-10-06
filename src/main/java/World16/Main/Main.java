@@ -8,16 +8,26 @@ import World16.Commands.home.sethome;
 import World16.Commands.tp.tpa;
 import World16.Commands.tp.tpaccept;
 import World16.Commands.tp.tpdeny;
+import World16.Commands.warp.delwarp;
+import World16.Commands.warp.setwarp;
+import World16.Commands.warp.warp;
 import World16.Events.*;
 import World16.Events.PluginEvents.EasyBackupEvent;
 import World16.Managers.CustomConfigManager;
 import World16.Managers.JailManager;
+import World16.Managers.WarpManager;
 import World16.Utils.*;
 import World16.test.test1;
 import World16Elevators.ElevatorMain;
 import World16Elevators.Objects.ElevatorObject;
 import World16Elevators.Objects.FloorObject;
 import World16Elevators.Objects.SignObject;
+import World16FireAlarms.FireAlarmManager;
+import World16FireAlarms.Objects.Screen.FireAlarmScreen;
+import World16FireAlarms.Objects.Screen.FireAlarmSignOS;
+import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
+import World16FireAlarms.Objects.Simple.SimpleStrobe;
+import World16FireAlarms.Objects.Zone;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -31,9 +41,15 @@ public class Main extends JavaPlugin {
         ConfigurationSerialization.registerClass(SignObject.class, "SignObject");
         ConfigurationSerialization.registerClass(FloorObject.class, "FloorObject");
         ConfigurationSerialization.registerClass(ElevatorObject.class, "ElevatorObject");
+        //Fire Alarms
+        ConfigurationSerialization.registerClass(Zone.class, "Zone");
+        ConfigurationSerialization.registerClass(SimpleStrobe.class, "IStrobe");
+        ConfigurationSerialization.registerClass(SimpleFireAlarm.class, "IFireAlarm");
+        ConfigurationSerialization.registerClass(FireAlarmSignOS.class, "FireAlarmSignOS");
+        ConfigurationSerialization.registerClass(FireAlarmScreen.class, "FireAlarmScreen");
     }
 
-    private Main plugin;
+    private static Main plugin;
 
     private SetListMap setListMap;
 
@@ -42,21 +58,21 @@ public class Main extends JavaPlugin {
     //Managers
     private CustomConfigManager customConfigManager;
     private JailManager jailManager;
-    private ElevatorMain elevatorMain;
+    private WarpManager warpManager;
+    private ElevatorManager elevatorManager;
+    private FireAlarmManager fireAlarmManager;
 
     private API api;
     private OtherPlugins otherPlugins;
 
     public void onEnable() {
-        this.plugin = this;
+        plugin = this;
         this.otherPlugins = new OtherPlugins(this);
         this.setListMap = new SetListMap();
         this.api = new API(plugin);
 
         regCustomManagers();
         regFileConfigGEN();
-        regDiscordBot();
-        regElevators();
         regEvents();
         regCommands();
         regBStats();
@@ -66,7 +82,9 @@ public class Main extends JavaPlugin {
 
     public void onDisable() {
         this.discordBot.sendServerQuitMessage();
-        this.getElevatorMain().saveAllElevators();
+        this.warpManager.saveAllWarps();
+        this.elevatorManager.saveAllElevators();
+        this.fireAlarmManager.saveFireAlarms();
         this.setListMap.clearSetListMap();
         getLogger().info("[World1-6Essentials] is now disabled.");
     }
@@ -115,12 +133,18 @@ public class Main extends JavaPlugin {
         new workbench(this, this.customConfigManager);
         new elevator(this, this.customConfigManager);
         new lastjoin(this, this.customConfigManager);
+        new firealarm(this, this.customConfigManager);
 
         //Homes
-        new delhome(this.plugin);
-        new home(this.plugin);
-        new homelist(this.plugin);
-        new sethome(this.plugin);
+        new delhome(plugin);
+        new home(plugin);
+        new homelist(plugin);
+        new sethome(plugin);
+
+        //Warps
+        new warp(plugin);
+        new setwarp(plugin);
+        new delwarp(plugin);
     }
 
     private void regEvents() {
@@ -138,6 +162,7 @@ public class Main extends JavaPlugin {
         new OnAsyncPlayerChatEvent(this);
         new OnPlayerInteractEvent(this);
         new OnPlayerMoveEvent(this);
+        new OnBlockBreakEvent(this);
 
         //PluginEvents
         new EasyBackupEvent(this);
@@ -155,6 +180,13 @@ public class Main extends JavaPlugin {
 
         this.jailManager = new JailManager(this.customConfigManager, this);
         this.jailManager.getAllJailsFromConfig();
+
+        this.warpManager = new WarpManager(this, this.customConfigManager);
+        this.warpManager.loadAllWarps();
+
+        regDiscordBot();
+        regElevators();
+        regFireAlarms();
     }
 
     private void regBStats() {
@@ -163,21 +195,28 @@ public class Main extends JavaPlugin {
 
     private void regDiscordBot() {
         this.discordBot = new DiscordBot(this, this.customConfigManager);
-        boolean discordbot = this.discordBot.setup();
-        if (discordbot) {
-            this.plugin.getServer().getScheduler().runTaskAsynchronously(this, this.discordBot);
-        } else {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cDiscord Bot has not been enabled because of exception"));
+        if (this.api.isDiscordBotEnabled()) {
+            boolean discordbot = this.discordBot.setup();
+            if (discordbot) {
+                plugin.getServer().getScheduler().runTaskAsynchronously(this, this.discordBot);
+            } else {
+                plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cDiscord Bot has not been enabled because of exception"));
+            }
         }
     }
 
     private void regElevators() {
-        this.elevatorMain = new ElevatorMain(this, this.customConfigManager);
+        this.elevatorManager = new ElevatorManager(this, this.customConfigManager, this.api.isElevatorsEnabled());
         if (this.otherPlugins.hasWorldEdit()) {
-            this.elevatorMain.loadAllElevators();
+            this.elevatorManager.loadAllElevators();
         } else {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cElevator's won't be working since there's no WorldEdit."));
+            plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cElevator's won't be working since there's no WorldEdit."));
         }
+    }
+
+    private void regFireAlarms() {
+        this.fireAlarmManager = new FireAlarmManager(this, this.customConfigManager, this.api.isFireAlarmsEnabled());
+        this.fireAlarmManager.loadFireAlarms();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -194,7 +233,7 @@ public class Main extends JavaPlugin {
 
     //Getters
 
-    public Main getPlugin() {
+    public static Main getPlugin() {
         return plugin;
     }
 
@@ -210,6 +249,10 @@ public class Main extends JavaPlugin {
         return jailManager;
     }
 
+    public WarpManager getWarpManager() {
+        return warpManager;
+    }
+
     public API getApi() {
         return api;
     }
@@ -218,11 +261,15 @@ public class Main extends JavaPlugin {
         return otherPlugins;
     }
 
-    public ElevatorMain getElevatorMain() {
-        return elevatorMain;
+    public ElevatorManager getElevatorManager() {
+        return elevatorManager;
     }
 
     public DiscordBot getDiscordBot() {
         return discordBot;
+    }
+
+    public FireAlarmManager getFireAlarmManager() {
+        return fireAlarmManager;
     }
 }

@@ -6,7 +6,7 @@ import World16.TabComplete.ElevatorTab;
 import World16.Utils.API;
 import World16.Utils.SimpleMath;
 import World16.Utils.Translate;
-import World16Elevators.ElevatorMain;
+import World16Elevators.ElevatorManager;
 import World16Elevators.Objects.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
@@ -30,7 +30,7 @@ public class elevator implements CommandExecutor {
 
     private CustomConfigManager customConfigManager;
     private WorldEditPlugin worldEditPlugin;
-    private ElevatorMain elevatorMain;
+    private ElevatorManager elevatorManager;
 
     private Map<String, ElevatorObject> elevatorObjectMap;
 
@@ -45,7 +45,7 @@ public class elevator implements CommandExecutor {
 
         this.worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
         this.elevatorObjectMap = this.plugin.getSetListMap().getElevatorObjectMap();
-        this.elevatorMain = this.plugin.getElevatorMain();
+        this.elevatorManager = this.plugin.getElevatorManager();
 
         this.plugin.getCommand("elevator").setExecutor(this);
         this.plugin.getCommand("elevator").setTabCompleter(new ElevatorTab(this.plugin));
@@ -136,6 +136,11 @@ public class elevator implements CommandExecutor {
         Player p = (Player) sender;
         if (!p.hasPermission("world16.elevator")) {
             api.PermissionErrorMessage(p);
+            return true;
+        }
+
+        if (!this.plugin.getApi().isElevatorsEnabled() || !this.plugin.getOtherPlugins().hasWorldEdit()) {
+            p.sendMessage(Translate.chat("Looks like elevators aren't enabled!"));
             return true;
         }
 
@@ -245,7 +250,7 @@ public class elevator implements CommandExecutor {
                         return true;
                     }
 
-                    this.elevatorMain.deleteFloorOfElevator(elevatorName, floorNum);
+                    this.elevatorManager.deleteFloorOfElevator(elevatorName, floorNum);
                     p.sendMessage(Translate.chat("The floor: " + floorNum + " has been removed from the elevator: " + elevatorName));
                     return true;
                 } else if (args.length == 4 && args[1].equalsIgnoreCase("sign")) {
@@ -277,19 +282,19 @@ public class elevator implements CommandExecutor {
                     p.sendMessage(Translate.chat("That elevator doesn't exist."));
                     return true;
                 }
-                this.plugin.getElevatorMain().deleteElevator(elevatorName);
+                this.plugin.getElevatorManager().deleteElevator(elevatorName);
                 p.sendMessage(Translate.chat("Elevator: " + elevatorName + " has been deleted."));
                 return true;
             }
 
             if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
-                this.plugin.getElevatorMain().saveAllElevators();
+                this.plugin.getElevatorManager().saveAllElevators();
                 p.sendMessage(Translate.chat("All elevators have been saved."));
                 return true;
             }
 
             if (args.length == 1 && args[0].equalsIgnoreCase("load")) {
-                this.plugin.getElevatorMain().loadAllElevators();
+                this.plugin.getElevatorManager().loadAllElevators();
                 p.sendMessage(Translate.chat("All elevators have been loaded in memory."));
                 return true;
             }
@@ -432,7 +437,7 @@ public class elevator implements CommandExecutor {
                 }
 
                 ElevatorObject elevatorObject = elevatorObjectMap.get(elevatorName);
-                elevatorMain.deleteElevator(elevatorName);
+                elevatorManager.deleteElevator(elevatorName);
                 elevatorObject.setElevatorName(toElevatorName);
                 elevatorObjectMap.putIfAbsent(toElevatorName, elevatorObject);
                 p.sendMessage(Translate.chat("Old Name: " + elevatorName + " new Name: " + toElevatorName));

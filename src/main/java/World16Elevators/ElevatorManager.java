@@ -10,27 +10,27 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Map;
 
-public class ElevatorMain {
+public class ElevatorManager {
 
     private Main plugin;
-    private CustomConfigManager customConfigManager;
+
     private CustomYmlManager eleYml;
+
+    private boolean on;
 
     private Map<String, ElevatorObject> elevatorObjectMap;
 
-    public ElevatorMain(Main plugin, CustomConfigManager customConfigManager) {
+    public ElevatorManager(Main plugin, CustomConfigManager customConfigManager, boolean on) {
+        this.on = on;
         this.plugin = plugin;
-        this.customConfigManager = customConfigManager;
         this.elevatorObjectMap = this.plugin.getSetListMap().getElevatorObjectMap();
-        this.eleYml = this.customConfigManager.getElevatorsYml();
+        this.eleYml = customConfigManager.getElevatorsYml();
     }
 
     public void loadAllElevators() {
-        //Don't run if there's no WorldEdit.
-        if (!this.plugin.getOtherPlugins().hasWorldEdit()) {
-            return;
-        }
+        if (!on || !this.plugin.getOtherPlugins().hasWorldEdit()) return;
 
+        //Only runs when elevator.yml is first being created.
         ConfigurationSection cs = this.eleYml.getConfig().getConfigurationSection("Elevators");
         if (cs == null) {
             this.eleYml.getConfig().createSection("Elevators");
@@ -39,30 +39,27 @@ public class ElevatorMain {
             return;
         }
 
+        //For each elevator do.
         for (String elevator : cs.getKeys(false)) {
             ConfigurationSection elevatorConfig = cs.getConfigurationSection(elevator);
             ElevatorObject elevatorObject = (ElevatorObject) elevatorConfig.get("ElevatorObject");
 
-            //Floors
+            //For each elevator floor do.
             ConfigurationSection elevatorFloors = elevatorConfig.getConfigurationSection("Floors");
             if (elevatorFloors != null) {
                 for (String floorNumber : elevatorFloors.getKeys(false)) {
                     elevatorObject.addFloor((FloorObject) elevatorFloors.get(floorNumber));
                 }
 
-                //Just a hack since i don't want nothing static.
-                elevatorObject.setPlugin(this.plugin);
             }
             elevatorObjectMap.putIfAbsent(elevator, elevatorObject);
         }
     }
 
     public void saveAllElevators() {
-        //Don't run if there's no WorldEdit.
-        if (!this.plugin.getOtherPlugins().hasWorldEdit()) {
-            return;
-        }
+        if (!on || !this.plugin.getOtherPlugins().hasWorldEdit()) return;
 
+        //For each elevator do.
         for (Map.Entry<String, ElevatorObject> entry : elevatorObjectMap.entrySet()) {
             String k = entry.getKey();
             ElevatorObject v = entry.getValue();
@@ -77,12 +74,14 @@ public class ElevatorMain {
 
             elevator.set("ElevatorObject", v);
 
+            //Floors
             ConfigurationSection elevatorFloors = elevator.getConfigurationSection("Floors");
             if (elevatorFloors == null) {
                 elevatorFloors = elevator.createSection("Floors");
                 this.eleYml.saveConfigSilent();
             }
 
+            //For each floor do.
             for (Map.Entry<Integer, FloorObject> e : v.getFloorsMap().entrySet()) {
                 Integer k2 = e.getKey();
                 FloorObject v2 = e.getValue();
@@ -94,10 +93,7 @@ public class ElevatorMain {
     }
 
     public void deleteElevator(String name) {
-        //Don't run if there's no WorldEdit.
-        if (!this.plugin.getOtherPlugins().hasWorldEdit()) {
-            return;
-        }
+        if (!on || !this.plugin.getOtherPlugins().hasWorldEdit()) return;
 
         if (elevatorObjectMap.get(name.toLowerCase()) != null) {
             elevatorObjectMap.remove(name.toLowerCase());
@@ -108,10 +104,7 @@ public class ElevatorMain {
     }
 
     public void deleteFloorOfElevator(String elevatorName, int floorNum) {
-        //Don't run if there's no WorldEdit.
-        if (!this.plugin.getOtherPlugins().hasWorldEdit()) {
-            return;
-        }
+        if (!on || !this.plugin.getOtherPlugins().hasWorldEdit()) return;
 
         if (elevatorObjectMap.get(elevatorName.toLowerCase()) != null) {
             elevatorObjectMap.get(elevatorName.toLowerCase()).getFloorsMap().remove(floorNum);

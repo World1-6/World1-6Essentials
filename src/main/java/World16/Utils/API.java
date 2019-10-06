@@ -46,7 +46,7 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "9/15/2019";
+    public static final String DATE_OF_VERSION = "10/5/2019";
     public static final String PREFIX = "[&9World1-6Ess&r]";
     public static final String USELESS_TAG = PREFIX + "->[&bUSELESS&r]";
     public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";
@@ -158,6 +158,18 @@ public class API {
 
     public boolean isDebug() {
         return plugin.getConfig().getString("debug").equalsIgnoreCase("true");
+    }
+
+    public boolean isElevatorsEnabled() {
+        return plugin.getConfig().getString("elevators").equalsIgnoreCase("true");
+    }
+
+    public boolean isFireAlarmsEnabled() {
+        return plugin.getConfig().getString("firealarms").equalsIgnoreCase("true");
+    }
+
+    public boolean isDiscordBotEnabled() {
+        return plugin.getConfig().getString("discordbot").equalsIgnoreCase("true");
     }
 
     public String FormatTime(LocalDateTime time) {

@@ -1,17 +1,33 @@
 package World16FireAlarms.interfaces;
 
-public interface IFireAlarm {
+import World16FireAlarms.Objects.TroubleReason;
+import World16FireAlarms.Objects.Zone;
+import org.bukkit.Location;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-    void registerStrobe();
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+public interface IFireAlarm extends ConfigurationSerializable {
 
     void registerNac();
 
-    void registerZone();
+    void registerZone(Zone zone);
 
-    void alarm();
+    void registerStrobe(IStrobe iStrobe);
+
+    void registerSign(String string, Location location);
+
+    void reset(Optional<Zone> zone);
 
     void trouble();
 
-    void reset();
+    void alarm(Optional<Zone> zone, TroubleReason troubleReason);
 
+    Map<String, IStrobe> getStrobesMap();
+
+    List<Zone> getZones();
+
+    Map<String, Location> getSigns();
 }
