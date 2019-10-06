@@ -14,7 +14,7 @@ public class ElevatorManager {
 
     private Main plugin;
 
-    private CustomYmlManager eleYml;
+    private CustomYmlManager elevatorsYml;
 
     private boolean on;
 
@@ -24,17 +24,17 @@ public class ElevatorManager {
         this.on = on;
         this.plugin = plugin;
         this.elevatorObjectMap = this.plugin.getSetListMap().getElevatorObjectMap();
-        this.eleYml = customConfigManager.getElevatorsYml();
+        this.elevatorsYml = customConfigManager.getElevatorsYml();
     }
 
     public void loadAllElevators() {
         if (!on || !this.plugin.getOtherPlugins().hasWorldEdit()) return;
 
         //Only runs when elevator.yml is first being created.
-        ConfigurationSection cs = this.eleYml.getConfig().getConfigurationSection("Elevators");
+        ConfigurationSection cs = this.elevatorsYml.getConfig().getConfigurationSection("Elevators");
         if (cs == null) {
-            this.eleYml.getConfig().createSection("Elevators");
-            this.eleYml.saveConfigSilent();
+            this.elevatorsYml.getConfig().createSection("Elevators");
+            this.elevatorsYml.saveConfigSilent();
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat("&c[ElevatorManager]&r&6 Elevators section has been created."));
             return;
         }
@@ -66,10 +66,10 @@ public class ElevatorManager {
 
             String elevatorLocation = "Elevators" + "." + k.toLowerCase();
 
-            ConfigurationSection elevator = this.eleYml.getConfig().getConfigurationSection(elevatorLocation);
+            ConfigurationSection elevator = this.elevatorsYml.getConfig().getConfigurationSection(elevatorLocation);
             if (elevator == null) {
-                elevator = this.eleYml.getConfig().createSection(elevatorLocation);
-                this.eleYml.saveConfigSilent();
+                elevator = this.elevatorsYml.getConfig().createSection(elevatorLocation);
+                this.elevatorsYml.saveConfigSilent();
             }
 
             elevator.set("ElevatorObject", v);
@@ -78,7 +78,7 @@ public class ElevatorManager {
             ConfigurationSection elevatorFloors = elevator.getConfigurationSection("Floors");
             if (elevatorFloors == null) {
                 elevatorFloors = elevator.createSection("Floors");
-                this.eleYml.saveConfigSilent();
+                this.elevatorsYml.saveConfigSilent();
             }
 
             //For each floor do.
@@ -87,9 +87,9 @@ public class ElevatorManager {
                 FloorObject v2 = e.getValue();
                 elevatorFloors.set(String.valueOf(k2), v2);
             }
-            this.eleYml.saveConfigSilent();
+            this.elevatorsYml.saveConfigSilent();
         }
-        this.eleYml.saveConfigSilent();
+        this.elevatorsYml.saveConfigSilent();
     }
 
     public void deleteElevator(String name) {
@@ -97,9 +97,9 @@ public class ElevatorManager {
 
         if (elevatorObjectMap.get(name.toLowerCase()) != null) {
             elevatorObjectMap.remove(name.toLowerCase());
-            ConfigurationSection elevator = this.eleYml.getConfig().getConfigurationSection("Elevators");
+            ConfigurationSection elevator = this.elevatorsYml.getConfig().getConfigurationSection("Elevators");
             elevator.set(name.toLowerCase(), null);
-            this.eleYml.saveConfigSilent();
+            this.elevatorsYml.saveConfigSilent();
         }
     }
 
@@ -108,10 +108,10 @@ public class ElevatorManager {
 
         if (elevatorObjectMap.get(elevatorName.toLowerCase()) != null) {
             elevatorObjectMap.get(elevatorName.toLowerCase()).getFloorsMap().remove(floorNum);
-            ConfigurationSection elevatorFloors = this.eleYml.getConfig().getConfigurationSection("Elevators." + elevatorName.toLowerCase() + ".Floors");
+            ConfigurationSection elevatorFloors = this.elevatorsYml.getConfig().getConfigurationSection("Elevators." + elevatorName.toLowerCase() + ".Floors");
             if (elevatorFloors != null) {
                 elevatorFloors.set(String.valueOf(floorNum), null);
-                this.eleYml.saveConfigSilent();
+                this.elevatorsYml.saveConfigSilent();
             }
         }
     }

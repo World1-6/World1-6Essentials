@@ -28,6 +28,7 @@ public class WarpManager {
         if (cs == null) {
             cs = this.warpsYml.getConfig().createSection("Warps");
             this.warpsYml.saveConfigSilent();
+            return;
         }
 
         ConfigurationSection warpsConfig = null;
