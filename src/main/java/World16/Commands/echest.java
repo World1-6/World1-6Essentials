@@ -33,7 +33,7 @@ public class echest implements CommandExecutor {
             return true;
         }
         p.openInventory(p.getEnderChest());
-        p.playSound(p.getLocation(), Sound.BLOCK_ENDERCHEST_OPEN, 10.0f, 1.0f);
+        p.playSound(p.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 10.0f, 1.0f);
         return true;
     }
 }

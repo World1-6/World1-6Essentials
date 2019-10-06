@@ -4,11 +4,13 @@ import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
 import World16.TabComplete.ElevatorTab;
 import World16.Utils.API;
+import World16.Utils.SimpleMath;
 import World16.Utils.Translate;
 import World16Elevators.ElevatorManager;
 import World16Elevators.Objects.*;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
@@ -16,6 +18,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -31,11 +34,14 @@ public class elevator implements CommandExecutor {
 
     private Map<String, ElevatorObject> elevatorObjectMap;
 
+    private SimpleMath simpleMath;
+
     public elevator(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
 
         this.customConfigManager = customConfigManager;
         this.api = new API(this.plugin);
+        this.simpleMath = new SimpleMath(this.plugin);
 
         this.worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
         this.elevatorObjectMap = this.plugin.getSetListMap().getElevatorObjectMap();
@@ -168,14 +174,18 @@ public class elevator implements CommandExecutor {
                     Location down = new Location(p.getWorld(), XAX, XAY, XAZ);
                     Location up = new Location(p.getWorld(), XBX, XBY, XBZ);
 
-                    Selection selection = worldEditPlugin.getSelection(p);
-                    if (selection == null) {
+                    Region region = getSelection(p);
+
+                    if (region == null) {
                         p.sendMessage("Please make a selection with WorldEdit and then redo the command please.");
                         return true;
                     }
-                    FloorObject floorObject = new FloorObject(0, api.getBlockPlayerIsLookingAt(p).getLocation(), new BoundingBox(selection.getMinimumPoint().toVector(), selection.getMaximumPoint().toVector()));
-                    BoundingBox boundingBox = new BoundingBox(new Vector(XAX, XAY, XAZ), new Vector(XBX, XBY, XBZ));
 
+                    Vector one = new Vector(region.getMinimumPoint().getX(), region.getMinimumPoint().getY(), region.getMinimumPoint().getZ());
+                    Vector two = new Vector(region.getMaximumPoint().getX(), region.getMaximumPoint().getY(), region.getMaximumPoint().getZ());
+                    FloorObject floorObject = new FloorObject(0, api.getBlockPlayerIsLookingAt(p).getLocation(), simpleMath.toBoundingBox(one, two));
+
+                    BoundingBox boundingBox = simpleMath.toBoundingBox(new Vector(XAX, XAY, XAZ), new Vector(XBX, XBY, XBZ));
                     ElevatorObject elevatorObject = new ElevatorObject(plugin, p.getWorld().getName(), elevatorName, floorObject, boundingBox);
                     elevatorObjectMap.putIfAbsent(elevatorName, elevatorObject);
                     p.sendMessage(Translate.chat("Elevator: " + elevatorName + " has been created"));
@@ -197,8 +207,8 @@ public class elevator implements CommandExecutor {
                     String elevatorName = args[2].toLowerCase();
                     int floorNum = api.asIntOrDefault(args[3], 0);
 
-                    Selection selection = worldEditPlugin.getSelection(p);
-                    if (selection == null) {
+                    Region region = getSelection(p);
+                    if (region == null) {
                         p.sendMessage("Please make a selection with WorldEdit and then redo the command please.");
                         return true;
                     }
@@ -208,7 +218,9 @@ public class elevator implements CommandExecutor {
                         return true;
                     }
 
-                    BoundingBox boundingBox = new BoundingBox(selection.getMinimumPoint().toVector(), selection.getMaximumPoint().toVector());
+                    Vector one = new Vector(region.getMinimumPoint().getX(), region.getMinimumPoint().getY(), region.getMinimumPoint().getZ());
+                    Vector two = new Vector(region.getMaximumPoint().getX(), region.getMaximumPoint().getY(), region.getMaximumPoint().getZ());
+                    BoundingBox boundingBox = simpleMath.toBoundingBox(one, two);
                     elevatorObjectMap.get(elevatorName).addFloor(new FloorObject(floorNum, api.getBlockPlayerIsLookingAt(p).getLocation(), boundingBox));
                     p.sendMessage(Translate.chat("Floor: " + floorNum + " has been added to the elevator: " + elevatorName));
                     return true;
@@ -433,5 +445,15 @@ public class elevator implements CommandExecutor {
             }
             return true;
         }
+    }
+
+    public Region getSelection(Player player) {
+        Region region;
+        try {
+            region = worldEditPlugin.getSession(player).getSelection(BukkitAdapter.adapt(player.getWorld()));
+        } catch (Exception ex) {
+            return null;
+        }
+        return region;
     }
 }

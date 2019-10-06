@@ -77,11 +77,11 @@ public class back implements CommandExecutor {
 
                 //Checks if it's Lava Or Water.
                 if (deathlocation.getBlock().isLiquid() || deathlocation.getBlock().getRelative(BlockFace.DOWN).isLiquid()) {
-                    deathlocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.LOG);
-                    deathlocation.getBlock().getRelative(BlockFace.EAST).setType(Material.LOG);
-                    deathlocation.getBlock().getRelative(BlockFace.NORTH).setType(Material.LOG);
-                    deathlocation.getBlock().getRelative(BlockFace.WEST).setType(Material.LOG);
-                    deathlocation.getBlock().getRelative(BlockFace.SOUTH).setType(Material.LOG);
+                    deathlocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.OAK_LOG);
+                    deathlocation.getBlock().getRelative(BlockFace.EAST).setType(Material.OAK_LOG);
+                    deathlocation.getBlock().getRelative(BlockFace.NORTH).setType(Material.OAK_LOG);
+                    deathlocation.getBlock().getRelative(BlockFace.WEST).setType(Material.OAK_LOG);
+                    deathlocation.getBlock().getRelative(BlockFace.SOUTH).setType(Material.OAK_LOG);
                     deathlocation.getBlock().setType(Material.AIR);
                 }
 

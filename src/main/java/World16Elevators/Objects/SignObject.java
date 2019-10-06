@@ -25,7 +25,7 @@ public class SignObject implements ConfigurationSerializable {
             return false;
         }
 
-        return location.getBlock().getType() == Material.WALL_SIGN || location.getBlock().getType() == Material.SIGN_POST;
+        return location.getBlock().getType() == Material.OAK_WALL_SIGN || location.getBlock().getType() == Material.LEGACY_SIGN_POST;
     }
 
     public Sign getSign() {

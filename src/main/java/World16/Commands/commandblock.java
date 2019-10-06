@@ -35,7 +35,7 @@ public class commandblock implements CommandExecutor {
             api.PermissionErrorMessage(p);
             return true;
         }
-        ItemStack item = InventoryUtils.createItem(Material.COMMAND, 1, "&cCommand Block", "New Fresh Command Block");
+        ItemStack item = InventoryUtils.createItem(Material.COMMAND_BLOCK, 1, "&cCommand Block", "New Fresh Command Block");
         item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
         p.getInventory().addItem(item);
         return true;

@@ -18,8 +18,7 @@ import World16.Managers.JailManager;
 import World16.Managers.WarpManager;
 import World16.Utils.*;
 import World16.test.test1;
-import World16Elevators.ElevatorManager;
-import World16Elevators.Objects.BoundingBox;
+import World16Elevators.ElevatorMain;
 import World16Elevators.Objects.ElevatorObject;
 import World16Elevators.Objects.FloorObject;
 import World16Elevators.Objects.SignObject;
@@ -39,7 +38,6 @@ public class Main extends JavaPlugin {
 
     static {
         //Elevators
-        ConfigurationSerialization.registerClass(BoundingBox.class, "BoundingBox");
         ConfigurationSerialization.registerClass(SignObject.class, "SignObject");
         ConfigurationSerialization.registerClass(FloorObject.class, "FloorObject");
         ConfigurationSerialization.registerClass(ElevatorObject.class, "ElevatorObject");
