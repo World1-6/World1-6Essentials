@@ -3,7 +3,6 @@ package World16.Commands.jail;
 import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
 import World16.Managers.JailManager;
-import World16.TabComplete.JailTab;
 import World16.Utils.API;
 import World16.Utils.Translate;
 import org.bukkit.Location;
@@ -34,7 +33,6 @@ public class setjail implements CommandExecutor {
         this.api = new API(this.plugin);
 
         this.plugin.getCommand("setjail").setExecutor(this);
-        this.plugin.getCommand("setjail").setTabCompleter(new JailTab(this.plugin));
     }
 
     @Override
