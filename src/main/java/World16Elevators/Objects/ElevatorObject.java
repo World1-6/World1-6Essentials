@@ -212,17 +212,17 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     private void worldEditMoveUP(int floor) {
-        WorldEditPlugin worldEditPlugin = plugin.getOtherPlugins().getWorldEditPlugin();
+        WorldEditPlugin worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
 
         World world = BukkitAdapter.adapt(getBukkitWorld());
-        BlockVector3 blockVector31 = BukkitAdapter.asBlockVector(locationDOWN);
-        BlockVector3 blockVector32 = BukkitAdapter.asBlockVector(locationUP);
+        BlockVector3 blockVector31 = BlockVector3.at(locationDOWN.getBlockX(), locationDOWN.getBlockY(), locationDOWN.getBlockZ());
+        BlockVector3 blockVector32 = BlockVector3.at(locationUP.getBlockX(), locationUP.getBlockY(), locationUP.getBlockZ());
 
         CuboidRegion cuboidRegion = new CuboidRegion(world, blockVector31, blockVector32);
 
-        EditSession editSession = worldEditPlugin.getWorldEdit().getEditSessionFactory().getEditSession(world, -1);
-        BlockVector3 blockVector3DIR = BukkitAdapter.asBlockVector(new Location(getBukkitWorld(), 0, 1, 0));
-        try {
+        BlockVector3 blockVector3DIR = BlockVector3.at(0, 1, 0);
+
+        try (EditSession editSession = worldEditPlugin.getWorldEdit().getEditSessionFactory().getEditSession(world, -1)) {
             editSession.moveCuboidRegion(cuboidRegion, blockVector3DIR, 1, false, null);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
@@ -235,17 +235,17 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     private void worldEditMoveDOWN(int floor) {
-        WorldEditPlugin worldEditPlugin = plugin.getOtherPlugins().getWorldEditPlugin();
+        WorldEditPlugin worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
 
         World world = BukkitAdapter.adapt(getBukkitWorld());
-        BlockVector3 blockVector31 = BukkitAdapter.asBlockVector(locationDOWN);
-        BlockVector3 blockVector32 = BukkitAdapter.asBlockVector(locationUP);
+        BlockVector3 blockVector31 = BlockVector3.at(locationDOWN.getBlockX(), locationDOWN.getBlockY(), locationDOWN.getBlockZ());
+        BlockVector3 blockVector32 = BlockVector3.at(locationUP.getBlockX(), locationUP.getBlockY(), locationUP.getBlockZ());
 
         CuboidRegion cuboidRegion = new CuboidRegion(world, blockVector31, blockVector32);
 
-        EditSession editSession = worldEditPlugin.getWorldEdit().getEditSessionFactory().getEditSession(world, -1);
-        BlockVector3 blockVector3DIR = BukkitAdapter.asBlockVector(new Location(getBukkitWorld(), 0, -1, 0));
-        try {
+        BlockVector3 blockVector3DIR = BlockVector3.at(0, -1, 0);
+
+        try (EditSession editSession = worldEditPlugin.getWorldEdit().getEditSessionFactory().getEditSession(world, -1)) {
             editSession.moveCuboidRegion(cuboidRegion, blockVector3DIR, 1, false, null);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
