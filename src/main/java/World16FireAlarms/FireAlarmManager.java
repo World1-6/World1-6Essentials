@@ -4,8 +4,8 @@ import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
 import World16.Managers.CustomYmlManager;
 import World16.Utils.Translate;
-import World16FireAlarms.Objects.Zone;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
+import World16FireAlarms.Objects.Zone;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
@@ -175,8 +175,10 @@ public class FireAlarmManager {
 
         if (this.fireAlarmMap.get(name) != null) {
             fireAlarmMap.remove(name);
+
             ConfigurationSection firealarmConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms");
-            firealarmConfig.set(name.toLowerCase(), null);
+            if (firealarmConfig != null)
+                firealarmConfig.set(name.toLowerCase(), null);
             this.fireAlarmsYml.saveConfigSilent();
         }
     }
@@ -187,8 +189,11 @@ public class FireAlarmManager {
         if (this.fireAlarmMap.get(fireAlarm) != null) {
             this.fireAlarmMap.get(fireAlarm).getStrobesMap().remove(strobeName);
             ConfigurationSection fireAlarmConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms." + fireAlarm.toLowerCase());
-            ConfigurationSection fireAlarmStrobes = fireAlarmConfig.getConfigurationSection("Strobes");
-            fireAlarmStrobes.set(strobeName.toLowerCase(), null);
+            if (fireAlarmConfig != null) {
+                ConfigurationSection fireAlarmStrobes = fireAlarmConfig.getConfigurationSection("Strobes");
+                if (fireAlarmStrobes != null)
+                    fireAlarmStrobes.set(strobeName.toLowerCase(), null);
+            }
             this.fireAlarmsYml.saveConfigSilent();
         }
     }
@@ -199,8 +204,10 @@ public class FireAlarmManager {
         if (this.fireAlarmScreenMap.get(location) != null) {
             String signName = this.fireAlarmScreenMap.get(location).getName();
             fireAlarmScreenMap.remove(location);
-            ConfigurationSection firealarmConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarmScreens");
-            firealarmConfig.set(signName.toLowerCase(), null);
+
+            ConfigurationSection firealarmScreensConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarmScreens");
+            if (firealarmScreensConfig != null)
+                firealarmScreensConfig.set(signName.toLowerCase(), null);
             this.fireAlarmsYml.saveConfigSilent();
         }
     }
@@ -213,12 +220,15 @@ public class FireAlarmManager {
             fireAlarmMap.get(fireAlarmName).getSigns().remove(signName);
 
             ConfigurationSection cs = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms." + fireAlarmName.toLowerCase());
-            ConfigurationSection cs1 = cs.getConfigurationSection("Signs");
+            if (cs != null) {
+                ConfigurationSection cs1 = cs.getConfigurationSection("Signs");
+                if (cs1 != null)
+                    cs1.set(signName.toLowerCase(), null);
+            }
 
-            cs1.set(signName.toLowerCase(), null);
-
-            ConfigurationSection firealarmConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarmScreens");
-            firealarmConfig.set(signName.toLowerCase(), null);
+            ConfigurationSection fireAlarmScreensConfig = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarmScreens");
+            if (fireAlarmScreensConfig != null)
+                fireAlarmScreensConfig.set(signName.toLowerCase(), null);
             this.fireAlarmsYml.saveConfigSilent();
         }
     }
