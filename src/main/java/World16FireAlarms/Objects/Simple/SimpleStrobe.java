@@ -4,6 +4,8 @@ import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Lightable;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -28,11 +30,15 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
     }
 
     public void on() {
-        this.location.getBlock().setType(Material.REDSTONE_BLOCK);
+        BlockData data = this.location.getBlock().getBlockData();
+        if (data instanceof Lightable) {
+            ((Lightable) data).setLit(true);
+            this.location.getBlock().setBlockData(data);
+        }
     }
 
     public void off() {
-        this.location.getBlock().setType(Material.SOUL_SAND);
+        this.location.getBlock().setType(Material.REDSTONE_LAMP);
     }
 
     public void sound() {
