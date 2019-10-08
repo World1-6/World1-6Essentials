@@ -8,6 +8,8 @@ import World16.Commands.home.sethome;
 import World16.Commands.jail.deljail;
 import World16.Commands.jail.jail;
 import World16.Commands.jail.setjail;
+import World16.Commands.spawn.setspawn;
+import World16.Commands.spawn.spawn;
 import World16.Commands.tp.tpa;
 import World16.Commands.tp.tpaccept;
 import World16.Commands.tp.tpdeny;

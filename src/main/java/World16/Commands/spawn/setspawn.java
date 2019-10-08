@@ -1,4 +1,4 @@
-package World16.Commands;
+package World16.Commands.spawn;
 
 import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
