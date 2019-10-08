@@ -1,10 +1,14 @@
 World16.Commands
 World16.Commands.home
+World16.Commands.jail
+World16.Commands.spawn
 World16.Commands.tp
+World16.Commands.warp
 World16.CustomEvents.Events
 World16.CustomEvents.handlers
 World16.CustomExceptions
 World16.Events
+World16.Events.PluginEvents
 World16.Main
 World16.Managers
 World16.Objects
@@ -13,3 +17,8 @@ World16.test
 World16.Utils
 World16Elevators
 World16Elevators.Objects
+World16FireAlarms
+World16FireAlarms.interfaces
+World16FireAlarms.Objects
+World16FireAlarms.Objects.Screen
+World16FireAlarms.Objects.Simple
