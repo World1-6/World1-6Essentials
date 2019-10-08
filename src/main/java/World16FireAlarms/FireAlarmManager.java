@@ -39,9 +39,10 @@ public class FireAlarmManager {
     public void loadFireAlarms() {
         if (!on) return;
 
-        //Only runs when firealarms.yml is first being created.
         ConfigurationSection cs = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarms");
         ConfigurationSection cs1 = this.fireAlarmsYml.getConfig().getConfigurationSection("FireAlarmScreens");
+
+        //Only runs when firealarms.yml is first being created.
         if (cs == null || cs1 == null) {
             if (cs == null) {
                 this.fireAlarmsYml.getConfig().createSection("FireAlarms");
@@ -57,11 +58,11 @@ public class FireAlarmManager {
 
         //For each fire alarm.
         for (String fireAlarm : cs.getKeys(false)) {
-            cs = cs.getConfigurationSection(fireAlarm);
-            IFireAlarm iFireAlarm = (IFireAlarm) cs.get("IFireAlarm");
+            ConfigurationSection fireAlarmConfig = cs.getConfigurationSection(fireAlarm);
+            IFireAlarm iFireAlarm = (IFireAlarm) fireAlarmConfig.get("IFireAlarm");
 
             //Strobes
-            ConfigurationSection strobesConfig = cs.getConfigurationSection("Strobes");
+            ConfigurationSection strobesConfig = fireAlarmConfig.getConfigurationSection("Strobes");
             if (strobesConfig != null) {
                 for (String strobes : strobesConfig.getKeys(false)) {
                     iFireAlarm.registerStrobe((IStrobe) strobesConfig.get(strobes));
@@ -69,7 +70,7 @@ public class FireAlarmManager {
             }
 
             //Zones
-            ConfigurationSection zonesConfig = cs.getConfigurationSection("Zones");
+            ConfigurationSection zonesConfig = fireAlarmConfig.getConfigurationSection("Zones");
             if (zonesConfig != null) {
                 for (String zone : zonesConfig.getKeys(false)) {
                     iFireAlarm.registerZone((Zone) zonesConfig.get(zone));
@@ -77,7 +78,7 @@ public class FireAlarmManager {
             }
 
             //Signs
-            ConfigurationSection signsConfig = cs.getConfigurationSection("Signs");
+            ConfigurationSection signsConfig = fireAlarmConfig.getConfigurationSection("Signs");
             if (signsConfig != null) {
                 for (String sign : signsConfig.getKeys(false)) {
                     iFireAlarm.registerSign(sign, (Location) signsConfig.get(sign));
