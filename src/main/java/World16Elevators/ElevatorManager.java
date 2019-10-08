@@ -30,8 +30,9 @@ public class ElevatorManager {
     public void loadAllElevators() {
         if (!on || !this.plugin.getOtherPlugins().hasWorldEdit()) return;
 
-        //Only runs when elevator.yml is first being created.
         ConfigurationSection cs = this.elevatorsYml.getConfig().getConfigurationSection("Elevators");
+
+        //Only runs when elevator.yml is first being created.
         if (cs == null) {
             this.elevatorsYml.getConfig().createSection("Elevators");
             this.elevatorsYml.saveConfigSilent();
@@ -97,8 +98,10 @@ public class ElevatorManager {
 
         if (elevatorObjectMap.get(name.toLowerCase()) != null) {
             elevatorObjectMap.remove(name.toLowerCase());
-            ConfigurationSection elevator = this.elevatorsYml.getConfig().getConfigurationSection("Elevators");
-            elevator.set(name.toLowerCase(), null);
+
+            ConfigurationSection elevators = this.elevatorsYml.getConfig().getConfigurationSection("Elevators");
+            if (elevators != null)
+                elevators.set(name.toLowerCase(), null);
             this.elevatorsYml.saveConfigSilent();
         }
     }
