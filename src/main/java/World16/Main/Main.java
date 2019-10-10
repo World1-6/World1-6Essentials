@@ -96,11 +96,6 @@ public class Main extends JavaPlugin {
     }
 
     private void regCommands() {
-        new gmc(this);
-        new gms(this);
-        new gmsp(this);
-        new gma(this);
-
         new day(this);
         new night(this);
         new feed(this);
@@ -110,12 +105,10 @@ public class Main extends JavaPlugin {
         new commandblock(this);
         new bed(this);
         new ram(this);
-        new spawn(this, this.customConfigManager);
         new echest(this);
         new sign(this);
         new key(this); //KEY COMMAND
         new colors(this);
-        new setspawn(this, this.customConfigManager);
         new afk(this);
         new flyspeed(this, this.customConfigManager);
         new isafk(this, this.customConfigManager);
@@ -123,11 +116,6 @@ public class Main extends JavaPlugin {
         new broadcast(this, this.customConfigManager);
         new god(this);
         new msg(this, this.customConfigManager);
-
-        new tpa(this, this.customConfigManager);
-        new tpaccept(this, this.customConfigManager);
-        new tpdeny(this, this.customConfigManager);
-
         new test1(this, this.customConfigManager);
         new eram(this, this.customConfigManager);
         new waitdo(this, this.customConfigManager);
@@ -138,6 +126,21 @@ public class Main extends JavaPlugin {
         new elevator(this, this.customConfigManager);
         new lastjoin(this, this.customConfigManager);
         new firealarm(this, this.customConfigManager);
+
+        //Gamemode commands
+        new gmc(this);
+        new gms(this);
+        new gmsp(this);
+        new gma(this);
+
+        //Tpa commands
+        new tpa(this, this.customConfigManager);
+        new tpaccept(this, this.customConfigManager);
+        new tpdeny(this, this.customConfigManager);
+
+        //Spawn commands
+        new spawn(this, this.customConfigManager);
+        new setspawn(this, this.customConfigManager);
 
         //Homes
         new delhome(this);
