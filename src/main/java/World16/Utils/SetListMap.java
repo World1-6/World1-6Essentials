@@ -4,6 +4,7 @@ import World16.Objects.KeyObject;
 import World16.Objects.LocationObject;
 import World16Elevators.Objects.ElevatorObject;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
+import World16FireAlarms.Objects.Screen.ScreenFocus;
 import World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -23,6 +24,7 @@ public class SetListMap {
     private Map<String, Map<String, String>> tagsMap; //0
     private Map<UUID, Location> afkMap; //0
     private Map<UUID, Map<String, Location>> homesMap; //0
+    private Map<UUID, ScreenFocus> screenFocusMap; //0
 
     private Map<String, UUID> uuidCache; //1
     private Map<String, Location> jails; //1
@@ -48,6 +50,7 @@ public class SetListMap {
         this.tagsMap = new HashMap<>();
         this.afkMap = new HashMap<>();
         this.homesMap = new HashMap<>();
+        this.screenFocusMap = new HashMap<>();
 
         this.uuidCache = new HashMap<>();
         this.jails = new HashMap<>();
@@ -92,6 +95,8 @@ public class SetListMap {
         afkMap.remove(p.getUniqueId());
 
         homesMap.remove(p.getUniqueId());
+
+        screenFocusMap.remove(p.getUniqueId());
     }
 
     public void clearAllMaps() {
@@ -110,6 +115,7 @@ public class SetListMap {
         fireAlarmMap.clear();
         fireAlarmScreenMap.clear();
         warpsMap.clear();
+        screenFocusMap.clear();
     }
 
     public void clearAllLists(Player p) {
@@ -205,5 +211,9 @@ public class SetListMap {
 
     public Map<String, Location> getWarpsMap() {
         return warpsMap;
+    }
+
+    public Map<UUID, ScreenFocus> getScreenFocusMap() {
+        return screenFocusMap;
     }
 }
