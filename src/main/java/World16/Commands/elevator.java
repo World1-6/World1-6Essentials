@@ -11,6 +11,9 @@ import World16Elevators.Objects.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.regions.Region;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
@@ -302,6 +305,19 @@ public class elevator implements CommandExecutor {
             if (args.length == 1 && args[0].equalsIgnoreCase("clear")) {
                 elevatorObjectMap.clear();
                 p.sendMessage(Translate.chat("All elevators have been cleared in memory."));
+                return true;
+            }
+
+            if (args.length == 2 && args[0].equalsIgnoreCase("toString")) {
+                String elevatorName = args[1].toLowerCase();
+
+                if (elevatorObjectMap.get(elevatorName) == null) {
+                    p.sendMessage(Translate.chat("That elevator doesn't exist."));
+                    return true;
+                }
+
+                BaseComponent[] components = new ComponentBuilder("[CMD] Click me to copy more easier!").event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, elevatorObjectMap.get(elevatorName).toString())).create();
+                p.spigot().sendMessage(components);
                 return true;
             }
 

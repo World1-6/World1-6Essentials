@@ -150,7 +150,7 @@ public class ElevatorObject implements ConfigurationSerializable {
                     if (atDoor.getY() == floorObject.getAtDoor().getY()) {
                         this.cancel();
                         elevatorFloor = floorNum;
-                        floorDone(floorNum, elevatorStatus);
+                        floorDone(floorObject, elevatorStatus);
                         doFloorIdle();
                         isGoing = false;
                         return;
@@ -185,7 +185,7 @@ public class ElevatorObject implements ConfigurationSerializable {
                 if (atDoor.getY() == floorObject.getAtDoor().getY()) {
                     this.cancel();
                     elevatorFloor = floorNum;
-                    floorDone(floorNum, elevatorStatus);
+                    floorDone(floorObject, elevatorStatus);
                     doFloorIdle();
                     isGoing = false;
                     return;
@@ -261,10 +261,9 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.isEmergencyStop = true;
     }
 
-    private void floorDone(int floor, ElevatorStatus elevatorStatus) {
-        Material oldBlock = getFloor(floor).getAtDoor().getBlock().getType();
+    private void floorDone(FloorObject floorObject, ElevatorStatus elevatorStatus) {
+        Material oldBlock = floorObject.getAtDoor().getBlock().getType();
 
-        FloorObject floorObject = getFloor(floor);
         floorObject.getAtDoor().getBlock().setType(Material.REDSTONE_BLOCK);
 
         ElevatorStatus elevatorStatus1 = isNextFloorGoingUp();
@@ -351,9 +350,7 @@ public class ElevatorObject implements ConfigurationSerializable {
     public ElevatorStatus isNextFloorGoingUp() {
         if (!floorQueueBuffer.isEmpty()) {
             FloorObject floorObject = getFloor(floorQueueBuffer.peek());
-            if (floorObject == null) {
-                return ElevatorStatus.NOT_GOING_ANYWHERE;
-            }
+            if (floorObject == null) return ElevatorStatus.NOT_GOING_ANYWHERE;
             ElevatorStatus elevatorStatus = ElevatorStatus.NOT_GOING_ANYWHERE;
             return elevatorStatus.upOrDown(floorObject.getAtDoor().getY() > this.atDoor.getY());
         } else if (this.elevatorFloor == 0) {
@@ -619,5 +616,68 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     public static ElevatorObject deserialize(Map<String, Object> map) {
         return new ElevatorObject(Main.getPlugin(), (String) map.get("world"), (String) map.get("name"), (FloorObject) map.get("shaft"), (BoundingBox) map.get("shaftPlus"));
+    }
+
+    //Java
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ElevatorObject that = (ElevatorObject) o;
+        return elevatorFloor == that.elevatorFloor &&
+                ticksPerSecond == that.ticksPerSecond &&
+                doorHolderTicksPerSecond == that.doorHolderTicksPerSecond &&
+                elevatorWaiterTicksPerSecond == that.elevatorWaiterTicksPerSecond &&
+                isGoing == that.isGoing &&
+                isFloorQueueGoing == that.isFloorQueueGoing &&
+                isIdling == that.isIdling &&
+                isEmergencyStop == that.isEmergencyStop &&
+                topFloor == that.topFloor &&
+                topBottomFloor == that.topBottomFloor &&
+                Objects.equals(elevatorName, that.elevatorName) &&
+                Objects.equals(world, that.world) &&
+                Objects.equals(atDoor, that.atDoor) &&
+                Objects.equals(locationDOWN, that.locationDOWN) &&
+                Objects.equals(locationUP, that.locationUP) &&
+                Objects.equals(locationDownPLUS, that.locationDownPLUS) &&
+                Objects.equals(locationUpPLUS, that.locationUpPLUS) &&
+                Objects.equals(floorsMap, that.floorsMap) &&
+                Objects.equals(plugin, that.plugin) &&
+                Objects.equals(simpleMath, that.simpleMath) &&
+                Objects.equals(floorQueueBuffer, that.floorQueueBuffer) &&
+                Objects.equals(floorBuffer, that.floorBuffer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(elevatorName, world, atDoor, elevatorFloor, locationDOWN, locationUP, locationDownPLUS, locationUpPLUS, floorsMap, ticksPerSecond, doorHolderTicksPerSecond, elevatorWaiterTicksPerSecond, plugin, simpleMath, isGoing, isFloorQueueGoing, isIdling, isEmergencyStop, topFloor, topBottomFloor, floorQueueBuffer, floorBuffer);
+    }
+
+    @Override
+    public String toString() {
+        return "ElevatorObject{" +
+                "elevatorName='" + elevatorName + '\'' +
+                ", world='" + world + '\'' +
+                ", atDoor=" + atDoor +
+                ", elevatorFloor=" + elevatorFloor +
+                ", locationDOWN=" + locationDOWN +
+                ", locationUP=" + locationUP +
+                ", locationDownPLUS=" + locationDownPLUS +
+                ", locationUpPLUS=" + locationUpPLUS +
+                ", floorsMap=" + floorsMap +
+                ", ticksPerSecond=" + ticksPerSecond +
+                ", doorHolderTicksPerSecond=" + doorHolderTicksPerSecond +
+                ", elevatorWaiterTicksPerSecond=" + elevatorWaiterTicksPerSecond +
+                ", plugin=" + plugin +
+                ", simpleMath=" + simpleMath +
+                ", isGoing=" + isGoing +
+                ", isFloorQueueGoing=" + isFloorQueueGoing +
+                ", isIdling=" + isIdling +
+                ", isEmergencyStop=" + isEmergencyStop +
+                ", topFloor=" + topFloor +
+                ", topBottomFloor=" + topBottomFloor +
+                ", floorQueueBuffer=" + floorQueueBuffer +
+                ", floorBuffer=" + floorBuffer +
+                '}';
     }
 }
