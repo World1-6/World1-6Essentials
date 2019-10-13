@@ -3,6 +3,7 @@ package World16FireAlarms.Objects.Simple;
 import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Lightable;
@@ -19,10 +20,17 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
     private Location location;
     private String zone;
 
+    private boolean isLight;
+
     public SimpleStrobe(Location block, String name, String zoneName) {
         this.location = block;
         this.zone = zoneName;
         this.name = name;
+
+        BlockData data = this.location.getBlock().getBlockData();
+        if (data instanceof Lightable) {
+            isLight = true;
+        }
     }
 
     public SimpleStrobe(Block block, String name, String zoneName) {
@@ -30,18 +38,29 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
     }
 
     public void on() {
-        BlockData data = this.location.getBlock().getBlockData();
-        if (data instanceof Lightable) {
-            ((Lightable) data).setLit(true);
-            this.location.getBlock().setBlockData(data);
+        if (isLight) {
+            sound();
+            BlockData data = this.location.getBlock().getBlockData();
+            if (data instanceof Lightable) {
+                ((Lightable) data).setLit(true);
+                this.location.getBlock().setBlockData(data);
+                isLight = true;
+            } else isLight = false;
+        } else {
+            this.location.getBlock().setType(Material.REDSTONE_BLOCK);
         }
     }
 
     public void off() {
-        this.location.getBlock().setType(Material.REDSTONE_LAMP);
+        if (isLight) {
+            this.location.getBlock().setType(Material.REDSTONE_LAMP);
+            return;
+        }
+        this.location.getBlock().setType(Material.SOUL_SAND);
     }
 
     public void sound() {
+        this.location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 1F);
     }
 
     public Location getLocation() {
