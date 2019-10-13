@@ -266,6 +266,10 @@ public class ElevatorObject implements ConfigurationSerializable {
 
         floorObject.getAtDoor().getBlock().setType(Material.REDSTONE_BLOCK);
 
+        if (elevatorStatus == ElevatorStatus.DONT_KNOW) {
+            elevatorStatus = elevatorStatus.upOrDown(floorObject.getAtDoor().getY() > this.atDoor.getY());
+        }
+
         //SIGNS
         if (elevatorStatus == ElevatorStatus.UP) {
             if (floorObject.getSignObject() != null) floorObject.getSignObject().doUpArrow();
