@@ -55,29 +55,28 @@ public class OnPlayerInteractEvent implements Listener {
         if (this.plugin.getApi().isFireAlarmsEnabled()) {
             if (block != null && action == Action.RIGHT_CLICK_BLOCK) {
                 if (block.getType() == Material.OAK_WALL_SIGN || block.getType() == Material.OAK_SIGN) {
+                    FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
                     if (this.screenFocusMap.get(p.getUniqueId()) == null && this.fireAlarmScreenMap.get(block.getLocation()) != null) {
+                        fireAlarmScreen.tick(p);
                         this.screenFocusMap.putIfAbsent(p.getUniqueId(), new ScreenFocus(plugin, p));
                         return;
                     }
                     if (itemMeta != null && itemMeta.hasDisplayName()) {
-                        FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
-                        if (this.screenFocusMap.get(p.getUniqueId()) != null && itemMeta.getDisplayName().equalsIgnoreCase("Exit")) {
-                            event.setCancelled(true);
-                            this.screenFocusMap.get(p.getUniqueId()).revert();
-                            this.screenFocusMap.remove(p.getUniqueId());
-                        } else {
-                            if (fireAlarmScreen != null) {
-                                if (itemMeta.getDisplayName().equalsIgnoreCase("DOWN")) {
-                                    this.fireAlarmScreenMap.get(block.getLocation()).changeLines(p);
-                                } else if (itemMeta.getDisplayName().equalsIgnoreCase("SCROLL UP")) {
-                                    this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, true);
-                                } else if (itemMeta.getDisplayName().equalsIgnoreCase("SCROLL DOWN")) {
-                                    this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, false);
-                                }
+                        if (fireAlarmScreen != null) {
+                            if (this.screenFocusMap.get(p.getUniqueId()) != null && itemMeta.getDisplayName().equalsIgnoreCase("Exit")) {
+                                event.setCancelled(true);
+                                fireAlarmScreen.setStop(true);
+                                this.screenFocusMap.get(p.getUniqueId()).revert();
+                                this.screenFocusMap.remove(p.getUniqueId());
+                            } else if (itemMeta.getDisplayName().equalsIgnoreCase("DOWN")) {
+                                this.fireAlarmScreenMap.get(block.getLocation()).changeLines(p);
+                            } else if (itemMeta.getDisplayName().equalsIgnoreCase("SCROLL UP")) {
+                                this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, true);
+                            } else if (itemMeta.getDisplayName().equalsIgnoreCase("SCROLL DOWN")) {
+                                this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, false);
                             }
                         }
                     } else {
-                        FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
                         if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).onClick(p);
                     }
                 } else {

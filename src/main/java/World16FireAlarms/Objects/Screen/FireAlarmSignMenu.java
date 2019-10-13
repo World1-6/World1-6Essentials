@@ -7,5 +7,6 @@ public enum FireAlarmSignMenu {
     ALARM_POPUP,
     //1
     SETTINGS_MENU,
-    SETTINGS_TEST_FIREALARM
+    SETTINGS_TEST_FIREALARM,
+    SETTINGS_INFO
 }

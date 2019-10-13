@@ -16,6 +16,8 @@ import java.util.*;
 @SerializableAs("FireAlarmSignOS")
 public class FireAlarmSignOS implements ConfigurationSerializable {
 
+    private double version = 0.1;
+
     private Main plugin;
 
     private String name;
@@ -63,6 +65,9 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             if (line == 1) {
                 settings_menu_test_firealarm(fireAlarmScreen, sign);
                 return true;
+            } else if (line == 3) {
+                settings_menu_info(fireAlarmScreen, sign);
+                return true;
             }
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.SETTINGS_TEST_FIREALARM) {
@@ -75,7 +80,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
                 return true;
             } else if (line == 3) {
                 this.fireAlarmMap.get(this.fireAlarmName).reset(Optional.empty());
-                player.sendMessage(Translate.chat("Fire alarm has been reseted."));
+                player.sendMessage(Translate.chat("Fire alarm has been reset."));
                 return true;
             }
             return true;
@@ -83,7 +88,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             if (line == 2) {
                 this.fireAlarmMap.get(this.fireAlarmName).reset(Optional.empty());
                 backReverse(this.currentMenu, fireAlarmScreen, sign, line);
-                player.sendMessage(Translate.chat("The fire alarm has been reseted."));
+                player.sendMessage(Translate.chat("The fire alarm has been reset."));
                 return true;
             }
         }
@@ -119,6 +124,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
                 main_menu(fireAlarmScreen, sign);
                 break;
             case SETTINGS_TEST_FIREALARM:
+            case SETTINGS_INFO:
                 settings_menu(fireAlarmScreen, sign);
                 break;
         }
@@ -142,10 +148,10 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
     public void loadFirstTime(FireAlarmScreen fireAlarmScreen, Sign sign) {
         this.currentMenu = FireAlarmSignMenu.WAITING;
 
-        sign.setLine(0, "Fire Alarm 0.1V");
-        sign.setLine(1, "Loading data...");
-        sign.setLine(2, "Please wait...");
-        sign.setLine(3, "");
+        sign.setLine(0, "Bexar-Systems");
+        sign.setLine(1, "Version: " + this.version);
+        sign.setLine(2, "Loading data...");
+        sign.setLine(3, "Please wait...");
         fireAlarmScreen.updateSign(sign);
 
         new BukkitRunnable() {
@@ -158,7 +164,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
 
     private void main_menu(FireAlarmScreen fireAlarmScreen, Sign sign) {
         this.currentMenu = FireAlarmSignMenu.MAIN_MENU;
-        sign.setLine(0, "Fire Alarm V.01");
+        sign.setLine(0, "Bexar-Systems");
         sign.setLine(1, "-Settings");
         sign.setLine(2, "");
         sign.setLine(3, "");
@@ -173,7 +179,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         sign.setLine(0, "Settings/MENU");
         sign.setLine(1, "-Test Fire Alarm");
         sign.setLine(2, "");
-        sign.setLine(3, "");
+        sign.setLine(3, "-Info");
 
         fireAlarmScreen.setMin(0);
         fireAlarmScreen.setLine(0);
@@ -186,6 +192,17 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         sign.setLine(1, "-Alarm");
         sign.setLine(2, "-Trouble");
         sign.setLine(3, "-Reset");
+        fireAlarmScreen.setMin(0);
+        fireAlarmScreen.setLine(0);
+        fireAlarmScreen.updateSign(sign);
+    }
+
+    public void settings_menu_info(FireAlarmScreen fireAlarmScreen, Sign sign) {
+        this.currentMenu = FireAlarmSignMenu.SETTINGS_INFO;
+        sign.setLine(0, "Settings/Info");
+        sign.setLine(1, this.fireAlarmName);
+        sign.setLine(2, "Version: " + this.version);
+        sign.setLine(3, "NOS: " + this.fireAlarmMap.get(fireAlarmName).getStrobesMap().size());
         fireAlarmScreen.setMin(0);
         fireAlarmScreen.setLine(0);
         fireAlarmScreen.updateSign(sign);

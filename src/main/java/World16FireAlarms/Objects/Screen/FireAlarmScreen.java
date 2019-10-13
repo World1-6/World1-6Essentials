@@ -78,8 +78,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
     public void onClick(Player player) {
         if (!this.isTickerRunning) {
-            tick();
-            player.sendMessage(Translate.chat("&2Sign turned on."));
+            tick(player);
             return;
         }
 
@@ -91,8 +90,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
     public void onScroll(Player player, boolean up) {
         if (!this.isTickerRunning) {
-            tick();
-            player.sendMessage(Translate.chat("&2Sign turned on."));
+            tick(player);
             return;
         }
 
@@ -134,8 +132,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
     public void changeLines(Player player) {
         if (!this.isTickerRunning) {
-            tick();
-            player.sendMessage(Translate.chat("&2Sign turned on."));
+            tick(player);
             return;
         }
 
@@ -144,6 +141,11 @@ public class FireAlarmScreen implements ConfigurationSerializable {
         } else {
             line = min;
         }
+    }
+
+    public void tick(Player player) {
+        tick();
+        player.sendMessage(Translate.chat("&2Sign turned on."));
     }
 
     private void tick() {
@@ -161,7 +163,9 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
                     @Override
                     public void run() {
-                        if (stop) {
+                        if (stop && temp == 0) {
+                            isTickerRunning = false;
+                            stop = false;
                             this.cancel();
                             return;
                         }
