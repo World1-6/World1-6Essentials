@@ -144,8 +144,10 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     }
 
     public void tick(Player player) {
-        tick();
-        player.sendMessage(Translate.chat("&2Sign turned on."));
+        if (!this.isTickerRunning) {
+            tick();
+            player.sendMessage(Translate.chat("&2Sign turned on."));
+        }
     }
 
     private void tick() {

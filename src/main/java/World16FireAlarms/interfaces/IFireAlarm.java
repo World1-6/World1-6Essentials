@@ -23,7 +23,7 @@ public interface IFireAlarm extends ConfigurationSerializable {
 
     void trouble();
 
-    void alarm(Optional<Zone> zone, TroubleReason troubleReason);
+    void alarm(Optional<Zone> zone, TroubleReason troubleReason, Optional<String> stringOptional);
 
     Map<String, IStrobe> getStrobesMap();
 

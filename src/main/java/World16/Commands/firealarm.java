@@ -11,6 +11,8 @@ import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -46,7 +48,25 @@ public class firealarm implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
+
+            if (!(sender instanceof BlockCommandSender)) {
+                return true;
+            }
+
+            BlockCommandSender cmdblock = (BlockCommandSender) sender;
+            Block commandblock = cmdblock.getBlock();
+
+            if (args.length == 4 && args[0].equalsIgnoreCase("alarm")) {
+                String name = args[2].toLowerCase();
+                String pullstationname = args[3];
+
+                if (this.fireAlarmMap.get(name) == null) {
+                    return true;
+                }
+
+                this.fireAlarmMap.get(name).alarm(java.util.Optional.empty(), TroubleReason.PULL_STATION, Optional.of(pullstationname));
+                return true;
+            }
             return true;
         }
 
@@ -180,17 +200,35 @@ public class firealarm implements CommandExecutor {
                 return true;
             }
             return true;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("alarm")) {
-            String name = args[1].toLowerCase();
+        } else if (args[0].equalsIgnoreCase("alarm")) {
+            if (args.length == 1) {
+                p.sendMessage(Translate.chat("/firealarm alarm test <FireAlarmName>"));
+                p.sendMessage(Translate.chat("/firealarm alarm ps <FireAlarmName> <PullStationName>"));
+                return true;
+            } else if (args.length == 3) {
+                String name = args[2].toLowerCase();
 
-            if (this.fireAlarmMap.get(name) == null) {
-                p.sendMessage(Translate.chat("There's no such fire alarm called: " + name));
+                if (this.fireAlarmMap.get(name) == null) {
+                    p.sendMessage(Translate.chat("There's no such fire alarm called: " + name));
+                    return true;
+                }
+
+                this.fireAlarmMap.get(name).alarm(java.util.Optional.empty(), TroubleReason.PANEL_TEST, Optional.empty());
+                p.sendMessage(Translate.chat("Alright, the fire alarm should be going off currently."));
+                return true;
+            } else if (args.length == 4) {
+                String name = args[2].toLowerCase();
+                String pullstationname = args[3];
+
+                if (this.fireAlarmMap.get(name) == null) {
+                    p.sendMessage(Translate.chat("There's no such fire alarm called: " + name));
+                    return true;
+                }
+
+                this.fireAlarmMap.get(name).alarm(Optional.empty(), TroubleReason.PULL_STATION, Optional.of(pullstationname));
+                p.sendMessage(Translate.chat("Alright, the fire alarm should be going off currently."));
                 return true;
             }
-
-            this.fireAlarmMap.get(name).alarm(java.util.Optional.<World16FireAlarms.Objects.Zone>empty(), TroubleReason.PANEL_TEST);
-            p.sendMessage(Translate.chat("Alright, the fire alarm should be going off currently."));
-            return true;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("reset")) {
             String name = args[1].toLowerCase();
 

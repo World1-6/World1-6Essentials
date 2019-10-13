@@ -26,6 +26,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     private Map<String, Location> signsMap;
 
     private FireAlarmStatus fireAlarmStatus;
+    private boolean isAlarmCurrently = false;
 
     public SimpleFireAlarm(Main plugin, String name) {
         this.plugin = plugin;
@@ -59,6 +60,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     public void reset(Optional<Zone> zone) {
         if (!zone.isPresent()) {
             this.fireAlarmStatus = FireAlarmStatus.READY;
+            this.isAlarmCurrently = false;
             this.resetStrobes();
             //Signs
             for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
@@ -86,7 +88,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         //TODO add Trouble
     }
 
-    public void alarm(Optional<Zone> zone, TroubleReason troubleReason) {
+    public void alarm(Optional<Zone> zone, TroubleReason troubleReason, Optional<String> pullStationName) {
         if (!zone.isPresent()) {
             this.fireAlarmStatus = FireAlarmStatus.ALARM;
             setupMarchTime();
@@ -97,7 +99,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
                 FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
                 if (fireAlarmScreen != null)
-                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), troubleReason, zone);
+                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), troubleReason, zone, pullStationName);
                 else {
                     //Wait 1 second before removing so it won't cause a ConcurrentModificationException
                     new BukkitRunnable() {
@@ -123,32 +125,35 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     private int marchTime = 0;
 
     private void setupMarchTime() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (fireAlarmStatus == FireAlarmStatus.ALARM) {
-                    if (marchTime == 0) {
-                        for (Map.Entry<String, IStrobe> entry : strobesMap.entrySet()) {
-                            String k = entry.getKey();
-                            IStrobe v = entry.getValue();
-                            v.on();
+        if (!isAlarmCurrently) {
+            isAlarmCurrently = true;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (fireAlarmStatus == FireAlarmStatus.ALARM) {
+                        if (marchTime == 0) {
+                            for (Map.Entry<String, IStrobe> entry : strobesMap.entrySet()) {
+                                String k = entry.getKey();
+                                IStrobe v = entry.getValue();
+                                v.on();
+                            }
+                            marchTime++;
+                        } else if (marchTime >= 1) {
+                            for (Map.Entry<String, IStrobe> entry : strobesMap.entrySet()) {
+                                String k = entry.getKey();
+                                IStrobe v = entry.getValue();
+                                v.off();
+                            }
+                            marchTime = 0;
                         }
-                        marchTime++;
-                    } else if (marchTime >= 1) {
-                        for (Map.Entry<String, IStrobe> entry : strobesMap.entrySet()) {
-                            String k = entry.getKey();
-                            IStrobe v = entry.getValue();
-                            v.off();
-                        }
-                        marchTime = 0;
+                    } else {
+                        fireAlarmStatus = FireAlarmStatus.READY;
+                        resetStrobes();
+                        this.cancel();
                     }
-                } else {
-                    fireAlarmStatus = FireAlarmStatus.READY;
-                    resetStrobes();
-                    this.cancel();
                 }
-            }
-        }.runTaskTimer(plugin, 10L, 10L);
+            }.runTaskTimer(plugin, 10L, 10L);
+        }
     }
 
     //GETTERS AND SETTERS

@@ -72,7 +72,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.SETTINGS_TEST_FIREALARM) {
             if (line == 1) {
-                this.fireAlarmMap.get(this.fireAlarmName).alarm(Optional.empty(), TroubleReason.PANEL_TEST);
+                this.fireAlarmMap.get(this.fireAlarmName).alarm(Optional.empty(), TroubleReason.PANEL_TEST, Optional.empty());
                 player.sendMessage(Translate.chat("Alarm should be going off currently."));
                 return true;
             } else if (line == 2) {
@@ -95,9 +95,21 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         return true;
     }
 
-    public void sendPopup(FireAlarmScreen fireAlarmScreen, Sign sign, TroubleReason troubleReason, Optional<Zone> optionalZone) {
+    public void sendPopup(FireAlarmScreen fireAlarmScreen, Sign sign, TroubleReason troubleReason, Optional<Zone> optionalZone, Optional<String> pullStationNameOptional) {
+        this.currentMenu = FireAlarmSignMenu.ALARM_POPUP;
         if (troubleReason == TroubleReason.PANEL_TEST) {
-            this.currentMenu = FireAlarmSignMenu.ALARM_POPUP;
+            List<String> stringList = new ArrayList<>();
+            stringList.add("Popup/MENU");
+            stringList.add(troubleReason.toString());
+            stringList.add("-Reset");
+            stringList.add("");
+
+            fireAlarmScreen.setLine(0);
+            fireAlarmScreen.setMin(0);
+            fireAlarmScreen.setMax(3);
+
+            fireAlarmScreen.updateSign(sign, stringList);
+        } else if (troubleReason == TroubleReason.PULL_STATION) {
             List<String> stringList = new ArrayList<>();
             stringList.add("Popup/MENU");
             stringList.add(troubleReason.toString());
@@ -106,6 +118,10 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
 
             optionalZone.ifPresent(zone -> stringList.add("Z: " + zone.getName()));
             optionalZone.ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
+            pullStationNameOptional.ifPresent(string -> {
+                stringList.add("PSN: {below}");
+                stringList.add(string);
+            });
 
             fireAlarmScreen.setLine(0);
             fireAlarmScreen.setMin(0);
