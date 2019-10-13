@@ -176,6 +176,9 @@ public class Main extends JavaPlugin {
         new OnPlayerMoveEvent(this);
         new OnBlockBreakEvent(this);
 
+        //Inventory
+        new OnInventoryClickEvent(this);
+
         //PluginEvents
         new EasyBackupEvent(this);
     }

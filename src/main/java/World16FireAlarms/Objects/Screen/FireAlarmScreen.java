@@ -36,7 +36,9 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     private int max = 3;
 
     private SignCache signCache1;
+
     private boolean hasTextChanged = false;
+    private boolean hasScrollChanged = false;
 
     private boolean isTickerRunning = false;
     private boolean stop = false;
@@ -104,27 +106,29 @@ public class FireAlarmScreen implements ConfigurationSerializable {
                 int upONE = this.scroll + 1;
                 if (upONE < this.partition.size()) {
                     this.scroll++;
-                    this.fireAlarmSignOS.resetSign(this, sign, false);
-                    for (int i = 0; i < this.partition.get(this.scroll).size(); i++) {
-                        String line = this.partition.get(this.scroll).get(i);
+                    for (int i = 0; i <= 3; i++) {
+                        String line;
+                        if (i < this.partition.get(this.scroll).size()) {
+                            line = this.partition.get(this.scroll).get(i);
+                        } else line = "";
                         sign.setLine(i, line);
                     }
-                    this.partition = null;
                     this.signCache1 = new SignCache(sign);
-                    this.hasTextChanged = true;
+                    this.hasScrollChanged = true;
                 }
             } else {
                 int downONE = this.scroll - 1;
                 if (downONE >= 0 && downONE <= this.partition.size()) {
                     this.scroll--;
-                    this.fireAlarmSignOS.resetSign(this, sign, false);
-                    for (int i = 0; i < this.partition.get(this.scroll).size(); i++) {
-                        String line = this.partition.get(this.scroll).get(i);
+                    for (int i = 0; i <= 3; i++) {
+                        String line;
+                        if (i < this.partition.get(this.scroll).size()) {
+                            line = this.partition.get(this.scroll).get(i);
+                        } else line = "";
                         sign.setLine(i, line);
                     }
-                    this.partition = null;
                     this.signCache1 = new SignCache(sign);
-                    this.hasTextChanged = true;
+                    this.hasScrollChanged = true;
                 }
             }
         }
@@ -172,22 +176,28 @@ public class FireAlarmScreen implements ConfigurationSerializable {
                             return;
                         }
 
-                        if (temp == 0 && !hasTextChanged) {
+                        if (temp == 0 && !hasTextChanged && !hasScrollChanged) {
                             oldLine = line;
                             signCache.fromSign(sign);
                             text = sign.getLine(line);
                             sign.setLine(line, first + text);
                             if (!sign.update()) stop = true;
                             temp++;
-                        } else if (temp > 0 && !hasTextChanged) {
+                        } else if (temp > 0 && !hasTextChanged && !hasScrollChanged) {
                             sign.setLine(oldLine, text);
                             if (!sign.update()) stop = true;
                             temp = 0;
                         } else if (hasTextChanged) {
                             signCache1.update(sign);
+                            partition = null;
                             oldLine = line;
                             temp = 0;
                             hasTextChanged = false;
+                        } else if (hasScrollChanged) {
+                            signCache1.update(sign);
+                            oldLine = line;
+                            temp = 0;
+                            hasScrollChanged = false;
                         }
                     }
                 }.runTaskTimer(this.plugin, 10L, 10L);
@@ -202,12 +212,15 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
     public void updateSign(Sign sign, List<String> stringList) {
         this.partition = Lists.partition(stringList, 4);
-        for (int i = 0; i < this.partition.get(0).size(); i++) {
-            String line = this.partition.get(0).get(i);
+        for (int i = 0; i <= 3; i++) {
+            String line;
+            if (i < this.partition.get(0).size()) {
+                line = this.partition.get(0).get(i);
+            } else line = "";
             sign.setLine(i, line);
         }
         this.signCache1 = new SignCache(sign);
-        this.hasTextChanged = true;
+        this.hasScrollChanged = true;
     }
 
     public boolean isSign() {
