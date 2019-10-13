@@ -266,30 +266,11 @@ public class ElevatorObject implements ConfigurationSerializable {
 
         floorObject.getAtDoor().getBlock().setType(Material.REDSTONE_BLOCK);
 
-        ElevatorStatus elevatorStatus1 = isNextFloorGoingUp();
-
         //SIGNS
-        if (elevatorStatus1 == ElevatorStatus.UP) {
-            if (floorObject.getSignObject() != null) {
-                floorObject.getSignObject().doUpArrow();
-            }
-        } else if (elevatorStatus1 == ElevatorStatus.DOWN) {
-            if (floorObject.getSignObject() != null) {
-                floorObject.getSignObject().doDownArrow();
-            }
-        } else if (elevatorStatus1 == ElevatorStatus.NOT_GOING_ANYWHERE && elevatorStatus != ElevatorStatus.DONT_KNOW) {
-            if (floorObject.getSignObject() != null) {
-                switch (elevatorStatus) {
-                    case UP:
-                        floorObject.getSignObject().doUpArrow();
-                        break;
-                    case DOWN:
-                        floorObject.getSignObject().doDownArrow();
-                        break;
-                    default:
-                        break;
-                }
-            }
+        if (elevatorStatus == ElevatorStatus.UP) {
+            if (floorObject.getSignObject() != null) floorObject.getSignObject().doUpArrow();
+        } else if (elevatorStatus == ElevatorStatus.DOWN) {
+            if (floorObject.getSignObject() != null) floorObject.getSignObject().doDownArrow();
         }
 
         new BukkitRunnable() {
@@ -345,23 +326,6 @@ public class ElevatorObject implements ConfigurationSerializable {
                 }
             }
         }.runTaskTimer(plugin, 40L, 40L);
-    }
-
-    public ElevatorStatus isNextFloorGoingUp() {
-        if (!floorQueueBuffer.isEmpty()) {
-            FloorObject floorObject = getFloor(floorQueueBuffer.peek());
-            if (floorObject == null) return ElevatorStatus.NOT_GOING_ANYWHERE;
-            ElevatorStatus elevatorStatus = ElevatorStatus.NOT_GOING_ANYWHERE;
-            return elevatorStatus.upOrDown(floorObject.getAtDoor().getY() > this.atDoor.getY());
-        } else if (this.elevatorFloor == 0) {
-            return ElevatorStatus.UP;
-        } else if (this.elevatorFloor == this.topFloor) {
-            return ElevatorStatus.DOWN;
-        } else if (this.elevatorFloor == this.topBottomFloor) {
-            return ElevatorStatus.UP;
-        }
-
-        return ElevatorStatus.NOT_GOING_ANYWHERE;
     }
 
     private void arrivalChime(Location location) {

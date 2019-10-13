@@ -11,9 +11,6 @@ import World16Elevators.Objects.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.regions.Region;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
@@ -316,8 +313,7 @@ public class elevator implements CommandExecutor {
                     return true;
                 }
 
-                BaseComponent[] components = new ComponentBuilder("[CMD] Click me to copy more easier!").event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, elevatorObjectMap.get(elevatorName).toString())).create();
-                p.spigot().sendMessage(components);
+                this.plugin.getServer().getConsoleSender().sendMessage(elevatorObjectMap.get(elevatorName).toString());
                 return true;
             }
 
