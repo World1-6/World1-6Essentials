@@ -38,7 +38,8 @@ public class SetListMap {
     private List<String> godmList; //0
     private List<Player> adminListPlayer; //0
 
-    private List<String> adminList;//1
+    private List<String> adminList; //1
+    private List<String> soundsList; //1
 
     //Constucer
     public SetListMap() {
@@ -66,6 +67,7 @@ public class SetListMap {
         this.adminListPlayer = new ArrayList<>();
 
         this.adminList = new ArrayList<>();
+        this.soundsList = new ArrayList<>();
     }
 
     //METHODS
@@ -135,7 +137,6 @@ public class SetListMap {
     }
 
     //Getters
-
 
     public Map<String, KeyObject> getKeyDataM() {
         return keyDataM;
@@ -215,5 +216,9 @@ public class SetListMap {
 
     public Map<UUID, ScreenFocus> getScreenFocusMap() {
         return screenFocusMap;
+    }
+
+    public List<String> getSoundsList() {
+        return soundsList;
     }
 }

@@ -38,10 +38,10 @@ public class FirealarmTab implements TabCompleter {
 //            tabCompleteMap.get("firealarm").add("");
         }
 
-        this.soundList = new ArrayList<>();
+        this.soundList = this.plugin.getSetListMap().getAdminList();
 
         for (Sound value : Sound.values()) {
-            soundList.add(value.name());
+            this.soundList.add(value.name());
         }
     }
 
