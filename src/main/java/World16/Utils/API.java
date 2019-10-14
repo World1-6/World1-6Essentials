@@ -276,6 +276,15 @@ public class API {
         }
     }
 
+    public float asFloatOrDefault(String input, float default1) {
+        try {
+            Float.parseFloat(input);
+            return Float.parseFloat(input);
+        } catch (Exception e) {
+            return default1;
+        }
+    }
+
     public boolean asBooleanOrDefault(String boolean1, boolean default1) {
         try {
             Boolean.parseBoolean(boolean1);

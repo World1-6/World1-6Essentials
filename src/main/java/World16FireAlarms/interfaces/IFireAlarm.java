@@ -1,5 +1,6 @@
 package World16FireAlarms.interfaces;
 
+import World16FireAlarms.Objects.FireAlarmSound;
 import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.Objects.Zone;
 import org.bukkit.Location;
@@ -30,4 +31,8 @@ public interface IFireAlarm extends ConfigurationSerializable {
     List<Zone> getZones();
 
     Map<String, Location> getSigns();
+
+    void setFireAlarmSound(FireAlarmSound fireAlarmSound);
+
+    FireAlarmSound getFireAlarmSound();
 }

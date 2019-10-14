@@ -1,6 +1,7 @@
 package World16FireAlarms.Objects.Simple;
 
 import World16.Main.Main;
+import World16FireAlarms.Objects.FireAlarmSound;
 import World16FireAlarms.Objects.FireAlarmStatus;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.TroubleReason;
@@ -28,10 +29,14 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     private FireAlarmStatus fireAlarmStatus;
     private boolean isAlarmCurrently = false;
 
-    public SimpleFireAlarm(Main plugin, String name) {
+    private FireAlarmSound fireAlarmSound;
+
+    public SimpleFireAlarm(Main plugin, String name, FireAlarmSound fireAlarmSound) {
         this.plugin = plugin;
 
         this.name = name;
+
+        this.fireAlarmSound = fireAlarmSound;
 
         //Maps / Sets
         this.strobesMap = new HashMap<>();
@@ -43,6 +48,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     public void registerStrobe(IStrobe iStrobe) {
         this.strobesMap.putIfAbsent(iStrobe.getName(), iStrobe);
+        this.strobesMap.get(iStrobe.getName()).setFireAlarmSound(fireAlarmSound);
     }
 
     public void registerZone(Zone zone) {
@@ -195,6 +201,22 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         return signsMap;
     }
 
+    @Override
+    public void setFireAlarmSound(FireAlarmSound fireAlarmSound) {
+        this.fireAlarmSound = fireAlarmSound;
+        for (Map.Entry<String, IStrobe> entry : this.strobesMap.entrySet()) {
+            String k = entry.getKey();
+            IStrobe v = entry.getValue();
+
+            v.setFireAlarmSound(fireAlarmSound);
+        }
+    }
+
+    @Override
+    public FireAlarmSound getFireAlarmSound() {
+        return this.fireAlarmSound;
+    }
+
     public void setSignsMap(Map<String, Location> signsMap) {
         this.signsMap = signsMap;
     }
@@ -219,10 +241,11 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", this.name);
+        map.put("FireAlarmSound", this.fireAlarmSound);
         return map;
     }
 
     public static SimpleFireAlarm deserialize(Map<String, Object> map) {
-        return new SimpleFireAlarm(Main.getPlugin(), (String) map.get("Name"));
+        return new SimpleFireAlarm(Main.getPlugin(), (String) map.get("Name"), (FireAlarmSound) map.get("FireAlarmSound"));
     }
 }

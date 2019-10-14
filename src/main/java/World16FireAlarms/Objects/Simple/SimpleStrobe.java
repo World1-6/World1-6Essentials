@@ -1,9 +1,9 @@
 package World16FireAlarms.Objects.Simple;
 
+import World16FireAlarms.Objects.FireAlarmSound;
 import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Lightable;
@@ -22,10 +22,14 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
 
     private boolean isLight;
 
+    private FireAlarmSound fireAlarmSound;
+
     public SimpleStrobe(Location block, String name, String zoneName) {
         this.location = block;
         this.zone = zoneName;
         this.name = name;
+
+        this.fireAlarmSound = new FireAlarmSound();
 
         BlockData data = this.location.getBlock().getBlockData();
         if (data instanceof Lightable) {
@@ -60,7 +64,7 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
     }
 
     public void sound() {
-        this.location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 1F);
+        this.location.getWorld().playSound(location, fireAlarmSound.getSound(), fireAlarmSound.getVolume(), fireAlarmSound.getPitch());
     }
 
     public Location getLocation() {
@@ -69,6 +73,14 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
 
     public String getName() {
         return this.name;
+    }
+
+    public FireAlarmSound getFireAlarmSound() {
+        return fireAlarmSound;
+    }
+
+    public void setFireAlarmSound(FireAlarmSound fireAlarmSound) {
+        this.fireAlarmSound = fireAlarmSound;
     }
 
     @Override
