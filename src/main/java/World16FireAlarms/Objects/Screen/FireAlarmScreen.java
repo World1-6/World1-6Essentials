@@ -59,10 +59,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
         Sign sign = getSign();
         if (sign != null) {
-            if (!this.isTickerRunning) {
-                tick();
-            }
-
+            tick();
             this.fireAlarmSignOS.loadFirstTime(this, getSign());
         }
     }
@@ -206,11 +203,13 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     }
 
     public void updateSign(Sign sign) {
+        tick();
         this.signCache1 = new SignCache(sign);
         this.hasTextChanged = true;
     }
 
     public void updateSign(Sign sign, List<String> stringList) {
+        tick();
         this.partition = Lists.partition(stringList, 4);
         for (int i = 0; i <= 3; i++) {
             String line;

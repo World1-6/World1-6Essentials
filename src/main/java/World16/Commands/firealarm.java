@@ -2,9 +2,10 @@ package World16.Commands;
 
 import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
-import World16.TabComplete.FirealarmTab;
+import World16.TabComplete.FireAlarmTab;
 import World16.Utils.API;
 import World16.Utils.Translate;
+import World16FireAlarms.Objects.FireAlarmReason;
 import World16FireAlarms.Objects.FireAlarmSound;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
@@ -46,7 +47,7 @@ public class firealarm implements CommandExecutor {
         this.fireAlarmScreenMap = this.plugin.getSetListMap().getFireAlarmScreenMap();
 
         this.plugin.getCommand("firealarm").setExecutor(this);
-        this.plugin.getCommand("firealarm").setTabCompleter(new FirealarmTab(this.plugin));
+        this.plugin.getCommand("firealarm").setTabCompleter(new FireAlarmTab(this.plugin));
     }
 
     @Override
@@ -68,7 +69,9 @@ public class firealarm implements CommandExecutor {
                     return true;
                 }
 
-                this.fireAlarmMap.get(name).alarm(java.util.Optional.empty(), TroubleReason.PULL_STATION, Optional.of(pullstationname));
+                FireAlarmReason fireAlarmReason = new FireAlarmReason(TroubleReason.PULL_STATION);
+                fireAlarmReason.setOptionalPullStationName(Optional.of(pullstationname));
+                this.fireAlarmMap.get(name).alarm(fireAlarmReason);
                 return true;
             }
             return true;
@@ -236,7 +239,7 @@ public class firealarm implements CommandExecutor {
                     return true;
                 }
 
-                this.fireAlarmMap.get(name).alarm(java.util.Optional.empty(), TroubleReason.PANEL_TEST, Optional.empty());
+                this.fireAlarmMap.get(name).alarm(new FireAlarmReason(TroubleReason.PANEL_TEST));
                 p.sendMessage(Translate.chat("Alright, the fire alarm should be going off currently."));
                 return true;
             } else if (args.length == 4) {
@@ -248,7 +251,9 @@ public class firealarm implements CommandExecutor {
                     return true;
                 }
 
-                this.fireAlarmMap.get(name).alarm(Optional.empty(), TroubleReason.PULL_STATION, Optional.of(pullstationname));
+                FireAlarmReason fireAlarmReason = new FireAlarmReason(TroubleReason.PULL_STATION);
+                fireAlarmReason.setOptionalPullStationName(Optional.of(pullstationname));
+                this.fireAlarmMap.get(name).alarm(fireAlarmReason);
                 p.sendMessage(Translate.chat("Alright, the fire alarm should be going off currently."));
                 return true;
             }

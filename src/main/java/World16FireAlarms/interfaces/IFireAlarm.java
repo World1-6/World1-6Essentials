@@ -1,7 +1,7 @@
 package World16FireAlarms.interfaces;
 
+import World16FireAlarms.Objects.FireAlarmReason;
 import World16FireAlarms.Objects.FireAlarmSound;
-import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.Objects.Zone;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -24,7 +24,7 @@ public interface IFireAlarm extends ConfigurationSerializable {
 
     void trouble();
 
-    void alarm(Optional<Zone> zone, TroubleReason troubleReason, Optional<String> stringOptional);
+    void alarm(FireAlarmReason fireAlarmReason);
 
     Map<String, IStrobe> getStrobesMap();
 

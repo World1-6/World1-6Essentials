@@ -1,10 +1,10 @@
 package World16FireAlarms.Objects.Simple;
 
 import World16.Main.Main;
+import World16FireAlarms.Objects.FireAlarmReason;
 import World16FireAlarms.Objects.FireAlarmSound;
 import World16FireAlarms.Objects.FireAlarmStatus;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
-import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.Objects.Zone;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
@@ -94,8 +94,8 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         //TODO add Trouble
     }
 
-    public void alarm(Optional<Zone> zone, TroubleReason troubleReason, Optional<String> pullStationName) {
-        if (!zone.isPresent()) {
+    public void alarm(FireAlarmReason fireAlarmReason) {
+        if (!fireAlarmReason.getOptionalZone().isPresent()) {
             this.fireAlarmStatus = FireAlarmStatus.ALARM;
             setupMarchTime();
             //Signs
@@ -104,9 +104,9 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
                 Location v = entry.getValue();
 
                 FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
-                if (fireAlarmScreen != null)
-                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), troubleReason, zone, pullStationName);
-                else {
+                if (fireAlarmScreen != null) {
+                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), fireAlarmReason);
+                } else {
                     //Wait 1 second before removing so it won't cause a ConcurrentModificationException
                     new BukkitRunnable() {
                         @Override

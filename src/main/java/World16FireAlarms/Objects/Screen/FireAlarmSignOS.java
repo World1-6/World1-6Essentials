@@ -2,8 +2,8 @@ package World16FireAlarms.Objects.Screen;
 
 import World16.Main.Main;
 import World16.Utils.Translate;
+import World16FireAlarms.Objects.FireAlarmReason;
 import World16FireAlarms.Objects.TroubleReason;
-import World16FireAlarms.Objects.Zone;
 import World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -16,7 +16,7 @@ import java.util.*;
 @SerializableAs("FireAlarmSignOS")
 public class FireAlarmSignOS implements ConfigurationSerializable {
 
-    private double version = 0.1;
+    private double version = 0.2;
 
     private Main plugin;
 
@@ -72,7 +72,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.SETTINGS_TEST_FIREALARM) {
             if (line == 1) {
-                this.fireAlarmMap.get(this.fireAlarmName).alarm(Optional.empty(), TroubleReason.PANEL_TEST, Optional.empty());
+                this.fireAlarmMap.get(this.fireAlarmName).alarm(new FireAlarmReason(TroubleReason.PANEL_TEST));
                 player.sendMessage(Translate.chat("Alarm should be going off currently."));
                 return true;
             } else if (line == 2) {
@@ -95,12 +95,12 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         return true;
     }
 
-    public void sendPopup(FireAlarmScreen fireAlarmScreen, Sign sign, TroubleReason troubleReason, Optional<Zone> optionalZone, Optional<String> pullStationNameOptional) {
+    public void sendPopup(FireAlarmScreen fireAlarmScreen, Sign sign, FireAlarmReason fireAlarmReason) {
         this.currentMenu = FireAlarmSignMenu.ALARM_POPUP;
-        if (troubleReason == TroubleReason.PANEL_TEST) {
+        if (fireAlarmReason.getTroubleReason() == TroubleReason.PANEL_TEST) {
             List<String> stringList = new ArrayList<>();
             stringList.add("Popup/MENU");
-            stringList.add(troubleReason.toString());
+            stringList.add(fireAlarmReason.getTroubleReason().toString());
             stringList.add("-Reset");
             stringList.add("");
 
@@ -109,19 +109,16 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             fireAlarmScreen.setMax(3);
 
             fireAlarmScreen.updateSign(sign, stringList);
-        } else if (troubleReason == TroubleReason.PULL_STATION) {
+        } else if (fireAlarmReason.getTroubleReason() == TroubleReason.PULL_STATION) {
             List<String> stringList = new ArrayList<>();
             stringList.add("Popup/MENU");
-            stringList.add(troubleReason.toString());
+            stringList.add(fireAlarmReason.getTroubleReason().toString());
             stringList.add("-Reset");
-            stringList.add("MORE INFO BELOW");
+            stringList.add("B1>PSN: {below}");
 
-            optionalZone.ifPresent(zone -> stringList.add("Z: " + zone.getName()));
-            optionalZone.ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
-            pullStationNameOptional.ifPresent(string -> {
-                stringList.add("PSN: {below}");
-                stringList.add(string);
-            });
+            fireAlarmReason.getOptionalPullStationName().ifPresent(stringList::add);
+            fireAlarmReason.getOptionalZone().ifPresent(zone -> stringList.add("Z: " + zone.getName()));
+            fireAlarmReason.getOptionalZone().ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
 
             fireAlarmScreen.setLine(0);
             fireAlarmScreen.setMin(0);
@@ -206,7 +203,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         this.currentMenu = FireAlarmSignMenu.SETTINGS_TEST_FIREALARM;
         sign.setLine(0, "Settings/Test");
         sign.setLine(1, "-Alarm");
-        sign.setLine(2, "-Trouble");
+        sign.setLine(2, "Trouble");
         sign.setLine(3, "-Reset");
         fireAlarmScreen.setMin(0);
         fireAlarmScreen.setLine(0);
@@ -221,7 +218,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         stringList.add("Settings/Info");
         stringList.add(this.fireAlarmName);
         stringList.add("Version: " + this.version);
-        stringList.add("B>NOS: " + iFireAlarm.getStrobesMap().size());
+        stringList.add("B1>NOS: " + iFireAlarm.getStrobesMap().size());
 
         stringList.add("Sound: {below}");
         stringList.add(iFireAlarm.getFireAlarmSound().getSound().name());

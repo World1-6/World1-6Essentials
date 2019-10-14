@@ -63,16 +63,18 @@ public class OnPlayerInteractEvent implements Listener {
                     }
                     if (itemMeta != null && itemMeta.hasDisplayName()) {
                         if (fireAlarmScreen != null) {
+                            fireAlarmScreen.tick(p);
                             if (this.screenFocusMap.get(p.getUniqueId()) != null && itemMeta.getDisplayName().equalsIgnoreCase("Exit")) {
                                 event.setCancelled(true);
+                                fireAlarmScreen.setStop(true);
                                 this.screenFocusMap.get(p.getUniqueId()).revert();
                                 this.screenFocusMap.remove(p.getUniqueId());
                             } else if (itemMeta.getDisplayName().equalsIgnoreCase("DOWN")) {
                                 this.fireAlarmScreenMap.get(block.getLocation()).changeLines(p);
                             } else if (itemMeta.getDisplayName().equalsIgnoreCase("SCROLL UP")) {
-                                this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, true);
-                            } else if (itemMeta.getDisplayName().equalsIgnoreCase("SCROLL DOWN")) {
                                 this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, false);
+                            } else if (itemMeta.getDisplayName().equalsIgnoreCase("SCROLL DOWN")) {
+                                this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, true);
                             }
                         }
                     } else {
