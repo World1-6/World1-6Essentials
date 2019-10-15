@@ -1,6 +1,5 @@
 package World16.TabComplete;
 
-import World16.Commands.elevator;
 import World16.Main.Main;
 import World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.Sound;
@@ -85,18 +84,18 @@ public class FireAlarmTab implements TabCompleter {
             }
             return null;
         } else if (args[0].equalsIgnoreCase("sound")) {
-            if (args.length == 2){
+            if (args.length == 2) {
                 return getContains(args[1], firealarmList);
-            }else if(args.length == 3){
-            return getContains(args[2], this.soundList);
+            } else if (args.length == 3) {
+                return getContains(args[2], this.soundList);
             }
-        return null;
-        }else if (args.length == 2 && args[0].equalsIgnoreCase("reset")){
+            return null;
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("reset")) {
             return getContains(args[1], firealarmList);
-        }else if (args[0].equalsIgnoreCase("alarm")){
-            if (args.length == 2){
+        } else if (args[0].equalsIgnoreCase("alarm")) {
+            if (args.length == 2) {
                 return getContains(args[1], Arrays.asList("test", "ps"));
-            }else if (args.length == 3){
+            } else if (args.length == 3) {
                 return getContains(args[2], firealarmList);
             }
             return null;

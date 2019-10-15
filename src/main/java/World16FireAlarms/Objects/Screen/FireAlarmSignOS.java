@@ -16,7 +16,7 @@ import java.util.*;
 @SerializableAs("FireAlarmSignOS")
 public class FireAlarmSignOS implements ConfigurationSerializable {
 
-    private double version = 0.2;
+    private double version = 1.1;
 
     private Main plugin;
 
@@ -114,9 +114,9 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             stringList.add("Popup/MENU");
             stringList.add(fireAlarmReason.getTroubleReason().toString());
             stringList.add("-Reset");
-            if(fireAlarmReason.getOptionalZone().isPresent()) stringList.add("B1> {below}");
+            if (fireAlarmReason.getOptionalZone().isPresent()) stringList.add("B1> {below}");
 
-             fireAlarmReason.getOptionalPullStationName().ifPresent(stringList::add);
+            fireAlarmReason.getOptionalPullStationName().ifPresent(stringList::add);
             fireAlarmReason.getOptionalZone().ifPresent(zone -> stringList.add("Z: " + zone.getName()));
             fireAlarmReason.getOptionalZone().ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
 
