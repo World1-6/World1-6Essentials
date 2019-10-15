@@ -43,7 +43,7 @@ public class FireAlarmTab implements TabCompleter {
 //            tabCompleteMap.get("firealarm").add("");
         }
 
-        this.soundList = this.plugin.getSetListMap().getAdminList();
+        this.soundList = this.plugin.getSetListMap().getSoundsList();
 
         for (Sound value : Sound.values()) {
             this.soundList.add(value.name());

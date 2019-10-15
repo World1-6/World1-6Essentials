@@ -114,9 +114,11 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             stringList.add("Popup/MENU");
             stringList.add(fireAlarmReason.getTroubleReason().toString());
             stringList.add("-Reset");
-            stringList.add("B1>PSN: {below}");
-
+            if(fireAlarmReason.getOptionalZone().isPresent()){
+            stringList.add("B1> {below}");
             fireAlarmReason.getOptionalPullStationName().ifPresent(stringList::add);
+            }else fireAlarmReason.getOptionalPullStationName().ifPresent(stringList::add);
+
             fireAlarmReason.getOptionalZone().ifPresent(zone -> stringList.add("Z: " + zone.getName()));
             fireAlarmReason.getOptionalZone().ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
 
