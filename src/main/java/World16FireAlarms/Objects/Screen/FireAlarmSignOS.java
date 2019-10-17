@@ -218,12 +218,14 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         stringList.add("Settings/Info");
         stringList.add(this.fireAlarmName);
         stringList.add("Version: " + this.version);
-        stringList.add("B1>NOS: " + iFireAlarm.getStrobesMap().size());
+        stringList.add("B2>NOS: " + iFireAlarm.getStrobesMap().size());
 
         stringList.add("Sound: {below}");
         stringList.add(iFireAlarm.getFireAlarmSound().getSound().name());
         stringList.add("Volume: " + iFireAlarm.getFireAlarmSound().getVolume());
         stringList.add("Pitch: " + iFireAlarm.getFireAlarmSound().getPitch());
+
+        stringList.add("Tempo: " + iFireAlarm.getFireAlarmTempo().name());
 
         fireAlarmScreen.setMin(0);
         fireAlarmScreen.setMax(3);

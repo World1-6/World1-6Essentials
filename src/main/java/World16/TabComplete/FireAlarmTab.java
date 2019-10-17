@@ -1,6 +1,7 @@
 package World16.TabComplete;
 
 import World16.Main.Main;
+import World16FireAlarms.Objects.FireAlarmTempo;
 import World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -40,6 +41,7 @@ public class FireAlarmTab implements TabCompleter {
             tabCompleteMap.get("firealarm").add("alarm");
             tabCompleteMap.get("firealarm").add("reset");
             tabCompleteMap.get("firealarm").add("sound");
+            tabCompleteMap.get("firealarm").add("tempo");
 //            tabCompleteMap.get("firealarm").add("");
         }
 
@@ -88,6 +90,15 @@ public class FireAlarmTab implements TabCompleter {
                 return getContains(args[1], firealarmList);
             } else if (args.length == 3) {
                 return getContains(args[2], this.soundList);
+            }
+            return null;
+        } else if (args[0].equalsIgnoreCase("tempo")) {
+            List<String> tempos = new ArrayList<>();
+            for (FireAlarmTempo value : FireAlarmTempo.values()) tempos.add(value.name());
+            if (args.length == 2) {
+                return getContains(args[1], firealarmList);
+            } else if (args.length == 3) {
+                return getContains(args[2], tempos);
             }
             return null;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("reset")) {

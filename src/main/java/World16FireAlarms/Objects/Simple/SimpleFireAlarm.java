@@ -1,11 +1,8 @@
 package World16FireAlarms.Objects.Simple;
 
 import World16.Main.Main;
-import World16FireAlarms.Objects.FireAlarmReason;
-import World16FireAlarms.Objects.FireAlarmSound;
-import World16FireAlarms.Objects.FireAlarmStatus;
+import World16FireAlarms.Objects.*;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
-import World16FireAlarms.Objects.Zone;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
@@ -30,13 +27,15 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     private boolean isAlarmCurrently = false;
 
     private FireAlarmSound fireAlarmSound;
+    private FireAlarmTempo fireAlarmTempo;
 
-    public SimpleFireAlarm(Main plugin, String name, FireAlarmSound fireAlarmSound) {
+    public SimpleFireAlarm(Main plugin, String name, FireAlarmSound fireAlarmSound, FireAlarmTempo fireAlarmTempo) {
         this.plugin = plugin;
 
         this.name = name;
 
         this.fireAlarmSound = fireAlarmSound;
+        this.fireAlarmTempo = fireAlarmTempo;
 
         //Maps / Sets
         this.strobesMap = new HashMap<>();
@@ -95,29 +94,32 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     }
 
     public void alarm(FireAlarmReason fireAlarmReason) {
-        if (!fireAlarmReason.getOptionalZone().isPresent()) {
-            this.fireAlarmStatus = FireAlarmStatus.ALARM;
+        this.fireAlarmStatus = FireAlarmStatus.ALARM;
+        if (fireAlarmTempo == FireAlarmTempo.CODE3) {
+            setupCode3();
+        } else if (fireAlarmTempo == FireAlarmTempo.MARCH_TIME) {
             setupMarchTime();
-            //Signs
-            for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
-                String k = entry.getKey();
-                Location v = entry.getValue();
-
-                FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
-                if (fireAlarmScreen != null) {
-                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), fireAlarmReason);
-                } else {
-                    //Wait 1 second before removing so it won't cause a ConcurrentModificationException
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, k.toLowerCase(), v);
-                        }
-                    }.runTaskLater(plugin, 20L);
-                }
-            }
-            //Signs DONE...
         }
+
+        //Signs
+        for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
+            String k = entry.getKey();
+            Location v = entry.getValue();
+
+            FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
+            if (fireAlarmScreen != null) {
+                this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), fireAlarmReason);
+            } else {
+                //Wait 1 second before removing so it won't cause a ConcurrentModificationException
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, k.toLowerCase(), v);
+                    }
+                }.runTaskLater(plugin, 20L);
+            }
+        }
+        //Signs DONE...
     }
 
     private void resetStrobes() {
@@ -153,6 +155,49 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
                             marchTime = 0;
                         }
                     } else {
+                        marchTime = 0;
+                        fireAlarmStatus = FireAlarmStatus.READY;
+                        resetStrobes();
+                        this.cancel();
+                    }
+                }
+            }.runTaskTimer(plugin, 10L, 10L);
+        }
+    }
+
+    private int code3 = 0;
+
+    public void setupCode3() {
+        if (!this.isAlarmCurrently) {
+            this.isAlarmCurrently = true;
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (fireAlarmStatus == FireAlarmStatus.ALARM) {
+                        if (code3 == 0 || code3 == 2 || code3 == 4) {
+                            for (Map.Entry<String, IStrobe> entry : strobesMap.entrySet()) {
+                                String k = entry.getKey();
+                                IStrobe v = entry.getValue();
+                                v.on();
+                            }
+                            code3++;
+                        } else if (code3 == 1 || code3 == 3 || code3 == 5) {
+                            for (Map.Entry<String, IStrobe> entry : strobesMap.entrySet()) {
+                                String k = entry.getKey();
+                                IStrobe v = entry.getValue();
+                                v.off();
+                            }
+                            code3++;
+                        } else if (code3 >= 6) {
+                            if (code3 == 9) {
+                                code3 = 0;
+                                return;
+                            }
+                            code3++;
+                        }
+                    } else {
+                        code3 = 0;
                         fireAlarmStatus = FireAlarmStatus.READY;
                         resetStrobes();
                         this.cancel();
@@ -217,6 +262,16 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         return this.fireAlarmSound;
     }
 
+    @Override
+    public void setFireAlarmTempo(FireAlarmTempo fireAlarmTemp) {
+        this.fireAlarmTempo = fireAlarmTemp;
+    }
+
+    @Override
+    public FireAlarmTempo getFireAlarmTempo() {
+        return this.fireAlarmTempo;
+    }
+
     public void setSignsMap(Map<String, Location> signsMap) {
         this.signsMap = signsMap;
     }
@@ -242,10 +297,11 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", this.name);
         map.put("FireAlarmSound", this.fireAlarmSound);
+        map.put("FireAlarmTempo", this.fireAlarmTempo.toString());
         return map;
     }
 
     public static SimpleFireAlarm deserialize(Map<String, Object> map) {
-        return new SimpleFireAlarm(Main.getPlugin(), (String) map.get("Name"), (FireAlarmSound) map.get("FireAlarmSound"));
+        return new SimpleFireAlarm(Main.getPlugin(), (String) map.get("Name"), (FireAlarmSound) map.get("FireAlarmSound"), FireAlarmTempo.valueOf((String) map.get("FireAlarmTempo")));
     }
 }

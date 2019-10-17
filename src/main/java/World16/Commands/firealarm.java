@@ -7,6 +7,7 @@ import World16.Utils.API;
 import World16.Utils.Translate;
 import World16FireAlarms.Objects.FireAlarmReason;
 import World16FireAlarms.Objects.FireAlarmSound;
+import World16FireAlarms.Objects.FireAlarmTempo;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
 import World16FireAlarms.Objects.Simple.SimpleStrobe;
@@ -102,7 +103,7 @@ public class firealarm implements CommandExecutor {
                 return true;
             } else if (args.length == 3 && args[1].equalsIgnoreCase("firealarm")) {
                 String name = args[2].toLowerCase();
-                IFireAlarm iFireAlarm = new SimpleFireAlarm(plugin, name, new FireAlarmSound());
+                IFireAlarm iFireAlarm = new SimpleFireAlarm(plugin, name, new FireAlarmSound(), FireAlarmTempo.MARCH_TIME);
                 this.fireAlarmMap.putIfAbsent(name, iFireAlarm);
                 p.sendMessage(Translate.chat("Fire Alarm: " + name + " is now registered."));
                 return true;
@@ -300,6 +301,26 @@ public class firealarm implements CommandExecutor {
                 p.sendMessage(Translate.chat("Fire alarm sound has been set for " + fireAlarmName));
                 return true;
             }
+        } else if (args[0].equalsIgnoreCase("tempo")) {
+            if (args.length == 1) {
+                p.sendMessage(Translate.chat("/firealarm tempo <FireAlarmName> <Tempo>"));
+                return true;
+            } else if (args.length == 3) {
+                String fireAlarmName = args[1].toLowerCase();
+                String temp = args[2];
+
+                FireAlarmTempo fireAlarmTempo = FireAlarmTempo.valueOf(temp);
+
+                if (this.fireAlarmMap.get(fireAlarmName) == null) {
+                    p.sendMessage(Translate.chat("Not a fire alarm."));
+                    return true;
+                }
+
+                this.fireAlarmMap.get(fireAlarmName).setFireAlarmTempo(fireAlarmTempo);
+                p.sendMessage(Translate.chat("Fire Alarm: " + fireAlarmName + " tempo has changed to " + fireAlarmTempo.toString()));
+                return true;
+            }
+            return true;
         }
         return true;
     }
