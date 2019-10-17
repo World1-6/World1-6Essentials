@@ -3,6 +3,7 @@ package World16FireAlarms.Objects.Screen;
 import World16.Main.Main;
 import World16.Utils.Translate;
 import World16FireAlarms.Objects.FireAlarmReason;
+import World16FireAlarms.Objects.FireAlarmTempo;
 import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.block.Sign;
@@ -16,7 +17,7 @@ import java.util.*;
 @SerializableAs("FireAlarmSignOS")
 public class FireAlarmSignOS implements ConfigurationSerializable {
 
-    private double version = 1.1;
+    private double version = 1.2;
 
     private Main plugin;
 
@@ -65,6 +66,9 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             if (line == 1) {
                 settings_menu_test_firealarm(fireAlarmScreen, sign);
                 return true;
+            } else if (line == 2) {
+                settings_menu_change_tempo(fireAlarmScreen, sign);
+                return true;
             } else if (line == 3) {
                 settings_menu_info(fireAlarmScreen, sign);
                 return true;
@@ -81,6 +85,17 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             } else if (line == 3) {
                 this.fireAlarmMap.get(this.fireAlarmName).reset(Optional.empty());
                 player.sendMessage(Translate.chat("Fire alarm has been reset."));
+                return true;
+            }
+            return true;
+        } else if (this.currentMenu == FireAlarmSignMenu.SETTINGS_CHANGE_TEMPO) {
+            if (line == 1) {
+                this.fireAlarmMap.get(this.fireAlarmName).setFireAlarmTempo(FireAlarmTempo.MARCH_TIME);
+                player.sendMessage(Translate.chat("Fire Alarm: " + this.fireAlarmName + " tempo has changed to " + FireAlarmTempo.MARCH_TIME.name()));
+                return true;
+            } else if (line == 2) {
+                this.fireAlarmMap.get(this.fireAlarmName).setFireAlarmTempo(FireAlarmTempo.CODE3);
+                player.sendMessage(Translate.chat("Fire Alarm: " + this.fireAlarmName + " tempo has changed to " + FireAlarmTempo.CODE3.name()));
                 return true;
             }
             return true;
@@ -137,6 +152,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
                 main_menu(fireAlarmScreen, sign);
                 break;
             case SETTINGS_TEST_FIREALARM:
+            case SETTINGS_CHANGE_TEMPO:
             case SETTINGS_INFO:
                 settings_menu(fireAlarmScreen, sign);
                 break;
@@ -191,7 +207,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         this.currentMenu = FireAlarmSignMenu.SETTINGS_MENU;
         sign.setLine(0, "Settings/MENU");
         sign.setLine(1, "-Test Fire Alarm");
-        sign.setLine(2, "");
+        sign.setLine(2, "-Change Tempo");
         sign.setLine(3, "-Info");
 
         fireAlarmScreen.setMin(0);
@@ -207,6 +223,20 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         sign.setLine(3, "-Reset");
         fireAlarmScreen.setMin(0);
         fireAlarmScreen.setLine(0);
+        fireAlarmScreen.updateSign(sign);
+    }
+
+    private void settings_menu_change_tempo(FireAlarmScreen fireAlarmScreen, Sign sign) {
+        this.currentMenu = FireAlarmSignMenu.SETTINGS_CHANGE_TEMPO;
+        sign.setLine(0, "Settings/Tempo");
+        sign.setLine(1, "-MARCH_TIME");
+        sign.setLine(2, "-CODE3");
+        sign.setLine(3, "");
+
+        fireAlarmScreen.setMin(0);
+        fireAlarmScreen.setMax(3);
+        fireAlarmScreen.setLine(0);
+
         fireAlarmScreen.updateSign(sign);
     }
 

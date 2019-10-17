@@ -8,6 +8,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Collection;
+
 public class ScreenFocus {
 
     private Main plugin;
@@ -15,11 +17,17 @@ public class ScreenFocus {
     private Player player;
 
     private ItemStack[] oldInv;
+    private Collection<PotionEffect> potionEffects;
 
     public ScreenFocus(Main plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
         this.oldInv = player.getInventory().getContents();
+        this.potionEffects = this.player.getActivePotionEffects();
+
+        for (PotionEffect effect : this.player.getActivePotionEffects())
+            this.player.removePotionEffect(effect.getType());
+
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1, true, false));
         this.player.getInventory().clear();
         giveTools();
@@ -54,9 +62,11 @@ public class ScreenFocus {
 
     public void revert() {
         this.player.getInventory().clear();
-        this.player.getInventory().setContents(this.oldInv);
 
         for (PotionEffect effect : this.player.getActivePotionEffects())
             this.player.removePotionEffect(effect.getType());
+
+        this.player.addPotionEffects(this.potionEffects);
+        this.player.getInventory().setContents(this.oldInv);
     }
 }

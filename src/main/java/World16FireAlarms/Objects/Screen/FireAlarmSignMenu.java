@@ -8,5 +8,6 @@ public enum FireAlarmSignMenu {
     //1
     SETTINGS_MENU,
     SETTINGS_TEST_FIREALARM,
+    SETTINGS_CHANGE_TEMPO,
     SETTINGS_INFO
 }

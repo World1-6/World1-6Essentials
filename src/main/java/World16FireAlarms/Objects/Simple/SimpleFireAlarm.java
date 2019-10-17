@@ -55,7 +55,6 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     }
 
     public void registerNac() {
-
     }
 
     public void registerSign(String string, Location location) {
@@ -63,30 +62,27 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     }
 
     public void reset(Optional<Zone> zone) {
-        if (!zone.isPresent()) {
-            this.fireAlarmStatus = FireAlarmStatus.READY;
-            this.isAlarmCurrently = false;
-            this.resetStrobes();
-            //Signs
-            for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
-                String k = entry.getKey();
-                Location v = entry.getValue();
+        this.fireAlarmStatus = FireAlarmStatus.READY;
 
-                FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
-                if (fireAlarmScreen != null) {
-                    this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().resetSign(fireAlarmScreen, fireAlarmScreen.getSign(), true);
-                } else {
-                    //Wait 1 second before removing so it won't cause a ConcurrentModificationException
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, k.toLowerCase(), v);
-                        }
-                    }.runTaskLater(plugin, 20L);
-                }
+        //Signs
+        for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
+            String k = entry.getKey();
+            Location v = entry.getValue();
+
+            FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
+            if (fireAlarmScreen != null)
+                this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().resetSign(fireAlarmScreen, fireAlarmScreen.getSign(), true);
+            else {
+                //Wait 1 second before removing so it won't cause a ConcurrentModificationException
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, k.toLowerCase(), v);
+                    }
+                }.runTaskLater(plugin, 20L);
             }
-            //SIGNS DONE...
         }
+        //SIGNS DONE...
     }
 
     public void trouble() {
@@ -95,11 +91,9 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     public void alarm(FireAlarmReason fireAlarmReason) {
         this.fireAlarmStatus = FireAlarmStatus.ALARM;
-        if (fireAlarmTempo == FireAlarmTempo.CODE3) {
-            setupCode3();
-        } else if (fireAlarmTempo == FireAlarmTempo.MARCH_TIME) {
-            setupMarchTime();
-        }
+
+        if (fireAlarmTempo == FireAlarmTempo.CODE3) setupCode3();
+        else if (fireAlarmTempo == FireAlarmTempo.MARCH_TIME) setupMarchTime();
 
         //Signs
         for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
@@ -107,9 +101,9 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
             Location v = entry.getValue();
 
             FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
-            if (fireAlarmScreen != null) {
+            if (fireAlarmScreen != null)
                 this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), fireAlarmReason);
-            } else {
+            else {
                 //Wait 1 second before removing so it won't cause a ConcurrentModificationException
                 new BukkitRunnable() {
                     @Override
@@ -135,6 +129,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     private void setupMarchTime() {
         if (!isAlarmCurrently) {
             isAlarmCurrently = true;
+
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -155,8 +150,8 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
                             marchTime = 0;
                         }
                     } else {
+                        isAlarmCurrently = false;
                         marchTime = 0;
-                        fireAlarmStatus = FireAlarmStatus.READY;
                         resetStrobes();
                         this.cancel();
                     }
@@ -167,7 +162,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     private int code3 = 0;
 
-    public void setupCode3() {
+    private void setupCode3() {
         if (!this.isAlarmCurrently) {
             this.isAlarmCurrently = true;
 
@@ -190,15 +185,15 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
                             }
                             code3++;
                         } else if (code3 >= 6) {
-                            if (code3 == 9) {
+                            if (code3 == 8) {
                                 code3 = 0;
                                 return;
                             }
                             code3++;
                         }
                     } else {
+                        isAlarmCurrently = false;
                         code3 = 0;
-                        fireAlarmStatus = FireAlarmStatus.READY;
                         resetStrobes();
                         this.cancel();
                     }
