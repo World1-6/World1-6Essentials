@@ -32,9 +32,7 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
         this.fireAlarmSound = new FireAlarmSound();
 
         BlockData data = this.location.getBlock().getBlockData();
-        if (data instanceof Lightable) {
-            isLight = true;
-        }
+        if (data instanceof Lightable) isLight = true;
     }
 
     public SimpleStrobe(Block block, String name, String zoneName) {
@@ -50,17 +48,12 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
                 this.location.getBlock().setBlockData(data);
                 isLight = true;
             } else isLight = false;
-        } else {
-            this.location.getBlock().setType(Material.REDSTONE_BLOCK);
-        }
+        } else this.location.getBlock().setType(Material.REDSTONE_BLOCK);
     }
 
     public void off() {
-        if (isLight) {
-            this.location.getBlock().setType(Material.REDSTONE_LAMP);
-            return;
-        }
-        this.location.getBlock().setType(Material.SOUL_SAND);
+        if (isLight) this.location.getBlock().setType(Material.REDSTONE_LAMP);
+        else this.location.getBlock().setType(Material.SOUL_SAND);
     }
 
     public void sound() {
