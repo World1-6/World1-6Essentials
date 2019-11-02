@@ -67,6 +67,7 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     private Queue<FloorQueueObject> floorQueueBuffer;
     private Queue<Integer> floorBuffer;
+    private StopBy stopBy;
 
     public ElevatorObject(Main plugin, String world, String nameOfElevator, FloorObject currentFloor, BoundingBox boundingBox) {
         if (plugin != null) {
@@ -78,6 +79,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.floorsMap = new HashMap<>();
         this.floorQueueBuffer = new LinkedList<>();
         this.floorBuffer = new LinkedList<>();
+        this.stopBy = new StopBy();
 
         this.simpleMath = new SimpleMath(this.plugin);
 
@@ -116,14 +118,16 @@ public class ElevatorObject implements ConfigurationSerializable {
         boolean goUp;
 
         //Check if the floor is a thing or not.
-        if (getFloor(floorNum) == null) {
-            return;
-        }
+        if (getFloor(floorNum) == null) return;
 
         //Add to the queue if elevator is running or idling.
         if (isGoing || isIdling) {
-            floorQueueBuffer.add(new FloorQueueObject(floorNum, elevatorStatus));
-            setupFloorQueue();
+            if (this.floorBuffer.contains(floorNum) && this.stopBy.toElevatorStatus() == elevatorStatus) {
+                this.stopBy.getStopByQueue().add(floorNum);
+            } else {
+                floorQueueBuffer.add(new FloorQueueObject(floorNum, elevatorStatus));
+                setupFloorQueue();
+            }
             return;
         }
 
@@ -139,6 +143,8 @@ public class ElevatorObject implements ConfigurationSerializable {
         //This caculates what floors it's going to pass going up or down this has to be run before it sets this.elevatorFloor to not a floor.
         calculateFloorBuffer(floorNum, goUp);
 
+        this.stopBy.setGoUp(goUp);
+
         this.elevatorFloor = Integer.MIN_VALUE; //Not on a floor.
 
         //Tell the elevator to go down instead of up.
@@ -146,6 +152,10 @@ public class ElevatorObject implements ConfigurationSerializable {
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    if (isIdling) return;
+                    FloorObject stopByFloor = null;
+                    if (!stopBy.getStopByQueue().isEmpty()) stopByFloor = getFloor(stopBy.getStopByQueue().peek());
+
                     //Check's if at floor if so then stop the elvator.
                     if (atDoor.getY() == floorObject.getAtDoor().getY()) {
                         this.cancel();
@@ -153,6 +163,13 @@ public class ElevatorObject implements ConfigurationSerializable {
                         floorDone(floorObject, elevatorStatus);
                         doFloorIdle();
                         isGoing = false;
+                        return;
+                    } else if (stopByFloor != null && atDoor.getY() == stopByFloor.getAtDoor().getY()) {
+                        isIdling = true;
+                        stopBy.getStopByQueue().remove();
+                        elevatorFloor = floorNum;
+                        floorDone(stopByFloor, elevatorStatus);
+                        doFloorIdle();
                         return;
                     }
 
@@ -181,6 +198,10 @@ public class ElevatorObject implements ConfigurationSerializable {
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (isIdling) return;
+                FloorObject stopByFloor = null;
+                if (!stopBy.getStopByQueue().isEmpty()) stopByFloor = getFloor(stopBy.getStopByQueue().peek());
+
 //                Check's if at floor if so then stop the elvator.
                 if (atDoor.getY() == floorObject.getAtDoor().getY()) {
                     this.cancel();
@@ -188,6 +209,13 @@ public class ElevatorObject implements ConfigurationSerializable {
                     floorDone(floorObject, elevatorStatus);
                     doFloorIdle();
                     isGoing = false;
+                    return;
+                } else if (stopByFloor != null && atDoor.getY() == stopByFloor.getAtDoor().getY()) {
+                    isIdling = true;
+                    stopBy.getStopByQueue().remove();
+                    elevatorFloor = floorNum;
+                    floorDone(stopByFloor, elevatorStatus);
+                    doFloorIdle();
                     return;
                 }
 
@@ -300,11 +328,11 @@ public class ElevatorObject implements ConfigurationSerializable {
                     floorBuffer.add(num);
                 }
             }
-            return;
-        }
-        for (int num = this.elevatorFloor; num > floor; num--) {
-            if (num != this.elevatorFloor) {
-                floorBuffer.add(num);
+        } else {
+            for (int num = this.elevatorFloor; num > floor; num--) {
+                if (num != this.elevatorFloor) {
+                    floorBuffer.add(num);
+                }
             }
         }
     }
