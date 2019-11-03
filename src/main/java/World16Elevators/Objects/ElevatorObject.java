@@ -153,6 +153,7 @@ public class ElevatorObject implements ConfigurationSerializable {
                 @Override
                 public void run() {
                     if (isIdling) return;
+                    reCalculateFloorBuffer(goUp);
                     FloorObject stopByFloor = null;
                     if (!stopBy.getStopByQueue().isEmpty()) stopByFloor = getFloor(stopBy.getStopByQueue().peek());
 
@@ -199,6 +200,7 @@ public class ElevatorObject implements ConfigurationSerializable {
             @Override
             public void run() {
                 if (isIdling) return;
+                reCalculateFloorBuffer(goUp);
                 FloorObject stopByFloor = null;
                 if (!stopBy.getStopByQueue().isEmpty()) stopByFloor = getFloor(stopBy.getStopByQueue().peek());
 
@@ -334,6 +336,17 @@ public class ElevatorObject implements ConfigurationSerializable {
                     floorBuffer.add(num);
                 }
             }
+        }
+    }
+
+    private void reCalculateFloorBuffer(boolean goUp) {
+        Integer peek = this.floorBuffer.peek();
+        if (peek == null) return;
+
+        if (goUp) {
+            if (this.atDoor.getY() >= getFloor(peek).getAtDoor().getY()) this.floorBuffer.remove();
+        } else {
+            if (this.atDoor.getY() <= getFloor(peek).getAtDoor().getY()) this.floorBuffer.remove();
         }
     }
 
