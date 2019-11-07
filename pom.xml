@@ -26,12 +26,6 @@
                         </goals>
                         <configuration>
                             <finalName>World1-6Essentials</finalName>
-                            <relocations>
-                                <relocation>
-                                    <pattern>com.zaxxer.hikari</pattern>
-                                    <shadedPattern>me.mc2.internal.hikari</shadedPattern>
-                                </relocation>
-                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -49,13 +43,6 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>
-
-        <!-- Discord JDA -->
-        <repository>
-            <id>jcenter</id>
-            <name>jcenter-bintray</name>
-            <url>http://jcenter.bintray.com</url>
         </repository>
 
         <!-- Offcial WorldWdit API-->
