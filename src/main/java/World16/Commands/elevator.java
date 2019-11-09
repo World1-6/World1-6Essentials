@@ -1,7 +1,6 @@
 package World16.Commands;
 
 import World16.Main.Main;
-import World16.Managers.CustomConfigManager;
 import World16.TabComplete.ElevatorTab;
 import World16.Utils.API;
 import World16.Utils.SimpleMath;
@@ -11,7 +10,6 @@ import World16Elevators.Objects.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.regions.Region;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -28,7 +26,6 @@ public class elevator implements CommandExecutor {
     private Main plugin;
     private API api;
 
-    private CustomConfigManager customConfigManager;
     private WorldEditPlugin worldEditPlugin;
     private ElevatorManager elevatorManager;
 
@@ -36,10 +33,9 @@ public class elevator implements CommandExecutor {
 
     private SimpleMath simpleMath;
 
-    public elevator(Main plugin, CustomConfigManager customConfigManager) {
+    public elevator(Main plugin) {
         this.plugin = plugin;
 
-        this.customConfigManager = customConfigManager;
         this.api = new API(this.plugin);
         this.simpleMath = new SimpleMath(this.plugin);
 
@@ -160,8 +156,7 @@ public class elevator implements CommandExecutor {
                     p.sendMessage(Translate.chat("[Elevator creation]"));
                     p.sendMessage(Translate.chat("/elevator create <ElevatorName> <XAX> <XAY> <XAZ> <XBX> <XBY> <XAZ>"));
                     return true;
-                }
-                if (args.length == 8) {
+                } else if (args.length == 8) {
                     String elevatorName = args[1].toLowerCase();
                     int XAX = api.asIntOrDefault(args[2], 0);
                     int XAY = api.asIntOrDefault(args[3], 0);
@@ -170,9 +165,6 @@ public class elevator implements CommandExecutor {
                     int XBX = api.asIntOrDefault(args[5], 0);
                     int XBY = api.asIntOrDefault(args[6], 0);
                     int XBZ = api.asIntOrDefault(args[7], 0);
-
-                    Location down = new Location(p.getWorld(), XAX, XAY, XAZ);
-                    Location up = new Location(p.getWorld(), XBX, XBY, XBZ);
 
                     Region region = getSelection(p);
 
@@ -183,10 +175,11 @@ public class elevator implements CommandExecutor {
 
                     Vector one = new Vector(region.getMinimumPoint().getX(), region.getMinimumPoint().getY(), region.getMinimumPoint().getZ());
                     Vector two = new Vector(region.getMaximumPoint().getX(), region.getMaximumPoint().getY(), region.getMaximumPoint().getZ());
-                    FloorObject floorObject = new FloorObject(0, api.getBlockPlayerIsLookingAt(p).getLocation(), simpleMath.toBoundingBox(one, two));
 
+                    FloorObject floorObject = new FloorObject(0, api.getBlockPlayerIsLookingAt(p).getLocation(), simpleMath.toBoundingBox(one, two));
                     BoundingBox boundingBox = simpleMath.toBoundingBox(new Vector(XAX, XAY, XAZ), new Vector(XBX, XBY, XBZ));
                     ElevatorObject elevatorObject = new ElevatorObject(plugin, p.getWorld().getName(), elevatorName, floorObject, boundingBox);
+
                     elevatorObjectMap.putIfAbsent(elevatorName, elevatorObject);
                     p.sendMessage(Translate.chat("Elevator: " + elevatorName + " has been created"));
                     return true;
@@ -197,32 +190,9 @@ public class elevator implements CommandExecutor {
             if (args[0].equalsIgnoreCase("floor")) {
                 if (args.length == 1) {
                     p.sendMessage(Translate.chat("[Elevator Floor Setup]"));
-                    p.sendMessage(Translate.chat("/elevator floor create <ElevatorName> <FloorNumber>"));
                     p.sendMessage(Translate.chat("/elevator floor easycreate <ElevatorName> <FloorNumber>"));
                     p.sendMessage(Translate.chat("/elevator floor delete <ElevatorName> <FloorNumber>"));
                     p.sendMessage(Translate.chat("/elevator floor sign <ElevatorName> <FloorNumber>"));
-                    return true;
-                }
-                if (args.length == 4 && args[1].equalsIgnoreCase("create")) {
-                    String elevatorName = args[2].toLowerCase();
-                    int floorNum = api.asIntOrDefault(args[3], 0);
-
-                    Region region = getSelection(p);
-                    if (region == null) {
-                        p.sendMessage("Please make a selection with WorldEdit and then redo the command please.");
-                        return true;
-                    }
-
-                    if (elevatorObjectMap.get(elevatorName) == null) {
-                        p.sendMessage(Translate.chat("That elevator doesn't exist."));
-                        return true;
-                    }
-
-                    Vector one = new Vector(region.getMinimumPoint().getX(), region.getMinimumPoint().getY(), region.getMinimumPoint().getZ());
-                    Vector two = new Vector(region.getMaximumPoint().getX(), region.getMaximumPoint().getY(), region.getMaximumPoint().getZ());
-                    BoundingBox boundingBox = simpleMath.toBoundingBox(one, two);
-                    elevatorObjectMap.get(elevatorName).addFloor(new FloorObject(floorNum, api.getBlockPlayerIsLookingAt(p).getLocation(), boundingBox));
-                    p.sendMessage(Translate.chat("Floor: " + floorNum + " has been added to the elevator: " + elevatorName));
                     return true;
                 } else if (args.length == 4 && args[1].equalsIgnoreCase("easycreate")) {
                     String elevatorName = args[2].toLowerCase();
@@ -459,7 +429,7 @@ public class elevator implements CommandExecutor {
         }
     }
 
-    public Region getSelection(Player player) {
+    private Region getSelection(Player player) {
         Region region;
         try {
             region = worldEditPlugin.getSession(player).getSelection(BukkitAdapter.adapt(player.getWorld()));

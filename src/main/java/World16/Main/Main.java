@@ -125,7 +125,7 @@ public class Main extends JavaPlugin {
         new wformat(this, this.customConfigManager);
         new xyzdxdydz(this);
         new workbench(this, this.customConfigManager);
-        new elevator(this, this.customConfigManager);
+        new elevator(this);
         new lastjoin(this, this.customConfigManager);
         new firealarm(this, this.customConfigManager);
 

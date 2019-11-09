@@ -8,6 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +18,7 @@ public class ElevatorTab implements TabCompleter {
 
     //Maps
     private Map<String, List<String>> tabCompleteMap;
-
     private Map<String, ElevatorObject> elevatorObjectMap;
-    //...
-
-    //Lists
     //...
 
     public ElevatorTab(Main plugin) {
@@ -50,13 +47,10 @@ public class ElevatorTab implements TabCompleter {
         if (!(sender instanceof Player)) {
             return null;
         }
+
         Player p = (Player) sender;
 
-        if (!cmd.getName().equalsIgnoreCase("elevator")) {
-            return null;
-        }
-
-        if (!p.hasPermission("world16.elevator")) {
+        if (!cmd.getName().equalsIgnoreCase("elevator") || !p.hasPermission("world16.elevator")) {
             return null;
         }
 
@@ -64,10 +58,24 @@ public class ElevatorTab implements TabCompleter {
 
         if (args.length == 1) {
             return getContains(args[0], tabCompleteMap.get("elevator"));
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("delete")) {
+        } else if (args[0].equalsIgnoreCase("delete")) {
             return getContains(args[1], elevatorList);
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("rename")) {
+        } else if (args[0].equalsIgnoreCase("rename")) {
             return getContains(args[1], elevatorList);
+        } else if (args[0].equalsIgnoreCase("floor")) {
+            if (args.length == 2) {
+                return getContains(args[1], Arrays.asList("easycreate", "delete", "sign"));
+            } else if (args.length == 3) {
+                return getContains(args[2], elevatorList);
+            }
+        } else if (args[0].equalsIgnoreCase("call")) {
+            if (args.length == 2) {
+                return getContains(args[1], elevatorList);
+            }
+        } else if (args[0].equalsIgnoreCase("stop")) {
+            if (args.length == 2) {
+                return getContains(args[1], elevatorList);
+            }
         }
 
         return null;
