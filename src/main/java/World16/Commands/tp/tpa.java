@@ -70,5 +70,4 @@ public class tpa implements CommandExecutor {
             target.sendMessage(Translate.chat("&c/tpaccept &aOR&r &c/tpdeny"));
         }
     }
-
 }

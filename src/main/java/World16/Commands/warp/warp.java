@@ -51,14 +51,14 @@ public class warp implements CommandExecutor {
             return true;
         } else if (args.length == 1) {
             String name = args[0].toLowerCase();
+            Location warp = this.warpsMap.get(name);
 
-            if (this.warpsMap.get(name) == null) {
+            if (warp == null) {
                 p.sendMessage(Translate.chat("&cThat's not a warp."));
                 return true;
             }
 
-            Location location = this.warpsMap.get(name);
-            p.teleport(location);
+            p.teleport(warp);
             p.sendMessage(Translate.chat("&6Teleporting..."));
             return true;
         }

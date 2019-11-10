@@ -44,11 +44,11 @@ public class tpdeny implements CommandExecutor {
             return true;
         }
         if (args.length == 0) {
-            if (tpam.get(p) != null) {
+            Player tpa = this.tpam.get(p);
+            if (tpa != null) {
                 p.sendMessage(Translate.chat("&9Ok you denied the tp request."));
-                tpam.get(p).sendMessage(
-                        Translate.chat("[&eTPA&r] &cYour tpa request got denied by " + p.getDisplayName()));
-                tpam.remove(p);
+                tpa.sendMessage(Translate.chat("[&eTPA&r] &cYour tpa request got denied by " + p.getDisplayName()));
+                this.tpam.remove(p);
             } else {
                 p.sendMessage(Translate.chat("&4Something went wrong."));
             }

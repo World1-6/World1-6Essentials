@@ -45,11 +45,12 @@ public class tpaccept implements CommandExecutor {
             return true;
         }
         if (args.length == 0) {
-            if (tpam.get(p) != null) {
-                tpam.get(p).teleport(p);
-                tpam.get(p).sendMessage(Translate
-                        .chat("[&eTPA&r] &a" + p.getDisplayName() + " has accepted your tpa request."));
-                tpam.remove(p);
+            Player tpa = this.tpam.get(p);
+            if (tpa != null) {
+                tpa.teleport(p);
+                tpa.sendMessage(Translate.chat("[&eTPA&r] &a" + p.getDisplayName() + " has accepted your tpa request."));
+                this.tpam.remove(p);
+                return true;
             } else {
                 p.sendMessage(Translate.chat("&e[TPA]&r &cLooks like you don't have any tpa request."));
             }

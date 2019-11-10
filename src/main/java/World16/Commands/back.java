@@ -50,10 +50,11 @@ public class back implements CommandExecutor {
         }
         Player p = (Player) sender;
 
-        if (backm.get(p.getUniqueId()) == null) {
-            backm.remove(p.getUniqueId());
-            backm.put(p.getUniqueId(), new LocationObject());
-            plugin.getServer().getConsoleSender().sendMessage(Translate.chat("[&cBack&r] &cHey, If you see this then something broke when someone used the command /back."));
+        LocationObject back = this.backm.get(p.getUniqueId());
+
+        if (back == null) {
+            backm.putIfAbsent(p.getUniqueId(), new LocationObject());
+            p.sendMessage(Translate.chat("[&cBack&r] &cHey, If you see something broke in /back report this to Andrew121410#2035 on discord."));
             return true;
         }
 
@@ -72,8 +73,8 @@ public class back implements CommandExecutor {
                 api.PermissionErrorMessage(p);
                 return true;
             }
-            if (backm.get(p.getUniqueId()).getLocation(1) != null) {
-                Location deathlocation = backm.get(p.getUniqueId()).getLocation(1);
+            if (back.getLocation(1) != null) {
+                Location deathlocation = back.getLocation(1);
 
                 //Checks if it's Lava Or Water.
                 if (deathlocation.getBlock().isLiquid() || deathlocation.getBlock().getRelative(BlockFace.DOWN).isLiquid()) {
@@ -98,9 +99,8 @@ public class back implements CommandExecutor {
                 api.PermissionErrorMessage(p);
                 return true;
             }
-            if (backm.get(p.getUniqueId()).getLocation(2) != null) {
-                Location tpLoc = backm.get(p.getUniqueId()).getLocation(2);
-                p.teleport(tpLoc);
+            if (back.getLocation(2) != null) {
+                p.teleport(back.getLocation(2));
                 return true;
             } else {
                 p.sendMessage(Translate.chat("[&cBack&r] &eLooks like you didn't teleport yet."));
@@ -113,7 +113,7 @@ public class back implements CommandExecutor {
                 api.PermissionErrorMessage(p);
                 return true;
             }
-            backm.get(p.getUniqueId()).setLocation("set", 3, p.getLocation());
+            back.setLocation("set", 3, p.getLocation());
             p.sendMessage(Translate.chat("[&cBack&r] &aYour back location has been set."));
             return true;
 
@@ -123,8 +123,8 @@ public class back implements CommandExecutor {
                 api.PermissionErrorMessage(p);
                 return true;
             }
-            if (backm.get(p.getUniqueId()).getLocation(3) != null) {
-                p.teleport(backm.get(p.getUniqueId()).getLocation(3));
+            if (back.getLocation(3) != null) {
+                p.teleport(back.getLocation(3));
                 p.sendMessage(Translate.chat("[&cBack&r] &6Done."));
                 return true;
             } else {
