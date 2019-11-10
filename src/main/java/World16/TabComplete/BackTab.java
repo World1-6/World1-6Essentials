@@ -12,14 +12,11 @@ import java.util.Map;
 
 public class BackTab implements TabCompleter {
 
-    private Main plugin;
-
     //Maps
     private Map<String, List<String>> tabCompleteMap;
     //...
 
-    //Lists
-    //...
+    private Main plugin;
 
     public BackTab(Main plugin) {
         this.plugin = plugin;
@@ -43,11 +40,7 @@ public class BackTab implements TabCompleter {
         }
         Player p = (Player) sender;
 
-        if (!cmd.getName().equalsIgnoreCase("back")) {
-            return null;
-        }
-
-        if (!p.hasPermission("world16.back")) {
+        if (!cmd.getName().equalsIgnoreCase("back") || !p.hasPermission("world16.back")) {
             return null;
         }
 

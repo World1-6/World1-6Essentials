@@ -5,7 +5,6 @@ import World16.CustomEvents.handlers.UnAfkEventHandler;
 import World16.Main.Main;
 import World16.Utils.API;
 import World16.Utils.Translate;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,7 +38,6 @@ public class afk implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.afk")) {
@@ -49,22 +47,36 @@ public class afk implements CommandExecutor {
 
         String color = "&7";
 
-        //Checks if player is op if so then change the color to red.
-        if (p.isOp()) {
-            color = "&4";
-        }
-
-        if (afkMap.get(p.getUniqueId()) == null) {
-            Bukkit.broadcastMessage(Translate.chat("&7* " + color + p.getDisplayName() + "&r&7" + " is now AFK."));
-            afkMap.put(p.getUniqueId(), p.getLocation());
-            new AfkEventHandler(this.plugin, p.getDisplayName()); //CALLS THE EVENT.
+        if (args.length == 0) {
+            if (p.isOp()) color = "&4";
+            doAfk(p, color);
             return true;
-        } else if (afkMap.get(p.getUniqueId()) != null) {
-            Bukkit.broadcastMessage(Translate.chat("&7*" + color + " " + p.getDisplayName() + "&r&7 is no longer AFK."));
-            afkMap.remove(p.getUniqueId());
-            new UnAfkEventHandler(this.plugin, p.getDisplayName());
+        } else if (args.length == 1) {
+            if (!p.hasPermission("world16.afk.other")) {
+                api.PermissionErrorMessage(p);
+                return true;
+            }
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target != null && target.isOnline()) {
+                if (target.isOp()) color = "&4";
+                doAfk(target, color);
+            }
             return true;
+        } else {
+            p.sendMessage(Translate.chat("&cUsage:&9 /afk &aOR &9/afk <Player>"));
         }
         return true;
+    }
+
+    private void doAfk(Player player, String color) {
+        if (afkMap.get(player.getUniqueId()) == null) {
+            this.plugin.getServer().broadcastMessage(Translate.chat("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
+            afkMap.put(player.getUniqueId(), player.getLocation());
+            new AfkEventHandler(this.plugin, player.getDisplayName()); //CALLS THE EVENT.
+        } else if (afkMap.get(player.getUniqueId()) != null) {
+            this.plugin.getServer().broadcastMessage(Translate.chat("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
+            afkMap.remove(player.getUniqueId());
+            new UnAfkEventHandler(this.plugin, player.getDisplayName());
+        }
     }
 }

@@ -4,6 +4,7 @@ import World16.Main.Main;
 import World16.Utils.Translate;
 import World16FireAlarms.Objects.FireAlarmReason;
 import World16FireAlarms.Objects.FireAlarmTempo;
+import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
 import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.block.Sign;
@@ -40,6 +41,8 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
     }
 
     public boolean onLine(FireAlarmScreen fireAlarmScreen, Player player, Sign sign, int line, int scroll) {
+        SimpleFireAlarm simpleFireAlarm = (SimpleFireAlarm) this.fireAlarmMap.get(this.fireAlarmName);
+
         //Reverse
         if (line == 0 && scroll == 0) {
             backReverse(this.currentMenu, fireAlarmScreen, sign, line);
@@ -76,32 +79,32 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.SETTINGS_TEST_FIREALARM) {
             if (line == 1) {
-                this.fireAlarmMap.get(this.fireAlarmName).alarm(new FireAlarmReason(TroubleReason.PANEL_TEST));
+                simpleFireAlarm.alarm(new FireAlarmReason(TroubleReason.PANEL_TEST));
                 player.sendMessage(Translate.chat("Alarm should be going off currently."));
                 return true;
             } else if (line == 2) {
                 player.sendMessage(Translate.chat("NOT IMPLEMENTED."));
                 return true;
             } else if (line == 3) {
-                this.fireAlarmMap.get(this.fireAlarmName).reset(Optional.empty());
+                simpleFireAlarm.reset(Optional.empty());
                 player.sendMessage(Translate.chat("Fire alarm has been reset."));
                 return true;
             }
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.SETTINGS_CHANGE_TEMPO) {
             if (line == 1) {
-                this.fireAlarmMap.get(this.fireAlarmName).setFireAlarmTempo(FireAlarmTempo.MARCH_TIME);
+                simpleFireAlarm.setFireAlarmTempo(FireAlarmTempo.MARCH_TIME);
                 player.sendMessage(Translate.chat("Fire Alarm: " + this.fireAlarmName + " tempo has changed to " + FireAlarmTempo.MARCH_TIME.name()));
                 return true;
             } else if (line == 2) {
-                this.fireAlarmMap.get(this.fireAlarmName).setFireAlarmTempo(FireAlarmTempo.CODE3);
+                simpleFireAlarm.setFireAlarmTempo(FireAlarmTempo.CODE3);
                 player.sendMessage(Translate.chat("Fire Alarm: " + this.fireAlarmName + " tempo has changed to " + FireAlarmTempo.CODE3.name()));
                 return true;
             }
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.ALARM_POPUP) {
             if (line == 2) {
-                this.fireAlarmMap.get(this.fireAlarmName).reset(Optional.empty());
+                simpleFireAlarm.reset(Optional.empty());
                 backReverse(this.currentMenu, fireAlarmScreen, sign, line);
                 player.sendMessage(Translate.chat("The fire alarm has been reset."));
                 return true;

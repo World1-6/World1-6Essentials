@@ -9,11 +9,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Optional;
 
 public class fly implements CommandExecutor {
 
-    //Maps
-    //...
     //Lists
     private List<String> flyList;
     //....
@@ -27,7 +26,7 @@ public class fly implements CommandExecutor {
 
         this.flyList = this.plugin.getSetListMap().getFlyList();
 
-        plugin.getCommand("fly").setExecutor(this);
+        this.plugin.getCommand("fly").setExecutor(this);
     }
 
     @Override
@@ -36,51 +35,43 @@ public class fly implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.fly")) {
             api.PermissionErrorMessage(p);
             return true;
         }
-        if (cmd.getName().equalsIgnoreCase("fly")) {
-        }
+
         if (args.length == 0) {
-            if (!flyList.contains(p.getDisplayName()) && (!p.isFlying())) {
-                p.setAllowFlight(true);
-                p.sendMessage(Translate.chat("&6Set fly mode &cenabled&6 for " + p.getDisplayName()));
-                flyList.add(p.getDisplayName());
+            doFly(p, Optional.empty());
+            return true;
+        } else if (args.length == 1) {
+            if (!p.hasPermission("world16.fly.other")) {
+                api.PermissionErrorMessage(p);
                 return true;
-            } else if (flyList.contains(p.getDisplayName())) {
-                p.setAllowFlight(false);
-                p.sendMessage(Translate.chat("&6Set fly mode &cdisabled&6 for " + p.getDisplayName()));
-                flyList.remove(p.getDisplayName());
-                return true;
-            } else {
-                Player target = plugin.getServer().getPlayerExact(args[0]);
-                if (args.length >= 1 && target != null && target.isOnline()) {
-                    if (!p.hasPermission("world16.fly.other")) {
-                        api.PermissionErrorMessage(p);
-                        return true;
-                    }
-                    if (!flyList.contains(target.getDisplayName()) && (!target.isFlying())) {
-                        target.setAllowFlight(true);
-                        p.sendMessage(
-                                Translate.chat("&6Set fly mode &cenabled&6 for " + target.getDisplayName()));
-                        flyList.add(target.getDisplayName());
-                        return true;
-                    } else if (flyList.contains(target.getDisplayName())) {
-                        target.setAllowFlight(false);
-                        p.sendMessage(
-                                Translate.chat("&6Set fly mode &cdisabled&6 for " + target.getDisplayName()));
-                        flyList.remove(target.getDisplayName());
-                        return true;
-                    }
-                } else {
-                    p.sendMessage(Translate.chat("&cUsage: for yourself do /fly OR /fly <Player>"));
-                }
             }
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target != null && target.isOnline()) {
+                doFly(target, Optional.of(p));
+            }
+            return true;
+        } else {
+            p.sendMessage(Translate.chat("&cUsage: for yourself do /fly OR /fly <Player>"));
         }
         return true;
+    }
+
+    private void doFly(Player player, Optional<Player> optionalPlayer) {
+        if (!flyList.contains(player.getDisplayName()) && (!player.isFlying())) {
+            player.setAllowFlight(true);
+            player.sendMessage(Translate.chat("&6Set fly mode &cenabled&6 for " + player.getDisplayName()));
+            optionalPlayer.ifPresent(player1 -> player1.sendMessage(Translate.chat("&6Set fly mode &cenabled&6 for " + player.getDisplayName())));
+            flyList.add(player.getDisplayName());
+        } else if (flyList.contains(player.getDisplayName())) {
+            player.setAllowFlight(false);
+            player.sendMessage(Translate.chat("&6Set fly mode &cdisabled&6 for " + player.getDisplayName()));
+            optionalPlayer.ifPresent(player1 -> player1.sendMessage(Translate.chat("&6Set fly mode &cdisabled&6 for " + player.getDisplayName())));
+            flyList.remove(player.getDisplayName());
+        }
     }
 }

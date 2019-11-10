@@ -12,14 +12,14 @@ import java.util.Map;
 
 public class KeyTab implements TabCompleter {
 
-    private Main plugin;
-
     //Maps
     private Map<String, List<String>> tabCompleteMap;
     //...
 
     //Lists
     //...
+
+    private Main plugin;
 
     public KeyTab(Main plugin) {
         this.plugin = plugin;
@@ -43,11 +43,7 @@ public class KeyTab implements TabCompleter {
         }
         Player p = (Player) sender;
 
-        if (!cmd.getName().equalsIgnoreCase("key")) {
-            return null;
-        }
-
-        if (!p.hasPermission("world16.key")) {
+        if (!cmd.getName().equalsIgnoreCase("key") || !p.hasPermission("world16.key")) {
             return null;
         }
 

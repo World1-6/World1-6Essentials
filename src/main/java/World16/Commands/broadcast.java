@@ -18,6 +18,7 @@ public class broadcast implements CommandExecutor {
     public broadcast(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
+
         this.plugin.getCommand("broadcast").setExecutor(this);
     }
 
@@ -28,21 +29,18 @@ public class broadcast implements CommandExecutor {
             return true;
         }
         Player p = (Player) sender;
+
         if (!p.hasPermission("world16.broadcast")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         if (args.length == 0) {
             p.sendMessage(Translate.chat("[&cBroadCast&r] &cUsage: /broadcast <Message>"));
-        } else if (args.length >= 1) {
-
-            this.plugin.getServer().getOnlinePlayers().stream().forEach(player -> player.sendMessage(Translate.chat("[&c&lBroadcast&r]&a {messager}").replace("{messager}", String.join(" ", args))));
-
             return true;
         } else {
-            p.sendMessage("Something messed up!");
+            this.plugin.getServer().getOnlinePlayers().stream().forEach(player -> player.sendMessage(Translate.chat("[&c&lBroadcast&r]&a {messager}").replace("{messager}", String.join(" ", args))));
             return true;
         }
-        return true;
     }
 }

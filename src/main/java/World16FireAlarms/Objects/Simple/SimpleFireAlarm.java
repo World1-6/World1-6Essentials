@@ -71,7 +71,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
             FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
             if (fireAlarmScreen != null)
-                this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().resetSign(fireAlarmScreen, fireAlarmScreen.getSign(), true);
+                fireAlarmScreen.getFireAlarmSignOS().resetSign(fireAlarmScreen, fireAlarmScreen.getSign(), true);
             else {
                 //Wait 1 second before removing so it won't cause a ConcurrentModificationException
                 new BukkitRunnable() {
@@ -102,7 +102,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
             FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
             if (fireAlarmScreen != null)
-                this.plugin.getSetListMap().getFireAlarmScreenMap().get(v).getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), fireAlarmReason);
+                fireAlarmScreen.getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), fireAlarmReason);
             else {
                 //Wait 1 second before removing so it won't cause a ConcurrentModificationException
                 new BukkitRunnable() {

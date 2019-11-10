@@ -44,12 +44,8 @@ public class isafk implements CommandExecutor {
             return true;
         }
 
-        if (args.length == 0) {
-            p.sendMessage(Translate.chat("&e-----&9[AfkChecker]&r&e-----&r"));
-            p.sendMessage(Translate.chat("&6/isafk check <User> &9[Check's if user is AFK or not.]"));
-            return true;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("check")) {
-            Player playerFromArg = this.plugin.getServer().getPlayerExact(args[1]);
+        if (args.length == 1) {
+            Player playerFromArg = this.plugin.getServer().getPlayerExact(args[0]);
 
             if (playerFromArg == null) {
                 p.sendMessage(Translate.chat("&9[AfkChecker]&r&c I don't think that's a player."));
@@ -63,6 +59,9 @@ public class isafk implements CommandExecutor {
                 p.sendMessage(Translate.chat("&cThe Player: " + playerFromArg.getDisplayName() + " is not afk!"));
                 return true;
             }
+        } else {
+            p.sendMessage(Translate.chat("&e-----&9[AfkChecker]&r&e-----&r"));
+            p.sendMessage(Translate.chat("&6/isafk <User> &9[Check's if user is AFK or not.]"));
         }
         return true;
     }

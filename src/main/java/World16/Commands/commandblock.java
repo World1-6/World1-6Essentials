@@ -19,6 +19,7 @@ public class commandblock implements CommandExecutor {
     public commandblock(Main getPlugin) {
         this.plugin = getPlugin;
         this.api = new API(this.plugin);
+
         this.plugin.getCommand("commandblock").setExecutor(this);
     }
 
@@ -28,13 +29,13 @@ public class commandblock implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.commandblock")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         ItemStack item = InventoryUtils.createItem(Material.COMMAND_BLOCK, 1, "&cCommand Block", "New Fresh Command Block");
         item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
         p.getInventory().addItem(item);

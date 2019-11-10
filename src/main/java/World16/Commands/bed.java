@@ -18,6 +18,7 @@ public class bed implements CommandExecutor {
     public bed(Main getPlugin) {
         this.plugin = getPlugin;
         this.api = new API(this.plugin);
+
         this.plugin.getCommand("bed").setExecutor(this);
     }
 
@@ -27,16 +28,13 @@ public class bed implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.bed")) {
             api.PermissionErrorMessage(p);
             return true;
         }
-//        ItemStack item1 = new ItemStack(Material.BED, 1);
-//        item1.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
-//        p.getInventory().addItem(item1);
+
         ItemStack item = InventoryUtils.createItem(Material.RED_BED, 1, "Bed", "Bed");
         p.getInventory().addItem(item);
         return true;

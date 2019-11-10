@@ -16,7 +16,8 @@ public class feed implements CommandExecutor {
     public feed(Main plugin) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
-        plugin.getCommand("feed").setExecutor(this);
+
+        this.plugin.getCommand("feed").setExecutor(this);
     }
 
     @Override
@@ -25,29 +26,30 @@ public class feed implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.feed")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         if (args.length == 0) {
             p.setFoodLevel(20);
             p.sendMessage(Translate.chat("&6There you go."));
             return true;
-        } else {
+        } else if (args.length == 1) {
+            if (!p.hasPermission("world16.feed.other")) {
+                api.PermissionErrorMessage(p);
+                return true;
+            }
             Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (args.length >= 1 && target != null && target.isOnline()) {
-                if (!p.hasPermission("world16.feed.other")) {
-                    api.PermissionErrorMessage(p);
-                    return true;
-                }
+            if (target != null && target.isOnline()) {
                 target.setFoodLevel(20);
                 p.sendMessage(Translate.chat("&6There you go you just feed " + target.getDisplayName()));
-            } else {
-                p.sendMessage(Translate.chat("&cUsage: for yourself do /feed OR /feed <Player>"));
             }
+            return true;
+        } else {
+            p.sendMessage(Translate.chat("&cUsage: for yourself do /feed OR /feed <Player>"));
         }
         return true;
     }

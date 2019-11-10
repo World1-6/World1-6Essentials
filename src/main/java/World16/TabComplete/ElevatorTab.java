@@ -14,12 +14,12 @@ import java.util.Map;
 
 public class ElevatorTab implements TabCompleter {
 
-    private Main plugin;
-
     //Maps
     private Map<String, List<String>> tabCompleteMap;
     private Map<String, ElevatorObject> elevatorObjectMap;
     //...
+
+    private Main plugin;
 
     public ElevatorTab(Main plugin) {
         this.plugin = plugin;
@@ -47,7 +47,6 @@ public class ElevatorTab implements TabCompleter {
         if (!(sender instanceof Player)) {
             return null;
         }
-
         Player p = (Player) sender;
 
         if (!cmd.getName().equalsIgnoreCase("elevator") || !p.hasPermission("world16.elevator")) {

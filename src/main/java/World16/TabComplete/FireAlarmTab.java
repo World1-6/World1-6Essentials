@@ -16,8 +16,6 @@ import java.util.Map;
 
 public class FireAlarmTab implements TabCompleter {
 
-    private Main plugin;
-
     //Maps
     private Map<String, List<String>> tabCompleteMap;
     private Map<String, IFireAlarm> iFireAlarmMap;
@@ -26,6 +24,8 @@ public class FireAlarmTab implements TabCompleter {
     //Lists
     private List<String> soundList;
     //...
+
+    private Main plugin;
 
     public FireAlarmTab(Main plugin) {
         this.plugin = plugin;
@@ -59,11 +59,7 @@ public class FireAlarmTab implements TabCompleter {
         }
         Player p = (Player) sender;
 
-        if (!cmd.getName().equalsIgnoreCase("firealarm")) {
-            return null;
-        }
-
-        if (!p.hasPermission("world16.firealarm")) {
+        if (!cmd.getName().equalsIgnoreCase("firealarm") || !p.hasPermission("world16.firealarm")) {
             return null;
         }
 

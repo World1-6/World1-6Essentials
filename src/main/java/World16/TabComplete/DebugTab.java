@@ -12,14 +12,11 @@ import java.util.Map;
 
 public class DebugTab implements TabCompleter {
 
-    private Main plugin;
-
     //Maps
     private Map<String, List<String>> tabCompleteMap;
     //...
 
-    //Lists
-    //...
+    private Main plugin;
 
     public DebugTab(Main plugin) {
         this.plugin = plugin;
@@ -43,11 +40,7 @@ public class DebugTab implements TabCompleter {
         }
         Player p = (Player) sender;
 
-        if (!cmd.getName().equalsIgnoreCase("debug1-6")) {
-            return null;
-        }
-
-        if (!p.hasPermission("world16.debug")) {
+        if (!cmd.getName().equalsIgnoreCase("debug1-6") || !p.hasPermission("world16.debug")) {
             return null;
         }
 

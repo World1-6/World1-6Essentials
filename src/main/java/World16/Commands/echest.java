@@ -16,7 +16,8 @@ public class echest implements CommandExecutor {
     public echest(Main plugin) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
-        plugin.getCommand("echest").setExecutor(this);
+
+        this.plugin.getCommand("echest").setExecutor(this);
     }
 
     @Override
@@ -25,13 +26,13 @@ public class echest implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.echest")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         p.openInventory(p.getEnderChest());
         p.playSound(p.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 10.0f, 1.0f);
         return true;

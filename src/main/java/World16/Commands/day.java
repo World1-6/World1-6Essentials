@@ -16,6 +16,7 @@ public class day implements CommandExecutor {
     public day(Main getPlugin) {
         this.plugin = getPlugin;
         this.api = new API(this.plugin);
+
         this.plugin.getCommand("day").setExecutor(this);
     }
 
@@ -25,13 +26,13 @@ public class day implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.day")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         p.getLocation().getWorld().setTime(500);
         p.sendMessage(Translate.chat("&6The time was set to &eday&r."));
         return true;

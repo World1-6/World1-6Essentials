@@ -85,6 +85,8 @@ permissions:
   world16.afk:
     description: Allows to do afk
     default: true
+    children:
+      world16.afk.other:
   world16.back:
     description: Allows to do back
     default: true

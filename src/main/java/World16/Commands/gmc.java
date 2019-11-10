@@ -17,7 +17,8 @@ public class gmc implements CommandExecutor {
     public gmc(Main plugin) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
-        plugin.getCommand("gmc").setExecutor(this);
+
+        this.plugin.getCommand("gmc").setExecutor(this);
     }
 
     @Override
@@ -26,33 +27,32 @@ public class gmc implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.gmc")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         if (args.length == 0) {
             p.setGameMode(GameMode.CREATIVE);
-            p.sendMessage(
-                    Translate.chat("&6Set game mode &ccreative&6 for " + ((Player) sender).getDisplayName()));
+            p.sendMessage(Translate.chat("&6Set game mode &ccreative&6 for " + ((Player) sender).getDisplayName()));
+            return true;
+        } else if (args.length == 1) {
+            if (!p.hasPermission("world16.gmc.other")) {
+                api.PermissionErrorMessage(p);
+                return true;
+            }
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target != null && target.isOnline()) {
+                target.setGameMode(GameMode.CREATIVE);
+                target.sendMessage("&6Set game mode &ccreative&6 for " + target.getDisplayName());
+                p.sendMessage(Translate.chat("&6Set game mode &ccreative&6 for " + target.getDisplayName()));
+            }
             return true;
         } else {
-            Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (args.length == 1 && target != null && target.isOnline()) {
-                if (!p.hasPermission("world16.gmc.other")) {
-                    api.PermissionErrorMessage(p);
-                    return true;
-                }
-                target.setGameMode(GameMode.CREATIVE);
-                p.sendMessage(
-                        Translate.chat("&6Set game mode &ccreative&6 for " + target.getDisplayName()));
-            } else {
-                p.sendMessage(Translate.chat("&aAliases: gmc && gm1"));
-                p.sendMessage(Translate
-                        .chat("&cUsage: for yourself do /gmc OR /gm1 OR /gmc <Player> OR /gm1 <Player>"));
-            }
+            p.sendMessage(Translate.chat("&aAliases: gmc && gm1"));
+            p.sendMessage(Translate.chat("&cUsage: for yourself do /gmc OR /gm1 OR /gmc <Player> OR /gm1 <Player>"));
         }
         return true;
     }

@@ -16,7 +16,8 @@ public class night implements CommandExecutor {
     public night(Main plugin) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
-        plugin.getCommand("night").setExecutor(this);
+
+        this.plugin.getCommand("night").setExecutor(this);
     }
 
     @Override
@@ -25,13 +26,13 @@ public class night implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.night")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         p.getLocation().getWorld().setTime(13000);
         p.sendMessage(Translate.chat("&6The time was set to &9night&r."));
         return true;

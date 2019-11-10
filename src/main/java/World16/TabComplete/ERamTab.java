@@ -12,14 +12,11 @@ import java.util.Map;
 
 public class ERamTab implements TabCompleter {
 
-    private Main plugin;
-
     //Maps
     private Map<String, List<String>> tabCompleteMap;
     //...
 
-    //Lists
-    //...
+    private Main plugin;
 
     public ERamTab(Main plugin) {
         this.plugin = plugin;
@@ -47,11 +44,7 @@ public class ERamTab implements TabCompleter {
         }
         Player p = (Player) sender;
 
-        if (!cmd.getName().equalsIgnoreCase("eram")) {
-            return null;
-        }
-
-        if (!p.hasPermission("world16.eram")) {
+        if (!cmd.getName().equalsIgnoreCase("eram") || !p.hasPermission("world16.eram")) {
             return null;
         }
 
