@@ -13,12 +13,13 @@ import java.util.Map;
 
 public class tpdeny implements CommandExecutor {
 
-    private Main plugin;
-    private API api;
-
     //Maps
     private Map<Player, Player> tpam;
     //...
+
+
+    private Main plugin;
+    private API api;
 
     private CustomConfigManager customConfigManager;
 
@@ -39,10 +40,12 @@ public class tpdeny implements CommandExecutor {
             return true;
         }
         Player p = (Player) sender;
+
         if (!p.hasPermission("world16.tpdeny")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         if (args.length == 0) {
             Player tpa = this.tpam.get(p);
             if (tpa != null) {

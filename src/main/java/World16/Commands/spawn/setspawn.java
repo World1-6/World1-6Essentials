@@ -15,12 +15,13 @@ public class setspawn implements CommandExecutor {
     private Main plugin;
     private API api;
 
-    private CustomYmlManager shitYml = null;
+    private CustomYmlManager shitYml;
 
     public setspawn(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.shitYml = customConfigManager.getShitYml();
-        api = new API(this.plugin, this.shitYml);
+        this.api = new API(this.plugin, this.shitYml);
+
         this.plugin.getCommand("setspawn").setExecutor(this);
     }
 
@@ -30,7 +31,6 @@ public class setspawn implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.setspawn")) {

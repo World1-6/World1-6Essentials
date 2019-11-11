@@ -16,12 +16,13 @@ public class spawn implements CommandExecutor {
     private Main plugin;
     private API api;
 
-    private CustomYmlManager shitYml = null;
+    private CustomYmlManager shitYml;
 
     public spawn(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.shitYml = customConfigManager.getShitYml();
         this.api = new API(this.plugin, this.shitYml);
+
         this.plugin.getCommand("spawn").setExecutor(this);
     }
 
@@ -31,7 +32,6 @@ public class spawn implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
 
         Location spawn = this.api.getLocationFromFile(this.shitYml, "Spawn.default");
@@ -40,22 +40,24 @@ public class spawn implements CommandExecutor {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         if (args.length == 0) {
             p.teleport(spawn);
             p.sendMessage(Translate.chat("&6Teleporting..."));
             return true;
-        } else {
+        } else if (args.length == 1) {
+            if (!p.hasPermission("world16.spawn.other")) {
+                api.PermissionErrorMessage(p);
+                return true;
+            }
             Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (args.length >= 1 && target != null && target.isOnline()) {
-                if (!p.hasPermission("world16.spawn.other")) {
-                    api.PermissionErrorMessage(p);
-                    return true;
-                }
+            if (target != null && target.isOnline()) {
                 target.teleport(spawn);
                 target.sendMessage(Translate.chat("&6Teleporting..."));
-            } else {
-                p.sendMessage(Translate.chat("&cUsage: for yourself do /spawn OR /spawn <Player>"));
             }
+            return true;
+        } else {
+            p.sendMessage(Translate.chat("&cUsage: for yourself do /spawn OR /spawn <Player>"));
         }
         return true;
     }

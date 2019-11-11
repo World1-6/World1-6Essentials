@@ -5,7 +5,6 @@ import World16.Utils.Translate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,7 +19,7 @@ public class OnPlayerBedEnterEvent implements Listener {
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         Player p = event.getPlayer();
 

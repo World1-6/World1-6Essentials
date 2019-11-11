@@ -19,14 +19,14 @@ public class OnPlayerQuitEvent implements Listener {
     private SetListMap setListMap;
     private CustomConfigManager customConfigManager;
 
-    public OnPlayerQuitEvent(Main getPlugin, CustomConfigManager customConfigManager) {
-        this.plugin = getPlugin;
+    public OnPlayerQuitEvent(Main plugin, CustomConfigManager customConfigManager) {
+        this.plugin = plugin;
         this.api = new API(this.plugin);
         this.customConfigManager = customConfigManager;
 
         this.setListMap = this.plugin.getSetListMap();
 
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler

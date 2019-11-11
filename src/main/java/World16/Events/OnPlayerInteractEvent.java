@@ -54,44 +54,45 @@ public class OnPlayerInteractEvent implements Listener {
             if (block != null && action == Action.RIGHT_CLICK_BLOCK) {
                 ItemStack itemStack = p.getInventory().getItemInMainHand();
                 ItemMeta itemMeta = itemStack.getItemMeta();
-                if (block.getType() == Material.OAK_WALL_SIGN || block.getType() == Material.OAK_SIGN) {
-                    fireAlarmShit(event, p, block, itemMeta);
-                } else {
-                    if (itemMeta != null && itemMeta.hasDisplayName()) {
-                        if (this.screenFocusMap.get(p.getUniqueId()) != null && itemMeta.getDisplayName().equalsIgnoreCase("Exit")) {
-                            event.setCancelled(true);
-                            this.screenFocusMap.get(p.getUniqueId()).revert();
-                            this.screenFocusMap.remove(p.getUniqueId());
-                        }
-                    }
+                FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
+                ScreenFocus screenFocus = this.screenFocusMap.get(p.getUniqueId());
+                boolean isSign = false;
+
+                if (block.getType() == Material.OAK_WALL_SIGN || block.getType() == Material.OAK_SIGN) isSign = true;
+
+                if (!isSign && screenFocus != null) {
+                    event.setCancelled(true);
+                    screenFocus.revert();
+                    this.screenFocusMap.remove(p.getUniqueId());
                 }
+
+                if (fireAlarmScreen == null) return;
+                fireAlarmShit(event, p, itemMeta, fireAlarmScreen, screenFocus);
             }
         }
     }
 
-    private void fireAlarmShit(PlayerInteractEvent event, Player p, Block block, ItemMeta itemMeta) {
-        FireAlarmScreen fireAlarmScreen = this.fireAlarmScreenMap.get(block.getLocation());
-
-        if (this.screenFocusMap.get(p.getUniqueId()) == null && fireAlarmScreen != null) {
-            this.fireAlarmScreenMap.get(block.getLocation()).tick(p);
+    private void fireAlarmShit(PlayerInteractEvent event, Player p, ItemMeta itemMeta, FireAlarmScreen fireAlarmScreen, ScreenFocus screenFocus) {
+        if (screenFocus == null) {
+            fireAlarmScreen.tick(p);
             this.screenFocusMap.putIfAbsent(p.getUniqueId(), new ScreenFocus(plugin, p));
             return;
         }
 
-        if (itemMeta != null && itemMeta.hasDisplayName() && fireAlarmScreen != null) {
+        if (itemMeta != null && itemMeta.hasDisplayName()) {
             fireAlarmScreen.tick(p);
-            if (this.screenFocusMap.get(p.getUniqueId()) != null && itemMeta.getDisplayName().equalsIgnoreCase("Exit")) {
+            if (itemMeta.getDisplayName().equalsIgnoreCase("Exit")) {
                 event.setCancelled(true);
                 fireAlarmScreen.setStop(true);
-                this.screenFocusMap.get(p.getUniqueId()).revert();
+                screenFocus.revert();
                 this.screenFocusMap.remove(p.getUniqueId());
             } else if (itemMeta.getDisplayName().equalsIgnoreCase("DOWN")) {
-                this.fireAlarmScreenMap.get(block.getLocation()).changeLines(p);
+                fireAlarmScreen.changeLines(p);
             } else if (itemMeta.getDisplayName().equalsIgnoreCase("SCROLL UP")) {
-                this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, false);
+                fireAlarmScreen.onScroll(p, false);
             } else if (itemMeta.getDisplayName().equalsIgnoreCase("SCROLL DOWN")) {
-                this.fireAlarmScreenMap.get(block.getLocation()).onScroll(p, true);
+                fireAlarmScreen.onScroll(p, true);
             }
-        } else if (fireAlarmScreen != null) this.fireAlarmScreenMap.get(block.getLocation()).onClick(p);
+        } else fireAlarmScreen.onClick(p);
     }
 }

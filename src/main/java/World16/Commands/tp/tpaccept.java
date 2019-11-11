@@ -13,13 +13,12 @@ import java.util.Map;
 
 public class tpaccept implements CommandExecutor {
 
-    private Main plugin;
-
-    private API api;
-
     //Maps
     private Map<Player, Player> tpam;
     //...
+
+    private Main plugin;
+    private API api;
 
     private CustomConfigManager customYmlManager;
 
@@ -40,10 +39,12 @@ public class tpaccept implements CommandExecutor {
             return true;
         }
         Player p = (Player) sender;
+
         if (!p.hasPermission("world16.tpaccept")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         if (args.length == 0) {
             Player tpa = this.tpam.get(p);
             if (tpa != null) {

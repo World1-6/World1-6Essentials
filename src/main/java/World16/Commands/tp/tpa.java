@@ -14,13 +14,12 @@ import java.util.Map;
 
 public class tpa implements CommandExecutor {
 
-    private Main plugin;
-
-    private API api;
-
     //Maps
     private Map<Player, Player> tpam;
     //...
+
+    private Main plugin;
+    private API api;
 
     private CustomConfigManager customConfigManager;
 
@@ -41,19 +40,20 @@ public class tpa implements CommandExecutor {
             return true;
         }
         Player p = (Player) sender;
+
         if (!p.hasPermission("world16.tpa")) {
             api.PermissionErrorMessage(p);
             return true;
         }
+
         if (args.length == 0) {
             p.sendMessage(Translate.chat("[&eTPA&r] &cUsage: /tpa <Player>"));
-        } else {
+        } else if (args.length == 1) {
             Player target = plugin.getServer().getPlayerExact(args[0]); //Get the player
             if (target != null && target.isOnline()) {
                 tpam.put(target, p);
                 new TpaEventHandler(this.plugin, p.getDisplayName(), target.getDisplayName()); //RUNS TPA EVENT
-                p.sendMessage(
-                        Translate.chat("[&eTPA&r] &9Sent tpa request too " + target.getDisplayName()));
+                p.sendMessage(Translate.chat("[&eTPA&r] &9Sent tpa request too " + target.getDisplayName()));
                 sendTpaRequestMessage(p, target);
             } else {
                 p.sendMessage("&4Looks like that player is offline.");
@@ -65,8 +65,7 @@ public class tpa implements CommandExecutor {
 
     private void sendTpaRequestMessage(Player p, Player target) {
         if (p != null && target != null) {
-            target.sendMessage(
-                    Translate.chat("[&eTPA&r] &a" + p.getDisplayName() + " has sent a tpa request too you."));
+            target.sendMessage(Translate.chat("[&eTPA&r] &a" + p.getDisplayName() + " has sent a tpa request too you."));
             target.sendMessage(Translate.chat("&c/tpaccept &aOR&r &c/tpdeny"));
         }
     }
