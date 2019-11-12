@@ -80,7 +80,6 @@ public class OnPlayerInteractEvent implements Listener {
         }
 
         if (itemMeta != null && itemMeta.hasDisplayName()) {
-            fireAlarmScreen.tick(p);
             if (itemMeta.getDisplayName().equalsIgnoreCase("Exit")) {
                 event.setCancelled(true);
                 fireAlarmScreen.setStop(true);
