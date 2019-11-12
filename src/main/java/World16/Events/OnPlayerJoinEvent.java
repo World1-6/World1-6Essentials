@@ -45,8 +45,8 @@ public class OnPlayerJoinEvent implements Listener {
     private KeyManager keyapi;
     private HomeManager homeManager;
 
-    public OnPlayerJoinEvent(Main getPlugin, CustomConfigManager customConfigManager) {
-        this.plugin = getPlugin;
+    public OnPlayerJoinEvent(Main plugin, CustomConfigManager customConfigManager) {
+        this.plugin = plugin;
         this.customConfigManager = customConfigManager;
 
         this.keyDataM = this.plugin.getSetListMap().getKeyDataM();
@@ -57,21 +57,19 @@ public class OnPlayerJoinEvent implements Listener {
         this.api = new API(this.plugin);
 
         //ISQL
-        this.isqlKeys = new SQLite(plugin.getDataFolder(), "keys");
+        this.isqlKeys = new SQLite(this.plugin.getDataFolder(), "keys");
         this.isqlHomes = new SQLite(this.plugin.getDataFolder(), "Homes");
         //...
 
         this.keyapi = new KeyManager(this.plugin, this.isqlKeys);
         this.homeManager = new HomeManager(this.plugin, this.isqlHomes);
 
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
-
-        //JOIN MESSAGE STUFF
         event.setJoinMessage("");
 
         GameMode gameMode = null;
@@ -87,35 +85,20 @@ public class OnPlayerJoinEvent implements Listener {
             p.sendMessage(Translate.chat("[&9World1-6&r] &eDetected you were in creative before logging out you will stay in creative."));
         }
 
+        //Join message stuff.
         Bukkit.broadcastMessage(Translate.chat(API.PREFIX + " &6Welcome Back! " + p.getDisplayName()));
         p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
         version(p);
         //...
 
-        if (!api.getMysql_HOST().equals("null")) {
-            keyDataM.remove(p.getDisplayName()); //<-- just incase
-            keyDataM.put(p.getDisplayName(), new KeyObject(p.getDisplayName(), 1, "null"));
-            keyapi.getAllKeysISQL(p.getDisplayName(), isqlKeys);
-        } else {
-            plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " Please make sure too put in the isqlKeys details in the config.yml."));
+        if (api.getMysql_HOST().equals("null")) {
+            plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " Please make sure to put in the MySQL details in the config.yml."));
         }
 
-        //Just a safety thing put in place if Bukkit doesn't want to work correctly.
-        if (backM.get(p.getUniqueId()) != null) {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " " + "&cMAP UNLOADER BACK ISN'T WORKING: CLASS: " + this.getClass()));
-            backM.remove(p.getUniqueId());
-            backM.put(p.getUniqueId(), new LocationObject());
-        } else {
-            backM.put(p.getUniqueId(), new LocationObject());
-        }
-
-        if (homesMap.get(p.getUniqueId()) != null) {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " " + "&cMAP UNLOADER HOMES ISN'T WORKING: CLASS: " + this.getClass()));
-            homesMap.remove(p.getUniqueId());
-            this.homeManager.getAllHomesFromISQL(this.isqlHomes, p);
-        } else {
-            this.homeManager.getAllHomesFromISQL(this.isqlHomes, p);
-        }
+        keyDataM.put(p.getDisplayName(), new KeyObject(p.getDisplayName(), 1, "null"));
+        keyapi.getAllKeysISQL(p.getDisplayName(), isqlKeys);
+        backM.put(p.getUniqueId(), new LocationObject());
+        this.homeManager.getAllHomesFromISQL(this.isqlHomes, p);
 
         adminListPlayer.forEach((k) -> {
             p.hidePlayer(k);
