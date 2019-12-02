@@ -42,7 +42,6 @@ public class DiscordBot {
             return false;
         }
         isEnabled = true;
-        this.sendServerStartMessage();
         return true;
     }
 
