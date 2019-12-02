@@ -214,9 +214,7 @@ public class Main extends JavaPlugin {
         this.discordBot = new DiscordBot(this, this.customConfigManager);
         if (this.api.isDiscordBotEnabled()) {
             boolean discordbot = this.discordBot.setup();
-            if (discordbot) {
-                plugin.getServer().getScheduler().runTaskAsynchronously(this, this.discordBot);
-            } else {
+            if (!discordbot) {
                 plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cDiscord Bot has not been enabled because of exception"));
             }
         }

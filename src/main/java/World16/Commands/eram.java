@@ -5,7 +5,7 @@ import World16.Managers.CustomConfigManager;
 import World16.Managers.ERamManager;
 import World16.TabComplete.ERamTab;
 import World16.Utils.API;
-import World16.Utils.Tag;
+import World16.Utils.ERamTag;
 import World16.Utils.Translate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,7 +29,7 @@ public class eram implements CommandExecutor {
 
     private CustomConfigManager customConfigManager;
 
-    private Tag tagClass;
+    private ERamTag ERamTagClass;
 
     //Maps
     private Map<String, Map<String, List<Location>>> eramM;
@@ -43,7 +43,7 @@ public class eram implements CommandExecutor {
         this.api = new API(this.plugin);
 
         eRamManager = new ERamManager(this.plugin, this.customConfigManager);
-        this.tagClass = new Tag(this.plugin.getSetListMap());
+        this.ERamTagClass = new ERamTag(this.plugin.getSetListMap());
 
         this.eramM = this.plugin.getSetListMap().geteRamRaw();
         this.latestClickedBlocked = this.plugin.getSetListMap().getLatestClickedBlocked();
@@ -69,7 +69,7 @@ public class eram implements CommandExecutor {
 
                 if (tag.startsWith("@")) {
                     String tagWithoutA = tag.replace("@", "");
-                    tag = tagClass.getTag(playerName, tagWithoutA);
+                    tag = ERamTagClass.getTag(playerName, tagWithoutA);
                 }
                 eRamManager.doIt(playerName, tag);
                 return true;
@@ -79,7 +79,7 @@ public class eram implements CommandExecutor {
 
                 if (tag.startsWith("@")) {
                     String tagWithoutA = tag.replace("@", "");
-                    tag = tagClass.getTag(playerName, tagWithoutA);
+                    tag = ERamTagClass.getTag(playerName, tagWithoutA);
                 }
                 eRamManager.undoIt(playerName, tag);
                 return true;
@@ -89,16 +89,16 @@ public class eram implements CommandExecutor {
 
                 if (tagName.startsWith("@")) {
                     String tagWithoutA = tagName.replace("@", "");
-                    tagName = tagClass.getTag(playerName, tagWithoutA);
+                    tagName = ERamTagClass.getTag(playerName, tagWithoutA);
                 }
 
-                tagClass.removeTag(playerName, tagName);
+                ERamTagClass.removeTag(playerName, tagName);
                 return true;
             } else if (args.length == 4 && args[0].equalsIgnoreCase("addtag")) {
                 String playerName = args[1];
                 String tagName = args[2].toLowerCase();
                 String string = args[3].toLowerCase();
-                tagClass.addTag(playerName, tagName, string);
+                ERamTagClass.addTag(playerName, tagName, string);
                 return true;
             } else if (args.length == 4 && args[0].equalsIgnoreCase("delete")) {
                 String playerName = args[1];
@@ -118,7 +118,7 @@ public class eram implements CommandExecutor {
 
                 if (saveName.startsWith("@")) {
                     String tagWithoutA = saveName.replace("@", "");
-                    saveName = tagClass.getTag(playerName, tagWithoutA);
+                    saveName = ERamTagClass.getTag(playerName, tagWithoutA);
                 }
 
                 //Relative cords
@@ -222,12 +222,12 @@ public class eram implements CommandExecutor {
         } else if (args.length == 3 && args[0].equalsIgnoreCase("addtag")) {
             String tagName = args[1].toLowerCase();
             String string = args[2].toLowerCase();
-            tagClass.addTag(p.getDisplayName(), tagName, string);
+            ERamTagClass.addTag(p.getDisplayName(), tagName, string);
             p.sendMessage(Translate.chat("&6Added tag -> " + tagName + " " + string));
             return true;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("deletetag")) {
             String tagName = args[1].toLowerCase();
-            tagClass.removeTag(p.getDisplayName(), tagName);
+            ERamTagClass.removeTag(p.getDisplayName(), tagName);
             p.sendMessage(Translate.chat("&cRemoved tag -> " + tagName));
             return true;
         } else {

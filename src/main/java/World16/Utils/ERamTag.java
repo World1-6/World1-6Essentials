@@ -3,7 +3,7 @@ package World16.Utils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Tag {
+public class ERamTag {
 
     //Maps
     private Map<String, Map<String, String>> tagsMap;
@@ -11,7 +11,7 @@ public class Tag {
     //Lists
     //...
 
-    public Tag(SetListMap setListMap) {
+    public ERamTag(SetListMap setListMap) {
         this.tagsMap = setListMap.getTagsMap();
     }
 
