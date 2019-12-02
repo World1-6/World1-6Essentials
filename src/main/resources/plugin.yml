@@ -86,7 +86,7 @@ permissions:
     description: Allows to do afk
     default: true
     children:
-      world16.afk.other:
+      world16.afk.other: true
   world16.back:
     description: Allows to do back
     default: true
@@ -131,7 +131,6 @@ permissions:
       world16.debug.date: true
       world16.debug.checkuuid: true
       world16.debig.checkuuid.other: true
-
 
   world16.echest:
     description: Allows to do echest
