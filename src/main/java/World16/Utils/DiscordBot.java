@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class DiscordBot {
+public class DiscordBot implements Runnable {
 
     private Main plugin;
     private CustomConfigManager customConfigManager;
@@ -49,14 +49,14 @@ public class DiscordBot {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("TYPE", "PlayerJoin");
         jsonObject.put("Player", player.getDisplayName());
-        jsonPrintOut(jsonObject);
+        jsonPrintOut(jsonObject, false);
     }
 
     public void sendLeaveMessage(Player player) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("TYPE", "PlayerQuit");
         jsonObject.put("Player", player.getDisplayName());
-        jsonPrintOut(jsonObject);
+        jsonPrintOut(jsonObject, false);
     }
 
     public void sendEasyBackupEvent(me.forseth11.easybackup.api.Event event) {
@@ -65,31 +65,35 @@ public class DiscordBot {
         jsonObject.put("EasyBackupTYPE", event.getType().name());
         jsonObject.put("Message", event.getMessage());
         jsonObject.put("Time", event.getTime());
-        jsonPrintOut(jsonObject);
+        jsonPrintOut(jsonObject, false);
     }
 
     public void sendServerStartMessage() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("TYPE", "ServerStart");
-        jsonPrintOut(jsonObject);
+        jsonPrintOut(jsonObject, false);
     }
 
     public void sendServerQuitMessage() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("TYPE", "ServerQuit");
-        jsonPrintOut(jsonObject);
+        jsonPrintOut(jsonObject, false);
     }
 
-    private void jsonPrintOut(JSONObject jsonObject) {
+    private void jsonPrintOut(JSONObject jsonObject, boolean waitForAResponse) {
         if (!isEnabled) return;
         if (socket.isClosed()) setup();
         jsonObject.put("WHO", "World1-6");
         jsonObject.put("SV", this.plugin.getApi().getServerVersion());
+        jsonObject.put("WFR", waitForAResponse);
         out.println(jsonObject.toJSONString());
-        close();
+        if (!waitForAResponse) {
+            close();
+        }
     }
 
     private void close() {
+        isEnabled = false;
         try {
             socket.close();
             out.close();
@@ -97,6 +101,15 @@ public class DiscordBot {
             inSc.close();
         } catch (Exception ex) {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " &6Closing sockets made an Exception"));
+        }
+    }
+
+    @Override
+    public void run() {
+        while (isEnabled && inSc.hasNextLine()) {
+            String line = inSc.nextLine();
+            switch (line) {
+            }
         }
     }
 }
