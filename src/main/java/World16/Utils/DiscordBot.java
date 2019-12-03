@@ -93,7 +93,6 @@ public class DiscordBot implements Runnable {
     }
 
     private void close() {
-        isEnabled = false;
         try {
             socket.close();
             out.close();
@@ -106,7 +105,7 @@ public class DiscordBot implements Runnable {
 
     @Override
     public void run() {
-        while (isEnabled && inSc.hasNextLine()) {
+        while (!socket.isClosed() && inSc.hasNextLine()) {
             String line = inSc.nextLine();
             switch (line) {
             }
