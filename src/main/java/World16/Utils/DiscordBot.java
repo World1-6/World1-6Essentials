@@ -80,6 +80,14 @@ public class DiscordBot implements Runnable {
         jsonPrintOut(jsonObject, false);
     }
 
+    public void sendPlayerMessage(Player player, String message) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("TYPE", "PlayerMessage");
+        jsonObject.put("Player", player.getDisplayName());
+        jsonObject.put("Message", message);
+        jsonPrintOut(jsonObject, false);
+    }
+
     private void jsonPrintOut(JSONObject jsonObject, boolean waitForAResponse) {
         if (!isEnabled) return;
         if (socket.isClosed()) setup();
