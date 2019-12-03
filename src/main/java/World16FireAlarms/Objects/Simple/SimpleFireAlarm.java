@@ -1,6 +1,7 @@
 package World16FireAlarms.Objects.Simple;
 
 import World16.Main.Main;
+import World16.Utils.SignUtils;
 import World16FireAlarms.Objects.*;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.interfaces.IFireAlarm;
@@ -71,7 +72,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
             FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
             if (fireAlarmScreen != null)
-                fireAlarmScreen.getFireAlarmSignOS().resetSign(fireAlarmScreen, fireAlarmScreen.getSign(), true);
+                fireAlarmScreen.getFireAlarmSignOS().resetSign(fireAlarmScreen, SignUtils.isSign(fireAlarmScreen.getLocation().getBlock()), true);
             else {
                 //Wait 1 second before removing so it won't cause a ConcurrentModificationException
                 new BukkitRunnable() {
@@ -102,7 +103,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
             FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
             if (fireAlarmScreen != null)
-                fireAlarmScreen.getFireAlarmSignOS().sendPopup(fireAlarmScreen, fireAlarmScreen.getSign(), fireAlarmReason);
+                fireAlarmScreen.getFireAlarmSignOS().sendPopup(fireAlarmScreen, SignUtils.isSign(fireAlarmScreen.getLocation().getBlock()), fireAlarmReason);
             else {
                 //Wait 1 second before removing so it won't cause a ConcurrentModificationException
                 new BukkitRunnable() {

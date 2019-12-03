@@ -1,10 +1,10 @@
 package World16.Events;
 
 import World16.Main.Main;
+import World16.Utils.SignUtils;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.ScreenFocus;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,7 +58,7 @@ public class OnPlayerInteractEvent implements Listener {
                 ScreenFocus screenFocus = this.screenFocusMap.get(p.getUniqueId());
                 boolean isSign = false;
 
-                if (block.getType() == Material.OAK_WALL_SIGN || block.getType() == Material.OAK_SIGN) isSign = true;
+                if (SignUtils.isSign(block) != null) isSign = true;
 
                 if (!isSign && screenFocus != null) {
                     event.setCancelled(true);

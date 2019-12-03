@@ -3,6 +3,8 @@ package World16.Utils;
 import World16.Main.Main;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -43,5 +45,13 @@ public class SignUtils {
                     sb.append(" ");
             return sb.toString();
         }
+    }
+
+    public static Sign isSign(Block block) {
+        BlockState blockState = block.getState();
+        if (blockState instanceof Sign) {
+            return (Sign) blockState;
+        }
+        return null;
     }
 }

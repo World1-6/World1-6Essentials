@@ -21,7 +21,6 @@ public class SetListMap {
     private Map<Player, Player> tpaM; //0
     private Map<String, Map<String, List<Location>>> eRamRaw; //0
     private Map<String, Location> latestClickedBlocked; //0
-    private Map<String, Map<String, String>> tagsMap; //0
     private Map<UUID, Location> afkMap; //0
     private Map<UUID, Map<String, Location>> homesMap; //0
     private Map<UUID, ScreenFocus> screenFocusMap; //0
@@ -48,7 +47,6 @@ public class SetListMap {
         this.tpaM = new LinkedHashMap<>();
         this.eRamRaw = new HashMap<>();
         this.latestClickedBlocked = new HashMap<>();
-        this.tagsMap = new HashMap<>();
         this.afkMap = new HashMap<>();
         this.homesMap = new HashMap<>();
         this.screenFocusMap = new HashMap<>();
@@ -92,8 +90,6 @@ public class SetListMap {
 
         latestClickedBlocked.remove(p.getDisplayName());
 
-        tagsMap.remove(p.getDisplayName());
-
         afkMap.remove(p.getUniqueId());
 
         homesMap.remove(p.getUniqueId());
@@ -107,7 +103,6 @@ public class SetListMap {
         tpaM.clear();
         eRamRaw.clear();
         latestClickedBlocked.clear();
-        tagsMap.clear();
         afkMap.clear();
         uuidCache.clear();
         jails.clear();
@@ -156,10 +151,6 @@ public class SetListMap {
 
     public Map<String, Location> getLatestClickedBlocked() {
         return latestClickedBlocked;
-    }
-
-    public Map<String, Map<String, String>> getTagsMap() {
-        return tagsMap;
     }
 
     public Map<UUID, Location> getAfkMap() {

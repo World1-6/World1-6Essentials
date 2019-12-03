@@ -1,11 +1,11 @@
 package World16FireAlarms.Objects.Screen;
 
 import World16.Main.Main;
+import World16.Utils.SignUtils;
 import World16.Utils.Translate;
 import World16FireAlarms.interfaces.IFireAlarm;
 import com.google.common.collect.Lists;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -57,10 +57,10 @@ public class FireAlarmScreen implements ConfigurationSerializable {
 
         this.fireAlarmSignOS = new FireAlarmSignOS(this.plugin, FireAlarmSignMenu.OFF, this.name, this.fireAlarmName);
 
-        Sign sign = getSign();
+        Sign sign = SignUtils.isSign(location.getBlock());
         if (sign != null) {
             tick();
-            this.fireAlarmSignOS.loadFirstTime(this, getSign());
+            this.fireAlarmSignOS.loadFirstTime(this, sign);
         }
     }
 
@@ -81,7 +81,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
             return;
         }
 
-        Sign sign = getSign();
+        Sign sign = SignUtils.isSign(location.getBlock());
         if (sign != null) {
             this.fireAlarmSignOS.onLine(this, player, sign, line, scroll);
         }
@@ -97,7 +97,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
             return;
         }
 
-        Sign sign = getSign();
+        Sign sign = SignUtils.isSign(location.getBlock());
         if (sign != null) {
             if (up) {
                 int upONE = this.scroll + 1;
@@ -154,7 +154,7 @@ public class FireAlarmScreen implements ConfigurationSerializable {
     private void tick() {
         if (!this.isTickerRunning) {
             this.isTickerRunning = true;
-            Sign sign = getSign();
+            Sign sign = SignUtils.isSign(location.getBlock());
             if (sign != null) {
                 String first = ">";
                 String last = "<";
@@ -220,21 +220,6 @@ public class FireAlarmScreen implements ConfigurationSerializable {
         }
         this.signCache1 = new SignCache(sign);
         this.hasScrollChanged = true;
-    }
-
-    public boolean isSign() {
-        if (location == null) {
-            return false;
-        }
-
-        return location.getBlock().getType() == Material.OAK_WALL_SIGN || location.getBlock().getType() == Material.OAK_SIGN;
-    }
-
-    public Sign getSign() {
-        if (isSign()) {
-            return (Sign) location.getBlock().getState();
-        }
-        return null;
     }
 
     //GETTERS AND SETTERS

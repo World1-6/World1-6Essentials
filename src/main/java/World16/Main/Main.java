@@ -119,7 +119,6 @@ public class Main extends JavaPlugin {
         new god(this);
         new msg(this, this.customConfigManager);
         new test1(this, this.customConfigManager);
-        new eram(this, this.customConfigManager);
         new waitdo(this, this.customConfigManager);
         new runCommands(this, this.customConfigManager);
         new wformat(this, this.customConfigManager);
