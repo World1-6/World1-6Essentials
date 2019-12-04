@@ -7,7 +7,6 @@ public class CustomConfigManager {
     private Main plugin;
 
     private CustomYmlManager shitYml;
-    private CustomYmlManager eRamYml;
     private CustomYmlManager jailsYml;
     private CustomYmlManager warpsYml;
     private CustomYmlManager elevatorsYml;
@@ -24,13 +23,6 @@ public class CustomConfigManager {
         this.shitYml.setup("shit.yml");
         this.shitYml.saveConfig();
         this.shitYml.reloadConfig();
-        //...
-
-        //eram.yml
-        this.eRamYml = new CustomYmlManager(this.plugin);
-        this.eRamYml.setup("eram.yml");
-        this.eRamYml.saveConfig();
-        this.eRamYml.reloadConfig();
         //...
 
         //jails.yml
@@ -72,10 +64,6 @@ public class CustomConfigManager {
 
     public CustomYmlManager getShitYml() {
         return shitYml;
-    }
-
-    public CustomYmlManager getERamYML() {
-        return eRamYml;
     }
 
     public CustomYmlManager getJailsYml() {
