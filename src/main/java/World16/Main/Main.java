@@ -210,16 +210,8 @@ public class Main extends JavaPlugin {
     }
 
     private void regDiscordBot() {
-        this.discordBot = new DiscordBot(this, this.customConfigManager);
-        if (this.api.isDiscordBotEnabled()) {
-            boolean discordbot = this.discordBot.setup();
-            if (discordbot) {
-                this.discordBot.sendServerStartMessage();
-                plugin.getServer().getScheduler().runTaskAsynchronously(this, this.discordBot);
-            } else {
-                plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cDiscord Bot has not been enabled because of exception"));
-            }
-        }
+        this.discordBot = new DiscordBot(this, this.customConfigManager, this.api.isDiscordBotEnabled());
+        this.discordBot.sendServerStartMessage();
     }
 
     private void regElevators() {
