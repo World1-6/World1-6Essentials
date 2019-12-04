@@ -65,6 +65,7 @@ public class DiscordBot extends SimpleClientSocket {
     }
 
     public void ourJsonPrintOut(JSONObject jsonObject, boolean waitForAResponse) {
+        jsonObject.put("SV", this.plugin.getApi().getServerVersion());
         if (isEnabled) jsonPrintOut(jsonObject, "World1-6", waitForAResponse);
     }
 
