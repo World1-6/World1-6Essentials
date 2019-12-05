@@ -6,7 +6,6 @@ public class FireAlarmReason {
 
     private TroubleReason troubleReason;
 
-    private Optional<Zone> optionalZone = Optional.empty();
     private Optional<String> optionalPullStationName = Optional.empty();
 
     public FireAlarmReason(TroubleReason troubleReason) {
@@ -20,14 +19,6 @@ public class FireAlarmReason {
 
     public void setTroubleReason(TroubleReason troubleReason) {
         this.troubleReason = troubleReason;
-    }
-
-    public Optional<Zone> getOptionalZone() {
-        return optionalZone;
-    }
-
-    public void setOptionalZone(Zone optionalZone) {
-        this.optionalZone = Optional.ofNullable(optionalZone);
     }
 
     public Optional<String> getOptionalPullStationName() {

@@ -13,7 +13,10 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SerializableAs("FireAlarmSignOS")
 public class FireAlarmSignOS implements ConfigurationSerializable {
@@ -86,7 +89,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
                 player.sendMessage(Translate.chat("NOT IMPLEMENTED."));
                 return true;
             } else if (line == 3) {
-                simpleFireAlarm.reset(Optional.empty());
+                simpleFireAlarm.reset();
                 player.sendMessage(Translate.chat("Fire alarm has been reset."));
                 return true;
             }
@@ -104,7 +107,7 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.ALARM_POPUP) {
             if (line == 2) {
-                simpleFireAlarm.reset(Optional.empty());
+                simpleFireAlarm.reset();
                 backReverse(this.currentMenu, fireAlarmScreen, sign, line);
                 player.sendMessage(Translate.chat("The fire alarm has been reset."));
                 return true;
@@ -132,11 +135,8 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             stringList.add("Popup/MENU");
             stringList.add(fireAlarmReason.getTroubleReason().toString());
             stringList.add("-Reset");
-            if (fireAlarmReason.getOptionalZone().isPresent()) stringList.add("B1> {below}");
 
             fireAlarmReason.getOptionalPullStationName().ifPresent(stringList::add);
-            fireAlarmReason.getOptionalZone().ifPresent(zone -> stringList.add("Z: " + zone.getName()));
-            fireAlarmReason.getOptionalZone().ifPresent(zone -> stringList.add("ZF" + zone.getFloor()));
 
             fireAlarmScreen.setLine(0);
             fireAlarmScreen.setMin(0);

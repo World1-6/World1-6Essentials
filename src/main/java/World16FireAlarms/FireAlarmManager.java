@@ -5,7 +5,6 @@ import World16.Managers.CustomConfigManager;
 import World16.Managers.CustomYmlManager;
 import World16.Utils.Translate;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
-import World16FireAlarms.Objects.Zone;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
@@ -69,14 +68,6 @@ public class FireAlarmManager {
                 }
             }
 
-            //Zones
-            ConfigurationSection zonesConfig = fireAlarmConfig.getConfigurationSection("Zones");
-            if (zonesConfig != null) {
-                for (String zone : zonesConfig.getKeys(false)) {
-                    iFireAlarm.registerZone((Zone) zonesConfig.get(zone));
-                }
-            }
-
             //Signs
             ConfigurationSection signsConfig = fireAlarmConfig.getConfigurationSection("Signs");
             if (signsConfig != null) {
@@ -124,17 +115,6 @@ public class FireAlarmManager {
                 String k1 = e.getKey();
                 IStrobe v1 = e.getValue();
                 fireAlarmStrobesConfig.set(k1, v1);
-            }
-
-            //Zones
-            ConfigurationSection fireAlarmZoneConfig = fireAlarmConfig.getConfigurationSection("Zones");
-            if (fireAlarmZoneConfig == null) {
-                fireAlarmZoneConfig = fireAlarmConfig.createSection("Zones");
-                this.fireAlarmsYml.saveConfigSilent();
-            }
-
-            for (Zone zone : v.getZones()) {
-                fireAlarmZoneConfig.set(zone.getName(), zone);
             }
 
             //Signs

@@ -33,7 +33,6 @@ import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.FireAlarmSignOS;
 import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
 import World16FireAlarms.Objects.Simple.SimpleStrobe;
-import World16FireAlarms.Objects.Zone;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -48,7 +47,6 @@ public class Main extends JavaPlugin {
         ConfigurationSerialization.registerClass(FloorObject.class, "FloorObject");
         ConfigurationSerialization.registerClass(ElevatorObject.class, "ElevatorObject");
         //Fire Alarms
-        ConfigurationSerialization.registerClass(Zone.class, "Zone");
         ConfigurationSerialization.registerClass(FireAlarmSound.class, "FireAlarmSound");
         ConfigurationSerialization.registerClass(SimpleStrobe.class, "IStrobe");
         ConfigurationSerialization.registerClass(SimpleFireAlarm.class, "IFireAlarm");

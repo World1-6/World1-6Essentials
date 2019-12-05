@@ -266,7 +266,7 @@ public class firealarm implements CommandExecutor {
                 return true;
             }
 
-            this.fireAlarmMap.get(name).reset(Optional.empty());
+            this.fireAlarmMap.get(name).reset();
             p.sendMessage(Translate.chat("The fire alarm: " + name + " has been resetedede"));
             return true;
         } else if (args[0].equalsIgnoreCase("sound")) {

@@ -21,7 +21,6 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     private String name;
 
     private Map<String, IStrobe> strobesMap;
-    private List<Zone> zones;
     private Map<String, Location> signsMap;
 
     private FireAlarmStatus fireAlarmStatus;
@@ -40,7 +39,6 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
         //Maps / Sets
         this.strobesMap = new HashMap<>();
-        this.zones = new ArrayList<>();
         this.signsMap = new HashMap<>();
 
         this.fireAlarmStatus = FireAlarmStatus.READY;
@@ -51,10 +49,6 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         this.strobesMap.get(iStrobe.getName()).setFireAlarmSound(fireAlarmSound);
     }
 
-    public void registerZone(Zone zone) {
-        this.zones.add(zone);
-    }
-
     public void registerNac() {
     }
 
@@ -62,25 +56,20 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         this.signsMap.put(string.toLowerCase(), location);
     }
 
-    public void reset(Optional<Zone> zone) {
+    public void reset() {
         this.fireAlarmStatus = FireAlarmStatus.READY;
 
         //Signs
-        for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
-            String k = entry.getKey();
-            Location v = entry.getValue();
+        Iterator<Map.Entry<String, Location>> iterator = this.signsMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Location> entry = iterator.next();
+            FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(entry.getValue());
 
-            FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
-            if (fireAlarmScreen != null)
-                fireAlarmScreen.getFireAlarmSignOS().resetSign(fireAlarmScreen, SignUtils.isSign(fireAlarmScreen.getLocation().getBlock()), true);
-            else {
-                //Wait 1 second before removing so it won't cause a ConcurrentModificationException
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, k.toLowerCase(), v);
-                    }
-                }.runTaskLater(plugin, 20L);
+            if (fireAlarmScreen != null) {
+                fireAlarmScreen.getFireAlarmSignOS().resetSign(fireAlarmScreen, Objects.requireNonNull(SignUtils.isSign(fireAlarmScreen.getLocation().getBlock())), true);
+            } else {
+                iterator.remove();
+                this.plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, entry.getKey().toLowerCase(), entry.getValue());
             }
         }
         //SIGNS DONE...
@@ -97,24 +86,19 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         else if (fireAlarmTempo == FireAlarmTempo.MARCH_TIME) setupMarchTime();
 
         //Signs
-        for (Map.Entry<String, Location> entry : this.signsMap.entrySet()) {
-            String k = entry.getKey();
-            Location v = entry.getValue();
+        Iterator<Map.Entry<String, Location>> iterator = this.signsMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Location> entry = iterator.next();
+            FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(entry.getValue());
 
-            FireAlarmScreen fireAlarmScreen = this.plugin.getSetListMap().getFireAlarmScreenMap().get(v);
-            if (fireAlarmScreen != null)
+            if (fireAlarmScreen != null) {
                 fireAlarmScreen.getFireAlarmSignOS().sendPopup(fireAlarmScreen, SignUtils.isSign(fireAlarmScreen.getLocation().getBlock()), fireAlarmReason);
-            else {
-                //Wait 1 second before removing so it won't cause a ConcurrentModificationException
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, k.toLowerCase(), v);
-                    }
-                }.runTaskLater(plugin, 20L);
+            } else {
+                iterator.remove();
+                this.plugin.getFireAlarmManager().deleteFireAlarmSignScreen(name, entry.getKey().toLowerCase(), entry.getValue());
             }
+            //Signs DONE...
         }
-        //Signs DONE...
     }
 
     private void resetStrobes() {
@@ -227,15 +211,6 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     public void setStrobesMap(Map<String, IStrobe> strobesMap) {
         this.strobesMap = strobesMap;
-    }
-
-    @Override
-    public List<Zone> getZones() {
-        return zones;
-    }
-
-    public void setZones(List<Zone> zones) {
-        this.zones = zones;
     }
 
     public Map<String, Location> getSigns() {
