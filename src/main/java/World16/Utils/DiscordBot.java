@@ -1,17 +1,18 @@
 package World16.Utils;
 
-import CCUtils.Sockets.Client.SimpleClientSocket;
+import CCUtils.Sockets.Sockets.Client.SimpleSocketClient;
 import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 
-public class DiscordBot extends SimpleClientSocket {
+public class DiscordBot extends SimpleSocketClient {
 
     private Main plugin;
     private CustomConfigManager customConfigManager;
 
     private boolean isEnabled;
+    private boolean isWaitingForAResponse;
 
     public DiscordBot(Main plugin, CustomConfigManager customConfigManager, boolean isEnabled) {
         super("76.182.18.245", 2020);
@@ -65,13 +66,15 @@ public class DiscordBot extends SimpleClientSocket {
     }
 
     public void ourJsonPrintOut(JSONObject jsonObject, boolean waitForAResponse) {
+        if (!isEnabled) return;
         jsonObject.put("SV", this.plugin.getApi().getServerVersion());
-        if (isEnabled) jsonPrintOut(jsonObject, "World1-6", waitForAResponse);
+        isWaitingForAResponse = waitForAResponse;
+        jsonPrintOut(jsonObject, "World1-6", waitForAResponse);
     }
 
     @Override
     public void translate(JSONObject jsonObject) {
-
+        if (isWaitingForAResponse) isWaitingForAResponse = false;
     }
 }
 
