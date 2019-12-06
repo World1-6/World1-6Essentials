@@ -82,10 +82,8 @@ public class OnPlayerJoinEvent implements Listener {
         } catch (Exception ex) {
             p.sendMessage(Translate.chat("Error in OnPlayerJoinEvent send this text to Andrew121410#2035 on discord."));
         }
-
         if (p.hasPermission("world16.stay.creative") && gameMode == GameMode.CREATIVE) {
             p.setGameMode(GameMode.CREATIVE);
-            p.sendMessage(Translate.chat("[&9World1-6&r] &eDetected you were in creative before logging out you will stay in creative."));
         }
 
         //Join message stuff.
@@ -94,7 +92,7 @@ public class OnPlayerJoinEvent implements Listener {
         version(p);
         //...
 
-        if (api.getMysql_HOST().equals("null")) {
+        if (api.getMysql_HOST().equals("null") && api.isDebug()) {
             plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " Please make sure to put in the MySQL details in the config.yml."));
         }
 
