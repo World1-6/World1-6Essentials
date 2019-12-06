@@ -2,6 +2,7 @@ package World16.Utils;
 
 import World16.Objects.KeyObject;
 import World16.Objects.LocationObject;
+import World16.Objects.PowerToolObject;
 import World16Elevators.Objects.ElevatorObject;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.ScreenFocus;
@@ -24,6 +25,7 @@ public class SetListMap {
     private Map<UUID, Location> afkMap; //0
     private Map<UUID, Map<String, Location>> homesMap; //0
     private Map<UUID, ScreenFocus> screenFocusMap; //0
+    private Map<UUID, PowerToolObject> powerToolMap; //0
 
     private Map<String, UUID> uuidCache; //1
     private Map<String, Location> jails; //1
@@ -50,6 +52,7 @@ public class SetListMap {
         this.afkMap = new HashMap<>();
         this.homesMap = new HashMap<>();
         this.screenFocusMap = new HashMap<>();
+        this.powerToolMap = new HashMap<>();
 
         this.uuidCache = new HashMap<>();
         this.jails = new HashMap<>();
@@ -95,6 +98,8 @@ public class SetListMap {
         homesMap.remove(p.getUniqueId());
 
         screenFocusMap.remove(p.getUniqueId());
+
+        powerToolMap.remove(p.getUniqueId());
     }
 
     public void clearAllMaps() {
@@ -113,6 +118,7 @@ public class SetListMap {
         fireAlarmScreenMap.clear();
         warpsMap.clear();
         screenFocusMap.clear();
+        powerToolMap.clear();
     }
 
     public void clearAllLists(Player p) {
@@ -211,5 +217,9 @@ public class SetListMap {
 
     public List<String> getSoundsList() {
         return soundsList;
+    }
+
+    public Map<UUID, PowerToolObject> getPowerToolMap() {
+        return powerToolMap;
     }
 }

@@ -1,6 +1,7 @@
 package World16.Events;
 
 import World16.Main.Main;
+import World16.Objects.PowerToolObject;
 import World16.Utils.SignUtils;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.ScreenFocus;
@@ -23,6 +24,7 @@ public class OnPlayerInteractEvent implements Listener {
     private Map<String, Location> latestClickedBlocked;
     private Map<Location, FireAlarmScreen> fireAlarmScreenMap;
     private Map<UUID, ScreenFocus> screenFocusMap;
+    private Map<UUID, PowerToolObject> powerToolMap;
     //...
 
     private Main plugin;
@@ -33,6 +35,7 @@ public class OnPlayerInteractEvent implements Listener {
         this.latestClickedBlocked = this.plugin.getSetListMap().getLatestClickedBlocked();
         this.fireAlarmScreenMap = this.plugin.getSetListMap().getFireAlarmScreenMap();
         this.screenFocusMap = this.plugin.getSetListMap().getScreenFocusMap();
+        this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
@@ -41,13 +44,17 @@ public class OnPlayerInteractEvent implements Listener {
     public void playerinteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
         Block block = event.getClickedBlock();
-
         Action action = event.getAction();
 
+        PowerToolObject powerToolObject = this.powerToolMap.get(p.getUniqueId());
         //Get's the latest clicked block and stores it in HashMap.
         if (action == Action.RIGHT_CLICK_BLOCK) {
             latestClickedBlocked.remove(p.getDisplayName()); //Removes old block
             latestClickedBlocked.put(p.getDisplayName(), event.getClickedBlock().getLocation());
+
+            powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
+        } else if (action == Action.LEFT_CLICK_AIR) {
+            powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
         }
 
         if (this.plugin.getApi().isFireAlarmsEnabled()) {

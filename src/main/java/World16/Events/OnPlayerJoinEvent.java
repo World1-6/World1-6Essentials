@@ -8,6 +8,7 @@ import World16.Managers.HomeManager;
 import World16.Managers.KeyManager;
 import World16.Objects.KeyObject;
 import World16.Objects.LocationObject;
+import World16.Objects.PowerToolObject;
 import World16.Utils.API;
 import World16.Utils.Translate;
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ public class OnPlayerJoinEvent implements Listener {
     private Map<String, KeyObject> keyDataM;
     private Map<UUID, LocationObject> backM;
     private Map<UUID, Map<String, Location>> homesMap;
+    private Map<UUID, PowerToolObject> powerToolMap;
     //...
 
     //Lists
@@ -53,6 +55,7 @@ public class OnPlayerJoinEvent implements Listener {
         this.backM = this.plugin.getSetListMap().getBackM();
         this.homesMap = this.plugin.getSetListMap().getHomesMap();
         this.adminListPlayer = this.plugin.getSetListMap().getAdminListPlayer();
+        this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
 
         this.api = new API(this.plugin);
 
@@ -98,6 +101,8 @@ public class OnPlayerJoinEvent implements Listener {
         keyDataM.put(p.getDisplayName(), new KeyObject(p.getDisplayName(), 1, "null"));
         keyapi.getAllKeysISQL(p.getDisplayName(), isqlKeys);
         backM.put(p.getUniqueId(), new LocationObject());
+        powerToolMap.put(p.getUniqueId(), new PowerToolObject());
+
         this.homeManager.getAllHomesFromISQL(this.isqlHomes, p);
 
         adminListPlayer.forEach((k) -> {

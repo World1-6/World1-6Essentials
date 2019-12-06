@@ -57,6 +57,7 @@ commands:
       - to
   setwarp:
   delwarp:
+  powertool:
 
   gmc:
     aliases:
@@ -232,4 +233,7 @@ permissions:
     default: op
   world16.deljail:
     description: Allows to do deljail
+    default: op
+  world16.powertool:
+    description: Allows to do powertool
     default: op

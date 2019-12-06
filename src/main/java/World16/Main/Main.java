@@ -125,6 +125,7 @@ public class Main extends JavaPlugin {
         new elevator(this);
         new lastjoin(this, this.customConfigManager);
         new firealarm(this, this.customConfigManager);
+        new powertool(this, this.customConfigManager);
 
         //Gamemode commands
         new gmc(this);
