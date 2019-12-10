@@ -191,6 +191,7 @@ public class API {
 
     public String getServerVersion() {
         String version = plugin.getServer().getVersion();
+        if (version.contains("1.15")) return "1.15";
         if (version.contains("1.14") || version.contains("1.14.1") || version.contains("1.14.2") || version.contains("1.14.3") || version.contains("1.14.4"))
             return "1.14";
         if (version.contains("1.13") || version.contains("1.13.1") || version.contains("1.13.2")) return "1.13";
