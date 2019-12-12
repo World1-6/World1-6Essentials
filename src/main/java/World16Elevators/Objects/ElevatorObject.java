@@ -123,7 +123,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         FloorObject floorObject = getFloor(floorNum);
 
         //Checks if the elevator should go up or down.
-        goUp = this.elevatorMovement.getAtDoor().getY() > floorObject.getMainDoor().getY();
+        goUp = floorObject.getMainDoor().getY() > this.elevatorMovement.getAtDoor().getY();
 
         //This caculates what floors it's going to pass going up or down this has to be run before it sets this.elevatorFloor to not a floor.
         calculateFloorBuffer(floorNum, goUp);
