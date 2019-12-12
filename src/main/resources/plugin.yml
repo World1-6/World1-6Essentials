@@ -58,6 +58,7 @@ commands:
   setwarp:
   delwarp:
   powertool:
+  unsafenchant:
 
   gmc:
     aliases:
@@ -236,4 +237,7 @@ permissions:
     default: op
   world16.powertool:
     description: Allows to do powertool
+    default: op
+  world16.unsafenchant:
+    description: Allows to do unsafenchant
     default: op

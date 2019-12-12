@@ -24,6 +24,7 @@ import World16.Managers.WarpManager;
 import World16.Utils.*;
 import World16.test.test1;
 import World16Elevators.ElevatorManager;
+import World16Elevators.Objects.ElevatorMovement;
 import World16Elevators.Objects.ElevatorObject;
 import World16Elevators.Objects.FloorObject;
 import World16Elevators.Objects.SignObject;
@@ -44,6 +45,7 @@ public class Main extends JavaPlugin {
     static {
         //Elevators
         ConfigurationSerialization.registerClass(SignObject.class, "SignObject");
+        ConfigurationSerialization.registerClass(ElevatorMovement.class, "ElevatorMovement");
         ConfigurationSerialization.registerClass(FloorObject.class, "FloorObject");
         ConfigurationSerialization.registerClass(ElevatorObject.class, "ElevatorObject");
         //Fire Alarms
@@ -125,6 +127,7 @@ public class Main extends JavaPlugin {
         new elevator(this);
         new lastjoin(this, this.customConfigManager);
         new firealarm(this, this.customConfigManager);
+        new powertool(this, this.customConfigManager);
         new powertool(this, this.customConfigManager);
 
         //Gamemode commands

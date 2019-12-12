@@ -119,7 +119,7 @@ public class SimpleMath {
         return one.getMidpoint(two);
     }
 
-    public BoundingBox toBoundingBox(Vector one, Vector two) {
+    public static BoundingBox toBoundingBox(Vector one, Vector two) {
         return new BoundingBox(one.getX(), one.getY(), one.getZ(), two.getX(), two.getY(), two.getZ());
     }
 }

@@ -10,6 +10,7 @@ import World16Elevators.Objects.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.regions.Region;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -173,12 +174,12 @@ public class elevator implements CommandExecutor {
                         return true;
                     }
 
-                    Vector one = new Vector(region.getMinimumPoint().getX(), region.getMinimumPoint().getY(), region.getMinimumPoint().getZ());
-                    Vector two = new Vector(region.getMaximumPoint().getX(), region.getMaximumPoint().getY(), region.getMaximumPoint().getZ());
+                    Location one = new Location(p.getWorld(), region.getMinimumPoint().getX(), region.getMinimumPoint().getY(), region.getMinimumPoint().getZ());
+                    Location two = new Location(p.getWorld(), region.getMaximumPoint().getX(), region.getMaximumPoint().getY(), region.getMaximumPoint().getZ());
 
-                    FloorObject floorObject = new FloorObject(0, api.getBlockPlayerIsLookingAt(p).getLocation(), simpleMath.toBoundingBox(one, two));
-                    BoundingBox boundingBox = simpleMath.toBoundingBox(new Vector(XAX, XAY, XAZ), new Vector(XBX, XBY, XBZ));
-                    ElevatorObject elevatorObject = new ElevatorObject(plugin, p.getWorld().getName(), elevatorName, floorObject, boundingBox);
+                    ElevatorMovement elevatorMovement = new ElevatorMovement(0, this.api.getBlockPlayerIsLookingAt(p).getLocation(), one, two);
+                    BoundingBox boundingBox = SimpleMath.toBoundingBox(new Vector(XAX, XAY, XAZ), new Vector(XBX, XBY, XBZ));
+                    ElevatorObject elevatorObject = new ElevatorObject(false, plugin, p.getWorld().getName(), elevatorName, elevatorMovement, boundingBox);
 
                     elevatorObjectMap.putIfAbsent(elevatorName, elevatorObject);
                     p.sendMessage(Translate.chat("Elevator: " + elevatorName + " has been created"));
@@ -191,8 +192,9 @@ public class elevator implements CommandExecutor {
                 if (args.length == 1) {
                     p.sendMessage(Translate.chat("[Elevator Floor Setup]"));
                     p.sendMessage(Translate.chat("/elevator floor easycreate <ElevatorName> <FloorNumber>"));
-                    p.sendMessage(Translate.chat("/elevator floor delete <ElevatorName> <FloorNumber>"));
+                    p.sendMessage(Translate.chat("/elevator floor door <ElevatorName> <ADD OR DELETE> <Floor>"));
                     p.sendMessage(Translate.chat("/elevator floor sign <ElevatorName> <FloorNumber>"));
+                    p.sendMessage(Translate.chat("/elevator floor delete <ElevatorName> <FloorNumber>"));
                     return true;
                 } else if (args.length == 4 && args[1].equalsIgnoreCase("easycreate")) {
                     String elevatorName = args[2].toLowerCase();
@@ -239,6 +241,35 @@ public class elevator implements CommandExecutor {
 
                     elevatorObjectMap.get(elevatorName).getFloorsMap().get(floorNum).setSignObject(new SignObject(this.api.getBlockPlayerIsLookingAt(p).getLocation()));
                     p.sendMessage(Translate.chat("Sign has been set"));
+                    return true;
+                } else if (args.length == 5 && args[1].equalsIgnoreCase("door")) {
+                    Location location = api.getBlockPlayerIsLookingAt(p).getLocation();
+                    String elevatorName = args[2].toLowerCase();
+                    String addOrRemove = args[3];
+                    int floorNum = api.asIntOrDefault(args[4], 000);
+
+                    if (elevatorObjectMap.get(elevatorName) == null) {
+                        p.sendMessage(Translate.chat("That elevator doesn't exist."));
+                        return true;
+                    }
+
+                    if (elevatorObjectMap.get(elevatorName).getFloorsMap().get(floorNum) == null) {
+                        p.sendMessage(Translate.chat("This floor doesn't exist."));
+                        return true;
+                    }
+
+                    if (floorNum == 000) {
+                        p.sendMessage(Translate.chat("NOT AN INT"));
+                        return true;
+                    }
+
+                    if (addOrRemove.equalsIgnoreCase("add")) {
+                        elevatorObjectMap.get(elevatorName).getFloorsMap().get(floorNum).getDoorList().add(location);
+                        p.sendMessage(Translate.chat("The door for the floor: " + floorNum + " has been added to the elevator: " + elevatorName));
+                    } else if (addOrRemove.equalsIgnoreCase("remove") || addOrRemove.equalsIgnoreCase("delete")) {
+                        elevatorObjectMap.get(elevatorName).getFloorsMap().get(floorNum).getDoorList().remove(location);
+                        p.sendMessage(Translate.chat("The door for the floor: " + floorNum + " has been deleted for the elvator: " + elevatorName));
+                    }
                     return true;
                 }
                 return true;
