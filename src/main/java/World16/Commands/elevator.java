@@ -246,7 +246,7 @@ public class elevator implements CommandExecutor {
                     Location location = api.getBlockPlayerIsLookingAt(p).getLocation();
                     String elevatorName = args[2].toLowerCase();
                     String addOrRemove = args[3];
-                    int floorNum = api.asIntOrDefault(args[4], 000);
+                    int floorNum = api.asIntOrDefault(args[4], 0);
 
                     if (elevatorObjectMap.get(elevatorName) == null) {
                         p.sendMessage(Translate.chat("That elevator doesn't exist."));
@@ -255,11 +255,6 @@ public class elevator implements CommandExecutor {
 
                     if (elevatorObjectMap.get(elevatorName).getFloorsMap().get(floorNum) == null) {
                         p.sendMessage(Translate.chat("This floor doesn't exist."));
-                        return true;
-                    }
-
-                    if (floorNum == 000) {
-                        p.sendMessage(Translate.chat("NOT AN INT"));
                         return true;
                     }
 

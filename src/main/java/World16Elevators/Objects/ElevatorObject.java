@@ -129,14 +129,14 @@ public class ElevatorObject implements ConfigurationSerializable {
         FloorObject floorObject = getFloor(floorNum);
 
         //Checks if the elevator should go up or down.
-        goUp = floorObject.getDoorList().get(0).getY() > this.elevatorMovement.getAtDoor().getY();
+        goUp = floorObject.getMainDoor().getY() > this.elevatorMovement.getAtDoor().getY();
 
         //This caculates what floors it's going to pass going up or down this has to be run before it sets this.elevatorFloor to not a floor.
         calculateFloorBuffer(floorNum, goUp);
 
         this.stopBy.setGoUp(goUp);
 
-        this.elevatorMovement = null; //Not on a floor.
+        this.elevatorMovement.setFloor(null); //Not on a floor.
 
         //Tell the elevator to go down instead of up.
         if (!goUp) {
@@ -279,8 +279,15 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     private void floorDone(FloorObject floorObject, ElevatorStatus elevatorStatus) {
-        Material oldBlock = floorObject.getMainDoor().getBlock().getType();
+        Map<Location, Material> oldBlocks = new HashMap<>();
 
+        for (Location location : floorObject.getDoorList()) {
+            oldBlocks.put(location, location.getBlock().getType());
+            location.getBlock().setType(Material.REDSTONE_BLOCK);
+        }
+
+        Material oldBlock = floorObject.getMainDoor().getBlock().getType();
+        oldBlocks.put(floorObject.getMainDoor(), oldBlock);
         floorObject.getMainDoor().getBlock().setType(Material.REDSTONE_BLOCK);
 
         //SIGNS
@@ -296,7 +303,9 @@ public class ElevatorObject implements ConfigurationSerializable {
                 if (floorObject.getSignObject() != null) {
                     floorObject.getSignObject().clearSign();
                 }
-                floorObject.getMainDoor().getBlock().setType(oldBlock);
+
+                oldBlocks.forEach((k, v) -> k.getBlock().setType(v));
+                oldBlocks.clear();
             }
         }.runTaskLater(plugin, doorHolderTicksPerSecond);
     }
