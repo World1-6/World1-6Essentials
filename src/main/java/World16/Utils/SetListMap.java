@@ -8,6 +8,7 @@ import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.ScreenFocus;
 import World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.Location;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -26,6 +27,7 @@ public class SetListMap {
     private Map<UUID, Map<String, Location>> homesMap; //0
     private Map<UUID, ScreenFocus> screenFocusMap; //0
     private Map<UUID, PowerToolObject> powerToolMap; //0
+    private Map<Player, Arrow> sitMap;
 
     private Map<String, UUID> uuidCache; //1
     private Map<String, Location> jails; //1
@@ -53,6 +55,7 @@ public class SetListMap {
         this.homesMap = new HashMap<>();
         this.screenFocusMap = new HashMap<>();
         this.powerToolMap = new HashMap<>();
+        this.sitMap = new HashMap<>();
 
         this.uuidCache = new HashMap<>();
         this.jails = new HashMap<>();
@@ -100,6 +103,8 @@ public class SetListMap {
         screenFocusMap.remove(p.getUniqueId());
 
         powerToolMap.remove(p.getUniqueId());
+
+        sitMap.remove(p);
     }
 
     public void clearAllMaps() {
@@ -119,6 +124,7 @@ public class SetListMap {
         warpsMap.clear();
         screenFocusMap.clear();
         powerToolMap.clear();
+        sitMap.clear();
     }
 
     public void clearAllLists(Player p) {
@@ -221,5 +227,9 @@ public class SetListMap {
 
     public Map<UUID, PowerToolObject> getPowerToolMap() {
         return powerToolMap;
+    }
+
+    public Map<Player, Arrow> getSitMap() {
+        return sitMap;
     }
 }
