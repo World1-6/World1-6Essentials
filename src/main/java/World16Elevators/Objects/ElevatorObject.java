@@ -50,7 +50,6 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     //TEMP DON'T SAVE
     private Main plugin;
-    private SimpleMath simpleMath;
 
     private boolean isGoing;
     private boolean isFloorQueueGoing;
@@ -65,9 +64,7 @@ public class ElevatorObject implements ConfigurationSerializable {
     private StopBy stopBy;
 
     public ElevatorObject(boolean fromSave, Main plugin, String world, String nameOfElevator, ElevatorMovement elevatorMovement, BoundingBox boundingBox) {
-        if (plugin != null) {
-            this.plugin = plugin;
-        }
+        if (plugin != null) this.plugin = plugin;
 
         this.world = world; //NEEDS TO BE SECOND.
 
@@ -75,8 +72,6 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.floorQueueBuffer = new LinkedList<>();
         this.floorBuffer = new LinkedList<>();
         this.stopBy = new StopBy();
-
-        this.simpleMath = new SimpleMath(this.plugin);
 
         this.elevatorName = nameOfElevator;
         this.elevatorMovement = elevatorMovement;
@@ -121,7 +116,6 @@ public class ElevatorObject implements ConfigurationSerializable {
             }
             return;
         }
-
         isGoing = true;
         floorBuffer.clear(); //Clears the floorBuffer
 
@@ -129,7 +123,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         FloorObject floorObject = getFloor(floorNum);
 
         //Checks if the elevator should go up or down.
-        goUp = floorObject.getMainDoor().getY() > this.elevatorMovement.getAtDoor().getY();
+        goUp = this.elevatorMovement.getAtDoor().getY() > floorObject.getMainDoor().getY();
 
         //This caculates what floors it's going to pass going up or down this has to be run before it sets this.elevatorFloor to not a floor.
         calculateFloorBuffer(floorNum, goUp);
@@ -376,7 +370,7 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     public void addFloor(FloorObject floorObject) {
-        if (!(floorObject.getFloor() <= 0)) {
+        if (floorObject.getFloor() >= 1) {
             this.topFloor++;
         } else if (floorObject.getFloor() < 0) {
             this.topBottomFloor--;
@@ -402,9 +396,7 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     public void removeFloor(int floor) {
-        if (this.floorsMap.get(floor) != null) {
-            floorsMap.remove(floor);
-        }
+        floorsMap.remove(floor);
     }
 
     public String listAllFloors() {
@@ -501,14 +493,6 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     public void setPlugin(Main plugin) {
         this.plugin = plugin;
-    }
-
-    public SimpleMath getSimpleMath() {
-        return simpleMath;
-    }
-
-    public void setSimpleMath(SimpleMath simpleMath) {
-        this.simpleMath = simpleMath;
     }
 
     public boolean isGoing() {
@@ -627,7 +611,6 @@ public class ElevatorObject implements ConfigurationSerializable {
                 Objects.equals(locationUpPLUS, that.locationUpPLUS) &&
                 Objects.equals(floorsMap, that.floorsMap) &&
                 Objects.equals(plugin, that.plugin) &&
-                Objects.equals(simpleMath, that.simpleMath) &&
                 Objects.equals(floorQueueBuffer, that.floorQueueBuffer) &&
                 Objects.equals(floorBuffer, that.floorBuffer) &&
                 Objects.equals(stopBy, that.stopBy);
@@ -635,7 +618,7 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(elevatorName, world, elevatorMovement, locationDownPLUS, locationUpPLUS, floorsMap, ticksPerSecond, doorHolderTicksPerSecond, elevatorWaiterTicksPerSecond, plugin, simpleMath, isGoing, isFloorQueueGoing, isIdling, isEmergencyStop, topFloor, topBottomFloor, floorQueueBuffer, floorBuffer, stopBy);
+        return Objects.hash(elevatorName, world, elevatorMovement, locationDownPLUS, locationUpPLUS, floorsMap, ticksPerSecond, doorHolderTicksPerSecond, elevatorWaiterTicksPerSecond, plugin, isGoing, isFloorQueueGoing, isIdling, isEmergencyStop, topFloor, topBottomFloor, floorQueueBuffer, floorBuffer, stopBy);
     }
 
     @Override
@@ -651,7 +634,6 @@ public class ElevatorObject implements ConfigurationSerializable {
                 ", doorHolderTicksPerSecond=" + doorHolderTicksPerSecond +
                 ", elevatorWaiterTicksPerSecond=" + elevatorWaiterTicksPerSecond +
                 ", plugin=" + plugin +
-                ", simpleMath=" + simpleMath +
                 ", isGoing=" + isGoing +
                 ", isFloorQueueGoing=" + isFloorQueueGoing +
                 ", isIdling=" + isIdling +
