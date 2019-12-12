@@ -128,7 +128,7 @@ public class Main extends JavaPlugin {
         new lastjoin(this, this.customConfigManager);
         new firealarm(this, this.customConfigManager);
         new powertool(this, this.customConfigManager);
-        new powertool(this, this.customConfigManager);
+        new unsafenchant(this, this.customConfigManager);
 
         //Gamemode commands
         new gmc(this);
