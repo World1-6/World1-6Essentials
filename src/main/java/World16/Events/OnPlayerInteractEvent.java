@@ -146,8 +146,6 @@ public class OnPlayerInteractEvent implements Listener {
                         iterator.remove();
                     }
                 }
-                isSitCheckerRunning = false;
-                this.cancel();
             }
         }.runTaskTimer(plugin, 20 * 3, 20 * 3);
     }
