@@ -45,21 +45,9 @@ public class BackTab implements TabCompleter {
         }
 
         if (args.length == 1) {
-            return getContains(args[0], tabCompleteMap.get("back"));
+            return TabUtils.getContainsString(args[0], tabCompleteMap.get("back"));
         }
 
         return null;
-    }
-
-    private List<String> getContains(String args, List<String> oldArrayList) {
-        List<String> list = new ArrayList<>();
-
-        for (String mat : oldArrayList) {
-            if (mat.contains(args.toLowerCase())) {
-                list.add(mat);
-            }
-        }
-
-        return list;
     }
 }

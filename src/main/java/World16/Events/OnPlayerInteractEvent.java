@@ -39,6 +39,8 @@ public class OnPlayerInteractEvent implements Listener {
     private API api;
     private CustomConfigManager customConfigManager;
 
+    private boolean isSitCheckerRunning = false;
+
     public OnPlayerInteractEvent(Main plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
@@ -49,6 +51,8 @@ public class OnPlayerInteractEvent implements Listener {
         this.screenFocusMap = this.plugin.getSetListMap().getScreenFocusMap();
         this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
         this.sitMap = this.plugin.getSetListMap().getSitMap();
+
+        setupSeatChecker();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
@@ -74,7 +78,6 @@ public class OnPlayerInteractEvent implements Listener {
                 arrow.setGravity(false);
                 arrow.addPassenger(p);
                 sitMap.put(p, arrow);
-                setupSeatChecker();
             }
 
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
@@ -127,13 +130,9 @@ public class OnPlayerInteractEvent implements Listener {
         } else fireAlarmScreen.onClick(p);
     }
 
-    private boolean isSitCheckerRunning = false;
-
     private void setupSeatChecker() {
         //DONT RUN TWO TIMES.
-        if (isSitCheckerRunning) {
-            return;
-        }
+        if (isSitCheckerRunning) return;
         isSitCheckerRunning = true;
 
         new BukkitRunnable() {
@@ -150,6 +149,6 @@ public class OnPlayerInteractEvent implements Listener {
                 isSitCheckerRunning = false;
                 this.cancel();
             }
-        }.runTaskTimer(plugin, 20 * 2, 20 * 2);
+        }.runTaskTimer(plugin, 20 * 3, 20 * 3);
     }
 }

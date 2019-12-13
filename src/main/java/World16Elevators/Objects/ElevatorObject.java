@@ -286,17 +286,15 @@ public class ElevatorObject implements ConfigurationSerializable {
 
         //SIGNS
         if (elevatorStatus == ElevatorStatus.UP) {
-            if (floorObject.getSignObject() != null) floorObject.getSignObject().doUpArrow();
+            for (SignObject signObject : floorObject.getSignList()) signObject.doUpArrow();
         } else if (elevatorStatus == ElevatorStatus.DOWN) {
-            if (floorObject.getSignObject() != null) floorObject.getSignObject().doDownArrow();
+            for (SignObject signObject : floorObject.getSignList()) signObject.doDownArrow();
         }
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (floorObject.getSignObject() != null) {
-                    floorObject.getSignObject().clearSign();
-                }
+                for (SignObject signObject : floorObject.getSignList()) signObject.clearSign();
 
                 oldBlocks.forEach((k, v) -> k.getBlock().setType(v));
                 oldBlocks.clear();

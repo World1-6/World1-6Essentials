@@ -39,21 +39,9 @@ public class JailTab implements TabCompleter {
         List<String> keys = new ArrayList<>(this.jailsMap.keySet());
 
         if (args.length == 1) {
-            return getContains(args[0], keys);
+            return TabUtils.getContainsString(args[0], keys);
         }
 
         return null;
-    }
-
-    private List<String> getContains(String args, List<String> oldArrayList) {
-        List<String> list = new ArrayList<>();
-
-        for (String mat : oldArrayList) {
-            if (mat.contains(args.toLowerCase())) {
-                list.add(mat);
-            }
-        }
-
-        return list;
     }
 }

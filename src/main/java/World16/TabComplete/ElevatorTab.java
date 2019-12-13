@@ -36,6 +36,7 @@ public class ElevatorTab implements TabCompleter {
             tabCompleteMap.get("elevator").add("queue");
             tabCompleteMap.get("elevator").add("click");
             tabCompleteMap.get("elevator").add("rename");
+            tabCompleteMap.get("elevator").add("tostring");
 //            tabCompleteMap.get("back").add("");
         }
 
@@ -56,39 +57,31 @@ public class ElevatorTab implements TabCompleter {
         List<String> elevatorList = new ArrayList<>(this.elevatorObjectMap.keySet());
 
         if (args.length == 1) {
-            return getContains(args[0], tabCompleteMap.get("elevator"));
+            return TabUtils.getContainsString(args[0], tabCompleteMap.get("elevator"));
         } else if (args[0].equalsIgnoreCase("delete")) {
-            return getContains(args[1], elevatorList);
+            return TabUtils.getContainsString(args[1], elevatorList);
         } else if (args[0].equalsIgnoreCase("rename")) {
-            return getContains(args[1], elevatorList);
+            return TabUtils.getContainsString(args[1], elevatorList);
         } else if (args[0].equalsIgnoreCase("floor")) {
             if (args.length == 2) {
-                return getContains(args[1], Arrays.asList("easycreate", "delete", "sign"));
+                return TabUtils.getContainsString(args[1], Arrays.asList("create", "door", "sign", "delete"));
             } else if (args.length == 3) {
-                return getContains(args[2], elevatorList);
+                return TabUtils.getContainsString(args[2], elevatorList);
             }
         } else if (args[0].equalsIgnoreCase("call")) {
             if (args.length == 2) {
-                return getContains(args[1], elevatorList);
+                return TabUtils.getContainsString(args[1], elevatorList);
             }
         } else if (args[0].equalsIgnoreCase("stop")) {
             if (args.length == 2) {
-                return getContains(args[1], elevatorList);
+                return TabUtils.getContainsString(args[1], elevatorList);
+            }
+        } else if (args[0].equalsIgnoreCase("tostring")) {
+            if (args.length == 2) {
+                return TabUtils.getContainsString(args[1], elevatorList);
             }
         }
 
         return null;
-    }
-
-    private List<String> getContains(String args, List<String> oldArrayList) {
-        List<String> list = new ArrayList<>();
-
-        for (String mat : oldArrayList) {
-            if (mat.contains(args.toLowerCase())) {
-                list.add(mat);
-            }
-        }
-
-        return list;
     }
 }

@@ -191,12 +191,12 @@ public class elevator implements CommandExecutor {
             if (args[0].equalsIgnoreCase("floor")) {
                 if (args.length == 1) {
                     p.sendMessage(Translate.chat("[Elevator Floor Setup]"));
-                    p.sendMessage(Translate.chat("/elevator floor easycreate <ElevatorName> <FloorNumber>"));
+                    p.sendMessage(Translate.chat("/elevator floor create <ElevatorName> <FloorNumber>"));
                     p.sendMessage(Translate.chat("/elevator floor door <ElevatorName> <ADD OR DELETE> <Floor>"));
                     p.sendMessage(Translate.chat("/elevator floor sign <ElevatorName> <FloorNumber>"));
                     p.sendMessage(Translate.chat("/elevator floor delete <ElevatorName> <FloorNumber>"));
                     return true;
-                } else if (args.length == 4 && args[1].equalsIgnoreCase("easycreate")) {
+                } else if (args.length == 4 && args[1].equalsIgnoreCase("create")) {
                     String elevatorName = args[2].toLowerCase();
                     int floorNum = api.asIntOrDefault(args[3], 0);
 
@@ -206,7 +206,7 @@ public class elevator implements CommandExecutor {
                     }
 
                     elevatorObjectMap.get(elevatorName).addFloor(new FloorObject(floorNum, api.getBlockPlayerIsLookingAt(p).getLocation()));
-                    p.sendMessage(Translate.chat("[EasyCreate] Floor: " + floorNum + " has been added to the elevator: " + elevatorName));
+                    p.sendMessage(Translate.chat("[Create] Floor: " + floorNum + " has been added to the elevator: " + elevatorName));
                     return true;
                 } else if (args.length == 4 && args[1].equalsIgnoreCase("delete")) {
                     String elevatorName = args[2].toLowerCase();
@@ -239,7 +239,7 @@ public class elevator implements CommandExecutor {
                         return true;
                     }
 
-                    elevatorObjectMap.get(elevatorName).getFloorsMap().get(floorNum).setSignObject(new SignObject(this.api.getBlockPlayerIsLookingAt(p).getLocation()));
+                    elevatorObjectMap.get(elevatorName).getFloorsMap().get(floorNum).getSignList().add(new SignObject(this.api.getBlockPlayerIsLookingAt(p).getLocation()));
                     p.sendMessage(Translate.chat("Sign has been set"));
                     return true;
                 } else if (args.length == 5 && args[1].equalsIgnoreCase("door")) {

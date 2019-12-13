@@ -1,55 +1,29 @@
 package World16Elevators.Objects;
 
 
-import World16.Utils.SimpleMath;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
-import org.bukkit.util.BoundingBox;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SerializableAs("FloorObject")
 public class FloorObject implements ConfigurationSerializable {
 
     private int floor;
-
     private Location mainDoor;
     private List<Location> doorList;
+    private List<SignObject> signList;
 
-    private BoundingBox boundingBox;
-    private SignObject signObject;
-
-    public FloorObject(int floor, Location atDoor, BoundingBox boundingBox) {
-        this.floor = floor;
-
-        this.doorList = new ArrayList<>();
-        this.mainDoor = atDoor;
-
-        this.boundingBox = boundingBox;
-        this.signObject = null;
+    public FloorObject(int floor, Location mainDoor) {
+        this(floor, mainDoor, new ArrayList<>(), new ArrayList<>());
     }
 
-    public FloorObject(int floor, Location atDoor) {
-        this.floor = floor;
-
-        this.doorList = new ArrayList<>();
-        this.mainDoor = atDoor;
-
-        this.boundingBox = null;
-        this.signObject = null;
-    }
-
-    //USED FOR deserialize method.
-    public FloorObject(int floor, Location mainDoor, List<Location> atDoor, BoundingBox boundingBox, SignObject signObject) {
+    public FloorObject(int floor, Location mainDoor, List<Location> doorList, List<SignObject> signList) {
         this.floor = floor;
         this.mainDoor = mainDoor;
-        this.doorList = atDoor;
-        this.boundingBox = boundingBox;
-        this.signObject = signObject;
+        this.doorList = doorList;
+        this.signList = signList;
     }
 
     //GETTERS
@@ -57,44 +31,28 @@ public class FloorObject implements ConfigurationSerializable {
         return floor;
     }
 
-    public Location getMainDoor() {
-        return mainDoor;
-    }
-
-    public List<Location> getDoorList() {
-        return doorList;
-    }
-
-    public BoundingBox getBoundingBox() {
-        return boundingBox;
-    }
-
-    public SignObject getSignObject() {
-        return signObject;
-    }
-
     public void setFloor(int floor) {
         this.floor = floor;
+    }
+
+    public Location getMainDoor() {
+        return mainDoor;
     }
 
     public void setMainDoor(Location mainDoor) {
         this.mainDoor = mainDoor;
     }
 
-    public void setDoorList(List<Location> doorList) {
-        this.doorList = doorList;
+    public List<Location> getDoorList() {
+        return doorList;
     }
 
-    public void setBoundingBox(BoundingBox boundingBox) {
-        this.boundingBox = boundingBox;
-    }
-
-    public void setSignObject(SignObject signObject) {
-        this.signObject = signObject;
+    public List<SignObject> getSignList() {
+        return signList;
     }
 
     public static FloorObject from(ElevatorMovement elevatorMovement) {
-        return new FloorObject(elevatorMovement.getFloor(), elevatorMovement.getAtDoor(), SimpleMath.toBoundingBox(elevatorMovement.getLocationDOWN().toVector(), elevatorMovement.getLocationUP().toVector()));
+        return new FloorObject(elevatorMovement.getFloor(), elevatorMovement.getAtDoor());
     }
 
     @Override
@@ -103,12 +61,37 @@ public class FloorObject implements ConfigurationSerializable {
         map.put("floor", floor);
         map.put("mainDoor", mainDoor);
         map.put("doorList", doorList);
-        map.put("boundingBox", boundingBox);
-        map.put("signObject", signObject);
+        map.put("signList", signList);
         return map;
     }
 
     public static FloorObject deserialize(Map<String, Object> map) {
-        return new FloorObject((int) map.get("floor"), (Location) map.get("mainDoor"), (List<Location>) map.get("doorList"), (BoundingBox) map.get("boundingBox"), (SignObject) map.get("signObject"));
+        return new FloorObject((int) map.get("floor"), (Location) map.get("mainDoor"), (List<Location>) map.get("doorList"), (List<SignObject>) map.get("signList"));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FloorObject that = (FloorObject) o;
+        return floor == that.floor &&
+                Objects.equals(mainDoor, that.mainDoor) &&
+                Objects.equals(doorList, that.doorList) &&
+                Objects.equals(signList, that.signList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(floor, mainDoor, doorList, signList);
+    }
+
+    @Override
+    public String toString() {
+        return "FloorObject{" +
+                "floor=" + floor +
+                ", mainDoor=" + mainDoor +
+                ", doorList=" + doorList +
+                ", signList=" + signList +
+                '}';
     }
 }

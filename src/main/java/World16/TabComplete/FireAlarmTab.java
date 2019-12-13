@@ -66,59 +66,47 @@ public class FireAlarmTab implements TabCompleter {
         List<String> firealarmList = new ArrayList<>(this.iFireAlarmMap.keySet());
 
         if (args.length == 1) {
-            return getContains(args[0], tabCompleteMap.get("firealarm"));
+            return TabUtils.getContainsString(args[0], tabCompleteMap.get("firealarm"));
         } else if (args[0].equalsIgnoreCase("register")) {
             if (args.length == 2) {
-                return getContains(args[1], Arrays.asList("firealarm", "sign", "strobe"));
+                return TabUtils.getContainsString(args[1], Arrays.asList("firealarm", "sign", "strobe"));
             } else if (args.length == 3 && args[1].equalsIgnoreCase("sign") || args[1].equalsIgnoreCase("strobe")) {
-                return getContains(args[2], firealarmList);
+                return TabUtils.getContainsString(args[2], firealarmList);
             }
             return null;
         } else if (args[0].equalsIgnoreCase("delete")) {
             if (args.length == 2) {
-                return getContains(args[1], Arrays.asList("firealarm", "strobe"));
+                return TabUtils.getContainsString(args[1], Arrays.asList("firealarm", "strobe"));
             } else if (args.length == 3) {
-                return getContains(args[2], firealarmList);
+                return TabUtils.getContainsString(args[2], firealarmList);
             }
             return null;
         } else if (args[0].equalsIgnoreCase("sound")) {
             if (args.length == 2) {
-                return getContains(args[1], firealarmList);
+                return TabUtils.getContainsString(args[1], firealarmList);
             } else if (args.length == 3) {
-                return getContains(args[2], this.soundList);
+                return TabUtils.getContainsString(args[2], this.soundList);
             }
             return null;
         } else if (args[0].equalsIgnoreCase("tempo")) {
             List<String> tempos = new ArrayList<>();
             for (FireAlarmTempo value : FireAlarmTempo.values()) tempos.add(value.name());
             if (args.length == 2) {
-                return getContains(args[1], firealarmList);
+                return TabUtils.getContainsString(args[1], firealarmList);
             } else if (args.length == 3) {
-                return getContains(args[2], tempos);
+                return TabUtils.getContainsString(args[2], tempos);
             }
             return null;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("reset")) {
-            return getContains(args[1], firealarmList);
+            return TabUtils.getContainsString(args[1], firealarmList);
         } else if (args[0].equalsIgnoreCase("alarm")) {
             if (args.length == 2) {
-                return getContains(args[1], Arrays.asList("test", "ps"));
+                return TabUtils.getContainsString(args[1], Arrays.asList("test", "ps"));
             } else if (args.length == 3) {
-                return getContains(args[2], firealarmList);
+                return TabUtils.getContainsString(args[2], firealarmList);
             }
             return null;
         }
         return null;
-    }
-
-    private List<String> getContains(String args, List<String> oldArrayList) {
-        List<String> list = new ArrayList<>();
-
-        for (String mat : oldArrayList) {
-            if (mat.contains(args.toLowerCase())) {
-                list.add(mat);
-            }
-        }
-
-        return list;
     }
 }

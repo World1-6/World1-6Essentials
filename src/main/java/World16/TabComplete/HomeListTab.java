@@ -43,22 +43,9 @@ public class HomeListTab implements TabCompleter {
             }
             Set<String> homeSet = rawHomesMap.get(p.getUniqueId()).keySet();
             String[] homeString = homeSet.toArray(new String[0]);
-            return getContains(args[0], Arrays.asList(homeString));
+            return TabUtils.getContainsString(args[0], Arrays.asList(homeString));
         }
 
         return null;
-    }
-
-
-    private List<String> getContains(String args, List<String> oldArrayList) {
-        List<String> list = new ArrayList<>();
-
-        for (String mat : oldArrayList) {
-            if (mat.contains(args.toLowerCase())) {
-                list.add(mat);
-            }
-        }
-
-        return list;
     }
 }

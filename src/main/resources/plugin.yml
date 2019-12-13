@@ -243,5 +243,5 @@ permissions:
     description: Allows to do unsafenchant
     default: op
   world16.seats:
-    description: Allows to do unsafenchant
+    description: Allows to do seats
     default: true

@@ -45,21 +45,9 @@ public class DebugTab implements TabCompleter {
         }
 
         if (args.length == 1) {
-            return getContains(args[0], tabCompleteMap.get("debug1-6"));
+            return TabUtils.getContainsString(args[0], tabCompleteMap.get("debug1-6"));
         }
 
         return null;
-    }
-
-    private List<String> getContains(String args, List<String> oldArrayList) {
-        List<String> list = new ArrayList<>();
-
-        for (String s : oldArrayList) {
-            if (s.contains(args.toLowerCase())) {
-                list.add(s);
-            }
-        }
-
-        return list;
     }
 }

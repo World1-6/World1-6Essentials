@@ -34,10 +34,7 @@ import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.FireAlarmSignOS;
 import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
 import World16FireAlarms.Objects.Simple.SimpleStrobe;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -76,7 +73,6 @@ public class Main extends JavaPlugin {
         plugin = this;
         this.otherPlugins = new OtherPlugins(this);
         this.setListMap = new SetListMap();
-        this.api = new API(this);
 
         regCustomManagers();
         regFileConfigGEN();
@@ -197,6 +193,8 @@ public class Main extends JavaPlugin {
         this.customConfigManager = new CustomConfigManager(this);
         customConfigManager.registerAllCustomConfigs();
 
+        this.api = new API(this, customConfigManager);
+
         this.jailManager = new JailManager(this.customConfigManager, this);
         this.jailManager.loadAllJails();
 
@@ -206,10 +204,6 @@ public class Main extends JavaPlugin {
         regDiscordBot();
         regElevators();
         regFireAlarms();
-    }
-
-    private void regBStats() {
-        new Metrics(this);
     }
 
     private void regDiscordBot() {
@@ -231,20 +225,11 @@ public class Main extends JavaPlugin {
         this.fireAlarmManager.loadFireAlarms();
     }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        {
-            Player p = (Player) sender;
-
-            if (cmd.getName().equalsIgnoreCase("World1-6Essentials")) {
-                p.sendMessage(Translate.chat("&6Made By Andrew121410 My -> Discord: Andrew121410#2035"));
-                return true;
-            }
-        }
-        return true;
+    private void regBStats() {
+        new Metrics(this);
     }
 
     //Getters
-
     public static Main getPlugin() {
         return plugin;
     }
