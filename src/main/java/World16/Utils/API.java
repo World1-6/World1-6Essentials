@@ -5,7 +5,6 @@ import World16.Managers.CustomConfigManager;
 import World16.Managers.CustomYmlManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
@@ -21,7 +20,10 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,6 +45,7 @@ public class API {
     //...
 
     private Main plugin;
+    private CustomConfigManager customConfigManager;
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
@@ -70,15 +73,9 @@ public class API {
         setMySQL();
     }
 
-    @Deprecated
-    public API(Main plugin, CustomYmlManager configInstance) {
+    public API(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
-        doSetListMap();
-        setMySQL();
-    }
-
-    public API(Main plugin, CustomConfigManager configManager) {
-        this.plugin = plugin;
+        this.customConfigManager = customConfigManager;
         doSetListMap();
         setMySQL();
     }
@@ -237,6 +234,17 @@ public class API {
         configinstance.saveConfigSilent();
     }
 
+    public Block getBlockPlayerIsLookingAt(Player player) {
+        return player.getTargetBlock(null, 5);
+    }
+
+    public ConfigurationSection getPlayersYML(CustomConfigManager customConfigManager, Player player) {
+        ConfigurationSection configurationSection = customConfigManager.getPlayersYml().getConfig().getConfigurationSection("UUID." + player.getUniqueId());
+        if (configurationSection == null)
+            configurationSection = customConfigManager.getPlayersYml().getConfig().createSection("UUID." + player.getUniqueId());
+        return configurationSection;
+    }
+
     public boolean isInteger(String input) {
         try {
             Integer.parseInt(input);
@@ -312,24 +320,6 @@ public class API {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public Block getBlockPlayerIsLookingAt(Player player) {
-        return player.getTargetBlock((Set<Material>) null, 5);
-    }
-
-    public ConfigurationSection getPlayerTempYml(CustomConfigManager customConfigManager, Player player) {
-        ConfigurationSection configurationSection = customConfigManager.getTempYml().getConfig().getConfigurationSection("Name." + player.getDisplayName());
-        if (configurationSection == null)
-            configurationSection = customConfigManager.getTempYml().getConfig().createSection("Name." + player.getDisplayName());
-        return configurationSection;
-    }
-
-    public ConfigurationSection getPlayerTempYml(CustomConfigManager customConfigManager, String player) {
-        ConfigurationSection configurationSection = customConfigManager.getTempYml().getConfig().getConfigurationSection("Name." + player);
-        if (configurationSection == null)
-            configurationSection = customConfigManager.getTempYml().getConfig().createSection("Name." + player);
-        return configurationSection;
     }
 
     public void PermissionErrorMessage(Player p) {

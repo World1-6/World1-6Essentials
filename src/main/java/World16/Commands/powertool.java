@@ -41,8 +41,8 @@ public class powertool implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
+
         if (!p.hasPermission("world16.powertool")) {
             api.PermissionErrorMessage(p);
             return true;

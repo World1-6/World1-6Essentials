@@ -1,7 +1,9 @@
 package World16.Events;
 
 import World16.Main.Main;
+import World16.Managers.CustomConfigManager;
 import World16.Objects.PowerToolObject;
+import World16.Utils.API;
 import World16.Utils.SignUtils;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.ScreenFocus;
@@ -34,9 +36,13 @@ public class OnPlayerInteractEvent implements Listener {
     //...
 
     private Main plugin;
+    private API api;
+    private CustomConfigManager customConfigManager;
 
     public OnPlayerInteractEvent(Main plugin) {
         this.plugin = plugin;
+        this.api = this.plugin.getApi();
+        this.customConfigManager = this.plugin.getCustomConfigManager();
 
         this.latestClickedBlocked = this.plugin.getSetListMap().getLatestClickedBlocked();
         this.fireAlarmScreenMap = this.plugin.getSetListMap().getFireAlarmScreenMap();
@@ -60,14 +66,15 @@ public class OnPlayerInteractEvent implements Listener {
             latestClickedBlocked.put(p.getDisplayName(), event.getClickedBlock().getLocation());
 
             //Stairs
-            if (block.getBlockData() instanceof Stairs) {
+            if (block.getBlockData() instanceof Stairs && api.getPlayersYML(customConfigManager, p).getBoolean("seats")) {
                 Stairs stairs = (Stairs) block.getBlockData();
 
                 Arrow arrow = (Arrow) block.getWorld().spawnEntity(block.getLocation().add(0.5D, 0.2D, 0.5D), EntityType.ARROW);
+                arrow.addScoreboardTag("plugin-seat");
                 arrow.setGravity(false);
                 arrow.addPassenger(p);
-                sitMap.putIfAbsent(p, arrow);
-                setupSitChecker();
+                sitMap.put(p, arrow);
+                setupSeatChecker();
             }
 
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
@@ -122,7 +129,7 @@ public class OnPlayerInteractEvent implements Listener {
 
     private boolean isSitCheckerRunning = false;
 
-    private void setupSitChecker() {
+    private void setupSeatChecker() {
         //DONT RUN TWO TIMES.
         if (isSitCheckerRunning) {
             return;

@@ -10,7 +10,7 @@ public class CustomConfigManager {
     private CustomYmlManager jailsYml;
     private CustomYmlManager warpsYml;
     private CustomYmlManager elevatorsYml;
-    private CustomYmlManager tempYml;
+    private CustomYmlManager playersYml;
     private CustomYmlManager firealarmsYml;
 
     public CustomConfigManager(Main plugin) {
@@ -46,11 +46,11 @@ public class CustomConfigManager {
         this.elevatorsYml.reloadConfig();
         //...
 
-        //temp.yml
-        this.tempYml = new CustomYmlManager(this.plugin);
-        this.tempYml.setup("temp.yml");
-        this.tempYml.saveConfig();
-        this.tempYml.reloadConfig();
+        //players.yml
+        this.playersYml = new CustomYmlManager(this.plugin);
+        this.playersYml.setup("players.yml");
+        this.playersYml.saveConfig();
+        this.playersYml.reloadConfig();
         //...
 
         //firealarms.yml
@@ -78,8 +78,8 @@ public class CustomConfigManager {
         return elevatorsYml;
     }
 
-    public CustomYmlManager getTempYml() {
-        return tempYml;
+    public CustomYmlManager getPlayersYml() {
+        return playersYml;
     }
 
     public CustomYmlManager getFireAlarmsYml() {

@@ -34,9 +34,9 @@ public class OnPlayerQuitEvent implements Listener {
         Player p = event.getPlayer();
 
         //TEMP.yml
-        ConfigurationSection configurationSection = this.api.getPlayerTempYml(customConfigManager, p);
+        ConfigurationSection configurationSection = this.api.getPlayersYML(customConfigManager, p);
         configurationSection.set("Gamemode", p.getGameMode().name());
-        this.customConfigManager.getTempYml().saveConfigSilent();
+        this.customConfigManager.getPlayersYml().saveConfigSilent();
         //...
 
         //CLEAR Set's and List's and Map's

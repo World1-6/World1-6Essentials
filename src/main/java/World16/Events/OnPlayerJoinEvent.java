@@ -75,8 +75,12 @@ public class OnPlayerJoinEvent implements Listener {
         Player p = event.getPlayer();
         event.setJoinMessage("");
 
+        if (api.getPlayersYML(customConfigManager, p).get("seats") == null) {
+            api.getPlayersYML(customConfigManager, p).set("seats", true);
+        }
+
         GameMode gameMode = null;
-        String gamemode = this.api.getPlayerTempYml(this.customConfigManager, p).getString("Gamemode");
+        String gamemode = this.api.getPlayersYML(this.customConfigManager, p).getString("Gamemode");
         try {
             if (gamemode != null) gameMode = GameMode.valueOf(gamemode);
         } catch (Exception ex) {

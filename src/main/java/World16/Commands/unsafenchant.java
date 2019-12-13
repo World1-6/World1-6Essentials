@@ -34,8 +34,8 @@ public class unsafenchant implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
+
         if (!p.hasPermission("world16.unsafenchant")) {
             api.PermissionErrorMessage(p);
             return true;

@@ -129,6 +129,7 @@ public class Main extends JavaPlugin {
         new firealarm(this, this.customConfigManager);
         new powertool(this, this.customConfigManager);
         new unsafenchant(this, this.customConfigManager);
+        new seats(this, this.customConfigManager);
 
         //Gamemode commands
         new gmc(this);
