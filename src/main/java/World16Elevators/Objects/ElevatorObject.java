@@ -73,14 +73,12 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.locationDownPLUS = boundingBox.getMin().toLocation(getBukkitWorld());
         this.locationUpPLUS = boundingBox.getMax().toLocation(getBukkitWorld());
 
-        //Config
-
         this.isGoing = false;
         this.isFloorQueueGoing = false;
         this.isIdling = false;
         this.isEmergencyStop = false;
 
-        if (!fromSave) this.floorsMap.putIfAbsent(0, FloorObject.from(elevatorMovement));
+        if (!fromSave) this.addFloor(FloorObject.from(elevatorMovement));
     }
 
     public Collection<Entity> getEntities() {
@@ -99,8 +97,11 @@ public class ElevatorObject implements ConfigurationSerializable {
     public void goToFloor(int floorNum, ElevatorStatus elevatorStatus) {
         boolean goUp;
 
+        //Gets the floor before the elevator starts ticking.
+        FloorObject floorObject = getFloor(floorNum);
+
         //Check if the floor is a thing or not.
-        if (getFloor(floorNum) == null) return;
+        if (floorObject == null) return;
 
         //Add to the queue if elevator is running or idling.
         if (isGoing || isIdling) {
@@ -115,13 +116,10 @@ public class ElevatorObject implements ConfigurationSerializable {
         isGoing = true;
         floorBuffer.clear(); //Clears the floorBuffer
 
-        //Gets the floor before the elevator starts ticking.
-        FloorObject floorObject = getFloor(floorNum);
-
         //Checks if the elevator should go up or down.
         goUp = floorObject.getMainDoor().getY() > this.elevatorMovement.getAtDoor().getY();
 
-        //This caculates what floors it's going to pass going up or down this has to be run before it sets this.elevatorFloor to not a floor.
+        //This calculates what floors it's going to pass going up or down this has to be run before it sets this.elevatorFloor to not a floor.
         calculateFloorBuffer(floorNum, goUp);
 
         this.stopBy.setGoUp(goUp);
@@ -164,7 +162,7 @@ public class ElevatorObject implements ConfigurationSerializable {
                         return;
                     }
 
-                    worldEditMoveDOWN(floorNum);
+                    worldEditMoveDOWN();
 
                     //TP THEM DOWN 1
                     for (Player player : getPlayers()) {
@@ -211,7 +209,7 @@ public class ElevatorObject implements ConfigurationSerializable {
                     return;
                 }
 
-                worldEditMoveUP(floorNum);
+                worldEditMoveUP();
 
                 //TP THEM UP 1
                 for (Player player : getPlayers()) {
@@ -222,7 +220,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         }.runTaskTimer(plugin, elevatorMovement.getTicksPerSecond(), elevatorMovement.getTicksPerSecond());
     }
 
-    private void worldEditMoveUP(int floor) {
+    private void worldEditMoveUP() {
         WorldEditPlugin worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
 
         World world = BukkitAdapter.adapt(getBukkitWorld());
@@ -243,7 +241,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         locationDownPLUS.add(0, 1, 0);
     }
 
-    private void worldEditMoveDOWN(int floor) {
+    private void worldEditMoveDOWN() {
         WorldEditPlugin worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
 
         World world = BukkitAdapter.adapt(getBukkitWorld());
@@ -304,19 +302,8 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     private void calculateFloorBuffer(int floor, boolean isUp) {
-        if (isUp) {
-            for (int num = this.elevatorMovement.getFloor(); num < floor; num++) {
-                if (num != this.elevatorMovement.getFloor()) {
-                    floorBuffer.add(num);
-                }
-            }
-        } else {
-            for (int num = this.elevatorMovement.getFloor(); num > floor; num--) {
-                if (num != this.elevatorMovement.getFloor()) {
-                    floorBuffer.add(num);
-                }
-            }
-        }
+        if (isUp) for (int num = this.elevatorMovement.getFloor() + 1; num < floor; num++) floorBuffer.add(num);
+        else for (int num = this.elevatorMovement.getFloor() - 1; num > floor; num--) floorBuffer.add(num);
     }
 
     private void reCalculateFloorBuffer(boolean goUp) {
@@ -369,7 +356,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         } else if (floorObject.getFloor() < 0) {
             this.topBottomFloor--;
         } else if (floorObject.getFloor() == 0) {
-            this.floorsMap.remove(floorObject.getFloor());
+            this.floorsMap.remove(0);
         }
 
         this.floorsMap.putIfAbsent(floorObject.getFloor(), floorObject);
@@ -378,13 +365,6 @@ public class ElevatorObject implements ConfigurationSerializable {
     public FloorObject getFloor(int floor) {
         if (this.floorsMap.get(floor) != null) {
             return this.floorsMap.get(floor);
-        }
-        return null;
-    }
-
-    private FloorObject getFloor(FloorQueueObject floorQueueObject) {
-        if (this.floorsMap.get(floorQueueObject.getFloorNumber()) != null) {
-            return this.floorsMap.get(floorQueueObject.getFloorNumber());
         }
         return null;
     }

@@ -123,7 +123,7 @@ public class ElevatorMovement implements ConfigurationSerializable {
     }
 
     public static ElevatorMovement deserialize(Map<String, Object> map) {
-        return new ElevatorMovement((Integer) map.get("floor"), (Location) map.get("atDoor"), (Location) map.get("locationDOWN"), (Location) map.get("locationUP"), (long) map.get("ticksPerSecond"), (long) map.get("doorHolderTicksPerSecond"), (long) map.get("elevatorWaiterTicksPerSecond"));
+        return new ElevatorMovement((Integer) map.get("floor"), (Location) map.get("atDoor"), (Location) map.get("locationDOWN"), (Location) map.get("locationUP"), ((Integer) map.get("ticksPerSecond")).longValue(), ((Integer) map.get("doorHolderTicksPerSecond")).longValue(), ((Integer) map.get("elevatorWaiterTicksPerSecond")).longValue());
     }
 
     //JAVA
