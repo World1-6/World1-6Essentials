@@ -16,11 +16,28 @@ public class ElevatorMovement implements ConfigurationSerializable {
     private Location locationDOWN;
     private Location locationUP;
 
+    //Config
+    private long ticksPerSecond;
+    private long doorHolderTicksPerSecond;
+    private long elevatorWaiterTicksPerSecond;
+
+    public static final long DEFAULT_TICKS_PER_SECOND = 6L;
+    public static final long DEFAULT_DOOR_HOLDER_TICKS_PER_SECOND = 20L * 5L;
+    public static final long DEFAULT_ELEVATOR_WAITER_TICKS_PER_SECOND = 20L * 6L;
+    //...
+
     public ElevatorMovement(Integer floor, Location atDoor, Location locationDOWN, Location locationUP) {
+        this(floor, atDoor, locationDOWN, locationUP, DEFAULT_TICKS_PER_SECOND, DEFAULT_DOOR_HOLDER_TICKS_PER_SECOND, DEFAULT_ELEVATOR_WAITER_TICKS_PER_SECOND);
+    }
+
+    public ElevatorMovement(Integer floor, Location atDoor, Location locationDOWN, Location locationUP, long ticksPerSecond, long doorHolderTicksPerSecond, long elevatorWaiterTicksPerSecond) {
         this.floor = floor;
         this.atDoor = atDoor;
         this.locationDOWN = locationDOWN;
         this.locationUP = locationUP;
+        this.ticksPerSecond = ticksPerSecond;
+        this.doorHolderTicksPerSecond = doorHolderTicksPerSecond;
+        this.elevatorWaiterTicksPerSecond = elevatorWaiterTicksPerSecond;
     }
 
     public void moveUP() {
@@ -68,6 +85,30 @@ public class ElevatorMovement implements ConfigurationSerializable {
         this.locationUP = locationUP;
     }
 
+    public long getTicksPerSecond() {
+        return ticksPerSecond;
+    }
+
+    public void setTicksPerSecond(long ticksPerSecond) {
+        this.ticksPerSecond = ticksPerSecond;
+    }
+
+    public long getDoorHolderTicksPerSecond() {
+        return doorHolderTicksPerSecond;
+    }
+
+    public void setDoorHolderTicksPerSecond(long doorHolderTicksPerSecond) {
+        this.doorHolderTicksPerSecond = doorHolderTicksPerSecond;
+    }
+
+    public long getElevatorWaiterTicksPerSecond() {
+        return elevatorWaiterTicksPerSecond;
+    }
+
+    public void setElevatorWaiterTicksPerSecond(long elevatorWaiterTicksPerSecond) {
+        this.elevatorWaiterTicksPerSecond = elevatorWaiterTicksPerSecond;
+    }
+
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
@@ -75,11 +116,14 @@ public class ElevatorMovement implements ConfigurationSerializable {
         map.put("atDoor", atDoor);
         map.put("locationDOWN", this.locationUP);
         map.put("locationUP", this.locationDOWN);
+        map.put("ticksPerSecond", this.ticksPerSecond);
+        map.put("doorHolderTicksPerSecond", this.doorHolderTicksPerSecond);
+        map.put("elevatorWaiterTicksPerSecond", this.elevatorWaiterTicksPerSecond);
         return map;
     }
 
     public static ElevatorMovement deserialize(Map<String, Object> map) {
-        return new ElevatorMovement((Integer) map.get("floor"), (Location) map.get("atDoor"), (Location) map.get("locationDOWN"), (Location) map.get("locationUP"));
+        return new ElevatorMovement((Integer) map.get("floor"), (Location) map.get("atDoor"), (Location) map.get("locationDOWN"), (Location) map.get("locationUP"), (long) map.get("ticksPerSecond"), (long) map.get("doorHolderTicksPerSecond"), (long) map.get("elevatorWaiterTicksPerSecond"));
     }
 
     //JAVA
@@ -88,7 +132,10 @@ public class ElevatorMovement implements ConfigurationSerializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ElevatorMovement that = (ElevatorMovement) o;
-        return Objects.equals(floor, that.floor) &&
+        return ticksPerSecond == that.ticksPerSecond &&
+                doorHolderTicksPerSecond == that.doorHolderTicksPerSecond &&
+                elevatorWaiterTicksPerSecond == that.elevatorWaiterTicksPerSecond &&
+                Objects.equals(floor, that.floor) &&
                 Objects.equals(atDoor, that.atDoor) &&
                 Objects.equals(locationDOWN, that.locationDOWN) &&
                 Objects.equals(locationUP, that.locationUP);
@@ -96,7 +143,7 @@ public class ElevatorMovement implements ConfigurationSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(floor, atDoor, locationDOWN, locationUP);
+        return Objects.hash(floor, atDoor, locationDOWN, locationUP, ticksPerSecond, doorHolderTicksPerSecond, elevatorWaiterTicksPerSecond);
     }
 
     @Override
@@ -106,6 +153,9 @@ public class ElevatorMovement implements ConfigurationSerializable {
                 ", atDoor=" + atDoor +
                 ", locationDOWN=" + locationDOWN +
                 ", locationUP=" + locationUP +
+                ", ticksPerSecond=" + ticksPerSecond +
+                ", doorHolderTicksPerSecond=" + doorHolderTicksPerSecond +
+                ", elevatorWaiterTicksPerSecond=" + elevatorWaiterTicksPerSecond +
                 '}';
     }
 }

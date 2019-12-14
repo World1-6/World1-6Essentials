@@ -148,6 +148,7 @@ public class elevator implements CommandExecutor {
             p.sendMessage(Translate.chat("/elevator floor <Shows help for the floor."));
             p.sendMessage(Translate.chat("/elevator call <Shows help to call the elevator."));
             p.sendMessage(Translate.chat("/elevator rename <ElevatorName> <TOElevatorName>"));
+            p.sendMessage(Translate.chat("/elevator shaft <Shows help for the shaft.>"));
             return true;
         } else {
 
@@ -449,6 +450,36 @@ public class elevator implements CommandExecutor {
                 elevatorObject.setElevatorName(toElevatorName);
                 elevatorObjectMap.putIfAbsent(toElevatorName, elevatorObject);
                 p.sendMessage(Translate.chat("Old Name: " + elevatorName + " new Name: " + toElevatorName));
+                return true;
+            } else if (args[0].equalsIgnoreCase("shaft")) {
+                if (args.length == 1) {
+                    p.sendMessage(Translate.chat("/elevator shaft <ElevatorName> ticksPerSecond <Value>"));
+                    p.sendMessage(Translate.chat("/elevator shaft <ElevatorName> doorHolderTicksPerSecond <Value>"));
+                    p.sendMessage(Translate.chat("/elevator shaft <ElevatorName> elevatorWaiterTicksPerSecond <Value>"));
+                } else if (args.length > 2) {
+                    ElevatorObject elevatorObject = elevatorObjectMap.get(args[1].toLowerCase());
+                    String value = args[3];
+
+                    if (elevatorObject == null) {
+                        p.sendMessage(Translate.chat("That elevator doesn't exist."));
+                        return true;
+                    }
+
+                    if (args[2].equalsIgnoreCase("ticksPerSecond")) {
+                        long value1 = api.asLongOrDefault(value, ElevatorMovement.DEFAULT_TICKS_PER_SECOND);
+                        elevatorObject.getElevatorMovement().setTicksPerSecond(value1);
+                        p.sendMessage(Translate.chat("The ticks per second has been updated to: " + value1));
+                    } else if (args[2].equalsIgnoreCase("doorHolderTicksPerSecond")) {
+                        long value1 = api.asLongOrDefault(value, ElevatorMovement.DEFAULT_DOOR_HOLDER_TICKS_PER_SECOND);
+                        elevatorObject.getElevatorMovement().setDoorHolderTicksPerSecond(value1);
+                        p.sendMessage(Translate.chat("The door holder ticks per second has been updated to: " + value1));
+                    } else if (args[2].equalsIgnoreCase("elevatorWaiterTicksPerSecond")) {
+                        long value1 = api.asLongOrDefault(value, ElevatorMovement.DEFAULT_ELEVATOR_WAITER_TICKS_PER_SECOND);
+                        elevatorObject.getElevatorMovement().setElevatorWaiterTicksPerSecond(value1);
+                        p.sendMessage(Translate.chat("The elevator waiter ticks per second has been updated to: " + value1));
+                    }
+                    return true;
+                }
                 return true;
             }
             return true;

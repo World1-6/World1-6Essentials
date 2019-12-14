@@ -42,12 +42,6 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     private Map<Integer, FloorObject> floorsMap;
 
-    //Config
-    private final long ticksPerSecond = 6L;
-    private final long doorHolderTicksPerSecond = 20L * 5L;
-    private final long elevatorWaiterTicksPerSecond = 20L * 6L;
-    //...
-
     //TEMP DON'T SAVE
     private Main plugin;
 
@@ -78,6 +72,8 @@ public class ElevatorObject implements ConfigurationSerializable {
 
         this.locationDownPLUS = boundingBox.getMin().toLocation(getBukkitWorld());
         this.locationUpPLUS = boundingBox.getMax().toLocation(getBukkitWorld());
+
+        //Config
 
         this.isGoing = false;
         this.isFloorQueueGoing = false;
@@ -176,7 +172,7 @@ public class ElevatorObject implements ConfigurationSerializable {
                     }
 
                 }
-            }.runTaskTimer(plugin, ticksPerSecond, ticksPerSecond);
+            }.runTaskTimer(plugin, elevatorMovement.getTicksPerSecond(), elevatorMovement.getTicksPerSecond());
             return;
         }
 
@@ -223,7 +219,7 @@ public class ElevatorObject implements ConfigurationSerializable {
                 }
 
             }
-        }.runTaskTimer(plugin, ticksPerSecond, ticksPerSecond);
+        }.runTaskTimer(plugin, elevatorMovement.getTicksPerSecond(), elevatorMovement.getTicksPerSecond());
     }
 
     private void worldEditMoveUP(int floor) {
@@ -299,12 +295,12 @@ public class ElevatorObject implements ConfigurationSerializable {
                 oldBlocks.forEach((k, v) -> k.getBlock().setType(v));
                 oldBlocks.clear();
             }
-        }.runTaskLater(plugin, doorHolderTicksPerSecond);
+        }.runTaskLater(plugin, elevatorMovement.getDoorHolderTicksPerSecond());
     }
 
     private void doFloorIdle() {
         isIdling = true;
-        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> isIdling = false, elevatorWaiterTicksPerSecond);
+        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> isIdling = false, elevatorMovement.getElevatorWaiterTicksPerSecond());
     }
 
     private void calculateFloorBuffer(int floor, boolean isUp) {
@@ -473,18 +469,6 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.floorsMap = floorsMap;
     }
 
-    public long getTicksPerSecond() {
-        return ticksPerSecond;
-    }
-
-    public long getDoorHolderTicksPerSecond() {
-        return doorHolderTicksPerSecond;
-    }
-
-    public long getElevatorWaiterTicksPerSecond() {
-        return elevatorWaiterTicksPerSecond;
-    }
-
     public Main getPlugin() {
         return plugin;
     }
@@ -593,10 +577,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ElevatorObject that = (ElevatorObject) o;
-        return ticksPerSecond == that.ticksPerSecond &&
-                doorHolderTicksPerSecond == that.doorHolderTicksPerSecond &&
-                elevatorWaiterTicksPerSecond == that.elevatorWaiterTicksPerSecond &&
-                isGoing == that.isGoing &&
+        return isGoing == that.isGoing &&
                 isFloorQueueGoing == that.isFloorQueueGoing &&
                 isIdling == that.isIdling &&
                 isEmergencyStop == that.isEmergencyStop &&
@@ -616,7 +597,7 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(elevatorName, world, elevatorMovement, locationDownPLUS, locationUpPLUS, floorsMap, ticksPerSecond, doorHolderTicksPerSecond, elevatorWaiterTicksPerSecond, plugin, isGoing, isFloorQueueGoing, isIdling, isEmergencyStop, topFloor, topBottomFloor, floorQueueBuffer, floorBuffer, stopBy);
+        return Objects.hash(elevatorName, world, elevatorMovement, locationDownPLUS, locationUpPLUS, floorsMap, plugin, isGoing, isFloorQueueGoing, isIdling, isEmergencyStop, topFloor, topBottomFloor, floorQueueBuffer, floorBuffer, stopBy);
     }
 
     @Override
@@ -624,13 +605,10 @@ public class ElevatorObject implements ConfigurationSerializable {
         return "ElevatorObject{" +
                 "elevatorName='" + elevatorName + '\'' +
                 ", world='" + world + '\'' +
-                ", elevatorMovement=" + elevatorMovement.toString() +
+                ", elevatorMovement=" + elevatorMovement +
                 ", locationDownPLUS=" + locationDownPLUS +
                 ", locationUpPLUS=" + locationUpPLUS +
                 ", floorsMap=" + floorsMap +
-                ", ticksPerSecond=" + ticksPerSecond +
-                ", doorHolderTicksPerSecond=" + doorHolderTicksPerSecond +
-                ", elevatorWaiterTicksPerSecond=" + elevatorWaiterTicksPerSecond +
                 ", plugin=" + plugin +
                 ", isGoing=" + isGoing +
                 ", isFloorQueueGoing=" + isFloorQueueGoing +

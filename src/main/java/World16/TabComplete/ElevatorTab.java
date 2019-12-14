@@ -37,6 +37,7 @@ public class ElevatorTab implements TabCompleter {
             tabCompleteMap.get("elevator").add("click");
             tabCompleteMap.get("elevator").add("rename");
             tabCompleteMap.get("elevator").add("tostring");
+            tabCompleteMap.get("elevator").add("shaft");
 //            tabCompleteMap.get("back").add("");
         }
 
@@ -71,6 +72,12 @@ public class ElevatorTab implements TabCompleter {
         } else if (args[0].equalsIgnoreCase("call")) {
             if (args.length == 2) {
                 return TabUtils.getContainsString(args[1], elevatorList);
+            }
+        } else if (args[0].equalsIgnoreCase("shaft")) {
+            if (args.length == 2) {
+                return TabUtils.getContainsString(args[1], elevatorList);
+            } else if (args.length == 3) {
+                return TabUtils.getContainsString(args[2], Arrays.asList("ticksPerSecond", "doorHolderTicksPerSecond", "elevatorWaiterTicksPerSecond"));
             }
         } else if (args[0].equalsIgnoreCase("stop")) {
             if (args.length == 2) {
