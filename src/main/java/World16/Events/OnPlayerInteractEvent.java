@@ -8,7 +8,9 @@ import World16.Utils.SignUtils;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.ScreenFocus;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
@@ -72,6 +74,8 @@ public class OnPlayerInteractEvent implements Listener {
             //Stairs
             if (block.getBlockData() instanceof Stairs && api.getPlayersYML(customConfigManager, p).getBoolean("seats")) {
                 Stairs stairs = (Stairs) block.getBlockData();
+
+                if (block.getRelative(BlockFace.UP).getType() != Material.AIR) return;
 
                 Arrow arrow = (Arrow) block.getWorld().spawnEntity(block.getLocation().add(0.5D, 0.2D, 0.5D), EntityType.ARROW);
                 arrow.addScoreboardTag("plugin-seat");
