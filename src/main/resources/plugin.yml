@@ -61,6 +61,7 @@ commands:
   unsafenchant:
   seats:
   commandblockfind:
+  trafficlight:
 
   gmc:
     aliases:
@@ -248,4 +249,7 @@ permissions:
     default: true
   world16.commandblockfind:
     description: Allows to do commandblockfind
+    default: op
+  world16.trafficlight:
+    description: Allows to do trafficlight
     default: op

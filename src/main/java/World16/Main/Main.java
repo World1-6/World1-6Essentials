@@ -126,6 +126,7 @@ public class Main extends JavaPlugin {
         new unsafenchant(this, this.customConfigManager);
         new seats(this, this.customConfigManager);
         new commandblockfind(this);
+        new trafficlight(this, this.customConfigManager);
 
         //Gamemode commands
         new gmc(this);
