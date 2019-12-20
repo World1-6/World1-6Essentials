@@ -17,7 +17,6 @@ import World16.Commands.warp.delwarp;
 import World16.Commands.warp.setwarp;
 import World16.Commands.warp.warp;
 import World16.Events.*;
-import World16.Events.PluginEvents.EasyBackupEvent;
 import World16.Managers.CustomConfigManager;
 import World16.Managers.JailManager;
 import World16.Managers.WarpManager;
@@ -126,6 +125,7 @@ public class Main extends JavaPlugin {
         new powertool(this, this.customConfigManager);
         new unsafenchant(this, this.customConfigManager);
         new seats(this, this.customConfigManager);
+        new commandblockfind(this);
 
         //Gamemode commands
         new gmc(this);
@@ -179,8 +179,7 @@ public class Main extends JavaPlugin {
         //Inventory
         new OnInventoryClickEvent(this);
 
-        //PluginEvents
-        new EasyBackupEvent(this);
+        new OnServerCommandEvent(this);
     }
 
     private void regFileConfigGEN() {

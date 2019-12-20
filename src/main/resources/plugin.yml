@@ -60,6 +60,7 @@ commands:
   powertool:
   unsafenchant:
   seats:
+  commandblockfind:
 
   gmc:
     aliases:
@@ -245,3 +246,6 @@ permissions:
   world16.seats:
     description: Allows to do seats
     default: true
+  world16.commandblockfind:
+    description: Allows to do commandblockfind
+    default: op

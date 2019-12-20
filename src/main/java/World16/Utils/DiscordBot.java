@@ -36,14 +36,14 @@ public class DiscordBot extends SimpleSocketClient {
         ourJsonPrintOut(jsonObject, false);
     }
 
-    public void sendEasyBackupEvent(me.forseth11.easybackup.api.Event event) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("TYPE", "EasyBackup");
-        jsonObject.put("EasyBackupTYPE", event.getType().name());
-        jsonObject.put("Message", event.getMessage());
-        jsonObject.put("Time", event.getTime());
-        ourJsonPrintOut(jsonObject, false);
-    }
+//    public void sendEasyBackupEvent(me.forseth11.easybackup.api.Event event) {
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("TYPE", "EasyBackup");
+//        jsonObject.put("EasyBackupTYPE", event.getType().name());
+//        jsonObject.put("Message", event.getMessage());
+//        jsonObject.put("Time", event.getTime());
+//        ourJsonPrintOut(jsonObject, false);
+//    }
 
     public void sendServerStartMessage() {
         JSONObject jsonObject = new JSONObject();

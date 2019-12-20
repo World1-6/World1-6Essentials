@@ -87,16 +87,9 @@
         </dependency>
 
         <dependency>
-            <groupId>me.forseth11.easybackup</groupId>
-            <artifactId>me.forseth11.easybackup</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
-            <version>7.0.0-SNAPSHOT</version>
+            <version>7.1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 

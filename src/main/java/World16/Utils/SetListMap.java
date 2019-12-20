@@ -43,6 +43,7 @@ public class SetListMap {
 
     private List<String> adminList; //1
     private List<String> soundsList; //1
+    private List<String> spyCommandBlock; //1
 
     //Constucer
     public SetListMap() {
@@ -72,6 +73,7 @@ public class SetListMap {
 
         this.adminList = new ArrayList<>();
         this.soundsList = new ArrayList<>();
+        this.spyCommandBlock = new ArrayList<>();
     }
 
     //METHODS
@@ -137,10 +139,11 @@ public class SetListMap {
 
     public void clearAllLists() {
         flyList.clear();
-
         godmList.clear();
-
         adminListPlayer.clear();
+        adminList.clear();
+        soundsList.clear();
+        spyCommandBlock.clear();
     }
 
     //Getters
@@ -231,5 +234,9 @@ public class SetListMap {
 
     public Map<Player, Arrow> getSitMap() {
         return sitMap;
+    }
+
+    public List<String> getSpyCommandBlock() {
+        return spyCommandBlock;
     }
 }
