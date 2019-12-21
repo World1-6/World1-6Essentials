@@ -32,7 +32,7 @@ public class TrafficLight {
     public boolean Green() {
         Banner banner = (Banner) location.getBlock().getState();
         List<Pattern> patterns = new ArrayList<>();
-        patterns.add(new Pattern(DyeColor.LIME, PatternType.TRIANGLE_TOP));
+        patterns.add(new Pattern(DyeColor.LIME, PatternType.TRIANGLE_BOTTOM));
         patterns.add(new Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER));
         banner.setPatterns(patterns);
         banner.update();
@@ -52,7 +52,7 @@ public class TrafficLight {
     public boolean Red() {
         Banner banner = (Banner) location.getBlock().getState();
         List<Pattern> patterns = new ArrayList<>();
-        patterns.add(new Pattern(DyeColor.RED, PatternType.TRIANGLE_BOTTOM));
+        patterns.add(new Pattern(DyeColor.RED, PatternType.TRIANGLE_TOP));
         patterns.add(new Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER));
         banner.setPatterns(patterns);
         banner.update();

@@ -21,6 +21,7 @@ public class TrafficSystem {
     public TrafficSystem(Main plugin, TrafficSystemType trafficSystemType) {
         this.plugin = plugin;
         this.trafficSystemType = trafficSystemType;
+
         this.trafficLightSystemMap = new HashMap<>();
         this.currentTick = 0;
     }
@@ -36,12 +37,12 @@ public class TrafficSystem {
                         trafficLightSystemMap.get(currentTrafficLightSystem).doLight(TrafficLightState.GREEN);
                         trafficLightSystemMap.entrySet().stream().filter(key -> key.getKey() != currentTrafficLightSystem).forEach((k -> k.getValue().doLight(TrafficLightState.RED)));
                     }
-                } else if (currentTick == 11 || currentTick == 12) {
+                } else if (currentTick == 11 || currentTick == 12 || currentTick == 13 || currentTick == 14) {
                     //YELLOW
                     if (currentTick == 11) {
                         trafficLightSystemMap.get(currentTrafficLightSystem).doLight(TrafficLightState.YELLOW);
                     }
-                } else if (currentTick >= 13) {
+                } else if (currentTick == 15) {
                     //RED
                     trafficLightSystemMap.get(currentTrafficLightSystem).doLight(TrafficLightState.RED);
 
