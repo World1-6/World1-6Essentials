@@ -60,7 +60,7 @@ public class sign implements CommandExecutor {
             BlockState state = block.getState();
 
             if (!(state instanceof Sign)) {
-                p.sendMessage(Translate.chat("NOT A SIGN REPEAT NOT A SIGN xD."));
+                p.sendMessage(Translate.chat("This isn't a sign."));
                 return true;
             }
 

@@ -49,9 +49,14 @@ public class trafficlight implements CommandExecutor {
             return true;
         }
 
+        if (!api.isTrafficSystemEnabled()) {
+            p.sendMessage(Translate.chat("Looks like the traffic system isn't enabled."));
+            return true;
+        }
+
         if (args.length == 0) {
             p.sendMessage(Translate.chat("/trafficlight create <Name>"));
-            p.sendMessage(Translate.chat("/trafficlight add <Name> <INT> <INT>"));
+            p.sendMessage(Translate.chat("/trafficlight add <Name> <Junction> <INT>"));
             p.sendMessage(Translate.chat("/trafficlight tick <NAME>"));
             return true;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("create")) {

@@ -12,6 +12,7 @@ public class CustomConfigManager {
     private CustomYmlManager elevatorsYml;
     private CustomYmlManager playersYml;
     private CustomYmlManager firealarmsYml;
+    private CustomYmlManager trafficLightYml;
 
     public CustomConfigManager(Main plugin) {
         this.plugin = plugin;
@@ -60,6 +61,13 @@ public class CustomConfigManager {
         this.firealarmsYml.reloadConfig();
         //...
 
+        //trafficlights.yml
+        this.trafficLightYml = new CustomYmlManager(this.plugin);
+        this.trafficLightYml.setup("trafficlights.yml");
+        this.trafficLightYml.saveConfig();
+        this.trafficLightYml.reloadConfig();
+        //...
+
     }
 
     public CustomYmlManager getShitYml() {
@@ -84,5 +92,9 @@ public class CustomConfigManager {
 
     public CustomYmlManager getFireAlarmsYml() {
         return firealarmsYml;
+    }
+
+    public CustomYmlManager getTrafficLightYml() {
+        return trafficLightYml;
     }
 }

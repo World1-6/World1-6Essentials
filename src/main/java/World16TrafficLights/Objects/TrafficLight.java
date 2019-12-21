@@ -5,11 +5,14 @@ import org.bukkit.Location;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class TrafficLight {
+public class TrafficLight implements ConfigurationSerializable {
 
     private Location location;
 
@@ -57,5 +60,16 @@ public class TrafficLight {
         banner.setPatterns(patterns);
         banner.update();
         return true;
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("Location", this.location);
+        return map;
+    }
+
+    public static TrafficLight deserialize(Map<String, Object> map) {
+        return new TrafficLight((Location) map.get("Location"));
     }
 }

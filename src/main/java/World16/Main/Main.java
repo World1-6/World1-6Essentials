@@ -33,6 +33,10 @@ import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.FireAlarmSignOS;
 import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
 import World16FireAlarms.Objects.Simple.SimpleStrobe;
+import World16TrafficLights.Objects.TrafficLight;
+import World16TrafficLights.Objects.TrafficLightSystem;
+import World16TrafficLights.Objects.TrafficSystem;
+import World16TrafficLights.TrafficSystemManager;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,6 +54,10 @@ public class Main extends JavaPlugin {
         ConfigurationSerialization.registerClass(SimpleFireAlarm.class, "IFireAlarm");
         ConfigurationSerialization.registerClass(FireAlarmSignOS.class, "FireAlarmSignOS");
         ConfigurationSerialization.registerClass(FireAlarmScreen.class, "FireAlarmScreen");
+        //Traffic Lights
+        ConfigurationSerialization.registerClass(TrafficSystem.class, "TrafficSystem");
+        ConfigurationSerialization.registerClass(TrafficLightSystem.class, "TrafficLightSystem");
+        ConfigurationSerialization.registerClass(TrafficLight.class, "TrafficLight");
     }
 
     private static Main plugin;
@@ -64,6 +72,7 @@ public class Main extends JavaPlugin {
     private WarpManager warpManager;
     private ElevatorManager elevatorManager;
     private FireAlarmManager fireAlarmManager;
+    private TrafficSystemManager trafficSystemManager;
 
     private API api;
     private OtherPlugins otherPlugins;
@@ -88,6 +97,7 @@ public class Main extends JavaPlugin {
         this.warpManager.saveAllWarps();
         this.elevatorManager.saveAllElevators();
         this.fireAlarmManager.saveFireAlarms();
+        this.trafficSystemManager.saveAll();
         this.setListMap.clearSetListMap();
         getLogger().info("[World1-6Essentials] is now disabled.");
     }
@@ -181,6 +191,7 @@ public class Main extends JavaPlugin {
         new OnInventoryClickEvent(this);
 
         new OnServerCommandEvent(this);
+        new OnSignChangeEvent(this);
     }
 
     private void regFileConfigGEN() {
@@ -201,12 +212,14 @@ public class Main extends JavaPlugin {
         this.warpManager = new WarpManager(this, this.customConfigManager);
         this.warpManager.loadAllWarps();
 
-        regDiscordBot();
-        regElevators();
-        regFireAlarms();
-    }
+        this.fireAlarmManager = new FireAlarmManager(this, this.customConfigManager, this.api.isFireAlarmsEnabled());
+        this.fireAlarmManager.loadFireAlarms();
 
-    private void regDiscordBot() {
+        regElevators();
+
+        this.trafficSystemManager = new TrafficSystemManager(this, this.customConfigManager, api.isTrafficSystemEnabled());
+        trafficSystemManager.loadAll();
+
         this.discordBot = new DiscordBot(this, this.customConfigManager, this.api.isDiscordBotEnabled());
         this.discordBot.sendServerStartMessage();
     }
@@ -218,11 +231,6 @@ public class Main extends JavaPlugin {
         } else {
             plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cElevator's won't be working since there's no WorldEdit."));
         }
-    }
-
-    private void regFireAlarms() {
-        this.fireAlarmManager = new FireAlarmManager(this, this.customConfigManager, this.api.isFireAlarmsEnabled());
-        this.fireAlarmManager.loadFireAlarms();
     }
 
     private void regBStats() {

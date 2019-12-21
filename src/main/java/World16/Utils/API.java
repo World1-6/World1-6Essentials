@@ -169,6 +169,14 @@ public class API {
         return plugin.getConfig().getString("discordbot").equalsIgnoreCase("true");
     }
 
+    public boolean isTrafficSystemEnabled() {
+        return plugin.getConfig().getString("trafficsystem").equalsIgnoreCase("true");
+    }
+
+    public boolean isSignTranslateColors() {
+        return plugin.getConfig().getString("signTranslateColors").equalsIgnoreCase("true");
+    }
+
     public String FormatTime(LocalDateTime time) {
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
         return time.format(myFormatObj);

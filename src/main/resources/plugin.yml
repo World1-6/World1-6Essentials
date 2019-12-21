@@ -5,6 +5,7 @@ main: World16.Main.Main
 api-version: 1.14
 
 softdepend: [WorldEdit]
+depend: [ProtocolLib]
 
 commands:
   World1-6Essentials:
@@ -184,6 +185,8 @@ permissions:
   world16.sign:
     description: Allows to do sign
     default: op
+    children:
+      world16.sign.color: true
   world16.spawn:
     description: Allows to do spawn
     default: true

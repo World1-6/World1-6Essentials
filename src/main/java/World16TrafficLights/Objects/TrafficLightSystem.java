@@ -1,17 +1,18 @@
 package World16TrafficLights.Objects;
 
 import World16.Main.Main;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class TrafficLightSystem {
+public class TrafficLightSystem implements ConfigurationSerializable {
 
     private Main plugin;
 
     private Map<Integer, TrafficLight> trafficLightMap;
-    private TrafficLightState currentTrafficLightState;
+    private TrafficLightState lightState;
 
     public TrafficLightSystem(Main plugin) {
         this.plugin = plugin;
@@ -19,7 +20,7 @@ public class TrafficLightSystem {
     }
 
     public void doLight(TrafficLightState trafficLightState) {
-        this.currentTrafficLightState = trafficLightState;
+        this.lightState = trafficLightState;
 
         Iterator<Map.Entry<Integer, TrafficLight>> iterator = trafficLightMap.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -38,7 +39,17 @@ public class TrafficLightSystem {
         return trafficLightMap;
     }
 
-    public TrafficLightState getCurrentTrafficLightState() {
-        return currentTrafficLightState;
+    public TrafficLightState getLightState() {
+        return lightState;
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap<>();
+        return map;
+    }
+
+    public static TrafficLightSystem deserialize(Map<String, Object> map) {
+        return new TrafficLightSystem(Main.getPlugin());
     }
 }
