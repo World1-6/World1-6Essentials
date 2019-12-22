@@ -38,19 +38,23 @@ public class TrafficSystemManager {
 
         for (String key : mCS.getKeys(false)) {
             ConfigurationSection trafficSystem = mCS.getConfigurationSection(key);
-            ConfigurationSection lightSystem = trafficSystem.getConfigurationSection("TrafficLightSystems");
-            ConfigurationSection lights = lightSystem.getConfigurationSection("Lights");
+            ConfigurationSection trafficLightSystems = trafficSystem.getConfigurationSection("TrafficLightSystems");
 
             TrafficSystem trafficSystemObject = (TrafficSystem) trafficSystem.get("TrafficSystem");
 
-            for (String lightSystemKey : lightSystem.getKeys(false)) {
-                TrafficLightSystem trafficLightSystem = (TrafficLightSystem) trafficSystem.get(lightSystemKey);
+            for (String trafficLightSystemsKey : trafficLightSystems.getKeys(false)) {
+                ConfigurationSection trafficLightSystem = trafficLightSystems.getConfigurationSection(trafficLightSystemsKey);
+                ConfigurationSection lights = trafficLightSystem.getConfigurationSection("Lights");
+
+                TrafficLightSystem trafficLightSystemObject = (TrafficLightSystem) trafficLightSystem.get("TrafficLightSystem");
 
                 for (String lightsKey : lights.getKeys(false)) {
-                    trafficLightSystem.getTrafficLightMap().put(Integer.valueOf(lightsKey), (TrafficLight) lights.get(lightsKey));
+                    TrafficLight trafficLight = (TrafficLight) lights.get(lightsKey);
+                    trafficLightSystemObject.getTrafficLightMap().put(Integer.valueOf(lightsKey), trafficLight);
                 }
-                trafficSystemObject.getTrafficLightSystemMap().put(Integer.valueOf(lightSystemKey), trafficLightSystem);
+                trafficSystemObject.getTrafficLightSystemMap().put(Integer.valueOf(trafficLightSystemsKey), trafficLightSystemObject);
             }
+            trafficSystemObject.tick();
             this.trafficSystemMap.put(key, trafficSystemObject);
         }
     }
@@ -76,18 +80,25 @@ public class TrafficSystemManager {
 
             trafficSystem.set("TrafficSystem", v);
 
-            ConfigurationSection lightSystem = trafficSystem.getConfigurationSection("TrafficLightSystems");
-            if (lightSystem == null) {
-                lightSystem = trafficSystem.createSection("TrafficLightSystems");
+            ConfigurationSection trafficLightSystems = trafficSystem.getConfigurationSection("TrafficLightSystems");
+            if (trafficLightSystems == null) {
+                trafficLightSystems = trafficSystem.createSection("TrafficLightSystems");
                 this.trafficLightYML.saveConfigSilent();
             }
             for (Map.Entry<Integer, TrafficLightSystem> e : v.getTrafficLightSystemMap().entrySet()) {
                 Integer key = e.getKey();
                 TrafficLightSystem value = e.getValue();
 
-                ConfigurationSection lights = lightSystem.getConfigurationSection("Lights");
+                ConfigurationSection trafficLightSystem = trafficLightSystems.getConfigurationSection(String.valueOf(key));
+                if (trafficLightSystem == null) {
+                    trafficLightSystem = trafficLightSystems.createSection(String.valueOf(key));
+                    this.trafficLightYML.saveConfigSilent();
+                }
+                trafficLightSystem.set("TrafficLightSystem", value);
+
+                ConfigurationSection lights = trafficLightSystem.getConfigurationSection("Lights");
                 if (lights == null) {
-                    lights = lightSystem.createSection("Lights");
+                    lights = trafficLightSystem.createSection("Lights");
                     this.trafficLightYML.saveConfigSilent();
                 }
                 for (Map.Entry<Integer, TrafficLight> mapEntry : value.getTrafficLightMap().entrySet()) {
@@ -95,7 +106,6 @@ public class TrafficSystemManager {
                     TrafficLight trafficLight = mapEntry.getValue();
                     lights.set(String.valueOf(integer), trafficLight);
                 }
-                lightSystem.set(String.valueOf(key), value);
             }
             this.trafficLightYML.saveConfigSilent();
         }

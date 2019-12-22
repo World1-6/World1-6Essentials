@@ -5,7 +5,6 @@ main: World16.Main.Main
 api-version: 1.14
 
 softdepend: [WorldEdit]
-depend: [ProtocolLib]
 
 commands:
   World1-6Essentials:
