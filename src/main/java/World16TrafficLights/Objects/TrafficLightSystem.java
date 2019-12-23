@@ -4,7 +4,6 @@ import World16.Main.Main;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class TrafficLightSystem implements ConfigurationSerializable {
@@ -27,18 +26,7 @@ public class TrafficLightSystem implements ConfigurationSerializable {
 
     public void doLight(TrafficLightState trafficLightState) {
         this.lightState = trafficLightState;
-
-        Iterator<Map.Entry<Integer, TrafficLight>> iterator = trafficLightMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Integer, TrafficLight> entry = iterator.next();
-            if (entry.getValue().doLight(trafficLightState)) {
-                //SUCCUS
-            } else {
-                //FAILELD
-                iterator.remove();
-
-            }
-        }
+        trafficLightMap.entrySet().removeIf(entry -> !entry.getValue().doLight(trafficLightState));
     }
 
     public Map<Integer, TrafficLight> getTrafficLightMap() {

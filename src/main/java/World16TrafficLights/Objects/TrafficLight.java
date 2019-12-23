@@ -72,10 +72,12 @@ public class TrafficLight implements ConfigurationSerializable {
         return true;
     }
 
+    //TODO add turn_left
     public boolean turn_left() {
         return yellow();
     }
 
+    //TODO add turn_right
     public boolean turn_right() {
         return yellow();
     }

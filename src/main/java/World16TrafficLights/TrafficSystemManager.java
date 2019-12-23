@@ -110,4 +110,47 @@ public class TrafficSystemManager {
             this.trafficLightYML.saveConfigSilent();
         }
     }
+
+    public void deleteSystem(String key) {
+        if (!isEnabled) return;
+
+        this.trafficSystemMap.get(key.toLowerCase()).stop();
+        this.trafficSystemMap.remove(key.toLowerCase());
+
+        ConfigurationSection mCS = trafficLightYML.getConfig().getConfigurationSection("TrafficSystems");
+        if (mCS == null) return;
+
+        mCS.set(key.toLowerCase(), null);
+        this.trafficLightYML.saveConfigSilent();
+    }
+
+    public void deleteJunction(String key, String junctionKey) {
+        if (!isEnabled) return;
+
+        this.trafficSystemMap.get(key.toLowerCase()).getTrafficLightSystemMap().remove(Integer.valueOf(junctionKey));
+
+        ConfigurationSection mCS = trafficLightYML.getConfig().getConfigurationSection("TrafficSystems");
+        if (mCS == null) return;
+
+        ConfigurationSection trafficLightSystems = mCS.getConfigurationSection(key.toLowerCase() + ".TrafficLightSystems");
+        if (trafficLightSystems == null) return;
+
+        trafficLightSystems.set(junctionKey, null);
+        this.trafficLightYML.saveConfigSilent();
+    }
+
+    public void deleteLight(String key, String junctionKey, String lightKey) {
+        if (!isEnabled) return;
+
+        this.trafficSystemMap.get(key.toLowerCase()).getTrafficLightSystemMap().get(Integer.valueOf(junctionKey)).getTrafficLightMap().remove(Integer.valueOf(lightKey));
+
+        ConfigurationSection mCS = trafficLightYML.getConfig().getConfigurationSection("TrafficSystems");
+        if (mCS == null) return;
+
+        ConfigurationSection trafficLights = mCS.getConfigurationSection(key.toLowerCase() + ".TrafficLightSystems." + junctionKey);
+        if (trafficLights == null) return;
+
+        trafficLights.set(lightKey, null);
+        this.trafficLightYML.saveConfigSilent();
+    }
 }

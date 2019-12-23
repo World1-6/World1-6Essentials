@@ -277,4 +277,8 @@ public class Main extends JavaPlugin {
     public FireAlarmManager getFireAlarmManager() {
         return fireAlarmManager;
     }
+
+    public TrafficSystemManager getTrafficSystemManager() {
+        return trafficSystemManager;
+    }
 }
