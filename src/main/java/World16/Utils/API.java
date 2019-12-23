@@ -331,8 +331,7 @@ public class API {
     }
 
     public void PermissionErrorMessage(Player p) {
-        p.sendMessage(
-                Translate.chat("&4You do not have permission to do this command."));
+        p.sendMessage(Translate.chat("&4You do not have permission to do this command."));
     }
 
     private void ClearHashMapMessage(String place) {

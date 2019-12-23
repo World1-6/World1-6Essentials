@@ -38,12 +38,40 @@ public class TrafficSystem implements ConfigurationSerializable {
                         trafficLightSystemMap.get(currentTrafficLightSystem).doLight(TrafficLightState.GREEN);
                         trafficLightSystemMap.entrySet().stream().filter(key -> key.getKey() != currentTrafficLightSystem).forEach((k -> k.getValue().doLight(TrafficLightState.RED)));
                     }
-                } else if (currentTick <= 14) {
+                } else if (currentTick <= 15) {
                     //YELLOW
                     //ONLY RUN ONE TIME
-                    if (currentTick == 11)
+                    if (currentTick == 11) {
                         trafficLightSystemMap.get(currentTrafficLightSystem).doLight(TrafficLightState.YELLOW);
-                } else if (currentTick == 15) {
+                    } else if (currentTick == 15) {
+                        trafficLightSystemMap.get(currentTrafficLightSystem).doLight(TrafficLightState.RED);
+                    }
+                } else if (trafficSystemType.hasTurningLane() && currentTick <= 26) {
+                    if (currentTick == 16) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().doLight(TrafficLightState.TURN));
+                    } else if (currentTick == 17) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().getTrafficLightMap().forEach((k1, v1) -> v1.off()));
+                    } else if (currentTick == 18) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().doLight(TrafficLightState.TURN));
+                    } else if (currentTick == 19) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().getTrafficLightMap().forEach((k1, v1) -> v1.off()));
+                    } else if (currentTick == 20) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().doLight(TrafficLightState.TURN));
+                    } else if (currentTick == 21) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().getTrafficLightMap().forEach((k1, v1) -> v1.off()));
+                    } else if (currentTick == 22) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().doLight(TrafficLightState.TURN));
+                    } else if (currentTick == 23) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().getTrafficLightMap().forEach((k1, v1) -> v1.off()));
+                    } else if (currentTick == 24) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().doLight(TrafficLightState.TURN));
+                    } else if (currentTick == 25) {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().getTrafficLightMap().forEach((k1, v1) -> v1.yellow()));
+                    } else {
+                        trafficLightSystemMap.entrySet().stream().filter((k) -> k.getValue().isTurningJunction()).forEach((k) -> k.getValue().getTrafficLightMap().forEach((k1, v1) -> v1.yellow()));
+                    }
+
+                } else {
                     //RED
                     trafficLightSystemMap.get(currentTrafficLightSystem).doLight(TrafficLightState.RED);
 

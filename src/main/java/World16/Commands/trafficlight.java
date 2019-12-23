@@ -55,29 +55,80 @@ public class trafficlight implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat("/trafficlight create <Name>"));
-            p.sendMessage(Translate.chat("/trafficlight add <Name> <Junction> <INT>"));
-            p.sendMessage(Translate.chat("/trafficlight tick <NAME>"));
+            p.sendMessage(Translate.chat("/trafficlight create [SHOWS HELP TO CREATE"));
+            p.sendMessage(Translate.chat("/trafficlight tick <Name>"));
             return true;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("create")) {
-            String name = args[1].toLowerCase();
-            this.trafficSystemMap.putIfAbsent(name, new TrafficSystem(plugin, TrafficSystemType.ONE_LANE_ROAD));
-            this.trafficSystemMap.get(name).getTrafficLightSystemMap().putIfAbsent(0, new TrafficLightSystem(plugin));
-            this.trafficSystemMap.get(name).getTrafficLightSystemMap().putIfAbsent(1, new TrafficLightSystem(plugin));
-            p.sendMessage(Translate.chat("The trafficlight: " + name + " has been added."));
-            return true;
-        } else if (args.length == 4 && args[0].equalsIgnoreCase("add")) {
-            Block block = api.getBlockPlayerIsLookingAt(p);
-            String name = args[1].toLowerCase();
-            int system = api.asIntOrDefault(args[2], 0);
-            int number = api.asIntOrDefault(args[3], 0);
-            TrafficSystem trafficSystem = this.trafficSystemMap.get(name);
-            trafficSystem.getTrafficLightSystemMap().get(system).getTrafficLightMap().put(number, new TrafficLight(block.getLocation()));
-            p.sendMessage(Translate.chat("ADDED"));
+        } else if (args[0].equalsIgnoreCase("create")) {
+            if (args.length == 1) {
+                p.sendMessage(Translate.chat("/trafficlight create system <Name> <Type>"));
+                p.sendMessage(Translate.chat("/trafficlight create junction <Name> <Int> <isTurningJunction"));
+                p.sendMessage(Translate.chat(""));
+                p.sendMessage(Translate.chat("/trafficlight create light <Name> <Junction> <Int> <O isLeft"));
+                return true;
+            } else if (args[1].equalsIgnoreCase("system")) {
+                String name = args[2].toLowerCase();
+                String rawType = args[3];
+
+                TrafficSystemType trafficSystemType;
+                try {
+                    trafficSystemType = TrafficSystemType.valueOf(rawType);
+                } catch (Exception e) {
+                    p.sendMessage(Translate.chat("Not a valid TrafficSystemType"));
+                    return true;
+                }
+
+                if (this.trafficSystemMap.get(name) != null) {
+                    p.sendMessage(Translate.chat("Looks like that traffic light system already exists with that name."));
+                    return true;
+                }
+
+                this.trafficSystemMap.put(name, new TrafficSystem(plugin, trafficSystemType));
+                p.sendMessage(Translate.chat(name + " traffic system has been added."));
+                return true;
+            } else if (args[1].equalsIgnoreCase("junction")) {
+                String name = args[2].toLowerCase();
+                int key = api.asIntOrDefault(args[3], 0);
+                boolean isturningJunction = api.asBooleanOrDefault(args[4], false);
+
+                if (this.trafficSystemMap.get(name) == null) {
+                    p.sendMessage(Translate.chat("Looks like that isn't a valid traffic system"));
+                    return true;
+                }
+
+                this.trafficSystemMap.get(name).getTrafficLightSystemMap().putIfAbsent(key, new TrafficLightSystem(plugin, isturningJunction));
+                p.sendMessage(Translate.chat("Junction box has been added to: " + name));
+                return true;
+            } else if (args[1].equalsIgnoreCase("light")) {
+                Block block = api.getBlockPlayerIsLookingAt(p);
+                String name = args[2].toLowerCase();
+                int junctionName = api.asIntOrDefault(args[3], 0);
+                int number = api.asIntOrDefault(args[4], 0);
+                Boolean isLeft = Boolean.valueOf(args[5]);
+
+                if (this.trafficSystemMap.get(name) == null) {
+                    p.sendMessage(Translate.chat("Looks like that isn't a valid traffic system"));
+                    return true;
+                }
+
+                if (this.trafficSystemMap.get(name).getTrafficLightSystemMap().get(junctionName) == null) {
+                    p.sendMessage(Translate.chat("Looks like that isn't a valid junction"));
+                    return true;
+                }
+
+                this.trafficSystemMap.get(name).getTrafficLightSystemMap().get(junctionName).getTrafficLightMap().put(number, new TrafficLight(block.getLocation(), isLeft));
+                return true;
+            }
         } else if (args[0].equalsIgnoreCase("tick")) {
             String name = args[1].toLowerCase();
+
+            if (this.trafficSystemMap.get(name) == null) {
+                p.sendMessage(Translate.chat("Looks like that isn't a valid traffic system"));
+                return true;
+            }
+
             this.trafficSystemMap.get(name).tick();
-            p.sendMessage(Translate.chat("STARTED TICKING"));
+            p.sendMessage(Translate.chat(name + " has started ticking"));
+            return true;
         }
         return true;
     }

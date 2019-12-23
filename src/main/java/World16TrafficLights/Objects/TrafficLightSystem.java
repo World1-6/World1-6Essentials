@@ -12,11 +12,17 @@ public class TrafficLightSystem implements ConfigurationSerializable {
     private Main plugin;
 
     private Map<Integer, TrafficLight> trafficLightMap;
+    private boolean isTurningJunction;
     private TrafficLightState lightState;
 
-    public TrafficLightSystem(Main plugin) {
+    public TrafficLightSystem(Main plugin, boolean isTurningJunction) {
         this.plugin = plugin;
+        this.isTurningJunction = isTurningJunction;
         this.trafficLightMap = new HashMap<>();
+    }
+
+    public TrafficLightSystem(Main plugin) {
+        this(plugin, false);
     }
 
     public void doLight(TrafficLightState trafficLightState) {
@@ -39,17 +45,26 @@ public class TrafficLightSystem implements ConfigurationSerializable {
         return trafficLightMap;
     }
 
+    public Main getPlugin() {
+        return plugin;
+    }
+
     public TrafficLightState getLightState() {
         return lightState;
+    }
+
+    public boolean isTurningJunction() {
+        return isTurningJunction;
     }
 
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
+        map.put("isTurningJunction", isTurningJunction);
         return map;
     }
 
     public static TrafficLightSystem deserialize(Map<String, Object> map) {
-        return new TrafficLightSystem(Main.getPlugin());
+        return new TrafficLightSystem(Main.getPlugin(), (boolean) map.get("isTurningJunction"));
     }
 }

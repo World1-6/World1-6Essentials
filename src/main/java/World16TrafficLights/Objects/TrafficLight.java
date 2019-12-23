@@ -15,61 +15,98 @@ import java.util.Map;
 public class TrafficLight implements ConfigurationSerializable {
 
     private Location location;
+    private Boolean isLeft;
 
     public TrafficLight(Location location) {
         this.location = location;
     }
 
+    public TrafficLight(Location location, boolean isLeft) {
+        this.location = location;
+        this.isLeft = isLeft;
+    }
+
     public boolean doLight(TrafficLightState trafficLightState) {
         switch (trafficLightState) {
             case GREEN:
-                return Green();
+                return green();
             case YELLOW:
-                return Yellow();
+                return yellow();
             case RED:
-                return Red();
+                return red();
+            case TURN:
+                if (isLeft) return turn_left();
+                else return turn_right();
         }
         return false;
     }
 
-    public boolean Green() {
+    public boolean green() {
         Banner banner = (Banner) location.getBlock().getState();
+        banner.setBaseColor(DyeColor.BLACK);
         List<Pattern> patterns = new ArrayList<>();
-        patterns.add(new Pattern(DyeColor.LIME, PatternType.TRIANGLE_BOTTOM));
-        patterns.add(new Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER));
+        patterns.add(new Pattern(DyeColor.LIME, PatternType.STRIPE_BOTTOM));
+        patterns.add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
         banner.setPatterns(patterns);
         banner.update();
         return true;
     }
 
-    public boolean Yellow() {
+    public boolean yellow() {
         Banner banner = (Banner) location.getBlock().getState();
         List<Pattern> patterns = new ArrayList<>();
         patterns.add(new Pattern(DyeColor.YELLOW, PatternType.CIRCLE_MIDDLE));
-        patterns.add(new Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER));
         banner.setPatterns(patterns);
         banner.update();
         return true;
     }
 
-    public boolean Red() {
+    public boolean red() {
         Banner banner = (Banner) location.getBlock().getState();
+        banner.setBaseColor(DyeColor.BLACK);
         List<Pattern> patterns = new ArrayList<>();
-        patterns.add(new Pattern(DyeColor.RED, PatternType.TRIANGLE_TOP));
-        patterns.add(new Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER));
+        patterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_TOP));
+        patterns.add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
         banner.setPatterns(patterns);
         banner.update();
         return true;
+    }
+
+    public boolean turn_left() {
+        return yellow();
+    }
+
+    public boolean turn_right() {
+        return yellow();
+    }
+
+    public boolean off() {
+        Banner banner = (Banner) location.getBlock().getState();
+        banner.setBaseColor(DyeColor.BLACK);
+        for (int i = 0; i < banner.getPatterns().size(); i++) {
+            banner.removePattern(i);
+        }
+        banner.update();
+        return true;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public Boolean isLeft() {
+        return isLeft;
     }
 
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
         map.put("Location", this.location);
+        map.put("isLeft", isLeft);
         return map;
     }
 
     public static TrafficLight deserialize(Map<String, Object> map) {
-        return new TrafficLight((Location) map.get("Location"));
+        return new TrafficLight((Location) map.get("Location"), (Boolean) map.get("isLeft"));
     }
 }

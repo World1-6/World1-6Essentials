@@ -4,5 +4,6 @@ public enum TrafficLightState {
 
     GREEN,
     YELLOW,
-    RED
+    RED,
+    TURN
 }
