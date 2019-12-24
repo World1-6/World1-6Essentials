@@ -2,6 +2,7 @@ package World16TrafficLights.Objects;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -41,34 +42,50 @@ public class TrafficLight implements ConfigurationSerializable {
         return false;
     }
 
+    public boolean isBanner() {
+        return location.getBlock().getState() instanceof Banner;
+    }
+
     public boolean green() {
-        Banner banner = (Banner) location.getBlock().getState();
-        banner.setBaseColor(DyeColor.BLACK);
-        List<Pattern> patterns = new ArrayList<>();
-        patterns.add(new Pattern(DyeColor.LIME, PatternType.STRIPE_BOTTOM));
-        patterns.add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
-        banner.setPatterns(patterns);
-        banner.update();
+        if (isBanner()) {
+            Banner banner = (Banner) location.getBlock().getState();
+            banner.setBaseColor(DyeColor.BLACK);
+            List<Pattern> patterns = new ArrayList<>();
+            patterns.add(new Pattern(DyeColor.LIME, PatternType.STRIPE_BOTTOM));
+            patterns.add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
+            banner.setPatterns(patterns);
+            banner.update();
+        } else {
+            location.getBlock().setType(Material.LIME_TERRACOTTA);
+        }
         return true;
     }
 
     public boolean yellow() {
-        Banner banner = (Banner) location.getBlock().getState();
-        List<Pattern> patterns = new ArrayList<>();
-        patterns.add(new Pattern(DyeColor.YELLOW, PatternType.CIRCLE_MIDDLE));
-        banner.setPatterns(patterns);
-        banner.update();
+        if (isBanner()) {
+            Banner banner = (Banner) location.getBlock().getState();
+            List<Pattern> patterns = new ArrayList<>();
+            patterns.add(new Pattern(DyeColor.YELLOW, PatternType.CIRCLE_MIDDLE));
+            banner.setPatterns(patterns);
+            banner.update();
+        } else {
+            location.getBlock().setType(Material.YELLOW_TERRACOTTA);
+        }
         return true;
     }
 
     public boolean red() {
-        Banner banner = (Banner) location.getBlock().getState();
-        banner.setBaseColor(DyeColor.BLACK);
-        List<Pattern> patterns = new ArrayList<>();
-        patterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_TOP));
-        patterns.add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
-        banner.setPatterns(patterns);
-        banner.update();
+        if (isBanner()) {
+            Banner banner = (Banner) location.getBlock().getState();
+            banner.setBaseColor(DyeColor.BLACK);
+            List<Pattern> patterns = new ArrayList<>();
+            patterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_TOP));
+            patterns.add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
+            banner.setPatterns(patterns);
+            banner.update();
+        } else {
+            location.getBlock().setType(Material.RED_TERRACOTTA);
+        }
         return true;
     }
 
@@ -83,12 +100,16 @@ public class TrafficLight implements ConfigurationSerializable {
     }
 
     public boolean off() {
-        Banner banner = (Banner) location.getBlock().getState();
-        banner.setBaseColor(DyeColor.BLACK);
-        for (int i = 0; i < banner.getPatterns().size(); i++) {
-            banner.removePattern(i);
+        if (isBanner()) {
+            Banner banner = (Banner) location.getBlock().getState();
+            banner.setBaseColor(DyeColor.BLACK);
+            for (int i = 0; i < banner.getPatterns().size(); i++) {
+                banner.removePattern(i);
+            }
+            banner.update();
+        } else {
+            location.getBlock().setType(Material.BLACK_CONCRETE);
         }
-        banner.update();
         return true;
     }
 
