@@ -5,9 +5,8 @@ import World16.Utils.SimpleMath;
 import World16.Utils.SmoothTeleport;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
 import net.md_5.bungee.api.ChatColor;
@@ -23,7 +22,6 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.BoundingBox;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,8 +68,8 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.elevatorName = nameOfElevator;
         this.elevatorMovement = elevatorMovement;
 
-        this.locationDownPLUS = boundingBox.getMin().toLocation(getBukkitWorld());
-        this.locationUpPLUS = boundingBox.getMax().toLocation(getBukkitWorld());
+        this.locationDownPLUS = boundingBox.getVectorDOWN().toLocation(getBukkitWorld());
+        this.locationUpPLUS = boundingBox.getVectorUP().toLocation(getBukkitWorld());
 
         this.isGoing = false;
         this.isFloorQueueGoing = false;
@@ -82,11 +80,11 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     public Collection<Entity> getEntities() {
-        return getBukkitWorld().getNearbyEntities(SimpleMath.toBoundingBox(locationDownPLUS.toVector(), locationUpPLUS.toVector()));
+        return getBukkitWorld().getNearbyEntities(locationDownPLUS, locationUpPLUS.getX(), locationUpPLUS.getY(), locationDownPLUS.getZ());
     }
 
     public Collection<Player> getPlayers() {
-        return getBukkitWorld().getNearbyEntities(SimpleMath.toBoundingBox(locationDownPLUS.toVector(), locationUpPLUS.toVector())).stream().filter(entity -> entity instanceof Player).map(entity -> (Player) entity).collect(Collectors.toList());
+        return getBukkitWorld().getNearbyEntities(locationDownPLUS, locationUpPLUS.getX(), locationUpPLUS.getY(), locationDownPLUS.getZ()).stream().filter(entity -> entity instanceof Player).map(entity -> (Player) entity).collect(Collectors.toList());
     }
 
     public void callElevator(int whatFloor, int toWhatFloor) {
@@ -223,16 +221,16 @@ public class ElevatorObject implements ConfigurationSerializable {
     private void worldEditMoveUP() {
         WorldEditPlugin worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
 
-        World world = BukkitAdapter.adapt(getBukkitWorld());
-        BlockVector3 blockVector31 = BlockVector3.at(elevatorMovement.getLocationDOWN().getBlockX(), elevatorMovement.getLocationDOWN().getBlockY(), elevatorMovement.getLocationDOWN().getBlockZ());
-        BlockVector3 blockVector32 = BlockVector3.at(elevatorMovement.getLocationUP().getBlockX(), elevatorMovement.getLocationUP().getBlockY(), elevatorMovement.getLocationUP().getBlockZ());
+        World world = BukkitUtil.getLocalWorld(plugin.getServer().getWorld("world"));
+        com.sk89q.worldedit.Vector vectorDOWN = new com.sk89q.worldedit.Vector(BukkitUtil.toVector(elevatorMovement.getLocationDOWN()));
+        com.sk89q.worldedit.Vector vectorUP = new com.sk89q.worldedit.Vector(BukkitUtil.toVector(elevatorMovement.getLocationUP()));
+        CuboidRegion cuboidRegion = new CuboidRegion(world, vectorDOWN, vectorUP);
 
-        CuboidRegion cuboidRegion = new CuboidRegion(world, blockVector31, blockVector32);
+        com.sk89q.worldedit.Vector vectorDIR = new com.sk89q.worldedit.Vector(0, 1, 0);
 
-        BlockVector3 blockVector3DIR = BlockVector3.at(0, 1, 0);
-
-        try (EditSession editSession = worldEditPlugin.getWorldEdit().getEditSessionFactory().getEditSession(world, -1)) {
-            editSession.moveCuboidRegion(cuboidRegion, blockVector3DIR, 1, false, null);
+        EditSession editSession = worldEditPlugin.getWorldEdit().getEditSessionFactory().getEditSession(world, -1);
+        try {
+            editSession.moveCuboidRegion(cuboidRegion, vectorDIR, 1, false, null);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         }
@@ -244,16 +242,16 @@ public class ElevatorObject implements ConfigurationSerializable {
     private void worldEditMoveDOWN() {
         WorldEditPlugin worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
 
-        World world = BukkitAdapter.adapt(getBukkitWorld());
-        BlockVector3 blockVector31 = BlockVector3.at(elevatorMovement.getLocationDOWN().getBlockX(), elevatorMovement.getLocationDOWN().getBlockY(), elevatorMovement.getLocationDOWN().getBlockZ());
-        BlockVector3 blockVector32 = BlockVector3.at(elevatorMovement.getLocationUP().getBlockX(), elevatorMovement.getLocationUP().getBlockY(), elevatorMovement.getLocationUP().getBlockZ());
+        World world = BukkitUtil.getLocalWorld(plugin.getServer().getWorld("world"));
+        com.sk89q.worldedit.Vector vectorDOWN = new com.sk89q.worldedit.Vector(BukkitUtil.toVector(elevatorMovement.getLocationDOWN()));
+        com.sk89q.worldedit.Vector vectorUP = new com.sk89q.worldedit.Vector(BukkitUtil.toVector(elevatorMovement.getLocationUP()));
+        CuboidRegion cuboidRegion = new CuboidRegion(world, vectorDOWN, vectorUP);
 
-        CuboidRegion cuboidRegion = new CuboidRegion(world, blockVector31, blockVector32);
+        com.sk89q.worldedit.Vector vectorDIR = new com.sk89q.worldedit.Vector(0, -1, 0);
 
-        BlockVector3 blockVector3DIR = BlockVector3.at(0, -1, 0);
-
-        try (EditSession editSession = worldEditPlugin.getWorldEdit().getEditSessionFactory().getEditSession(world, -1)) {
-            editSession.moveCuboidRegion(cuboidRegion, blockVector3DIR, 1, false, null);
+        EditSession editSession = worldEditPlugin.getWorldEdit().getEditSessionFactory().getEditSession(world, -1);
+        try {
+            editSession.moveCuboidRegion(cuboidRegion, vectorDIR, 1, false, null);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         }
@@ -343,11 +341,11 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     private void arrivalChime(Location location) {
-        getBukkitWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 10F, 1.8F);
+        getBukkitWorld().playSound(location, Sound.BLOCK_NOTE_PLING, 10F, 1.8F);
     }
 
     private void passingChime(Location location) {
-        getBukkitWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 10F, 1.3F);
+        getBukkitWorld().playSound(location, Sound.BLOCK_NOTE_PLING, 10F, 1.3F);
     }
 
     public void addFloor(FloorObject floorObject) {

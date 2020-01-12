@@ -7,9 +7,8 @@ import World16.Utils.SimpleMath;
 import World16.Utils.Translate;
 import World16Elevators.ElevatorManager;
 import World16Elevators.Objects.*;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.bukkit.selections.Selection;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
@@ -17,7 +16,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -168,15 +166,15 @@ public class elevator implements CommandExecutor {
                     int XBY = api.asIntOrDefault(args[6], 0);
                     int XBZ = api.asIntOrDefault(args[7], 0);
 
-                    Region region = getSelection(p);
+                    Selection selection = worldEditPlugin.getSelection(p);
 
-                    if (region == null) {
+                    if (selection == null) {
                         p.sendMessage("Please make a selection with WorldEdit and then redo the command please.");
                         return true;
                     }
 
-                    Location one = new Location(p.getWorld(), region.getMinimumPoint().getX(), region.getMinimumPoint().getY(), region.getMinimumPoint().getZ());
-                    Location two = new Location(p.getWorld(), region.getMaximumPoint().getX(), region.getMaximumPoint().getY(), region.getMaximumPoint().getZ());
+                    Location one = new Location(p.getWorld(), selection.getMinimumPoint().getX(), selection.getMinimumPoint().getY(), selection.getMinimumPoint().getZ());
+                    Location two = new Location(p.getWorld(), selection.getMaximumPoint().getX(), selection.getMaximumPoint().getY(), selection.getMaximumPoint().getZ());
 
                     ElevatorMovement elevatorMovement = new ElevatorMovement(0, this.api.getBlockPlayerIsLookingAt(p).getLocation(), one, two);
                     BoundingBox boundingBox = SimpleMath.toBoundingBox(new Vector(XAX, XAY, XAZ), new Vector(XBX, XBY, XBZ));
@@ -484,15 +482,5 @@ public class elevator implements CommandExecutor {
             }
             return true;
         }
-    }
-
-    private Region getSelection(Player player) {
-        Region region;
-        try {
-            region = worldEditPlugin.getSession(player).getSelection(BukkitAdapter.adapt(player.getWorld()));
-        } catch (Exception ex) {
-            return null;
-        }
-        return region;
     }
 }

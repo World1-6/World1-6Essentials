@@ -43,7 +43,7 @@ public class unsafenchant implements CommandExecutor {
 
         if (args.length == 2) {
             ItemStack mainHand = p.getInventory().getItemInMainHand();
-            Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(args[0].toLowerCase()));
+            Enchantment enchantment = Enchantment.getByName(args[0].toLowerCase());
             int level = api.asIntOrDefault(args[1], 0);
 
             if (enchantment == null) {

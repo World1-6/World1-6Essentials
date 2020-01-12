@@ -39,12 +39,12 @@ public class ScreenFocus {
         DOWNItemMeta.setDisplayName("DOWN");
         DOWN.setItemMeta(DOWNItemMeta);
 
-        ItemStack SCROLLDOWN = new ItemStack(Material.GOLDEN_SWORD);
+        ItemStack SCROLLDOWN = new ItemStack(Material.GOLD_SWORD);
         ItemMeta SCROLLDOWNItemMeta = SCROLLDOWN.getItemMeta();
         SCROLLDOWNItemMeta.setDisplayName("SCROLL DOWN");
         SCROLLDOWN.setItemMeta(SCROLLDOWNItemMeta);
 
-        ItemStack SCROLLUP = new ItemStack(Material.GOLDEN_SWORD);
+        ItemStack SCROLLUP = new ItemStack(Material.GOLD_SWORD);
         ItemMeta SCROLlUPITEMMETA = SCROLLUP.getItemMeta();
         SCROLlUPITEMMETA.setDisplayName("SCROLL UP");
         SCROLLUP.setItemMeta(SCROLlUPITEMMETA);
