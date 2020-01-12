@@ -10,7 +10,7 @@ import java.util.Map;
 @SerializableAs("FireAlarmSound")
 public class FireAlarmSound implements ConfigurationSerializable {
 
-    private Sound sound = Sound.BLOCK_NOTE_PLING;
+    private Sound sound = Sound.BLOCK_NOTE_BLOCK_PLING;
     private float volume = 1F;
     private float pitch = 1F;
 

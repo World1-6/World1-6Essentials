@@ -1,17 +1,12 @@
 package World16.Utils;
 
 import World16.Main.Main;
-import World16Elevators.Objects.BoundingBox;
-import net.minecraft.server.v1_12_R1.AxisAlignedBB;
-import net.minecraft.server.v1_12_R1.BlockPosition;
-import net.minecraft.server.v1_12_R1.MinecraftServer;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class SimpleMath {
@@ -116,14 +111,6 @@ public class SimpleMath {
         return result;
     }
 
-    public Collection<Entity> getEntitiesInAABB(Vector one, Vector two) {
-        Collection<Entity> entitiesBukkit = new ArrayList<>();
-        for (net.minecraft.server.v1_12_R1.Entity entity : MinecraftServer.getServer().getWorld().getEntities(null, new AxisAlignedBB(new BlockPosition(one.getBlockX(), one.getBlockY(), one.getBlockZ()), new BlockPosition(two.getBlockX(), two.getBlockY(), two.getBlockZ())))) {
-            entitiesBukkit.add(entity.getBukkitEntity());
-        }
-        return entitiesBukkit;
-    }
-
     public boolean isInAABBSimple(Vector entity, Vector one, Vector two) {
         return entity.isInAABB(Vector.getMinimum(one, two), Vector.getMaximum(one, two));
     }
@@ -133,6 +120,6 @@ public class SimpleMath {
     }
 
     public static BoundingBox toBoundingBox(Vector one, Vector two) {
-        return new BoundingBox(new Vector(one.getX(), one.getY(), one.getZ()), new Vector(two.getX(), two.getY(), two.getZ()));
+        return new BoundingBox(one.getX(), one.getY(), one.getZ(), two.getX(), two.getY(), two.getZ());
     }
 }

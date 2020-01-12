@@ -56,7 +56,7 @@ public class TrafficLight implements ConfigurationSerializable {
             banner.setPatterns(patterns);
             banner.update();
         } else {
-            location.getBlock().setType(Material.LIME_GLAZED_TERRACOTTA);
+            location.getBlock().setType(Material.LIME_TERRACOTTA);
         }
         return true;
     }
@@ -69,7 +69,7 @@ public class TrafficLight implements ConfigurationSerializable {
             banner.setPatterns(patterns);
             banner.update();
         } else {
-            location.getBlock().setType(Material.YELLOW_GLAZED_TERRACOTTA);
+            location.getBlock().setType(Material.YELLOW_TERRACOTTA);
         }
         return true;
     }
@@ -84,7 +84,7 @@ public class TrafficLight implements ConfigurationSerializable {
             banner.setPatterns(patterns);
             banner.update();
         } else {
-            location.getBlock().setType(Material.RED_GLAZED_TERRACOTTA);
+            location.getBlock().setType(Material.RED_TERRACOTTA);
         }
         return true;
     }
@@ -108,7 +108,7 @@ public class TrafficLight implements ConfigurationSerializable {
             }
             banner.update();
         } else {
-            location.getBlock().setType(Material.CONCRETE);
+            location.getBlock().setType(Material.BLACK_CONCRETE);
         }
         return true;
     }

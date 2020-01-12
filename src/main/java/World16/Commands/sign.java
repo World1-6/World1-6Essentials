@@ -51,7 +51,7 @@ public class sign implements CommandExecutor {
             p.sendMessage(Translate.chat("&6/sign edit &9<Edits sign>"));
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("give")) {
-            ItemStack item1 = new ItemStack(Material.SIGN, 1);
+            ItemStack item1 = new ItemStack(Material.OAK_SIGN, 1);
             item1.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
             p.getInventory().addItem(item1);
             return true;

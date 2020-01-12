@@ -35,7 +35,7 @@ public class bed implements CommandExecutor {
             return true;
         }
 
-        ItemStack item = InventoryUtils.createItem(Material.BED, 1, "Bed", "Bed");
+        ItemStack item = InventoryUtils.createItem(Material.RED_BED, 1, "Bed", "Bed");
         p.getInventory().addItem(item);
         return true;
     }

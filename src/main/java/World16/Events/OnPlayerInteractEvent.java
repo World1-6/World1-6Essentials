@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -71,7 +72,8 @@ public class OnPlayerInteractEvent implements Listener {
             latestClickedBlocked.put(p.getDisplayName(), event.getClickedBlock().getLocation());
 
             //Stairs
-            if (block.getType() == Material.WOOD_STAIRS && api.getPlayersYML(customConfigManager, p).getBoolean("seats")) {
+            if (block.getBlockData() instanceof Stairs && api.getPlayersYML(customConfigManager, p).getBoolean("seats")) {
+                Stairs stairs = (Stairs) block.getBlockData();
 
                 if (block.getRelative(BlockFace.UP).getType() != Material.AIR) return;
 
