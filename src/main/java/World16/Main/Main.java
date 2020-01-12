@@ -65,6 +65,7 @@ public class Main extends JavaPlugin {
     private SetListMap setListMap;
 
     private DiscordBot discordBot;
+    private PlayerInitializer playerInitializer;
 
     //Managers
     private CustomConfigManager customConfigManager;
@@ -87,6 +88,8 @@ public class Main extends JavaPlugin {
         regEvents();
         regCommands();
         regBStats();
+
+        this.playerInitializer = new PlayerInitializer(this);
 
         getLogger().info("[World1-6Essentials] is now loaded!");
     }
@@ -280,5 +283,9 @@ public class Main extends JavaPlugin {
 
     public TrafficSystemManager getTrafficSystemManager() {
         return trafficSystemManager;
+    }
+
+    public PlayerInitializer getPlayerInitializer() {
+        return playerInitializer;
     }
 }
