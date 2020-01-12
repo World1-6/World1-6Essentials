@@ -29,6 +29,8 @@ public class DebugTab implements TabCompleter {
             tabCompleteMap.get("debug1-6").add("default");
             tabCompleteMap.get("debug1-6").add("date");
             tabCompleteMap.get("debug1-6").add("reload");
+            tabCompleteMap.get("debug1-6").add("load");
+            tabCompleteMap.get("debug1-6").add("unload");
 //            tabCompleteMap.get("debug1-6").add("");
         }
     }
