@@ -28,8 +28,8 @@ public class DebugTab implements TabCompleter {
             tabCompleteMap.get("debug1-6").add("op");
             tabCompleteMap.get("debug1-6").add("default");
             tabCompleteMap.get("debug1-6").add("date");
-            tabCompleteMap.get("debug1-6").add("checkuuid");
-//            tabCompleteMap.get("debug").add("");
+            tabCompleteMap.get("debug1-6").add("reload");
+//            tabCompleteMap.get("debug1-6").add("");
         }
     }
 

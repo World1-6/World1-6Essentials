@@ -108,7 +108,7 @@ public class Main extends JavaPlugin {
         new feed(this);
         new heal(this);
         new fly(this);
-        new debug(this);
+        new debug(this, this.customConfigManager);
         new commandblock(this);
         new bed(this);
         new ram(this);

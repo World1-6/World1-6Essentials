@@ -70,6 +70,26 @@ public class CustomConfigManager {
 
     }
 
+    public void saveAll() {
+        this.shitYml.saveConfigSilent();
+        this.jailsYml.saveConfigSilent();
+        this.warpsYml.saveConfigSilent();
+        this.elevatorsYml.saveConfigSilent();
+        this.playersYml.saveConfigSilent();
+        this.firealarmsYml.saveConfigSilent();
+        this.trafficLightYml.saveConfigSilent();
+    }
+
+    public void reloadAll() {
+        this.shitYml.reloadConfigSilint();
+        this.jailsYml.reloadConfigSilint();
+        this.warpsYml.reloadConfigSilint();
+        this.elevatorsYml.reloadConfigSilint();
+        this.playersYml.reloadConfigSilint();
+        this.firealarmsYml.reloadConfigSilint();
+        this.trafficLightYml.reloadConfigSilint();
+    }
+
     public CustomYmlManager getShitYml() {
         return shitYml;
     }

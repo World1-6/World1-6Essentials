@@ -80,4 +80,8 @@ public class CustomYmlManager {
         Bukkit.getServer().getConsoleSender()
                 .sendMessage(Translate.chat(API.USELESS_TAG + " &6The {nameoffile} has been reloaded.").replace("{nameoffile}", this.nameoffile));
     }
+
+    public void reloadConfigSilint() {
+        configcfg = YamlConfiguration.loadConfiguration(configfile);
+    }
 }

@@ -124,18 +124,6 @@ permissions:
   world16.debug:
     description: Allows to do debug
     default: op
-
-  world16.debug.all:
-    description: Allows to do debug
-    default: op
-    children:
-      world16.debug: true
-      world16.debug.op: true
-      world16.debug.default: true
-      world16.debug.date: true
-      world16.debug.checkuuid: true
-      world16.debig.checkuuid.other: true
-
   world16.echest:
     description: Allows to do echest
     default: op
