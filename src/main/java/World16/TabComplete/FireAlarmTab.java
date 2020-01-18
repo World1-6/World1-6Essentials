@@ -42,6 +42,7 @@ public class FireAlarmTab implements TabCompleter {
             tabCompleteMap.get("firealarm").add("reset");
             tabCompleteMap.get("firealarm").add("sound");
             tabCompleteMap.get("firealarm").add("tempo");
+            tabCompleteMap.get("firealarm").add("trigger");
 //            tabCompleteMap.get("firealarm").add("");
         }
 
@@ -95,6 +96,11 @@ public class FireAlarmTab implements TabCompleter {
                 return TabUtils.getContainsString(args[1], firealarmList);
             } else if (args.length == 3) {
                 return TabUtils.getContainsString(args[2], tempos);
+            }
+            return null;
+        } else if (args[0].equalsIgnoreCase("trigger")) {
+            if (args.length == 2) {
+                return TabUtils.getContainsString(args[1], firealarmList);
             }
             return null;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("reset")) {

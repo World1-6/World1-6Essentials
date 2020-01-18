@@ -28,6 +28,7 @@ import World16Elevators.Objects.ElevatorObject;
 import World16Elevators.Objects.FloorObject;
 import World16Elevators.Objects.SignObject;
 import World16FireAlarms.FireAlarmManager;
+import World16FireAlarms.Objects.FireAlarmSettings;
 import World16FireAlarms.Objects.FireAlarmSound;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.FireAlarmSignOS;
@@ -50,6 +51,7 @@ public class Main extends JavaPlugin {
         ConfigurationSerialization.registerClass(ElevatorObject.class, "ElevatorObject");
         //Fire Alarms
         ConfigurationSerialization.registerClass(FireAlarmSound.class, "FireAlarmSound");
+        ConfigurationSerialization.registerClass(FireAlarmSettings.class, "FireAlarmSettings");
         ConfigurationSerialization.registerClass(SimpleStrobe.class, "IStrobe");
         ConfigurationSerialization.registerClass(SimpleFireAlarm.class, "IFireAlarm");
         ConfigurationSerialization.registerClass(FireAlarmSignOS.class, "FireAlarmSignOS");

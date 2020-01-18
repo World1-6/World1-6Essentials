@@ -5,13 +5,10 @@ import World16.Managers.CustomConfigManager;
 import World16.TabComplete.FireAlarmTab;
 import World16.Utils.API;
 import World16.Utils.Translate;
-import World16FireAlarms.Objects.FireAlarmReason;
-import World16FireAlarms.Objects.FireAlarmSound;
-import World16FireAlarms.Objects.FireAlarmTempo;
+import World16FireAlarms.Objects.*;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Simple.SimpleFireAlarm;
 import World16FireAlarms.Objects.Simple.SimpleStrobe;
-import World16FireAlarms.Objects.TroubleReason;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
@@ -23,6 +20,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
@@ -103,7 +101,7 @@ public class firealarm implements CommandExecutor {
                 return true;
             } else if (args.length == 3 && args[1].equalsIgnoreCase("firealarm")) {
                 String name = args[2].toLowerCase();
-                IFireAlarm iFireAlarm = new SimpleFireAlarm(plugin, name, new FireAlarmSound(), FireAlarmTempo.MARCH_TIME);
+                IFireAlarm iFireAlarm = new SimpleFireAlarm(plugin, name, new FireAlarmSettings(new FireAlarmSound(), FireAlarmTempo.MARCH_TIME, null));
                 this.fireAlarmMap.putIfAbsent(name, iFireAlarm);
                 p.sendMessage(Translate.chat("Fire Alarm: " + name + " is now registered."));
                 return true;
@@ -297,7 +295,7 @@ public class firealarm implements CommandExecutor {
                 }
 
                 FireAlarmSound fireAlarmSound = new FireAlarmSound(realSound, realVolume, realPitch);
-                this.fireAlarmMap.get(fireAlarmName).setFireAlarmSound(fireAlarmSound);
+                this.fireAlarmMap.get(fireAlarmName).getFireAlarmSettings().setFireAlarmSound(fireAlarmSound);
                 p.sendMessage(Translate.chat("Fire alarm sound has been set for " + fireAlarmName));
                 return true;
             }
@@ -316,11 +314,27 @@ public class firealarm implements CommandExecutor {
                     return true;
                 }
 
-                this.fireAlarmMap.get(fireAlarmName).setFireAlarmTempo(fireAlarmTempo);
+                this.fireAlarmMap.get(fireAlarmName).getFireAlarmSettings().setFireAlarmTempo(fireAlarmTempo);
                 p.sendMessage(Translate.chat("Fire Alarm: " + fireAlarmName + " tempo has changed to " + fireAlarmTempo.toString()));
                 return true;
             }
             return true;
+        } else if (args[0].equalsIgnoreCase("trigger")) {
+            if (args.length == 1) {
+                p.sendMessage(Translate.chat("/firealarm trigger <FireAlarm> <Command?NULL>"));
+            } else if (args.length >= 3) {
+                String fireAlarmName = args[1].toLowerCase();
+                String command = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+
+                if (this.fireAlarmMap.get(fireAlarmName) == null) {
+                    p.sendMessage(Translate.chat("Not a fire alarm."));
+                    return true;
+                }
+
+                p.sendMessage(Translate.chat("Trigger has been set to: " + command));
+                this.fireAlarmMap.get(fireAlarmName).getFireAlarmSettings().setCommandTrigger(command);
+                return true;
+            }
         }
         return true;
     }

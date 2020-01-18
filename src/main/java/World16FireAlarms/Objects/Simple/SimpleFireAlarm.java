@@ -2,7 +2,10 @@ package World16FireAlarms.Objects.Simple;
 
 import World16.Main.Main;
 import World16.Utils.SignUtils;
-import World16FireAlarms.Objects.*;
+import World16FireAlarms.Objects.FireAlarmReason;
+import World16FireAlarms.Objects.FireAlarmSettings;
+import World16FireAlarms.Objects.FireAlarmStatus;
+import World16FireAlarms.Objects.FireAlarmTempo;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.interfaces.IFireAlarm;
 import World16FireAlarms.interfaces.IStrobe;
@@ -11,7 +14,10 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 @SerializableAs("IFireAlarm")
 public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
@@ -26,16 +32,14 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     private FireAlarmStatus fireAlarmStatus;
     private boolean isAlarmCurrently = false;
 
-    private FireAlarmSound fireAlarmSound;
-    private FireAlarmTempo fireAlarmTempo;
+    private FireAlarmSettings fireAlarmSettings;
 
-    public SimpleFireAlarm(Main plugin, String name, FireAlarmSound fireAlarmSound, FireAlarmTempo fireAlarmTempo) {
+    public SimpleFireAlarm(Main plugin, String name, FireAlarmSettings fireAlarmSettings) {
         this.plugin = plugin;
 
         this.name = name;
 
-        this.fireAlarmSound = fireAlarmSound;
-        this.fireAlarmTempo = fireAlarmTempo;
+        this.fireAlarmSettings = fireAlarmSettings;
 
         //Maps / Sets
         this.strobesMap = new HashMap<>();
@@ -46,7 +50,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
 
     public void registerStrobe(IStrobe iStrobe) {
         this.strobesMap.putIfAbsent(iStrobe.getName(), iStrobe);
-        this.strobesMap.get(iStrobe.getName()).setFireAlarmSound(fireAlarmSound);
+        this.strobesMap.get(iStrobe.getName()).setFireAlarmSound(fireAlarmSettings.getFireAlarmSound());
     }
 
     public void registerNac() {
@@ -82,8 +86,8 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     public void alarm(FireAlarmReason fireAlarmReason) {
         this.fireAlarmStatus = FireAlarmStatus.ALARM;
 
-        if (fireAlarmTempo == FireAlarmTempo.CODE3) setupCode3();
-        else if (fireAlarmTempo == FireAlarmTempo.MARCH_TIME) setupMarchTime();
+        if (fireAlarmSettings.getFireAlarmTempo() == FireAlarmTempo.CODE3) setupCode3();
+        else if (fireAlarmSettings.getFireAlarmTempo() == FireAlarmTempo.MARCH_TIME) setupMarchTime();
 
         //Signs
         Iterator<Map.Entry<String, Location>> iterator = this.signsMap.entrySet().iterator();
@@ -188,14 +192,6 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     }
 
     //GETTERS AND SETTERS
-    public Main getPlugin() {
-        return plugin;
-    }
-
-    public void setPlugin(Main plugin) {
-        this.plugin = plugin;
-    }
-
     public String getName() {
         return name;
     }
@@ -209,38 +205,17 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         return strobesMap;
     }
 
-    public void setStrobesMap(Map<String, IStrobe> strobesMap) {
-        this.strobesMap = strobesMap;
-    }
-
+    @Override
     public Map<String, Location> getSigns() {
         return signsMap;
     }
 
-    @Override
-    public void setFireAlarmSound(FireAlarmSound fireAlarmSound) {
-        this.fireAlarmSound = fireAlarmSound;
-        for (Map.Entry<String, IStrobe> entry : this.strobesMap.entrySet()) {
-            String k = entry.getKey();
-            IStrobe v = entry.getValue();
-
-            v.setFireAlarmSound(fireAlarmSound);
-        }
+    public void setStrobesMap(Map<String, IStrobe> strobesMap) {
+        this.strobesMap = strobesMap;
     }
 
-    @Override
-    public FireAlarmSound getFireAlarmSound() {
-        return this.fireAlarmSound;
-    }
-
-    @Override
-    public void setFireAlarmTempo(FireAlarmTempo fireAlarmTemp) {
-        this.fireAlarmTempo = fireAlarmTemp;
-    }
-
-    @Override
-    public FireAlarmTempo getFireAlarmTempo() {
-        return this.fireAlarmTempo;
+    public Map<String, Location> getSignsMap() {
+        return signsMap;
     }
 
     public void setSignsMap(Map<String, Location> signsMap) {
@@ -255,6 +230,23 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         this.fireAlarmStatus = fireAlarmStatus;
     }
 
+    public boolean isAlarmCurrently() {
+        return isAlarmCurrently;
+    }
+
+    public void setAlarmCurrently(boolean alarmCurrently) {
+        isAlarmCurrently = alarmCurrently;
+    }
+
+    @Override
+    public FireAlarmSettings getFireAlarmSettings() {
+        return fireAlarmSettings;
+    }
+
+    public void setFireAlarmSettings(FireAlarmSettings fireAlarmSettings) {
+        this.fireAlarmSettings = fireAlarmSettings;
+    }
+
     public int getMarchTime() {
         return marchTime;
     }
@@ -263,16 +255,23 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         this.marchTime = marchTime;
     }
 
+    public int getCode3() {
+        return code3;
+    }
+
+    public void setCode3(int code3) {
+        this.code3 = code3;
+    }
+
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
         map.put("Name", this.name);
-        map.put("FireAlarmSound", this.fireAlarmSound);
-        map.put("FireAlarmTempo", this.fireAlarmTempo.toString());
+        map.put("FireAlarmSettings", this.fireAlarmSettings);
         return map;
     }
 
     public static SimpleFireAlarm deserialize(Map<String, Object> map) {
-        return new SimpleFireAlarm(Main.getPlugin(), (String) map.get("Name"), (FireAlarmSound) map.get("FireAlarmSound"), FireAlarmTempo.valueOf((String) map.get("FireAlarmTempo")));
+        return new SimpleFireAlarm(Main.getPlugin(), (String) map.get("Name"), (FireAlarmSettings) map.get("FireAlarmSettings"));
     }
 }
