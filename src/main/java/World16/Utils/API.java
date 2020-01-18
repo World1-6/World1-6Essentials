@@ -54,7 +54,6 @@ public class API {
     public static final String USELESS_TAG = PREFIX + "->[&bUSELESS&r]";
     public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";
     public static final String EMERGENCY_TAG = PREFIX + "->&c[EMERGENCY]&r";
-    public static final String TOO_DAMN_OLD = "Your mc version is too damn old 1.11 up too 1.14.4 please.";
     public static final String SOMETHING_WENT_WRONG = "Something went wrong.";
     //...
 
@@ -202,7 +201,7 @@ public class API {
         if (version.contains("1.13") || version.contains("1.13.1") || version.contains("1.13.2")) return "1.13";
         if (version.contains("1.12") || version.contains("1.12.1") || version.contains("1.12.2")) return "1.12";
         if (version.contains("1.11") || version.contains("1.11.1") || version.contains("1.11.2")) return "1.11";
-        return TOO_DAMN_OLD;
+        return "TOO DAMN OLD";
     }
 
     public UUID getUUIDFromMojangAPI(String playername) {
