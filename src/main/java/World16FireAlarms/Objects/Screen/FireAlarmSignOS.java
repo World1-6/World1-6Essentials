@@ -96,11 +96,11 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
             return true;
         } else if (this.currentMenu == FireAlarmSignMenu.SETTINGS_CHANGE_TEMPO) {
             if (line == 1) {
-                simpleFireAlarm.setFireAlarmTempo(FireAlarmTempo.MARCH_TIME);
+                simpleFireAlarm.getFireAlarmSettings().setFireAlarmTempo(FireAlarmTempo.MARCH_TIME);
                 player.sendMessage(Translate.chat("Fire Alarm: " + this.fireAlarmName + " tempo has changed to " + FireAlarmTempo.MARCH_TIME.name()));
                 return true;
             } else if (line == 2) {
-                simpleFireAlarm.setFireAlarmTempo(FireAlarmTempo.CODE3);
+                simpleFireAlarm.getFireAlarmSettings().setFireAlarmTempo(FireAlarmTempo.CODE3);
                 player.sendMessage(Translate.chat("Fire Alarm: " + this.fireAlarmName + " tempo has changed to " + FireAlarmTempo.CODE3.name()));
                 return true;
             }
@@ -254,11 +254,11 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
         stringList.add("B2>NOS: " + iFireAlarm.getStrobesMap().size());
 
         stringList.add("Sound: {below}");
-        stringList.add(iFireAlarm.getFireAlarmSound().getSound().name());
-        stringList.add("Volume: " + iFireAlarm.getFireAlarmSound().getVolume());
-        stringList.add("Pitch: " + iFireAlarm.getFireAlarmSound().getPitch());
+        stringList.add(iFireAlarm.getFireAlarmSettings().getFireAlarmSound().getSound().name());
+        stringList.add("Volume: " + iFireAlarm.getFireAlarmSettings().getFireAlarmSound().getVolume());
+        stringList.add("Pitch: " + iFireAlarm.getFireAlarmSettings().getFireAlarmSound().getPitch());
 
-        stringList.add("Tempo: " + iFireAlarm.getFireAlarmTempo().name());
+        stringList.add("Tempo: " + iFireAlarm.getFireAlarmSettings().getFireAlarmTempo().name());
 
         fireAlarmScreen.setMin(0);
         fireAlarmScreen.setMax(3);

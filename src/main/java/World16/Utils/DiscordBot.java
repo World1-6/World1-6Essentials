@@ -15,7 +15,7 @@ public class DiscordBot extends SimpleSocketClient {
     private boolean isWaitingForAResponse;
 
     public DiscordBot(Main plugin, CustomConfigManager customConfigManager, boolean isEnabled) {
-        super("76.182.18.245", 2020);
+        super("ip.andrewsdatacenter.com", 2020);
 
         this.isEnabled = isEnabled;
         this.plugin = plugin;
