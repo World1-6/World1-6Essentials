@@ -86,6 +86,9 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
     public void alarm(FireAlarmReason fireAlarmReason) {
         this.fireAlarmStatus = FireAlarmStatus.ALARM;
 
+        if (fireAlarmSettings.getCommandTrigger() != null)
+            this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), this.fireAlarmSettings.getCommandTrigger());
+
         if (fireAlarmSettings.getFireAlarmTempo() == FireAlarmTempo.CODE3) setupCode3();
         else if (fireAlarmSettings.getFireAlarmTempo() == FireAlarmTempo.MARCH_TIME) setupMarchTime();
 
