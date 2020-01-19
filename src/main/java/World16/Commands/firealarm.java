@@ -130,7 +130,7 @@ public class firealarm implements CommandExecutor {
                 }
 
                 Location location = api.getBlockPlayerIsLookingAt(p).getLocation();
-                this.fireAlarmMap.get(firealarmName).registerStrobe(new SimpleStrobe(location, strobeName, null));
+                this.fireAlarmMap.get(firealarmName).registerStrobe(new SimpleStrobe(location, strobeName));
                 p.sendMessage(Translate.chat("Strobe: " + strobeName + " is now registered with the fire alarm: " + firealarmName));
                 return true;
             }

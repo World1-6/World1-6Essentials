@@ -18,15 +18,13 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
 
     private String name;
     private Location location;
-    private String zone;
 
     private boolean isLight;
 
     private FireAlarmSound fireAlarmSound;
 
-    public SimpleStrobe(Location block, String name, String zoneName) {
+    public SimpleStrobe(Location block, String name) {
         this.location = block;
-        this.zone = zoneName;
         this.name = name;
 
         this.fireAlarmSound = new FireAlarmSound();
@@ -35,8 +33,8 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
         if (data instanceof Lightable) isLight = true;
     }
 
-    public SimpleStrobe(Block block, String name, String zoneName) {
-        this(block.getLocation(), name, zoneName);
+    public SimpleStrobe(Block block, String name) {
+        this(block.getLocation(), name);
     }
 
     public void on() {
@@ -87,11 +85,10 @@ public class SimpleStrobe implements IStrobe, ConfigurationSerializable {
         Map<String, Object> map = new HashMap<>();
         map.put("Location", this.location);
         map.put("Name", this.name);
-        map.put("Zone", this.zone);
         return map;
     }
 
     public static SimpleStrobe deserialize(Map<String, Object> map) {
-        return new SimpleStrobe((Location) map.get("Location"), (String) map.get("Name"), (String) map.get("Zone"));
+        return new SimpleStrobe((Location) map.get("Location"), (String) map.get("Name"));
     }
 }
