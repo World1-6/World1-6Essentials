@@ -20,7 +20,7 @@ public class setspawn implements CommandExecutor {
     public setspawn(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.shitYml = customConfigManager.getShitYml();
-        this.api = new API(this.plugin, customConfigManager);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("setspawn").setExecutor(this);
     }

@@ -45,11 +45,10 @@ public class API {
     //...
 
     private Main plugin;
-    private CustomConfigManager customConfigManager;
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "1/18/2020";
+    public static final String DATE_OF_VERSION = "1/21/2020";
     public static final String PREFIX = "[&9World1-6Ess&r]";
     public static final String USELESS_TAG = PREFIX + "->[&bUSELESS&r]";
     public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";
@@ -65,21 +64,11 @@ public class API {
     private String mysql_PORT;
     // END MYSQL
 
-    // MAIN
     public API(Main plugin) {
         this.plugin = plugin;
         doSetListMap();
         setMySQL();
     }
-
-    public API(Main plugin, CustomConfigManager customConfigManager) {
-        this.plugin = plugin;
-        this.customConfigManager = customConfigManager;
-        doSetListMap();
-        setMySQL();
-    }
-
-    // END MAIN
 
     private void doSetListMap() {
         this.uuidCache = this.plugin.getSetListMap().getUuidCache();
@@ -194,14 +183,7 @@ public class API {
     }
 
     public String getServerVersion() {
-        String version = plugin.getServer().getVersion();
-        if (version.contains("1.15")) return "1.15";
-        if (version.contains("1.14") || version.contains("1.14.1") || version.contains("1.14.2") || version.contains("1.14.3") || version.contains("1.14.4"))
-            return "1.14";
-        if (version.contains("1.13") || version.contains("1.13.1") || version.contains("1.13.2")) return "1.13";
-        if (version.contains("1.12") || version.contains("1.12.1") || version.contains("1.12.2")) return "1.12";
-        if (version.contains("1.11") || version.contains("1.11.1") || version.contains("1.11.2")) return "1.11";
-        return "TOO DAMN OLD";
+        return plugin.getServer().getVersion();
     }
 
     public UUID getUUIDFromMojangAPI(String playername) {

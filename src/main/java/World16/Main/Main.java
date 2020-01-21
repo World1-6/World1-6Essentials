@@ -209,7 +209,7 @@ public class Main extends JavaPlugin {
         this.customConfigManager = new CustomConfigManager(this);
         customConfigManager.registerAllCustomConfigs();
 
-        this.api = new API(this, customConfigManager);
+        this.api = new API(this);
 
         this.jailManager = new JailManager(this.customConfigManager, this);
         this.jailManager.loadAllJails();

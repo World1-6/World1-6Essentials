@@ -29,7 +29,7 @@ public class waitdo implements CommandExecutor {
     public waitdo(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
-        this.api = new API(this.plugin, this.customConfigManager);
+        this.api = this.plugin.getApi();
         this.commandUtils = new CommandUtils(this.plugin);
 
         this.plugin.getCommand("waitdo").setExecutor(this);
