@@ -1,8 +1,11 @@
 package World16.Utils;
 
+import World16.CustomEvents.handlers.AfkEventHandler;
+import World16.CustomEvents.handlers.UnAfkEventHandler;
 import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
 import World16.Managers.CustomYmlManager;
+import World16.Objects.AfkObject;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -36,7 +39,7 @@ public class API {
 
     // Maps
     private Map<String, UUID> uuidCache;
-    private Map<UUID, Location> afkMap;
+    private Map<UUID, AfkObject> afkMap;
     //...
 
     // Lists
@@ -48,7 +51,7 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "1/23/2020";
+    public static final String DATE_OF_VERSION = "1/26/2020";
     public static final String PREFIX = "[&9World1-6Ess&r]";
     public static final String USELESS_TAG = PREFIX + "->[&bUSELESS&r]";
     public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";
@@ -130,7 +133,7 @@ public class API {
     // END OF MYSQL
 
     public boolean isAfk(Player p) {
-        return afkMap.get(p.getUniqueId()) != null;
+        return afkMap.get(p.getUniqueId()).isAfk();
     }
 
     public boolean isFlying(Player p) {
@@ -318,6 +321,18 @@ public class API {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void doAfk(Player player, String color) {
+        if (afkMap.get(player.getUniqueId()).isAfk()) {
+            this.plugin.getServer().broadcastMessage(Translate.chat("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
+            this.afkMap.get(player.getUniqueId()).restart(player);
+            new UnAfkEventHandler(this.plugin, player.getDisplayName());
+        } else if (!afkMap.get(player.getUniqueId()).isAfk()) {
+            this.plugin.getServer().broadcastMessage(Translate.chat("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
+            this.afkMap.get(player.getUniqueId()).setAfk(true, player.getLocation());
+            new AfkEventHandler(this.plugin, player.getDisplayName()); //CALLS THE EVENT.
         }
     }
 

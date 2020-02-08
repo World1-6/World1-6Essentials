@@ -1,5 +1,6 @@
 package World16.Utils;
 
+import World16.Objects.AfkObject;
 import World16.Objects.KeyObject;
 import World16.Objects.LocationObject;
 import World16.Objects.PowerToolObject;
@@ -24,7 +25,7 @@ public class SetListMap {
     private Map<Player, Player> tpaM; //0
     private Map<String, Map<String, List<Location>>> eRamRaw; //0
     private Map<String, Location> latestClickedBlocked; //0
-    private Map<UUID, Location> afkMap; //0
+    private Map<UUID, AfkObject> afkMap; //0
     private Map<UUID, Map<String, Location>> homesMap; //0
     private Map<UUID, ScreenFocus> screenFocusMap; //0
     private Map<UUID, PowerToolObject> powerToolMap; //0
@@ -172,7 +173,7 @@ public class SetListMap {
         return latestClickedBlocked;
     }
 
-    public Map<UUID, Location> getAfkMap() {
+    public Map<UUID, AfkObject> getAfkMap() {
         return afkMap;
     }
 

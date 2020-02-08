@@ -46,9 +46,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
 
     @EventHandler
     public void ChatEvent(org.bukkit.event.player.AsyncPlayerChatEvent event) {
-
         Player p = event.getPlayer();
-
         String cmd = event.getMessage();
 
         //NAME PINGER
@@ -57,6 +55,9 @@ public class OnAsyncPlayerChatEvent implements Listener {
             public void run() {
                 for (Player player : plugin.getServer().getOnlinePlayers()) {
                     if (cmd.contains(player.getDisplayName())) {
+                        if (api.isAfk(player)) {
+                            plugin.getServer().broadcastMessage(Translate.chat("&6[Afk] &eLooks like &r&9" + player.getDisplayName() + "&r&e, is afk they may not respond."));
+                        }
                         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
                     }
 

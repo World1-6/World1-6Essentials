@@ -4,29 +4,19 @@ import World16.Main.Main;
 import World16.Managers.CustomConfigManager;
 import World16.Utils.API;
 import World16.Utils.Translate;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
-import java.util.UUID;
-
 public class isafk implements CommandExecutor {
-
-    //Maps
-    private Map<UUID, Location> afkMap;
-    //...
 
     private Main plugin;
     private API api;
 
     public isafk(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
-
-        this.afkMap = this.plugin.getSetListMap().getAfkMap();
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("isafk").setExecutor(this);
     }

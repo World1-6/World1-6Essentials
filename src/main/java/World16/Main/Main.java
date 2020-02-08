@@ -17,6 +17,7 @@ import World16.Commands.warp.delwarp;
 import World16.Commands.warp.setwarp;
 import World16.Commands.warp.warp;
 import World16.Events.*;
+import World16.Managers.AfkManager;
 import World16.Managers.CustomConfigManager;
 import World16.Managers.JailManager;
 import World16.Managers.WarpManager;
@@ -76,6 +77,7 @@ public class Main extends JavaPlugin {
     private ElevatorManager elevatorManager;
     private FireAlarmManager fireAlarmManager;
     private TrafficSystemManager trafficSystemManager;
+    private AfkManager afkManager;
 
     private API api;
     private OtherPlugins otherPlugins;
@@ -225,6 +227,8 @@ public class Main extends JavaPlugin {
         this.trafficSystemManager = new TrafficSystemManager(this, this.customConfigManager, api.isTrafficSystemEnabled());
         trafficSystemManager.loadAll();
 
+        this.afkManager = new AfkManager(this);
+
         this.discordBot = new DiscordBot(this, this.customConfigManager, this.api.isDiscordBotEnabled());
         this.discordBot.sendServerStartMessage();
     }
@@ -289,5 +293,9 @@ public class Main extends JavaPlugin {
 
     public PlayerInitializer getPlayerInitializer() {
         return playerInitializer;
+    }
+
+    public AfkManager getAfkManager() {
+        return afkManager;
     }
 }

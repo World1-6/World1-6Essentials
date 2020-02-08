@@ -5,6 +5,7 @@ import CCUtils.Storage.SQLite;
 import World16.Main.Main;
 import World16.Managers.HomeManager;
 import World16.Managers.KeyManager;
+import World16.Objects.AfkObject;
 import World16.Objects.KeyObject;
 import World16.Objects.LocationObject;
 import World16.Objects.PowerToolObject;
@@ -19,6 +20,7 @@ public class PlayerInitializer {
     private Map<String, KeyObject> keyDataM;
     private Map<UUID, LocationObject> backM;
     private Map<UUID, PowerToolObject> powerToolMap;
+    private Map<UUID, AfkObject> afkObjectMap;
 
     private List<Player> adminListPlayer;
 
@@ -37,6 +39,7 @@ public class PlayerInitializer {
         this.backM = this.plugin.getSetListMap().getBackM();
         this.adminListPlayer = this.plugin.getSetListMap().getAdminListPlayer();
         this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
+        this.afkObjectMap = this.plugin.getSetListMap().getAfkMap();
 
         //ISQL
         this.isqlKeys = new SQLite(this.plugin.getDataFolder(), "keys");
@@ -54,6 +57,7 @@ public class PlayerInitializer {
         powerToolMap.put(player.getUniqueId(), new PowerToolObject());
 
         this.homeManager.getAllHomesFromISQL(this.isqlHomes, player);
+        this.afkObjectMap.put(player.getUniqueId(), new AfkObject(player));
 
         adminListPlayer.forEach((k) -> {
             player.hidePlayer(k);
