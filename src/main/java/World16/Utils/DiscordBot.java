@@ -22,19 +22,28 @@ public class DiscordBot extends SimpleSocketClient {
         this.customConfigManager = customConfigManager;
     }
 
-    public void sendJoinMessage(String displayName) {
+    public void sendJoinMessage(Player player) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("TYPE", "PlayerJoin");
-        jsonObject.put("Player", displayName);
+        jsonObject.put("Player", player.getDisplayName());
         ourJsonPrintOut(jsonObject, false);
     }
 
-    public void sendLeaveMessage(String displayName) {
+    public void sendLeaveMessage(Player player) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("TYPE", "PlayerQuit");
-        jsonObject.put("Player", displayName);
+        jsonObject.put("Player", player.getDisplayName());
         ourJsonPrintOut(jsonObject, false);
     }
+
+//    public void sendEasyBackupEvent(me.forseth11.easybackup.api.Event event) {
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("TYPE", "EasyBackup");
+//        jsonObject.put("EasyBackupTYPE", event.getType().name());
+//        jsonObject.put("Message", event.getMessage());
+//        jsonObject.put("Time", event.getTime());
+//        ourJsonPrintOut(jsonObject, false);
+//    }
 
     public void sendServerStartMessage() {
         JSONObject jsonObject = new JSONObject();
@@ -48,10 +57,10 @@ public class DiscordBot extends SimpleSocketClient {
         ourJsonPrintOut(jsonObject, false);
     }
 
-    public void sendPlayerMessage(String playerName, String message) {
+    public void sendPlayerMessage(Player player, String message) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("TYPE", "PlayerMessage");
-        jsonObject.put("Player", playerName);
+        jsonObject.put("Player", player.getDisplayName());
         jsonObject.put("Message", message);
         ourJsonPrintOut(jsonObject, false);
     }
