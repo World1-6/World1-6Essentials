@@ -53,9 +53,15 @@ public class ElevatorObject implements ConfigurationSerializable {
     private int topFloor = 0;
     private int topBottomFloor = 0;
 
+    //Helpers
+    private ElevatorMessageHelper elevatorMessageHelper;
+
     private Queue<FloorQueueObject> floorQueueBuffer;
     private Queue<Integer> floorBuffer;
     private StopBy stopBy;
+
+    private boolean isInItBefore;
+    private boolean isInItAfter;
 
     public ElevatorObject(boolean fromSave, Main plugin, String world, String nameOfElevator, ElevatorMovement elevatorMovement, BoundingBox boundingBox) {
         if (plugin != null) this.plugin = plugin;
@@ -77,6 +83,12 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.isFloorQueueGoing = false;
         this.isIdling = false;
         this.isEmergencyStop = false;
+
+        this.isInItBefore = false;
+        this.isInItAfter = false;
+
+        //Helpers
+        this.elevatorMessageHelper = new ElevatorMessageHelper(plugin, this);
 
         if (!fromSave) this.addFloor(FloorObject.from(elevatorMovement));
     }
@@ -114,6 +126,7 @@ public class ElevatorObject implements ConfigurationSerializable {
             return;
         }
         isGoing = true;
+        isInItBefore = !getPlayers().isEmpty();
         floorBuffer.clear(); //Clears the floorBuffer
 
         //Checks if the elevator should go up or down.
@@ -139,18 +152,11 @@ public class ElevatorObject implements ConfigurationSerializable {
                     //Check's if at floor if so then stop the elvator.
                     if (elevatorMovement.getAtDoor().getY() == floorObject.getMainDoor().getY()) {
                         this.cancel();
-                        elevatorMovement.setFloor(floorNum);
-                        floorDone(floorObject, elevatorStatus);
-                        doFloorIdle();
-                        isGoing = false;
-                        return;
+                        if (checkIfFloor(true, floorNum, floorObject, elevatorStatus, Optional.empty(), Optional.empty()))
+                            return;
                     } else if (stopByFloor != null && elevatorMovement.getAtDoor().getY() == stopByFloor.getMainDoor().getY()) {
-                        isIdling = true;
-                        stopBy.getStopByQueue().remove();
-                        elevatorMovement.setFloor(floorNum);
-                        floorDone(stopByFloor, elevatorStatus);
-                        doFloorIdle();
-                        return;
+                        if (checkIfFloor(false, floorNum, floorObject, elevatorStatus, Optional.of(stopBy), Optional.of(stopByFloor)))
+                            return;
                     }
 
 //                    Stop's the elevator if emergencyStop is on.
@@ -186,18 +192,11 @@ public class ElevatorObject implements ConfigurationSerializable {
 //                Check's if at floor if so then stop the elvator.
                 if (elevatorMovement.getAtDoor().getY() == floorObject.getMainDoor().getY()) {
                     this.cancel();
-                    elevatorMovement.setFloor(floorNum);
-                    floorDone(floorObject, elevatorStatus);
-                    doFloorIdle();
-                    isGoing = false;
-                    return;
+                    if (checkIfFloor(true, floorNum, floorObject, elevatorStatus, Optional.empty(), Optional.empty()))
+                        return;
                 } else if (stopByFloor != null && elevatorMovement.getAtDoor().getY() == stopByFloor.getMainDoor().getY()) {
-                    isIdling = true;
-                    stopBy.getStopByQueue().remove();
-                    elevatorMovement.setFloor(floorNum);
-                    floorDone(stopByFloor, elevatorStatus);
-                    doFloorIdle();
-                    return;
+                    if (checkIfFloor(false, floorNum, floorObject, elevatorStatus, Optional.of(stopBy), Optional.of(stopByFloor)))
+                        return;
                 }
 
 //                Stop's the elevator if emergencyStop is on.
@@ -218,6 +217,24 @@ public class ElevatorObject implements ConfigurationSerializable {
 
             }
         }.runTaskTimer(plugin, elevatorMovement.getTicksPerSecond(), elevatorMovement.getTicksPerSecond());
+    }
+
+    private boolean checkIfFloor(boolean isReally, int floorNum, FloorObject floorObject, ElevatorStatus elevatorStatus, Optional<StopBy> stopBy, Optional<FloorObject> stopByFloorOp) {
+        if (isReally) {
+            elevatorMovement.setFloor(floorNum);
+            if (!isInItBefore) elevatorMessageHelper.start();
+            floorDone(floorObject, elevatorStatus);
+            doFloorIdle();
+            isGoing = false;
+        } else {
+            StopBy stopBy1 = stopBy.get();
+            isIdling = true;
+            stopBy1.getStopByQueue().remove();
+            elevatorMovement.setFloor(floorNum);
+            floorDone(stopByFloorOp.get(), elevatorStatus);
+            doFloorIdle();
+        }
+        return true;
     }
 
     private void worldEditMoveUP() {
@@ -291,6 +308,8 @@ public class ElevatorObject implements ConfigurationSerializable {
                 for (SignObject signObject : floorObject.getSignList()) signObject.clearSign();
 
                 oldBlocks.forEach((k, v) -> k.getBlock().setType(v));
+                isInItAfter = !getPlayers().isEmpty();
+                if (!isInItAfter) elevatorMessageHelper.stop();
                 oldBlocks.clear();
             }
         }.runTaskLater(plugin, elevatorMovement.getDoorHolderTicksPerSecond());
