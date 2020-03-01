@@ -91,7 +91,7 @@ public class elevator implements CommandExecutor {
                         return true;
                     }
 
-                    elevatorObjectMap.get(elevatorName).goToFloor(floorNum, ElevatorStatus.DONT_KNOW);
+                    elevatorObjectMap.get(elevatorName).goToFloor(floorNum, ElevatorStatus.DONT_KNOW, ElevatorWho.COMMAND_BLOCK);
                     return true;
                 } else if (args.length == 4 && api.isBoolean(args[3])) {
                     String elevatorName = args[1].toLowerCase();
@@ -107,7 +107,7 @@ public class elevator implements CommandExecutor {
                     }
 
                     ElevatorStatus elevatorStatus = ElevatorStatus.DONT_KNOW;
-                    elevatorObjectMap.get(elevatorName).goToFloor(floorNum, elevatorStatus.upOrDown(goUp));
+                    elevatorObjectMap.get(elevatorName).goToFloor(floorNum, elevatorStatus.upOrDown(goUp), ElevatorWho.COMMAND_BLOCK);
                     return true;
                 } else if (args.length == 4 && !api.isBoolean(args[3])) {
                     String elevatorName = args[1].toLowerCase();
@@ -122,7 +122,7 @@ public class elevator implements CommandExecutor {
                         return true;
                     }
 
-                    elevatorObjectMap.get(elevatorName).callElevator(floorNum, toFloorNum);
+                    elevatorObjectMap.get(elevatorName).callElevator(floorNum, toFloorNum, ElevatorWho.COMMAND_BLOCK);
                     return true;
                 }
                 return true;
@@ -394,7 +394,7 @@ public class elevator implements CommandExecutor {
                         return true;
                     }
 
-                    elevatorObjectMap.get(elevatorName).goToFloor(floorNum, ElevatorStatus.DONT_KNOW);
+                    elevatorObjectMap.get(elevatorName).goToFloor(floorNum, ElevatorStatus.DONT_KNOW, ElevatorWho.PLAYER_COMMAND);
                     p.sendMessage(Translate.chat("Going to floor: " + floorNum + " for the Elevator: " + elevatorName));
                     return true;
                 } else if (args.length == 4 && api.isBoolean(args[3])) {
@@ -413,7 +413,7 @@ public class elevator implements CommandExecutor {
                     }
 
                     ElevatorStatus elevatorStatus = ElevatorStatus.DONT_KNOW;
-                    elevatorObjectMap.get(elevatorName).goToFloor(floorNum, elevatorStatus.upOrDown(goUp));
+                    elevatorObjectMap.get(elevatorName).goToFloor(floorNum, elevatorStatus.upOrDown(goUp), ElevatorWho.PLAYER_COMMAND);
                     p.sendMessage(Translate.chat("Going to floor: " + floorNum + " for the Elevator: " + elevatorName + " ElevatorStatus: " + elevatorStatus.upOrDown(goUp)));
                     return true;
                 } else if (args.length == 4 && !api.isBoolean(args[3])) {
@@ -431,7 +431,7 @@ public class elevator implements CommandExecutor {
                         return true;
                     }
 
-                    elevatorObjectMap.get(elevatorName).callElevator(floorNum, toFloorNum);
+                    elevatorObjectMap.get(elevatorName).callElevator(floorNum, toFloorNum, ElevatorWho.PLAYER_COMMAND);
                     p.sendMessage(Translate.chat("The elevator: " + elevatorName + " has been called to " + floorNum + " to go to " + toFloorNum));
                     return true;
                 }
