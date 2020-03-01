@@ -64,9 +64,9 @@ public class ElevatorRunnable extends BukkitRunnable {
 
             int x = elevatorObject.getElevatorMovement().getAtDoor().getBlockY();
             int z = floorObject.getMainDoor().getBlockY();
-            x += 3;
+            x += 4;
             if (x >= z) {
-                counter += 10;
+                counter += 5;
             }
 
         } else {
@@ -79,9 +79,9 @@ public class ElevatorRunnable extends BukkitRunnable {
 
             int x = elevatorObject.getElevatorMovement().getAtDoor().getBlockY();
             int z = floorObject.getMainDoor().getBlockY();
-            x -= 3;
+            x -= 4;
             if (x <= z) {
-                counter += 10;
+                counter += 5;
             }
         }
         this.cancel();
