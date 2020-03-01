@@ -36,6 +36,7 @@ public class ElevatorRunnable extends BukkitRunnable {
 
 //                Check's if at floor if so then stop the elvator.
         if (elevatorObject.getElevatorMovement().getAtDoor().getY() == floorObject.getMainDoor().getY()) {
+            counter = 0;
             this.cancel();
             elevatorObject.floorStop(floorNum, floorObject, elevatorStatus);
             return;
@@ -63,11 +64,11 @@ public class ElevatorRunnable extends BukkitRunnable {
 
             int x = elevatorObject.getElevatorMovement().getAtDoor().getBlockY();
             int z = floorObject.getMainDoor().getBlockY();
-            x += 6;
+            x += 3;
             if (x >= z) {
-                counter += 2;
+                counter += 10;
             }
-            new ElevatorRunnable(plugin, elevatorObject, goUP, floorNum, elevatorStatus).runTaskTimer(plugin, 0L, counter);
+
         } else {
             elevatorObject.worldEditMoveDOWN();
 
@@ -75,7 +76,15 @@ public class ElevatorRunnable extends BukkitRunnable {
             for (Player player : elevatorObject.getPlayers()) {
                 SmoothTeleport.teleport(player, player.getLocation().subtract(0, 1, 0));
             }
-            new ElevatorRunnable(plugin, elevatorObject, goUP, floorNum, elevatorStatus).run();
+
+            int x = elevatorObject.getElevatorMovement().getAtDoor().getBlockY();
+            int z = floorObject.getMainDoor().getBlockY();
+            x -= 3;
+            if (x <= z) {
+                counter += 10;
+            }
         }
+        this.cancel();
+        new ElevatorRunnable(plugin, elevatorObject, goUP, floorNum, elevatorStatus).runTaskLater(plugin, counter);
     }
 }

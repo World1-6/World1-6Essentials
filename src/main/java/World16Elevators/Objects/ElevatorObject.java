@@ -139,7 +139,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.elevatorMovement.setFloor(null); //Not on a floor.
 
         //Start ticking the elevator.
-        new ElevatorRunnable(plugin, this, goUp, floorNum, elevatorStatus).run();
+        new ElevatorRunnable(plugin, this, goUp, floorNum, elevatorStatus).runTask(plugin);
     }
 
     protected void floorStop(int floorNum, FloorObject floorObject, ElevatorStatus elevatorStatus) {
