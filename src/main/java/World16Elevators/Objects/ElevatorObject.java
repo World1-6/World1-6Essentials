@@ -56,6 +56,7 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     //Helpers
     private ElevatorMessageHelper elevatorMessageHelper;
+    //...
 
     private Queue<FloorQueueObject> floorQueueBuffer;
     private Queue<Integer> floorBuffer;
@@ -63,6 +64,8 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     private boolean isPlayersInItBefore;
     private boolean isPlayersInItAfter;
+
+    private FloorQueueObject whereItsCurrentlyGoing;
 
     public ElevatorObject(boolean fromSave, Main plugin, String world, String nameOfElevator, ElevatorMovement elevatorMovement, BoundingBox boundingBox) {
         if (plugin != null) this.plugin = plugin;
@@ -81,12 +84,14 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.locationUpPLUS = boundingBox.getMax().toLocation(getBukkitWorld());
 
         this.isGoing = false;
-        this.isFloorQueueGoing = false;
         this.isIdling = false;
+        this.isFloorQueueGoing = false;
         this.isEmergencyStop = false;
 
         this.isPlayersInItBefore = false;
         this.isPlayersInItAfter = false;
+
+        this.whereItsCurrentlyGoing = null;
 
         //Helpers
         this.elevatorMessageHelper = new ElevatorMessageHelper(plugin, this);
@@ -140,12 +145,15 @@ public class ElevatorObject implements ConfigurationSerializable {
 
         this.elevatorMovement.setFloor(null); //Not on a floor.
 
+        this.whereItsCurrentlyGoing = new FloorQueueObject(floorNum, elevatorStatus);
+
         //Start ticking the elevator.
         new ElevatorRunnable(plugin, this, goUp, floorNum, elevatorStatus).runTask(plugin);
     }
 
     protected void floorStop(int floorNum, FloorObject floorObject, ElevatorStatus elevatorStatus) {
         elevatorMovement.setFloor(floorNum);
+        this.whereItsCurrentlyGoing = null;
         if (!isPlayersInItBefore) elevatorMessageHelper.start();
         floorDone(floorObject, elevatorStatus);
         doFloorIdle();
@@ -493,6 +501,14 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     public void setElevatorControllerName(String elevatorControllerName) {
         this.elevatorControllerName = elevatorControllerName;
+    }
+
+    public FloorQueueObject getWhereItsCurrentlyGoing() {
+        return whereItsCurrentlyGoing;
+    }
+
+    public void setWhereItsCurrentlyGoing(FloorQueueObject whereItsCurrnetlyGoing) {
+        this.whereItsCurrentlyGoing = whereItsCurrnetlyGoing;
     }
 
     @Override

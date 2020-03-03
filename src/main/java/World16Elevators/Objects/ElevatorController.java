@@ -34,15 +34,9 @@ public class ElevatorController implements ConfigurationSerializable {
     }
 
     public ElevatorObject getClosestElevator(int floorNumber, boolean smart, ElevatorStatus elevatorStatus) {
-        Optional<ElevatorObject> optionalElevatorObject = this.elevatorsMap.values().stream().min(Comparator.comparingInt(i -> Math.abs(i.getElevatorMovement().getAtDoor().getBlockY() - i.getFloor(floorNumber).getMainDoor().getBlockY())));
-        if (smart) {
-            if (elevatorStatus == ElevatorStatus.DONT_KNOW) return optionalElevatorObject.get();
-
-            Optional<ElevatorObject> s1 = this.elevatorsMap.values().stream().filter(elevatorObject -> elevatorObject.isGoing() && elevatorObject.getStopBy().toElevatorStatus() == elevatorStatus && elevatorObject.getFloorBuffer().contains(floorNumber)).min(Comparator.comparingInt(i -> Math.abs(i.getElevatorMovement().getAtDoor().getBlockY() - i.getFloor(floorNumber).getMainDoor().getBlockY())));
-            return s1.orElseGet(optionalElevatorObject::get);
-        }
-
-        return optionalElevatorObject.get();
+        Optional<ElevatorObject> optionalElevatorObject = this.elevatorsMap.values().stream().filter(elevatorObject -> !elevatorObject.isGoing()).min(Comparator.comparingInt(i -> Math.abs(i.getElevatorMovement().getAtDoor().getBlockY() - i.getFloor(floorNumber).getMainDoor().getBlockY())));
+        Optional<ElevatorObject> optionalElevatorObject1 = this.elevatorsMap.values().stream().filter(ElevatorObject::isGoing).filter(elevatorObject -> elevatorObject.getFloorBuffer().contains(floorNumber) && elevatorObject.getStopBy().toElevatorStatus() == elevatorStatus).findFirst();
+        return optionalElevatorObject1.orElseGet(optionalElevatorObject::get);
     }
 
     public ElevatorObject getElevator(String name) {
