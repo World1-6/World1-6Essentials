@@ -4,7 +4,7 @@ import World16.Objects.AfkObject;
 import World16.Objects.KeyObject;
 import World16.Objects.LocationObject;
 import World16.Objects.PowerToolObject;
-import World16Elevators.Objects.ElevatorObject;
+import World16Elevators.Objects.ElevatorController;
 import World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import World16FireAlarms.Objects.Screen.ScreenFocus;
 import World16FireAlarms.interfaces.IFireAlarm;
@@ -34,7 +34,7 @@ public class SetListMap {
     private Map<String, UUID> uuidCache; //1
     private Map<String, Location> jails; //1
     private Map<String, List<String>> tabCompleteMap; //1
-    private Map<String, ElevatorObject> elevatorObjectMap; //1
+    private Map<String, ElevatorController> elevatorObjectMap; //1
     private Map<String, IFireAlarm> fireAlarmMap; //1
     private Map<Location, FireAlarmScreen> fireAlarmScreenMap; //1
     private Map<String, Location> warpsMap; //1
@@ -209,7 +209,7 @@ public class SetListMap {
         return adminList;
     }
 
-    public Map<String, ElevatorObject> getElevatorObjectMap() {
+    public Map<String, ElevatorController> getElevatorObjectMap() {
         return elevatorObjectMap;
     }
 

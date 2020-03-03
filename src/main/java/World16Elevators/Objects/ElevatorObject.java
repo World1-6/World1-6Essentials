@@ -302,6 +302,13 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.floorsMap.putIfAbsent(floorObject.getFloor(), floorObject);
     }
 
+    public void deleteFloor(int floor){
+        if (floor >= 1) this.topFloor--;
+        else if (floor < 0) this.topBottomFloor++;
+
+        this.floorsMap.remove(floor);
+    }
+
     public FloorObject getFloor(int floor) {
         if (this.floorsMap.get(floor) != null) {
             return this.floorsMap.get(floor);
