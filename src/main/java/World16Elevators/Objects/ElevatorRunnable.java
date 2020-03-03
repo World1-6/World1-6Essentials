@@ -15,17 +15,20 @@ public class ElevatorRunnable extends BukkitRunnable {
     private FloorObject floorObject;
     private ElevatorStatus elevatorStatus;
 
-    int counter = 0;
+    int counter;
 
-    public ElevatorRunnable(Main plugin, ElevatorObject elevatorObject, boolean goUP, int floorNum, ElevatorStatus elevatorStatus) {
+    public ElevatorRunnable(Main plugin, ElevatorObject elevatorObject, boolean goUP, int floorNum, ElevatorStatus elevatorStatus, int counter) {
         this.plugin = plugin;
         this.elevatorObject = elevatorObject;
         this.goUP = goUP;
         this.floorNum = floorNum;
         this.floorObject = elevatorObject.getFloor(floorNum);
         this.elevatorStatus = elevatorStatus;
+        this.counter = counter;
+    }
 
-        counter = (int) elevatorObject.getElevatorMovement().getTicksPerSecond();
+    public ElevatorRunnable(Main plugin, ElevatorObject elevatorObject, boolean goUp, int floorNum, ElevatorStatus elevatorStatus) {
+        this(plugin, elevatorObject, goUp, floorNum, elevatorStatus, (int) elevatorObject.getElevatorMovement().getTicksPerSecond());
     }
 
     @Override
@@ -64,9 +67,9 @@ public class ElevatorRunnable extends BukkitRunnable {
 
             int x = elevatorObject.getElevatorMovement().getAtDoor().getBlockY();
             int z = floorObject.getMainDoor().getBlockY();
-            x += 4;
+            x += 5;
             if (x >= z) {
-                counter += 5;
+                counter += 1;
             }
 
         } else {
@@ -79,12 +82,12 @@ public class ElevatorRunnable extends BukkitRunnable {
 
             int x = elevatorObject.getElevatorMovement().getAtDoor().getBlockY();
             int z = floorObject.getMainDoor().getBlockY();
-            x -= 4;
+            x -= 5;
             if (x <= z) {
-                counter += 5;
+                counter += 1;
             }
         }
         this.cancel();
-        new ElevatorRunnable(plugin, elevatorObject, goUP, floorNum, elevatorStatus).runTaskLater(plugin, counter);
+        new ElevatorRunnable(plugin, elevatorObject, goUP, floorNum, elevatorStatus, counter).runTaskLater(plugin, counter);
     }
 }

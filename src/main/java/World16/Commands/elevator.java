@@ -495,7 +495,7 @@ public class elevator implements CommandExecutor {
             } else if (args.length > 2) {
                 String controllerName = args[1].toLowerCase();
                 String elevatorName = args[2].toLowerCase();
-                String value = args[3];
+                String value = args[4];
 
                 ElevatorController elevatorController = this.elevatorControllerMap.get(controllerName);
                 if (elevatorController == null) {
@@ -509,15 +509,15 @@ public class elevator implements CommandExecutor {
                     return true;
                 }
 
-                if (args[2].equalsIgnoreCase("ticksPerSecond")) {
+                if (args[3].equalsIgnoreCase("ticksPerSecond")) {
                     long value1 = api.asLongOrDefault(value, ElevatorMovement.DEFAULT_TICKS_PER_SECOND);
                     elevatorObject.getElevatorMovement().setTicksPerSecond(value1);
                     p.sendMessage(Translate.chat("The ticks per second has been updated to: " + value1));
-                } else if (args[2].equalsIgnoreCase("doorHolderTicksPerSecond")) {
+                } else if (args[3].equalsIgnoreCase("doorHolderTicksPerSecond")) {
                     long value1 = api.asLongOrDefault(value, ElevatorMovement.DEFAULT_DOOR_HOLDER_TICKS_PER_SECOND);
                     elevatorObject.getElevatorMovement().setDoorHolderTicksPerSecond(value1);
                     p.sendMessage(Translate.chat("The door holder ticks per second has been updated to: " + value1));
-                } else if (args[2].equalsIgnoreCase("elevatorWaiterTicksPerSecond")) {
+                } else if (args[3].equalsIgnoreCase("elevatorWaiterTicksPerSecond")) {
                     long value1 = api.asLongOrDefault(value, ElevatorMovement.DEFAULT_ELEVATOR_WAITER_TICKS_PER_SECOND);
                     elevatorObject.getElevatorMovement().setElevatorWaiterTicksPerSecond(value1);
                     p.sendMessage(Translate.chat("The elevator waiter ticks per second has been updated to: " + value1));
