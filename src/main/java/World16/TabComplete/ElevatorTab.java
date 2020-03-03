@@ -28,6 +28,7 @@ public class ElevatorTab implements TabCompleter {
         tabCompleteMap.computeIfAbsent("elevator", k -> new ArrayList<>());
 
         if (tabCompleteMap.get("elevator").isEmpty()) {
+            tabCompleteMap.get("elevator").add("controller");
             tabCompleteMap.get("elevator").add("create");
             tabCompleteMap.get("elevator").add("floor");
             tabCompleteMap.get("elevator").add("delete");

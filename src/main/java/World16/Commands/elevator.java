@@ -413,7 +413,9 @@ public class elevator implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("call")) {
             if (args.length == 1) {
                 p.sendMessage(Translate.chat("/elevator call <Controller> <ElevatorName> <FloorNumber>"));
-            } else if (args.length == 4) {
+                p.sendMessage(Translate.chat("/elevator call <Controller> <FloorNumber>"));
+                p.sendMessage(Translate.chat("/elevator call <Controller> <FloorNumber> <Goup?>"));
+            } else if (args.length == 4 && !api.isBoolean(args[3])) {
                 String controllerName = args[1].toLowerCase();
                 String elevatorName = args[2].toLowerCase();
                 int floorNum = api.asIntOrDefault(args[3], 0);
@@ -433,7 +435,36 @@ public class elevator implements CommandExecutor {
                 elevatorObject.goToFloor(floorNum, ElevatorStatus.DONT_KNOW, ElevatorWho.PLAYER_COMMAND);
                 p.sendMessage(Translate.chat("Going to floor: " + floorNum + " for the Elevator: " + elevatorName));
                 return true;
+            } else if (args.length == 3) {
+                String controllerName = args[1].toLowerCase();
+                int floorNum = api.asIntOrDefault(args[2], 0);
+
+                ElevatorController elevatorController = this.elevatorControllerMap.get(controllerName);
+                if (elevatorController == null) {
+                    p.sendMessage("Elevator controller was not found.");
+                    return true;
+                }
+
+                elevatorController.callElevatorClosest(floorNum, ElevatorStatus.DONT_KNOW, ElevatorWho.PLAYER_COMMAND);
+                p.sendMessage(Translate.chat("Going to floor: " + floorNum + " on controller " + controllerName));
+                return true;
+            } else if (args.length == 4 && api.isBoolean(args[3])) {
+                String controllerName = args[1].toLowerCase();
+                int floorNum = api.asIntOrDefault(args[2], 0);
+                boolean booleanOrDefault = api.asBooleanOrDefault(args[3], false);
+
+                ElevatorController elevatorController = this.elevatorControllerMap.get(controllerName);
+                if (elevatorController == null) {
+                    p.sendMessage("Elevator controller was not found.");
+                    return true;
+                }
+
+                ElevatorStatus elevatorStatus = ElevatorStatus.DONT_KNOW;
+                elevatorController.callElevatorClosest(floorNum, elevatorStatus.upOrDown(booleanOrDefault), ElevatorWho.PLAYER_COMMAND);
+                p.sendMessage(Translate.chat("Called the nearest elevator on controller: " + controllerName + " to go to floor: " + floorNum + " and it when go; " + elevatorStatus.upOrDown(booleanOrDefault)));
+                return true;
             }
+            return true;
         } else if (args.length == 4 && args[0].equalsIgnoreCase("rename")) {
             String controllerName = args[1].toLowerCase();
             String elevatorName = args[2].toLowerCase();

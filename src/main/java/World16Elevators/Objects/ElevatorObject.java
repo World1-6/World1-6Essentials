@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 @SerializableAs("ElevatorObject")
 public class ElevatorObject implements ConfigurationSerializable {
 
+    private String elevatorControllerName;
+
     private String elevatorName;
     private String world;
     private ElevatorMovement elevatorMovement;
@@ -302,7 +304,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.floorsMap.putIfAbsent(floorObject.getFloor(), floorObject);
     }
 
-    public void deleteFloor(int floor){
+    public void deleteFloor(int floor) {
         if (floor >= 1) this.topFloor--;
         else if (floor < 0) this.topBottomFloor++;
 
@@ -328,7 +330,7 @@ public class ElevatorObject implements ConfigurationSerializable {
 
         List<BaseComponent[]> componentBuilders = new ArrayList<>();
         for (Integer integer : listAllFloorsInt()) {
-            componentBuilders.add(new ComponentBuilder(String.valueOf(integer)).color(ChatColor.GOLD).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/elevator call " + elevatorName.toLowerCase() + " " + integer)).create());
+            componentBuilders.add(new ComponentBuilder(String.valueOf(integer)).color(ChatColor.GOLD).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/elevator call " + elevatorControllerName + " " + elevatorName + " " + integer)).create());
         }
 
         ComponentBuilder componentBuilder = new ComponentBuilder(messageD).color(ChatColor.YELLOW).bold(true).append("\n");
@@ -483,6 +485,14 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     public void setStopBy(StopBy stopBy) {
         this.stopBy = stopBy;
+    }
+
+    public String getElevatorControllerName() {
+        return elevatorControllerName;
+    }
+
+    public void setElevatorControllerName(String elevatorControllerName) {
+        this.elevatorControllerName = elevatorControllerName;
     }
 
     @Override
