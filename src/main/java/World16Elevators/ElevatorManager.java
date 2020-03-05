@@ -144,11 +144,7 @@ public class ElevatorManager {
         if (elevatorController == null) return;
         elevatorController.getElevatorsMap().remove(elevatorName);
 
-        ConfigurationSection elevatorControllersSection = this.elevatorsYml.getConfig().getConfigurationSection("ElevatorControllers");
-        if (elevatorControllersSection == null) return;
-        ConfigurationSection elevatorControllerSection = elevatorControllersSection.getConfigurationSection(elevatorControllerName.toLowerCase());
-        if (elevatorControllerSection == null) return;
-        ConfigurationSection elevatorsSection = elevatorControllerSection.getConfigurationSection("Elevators");
+        ConfigurationSection elevatorsSection = this.elevatorsYml.getConfig().getConfigurationSection("ElevatorControllers." + elevatorControllerName.toLowerCase() + ".Elevators");
         if (elevatorsSection == null) return;
 
         elevatorsSection.set(elevatorName, null);
@@ -163,15 +159,7 @@ public class ElevatorManager {
         ElevatorObject elevatorObject = elevatorController.getElevatorsMap().get(elevatorName);
         elevatorObject.deleteFloor(floorNum);
 
-        ConfigurationSection elevatorControllersSection = this.elevatorsYml.getConfig().getConfigurationSection("ElevatorControllers");
-        if (elevatorControllersSection == null) return;
-        ConfigurationSection elevatorControllerSection = elevatorControllersSection.getConfigurationSection(elevatorControllerName.toLowerCase());
-        if (elevatorControllerSection == null) return;
-        ConfigurationSection elevatorsSection = elevatorControllerSection.getConfigurationSection("Elevators");
-        if (elevatorsSection == null) return;
-        ConfigurationSection elevatorSection = elevatorsSection.getConfigurationSection(elevatorName);
-        if (elevatorSection == null) return;
-        ConfigurationSection elevatorFloors = elevatorSection.getConfigurationSection("Floors");
+        ConfigurationSection elevatorFloors = this.elevatorsYml.getConfig().getConfigurationSection("ElevatorControllers." + elevatorControllerName.toLowerCase() + ".Elevators." + elevatorName + ".Floors");
         if (elevatorFloors == null) return;
 
         elevatorFloors.set(String.valueOf(floorNum), null);
