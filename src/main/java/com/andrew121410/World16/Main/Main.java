@@ -202,10 +202,10 @@ public class Main extends JavaPlugin {
     }
 
     private void regCustomManagers() {
+        this.api = new API(this);
+
         this.customConfigManager = new CustomConfigManager(this);
         customConfigManager.registerAllCustomConfigs();
-
-        this.api = new API(this);
 
         this.homeManager = new HomeManager(this);
 
