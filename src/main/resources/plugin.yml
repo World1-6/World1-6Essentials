@@ -4,6 +4,7 @@ author: Andrew121410
 main: com.andrew121410.World16.Main.Main
 api-version: 1.15
 
+depend: [Vault]
 softdepend: [WorldEdit]
 
 commands:
@@ -62,6 +63,10 @@ commands:
   seats:
   commandblockfind:
   trafficlight:
+  bal:
+    aliases:
+      - money
+  eco:
 
   gmc:
     aliases:
@@ -104,7 +109,6 @@ permissions:
       world16.back.tp: true
       world16.back.set: true
       world16.back.goto: true
-
 
   world16.bed:
     description: Allows to do bed
@@ -243,3 +247,37 @@ permissions:
   world16.trafficlight:
     description: Allows to do trafficlight
     default: op
+  world16.bal:
+    description: Allows you to do bal command
+    default: true
+  world16.bal.other:
+    description: Allow you to see other balances of other players
+    default: true
+  #    MONEY
+  world16.eco:
+    description: Allows you to do eco command
+    default: op
+  world16.eco.give:
+    description: Allows you to do eco give command
+    default: op
+  world16.eco.take:
+    description: Allows you to do eco take command
+    default: op
+  world16.eco.set:
+    description: Allows you to do eco set command
+    default: op
+  world16.eco.reset:
+    description: Allows you to do eco reset command
+    default: op
+  world16.eco.debug:
+    description: Allows you to do eco reset command
+    default: op
+  world16.eco.op:
+    description: Allows you to do eco admin commands
+    default: op
+    children:
+      world16.eco.give: true
+      world16.eco.take: true
+      world16.eco.set: true
+      world16.eco.reset: true
+      world16.eco.debug: true

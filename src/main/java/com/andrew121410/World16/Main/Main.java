@@ -1,6 +1,8 @@
 package com.andrew121410.World16.Main;
 
 import com.andrew121410.World16.Commands.*;
+import com.andrew121410.World16.Commands.economy.bal;
+import com.andrew121410.World16.Commands.economy.eco;
 import com.andrew121410.World16.Commands.home.delhome;
 import com.andrew121410.World16.Commands.home.home;
 import com.andrew121410.World16.Commands.home.homelist;
@@ -18,6 +20,7 @@ import com.andrew121410.World16.Commands.warp.setwarp;
 import com.andrew121410.World16.Commands.warp.warp;
 import com.andrew121410.World16.Events.*;
 import com.andrew121410.World16.Managers.*;
+import com.andrew121410.World16.Objects.MoneyObject;
 import com.andrew121410.World16.Utils.*;
 import com.andrew121410.World16.test.test1;
 import com.andrew121410.World16Elevators.ElevatorManager;
@@ -39,6 +42,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin {
 
     static {
+        ConfigurationSerialization.registerClass(MoneyObject.class, "MoneyObject");
+
         //Elevators
         ConfigurationSerialization.registerClass(ElevatorController.class, "ElevatorController");
         ConfigurationSerialization.registerClass(SignObject.class, "SignObject");
@@ -73,6 +78,7 @@ public class Main extends JavaPlugin {
     private TrafficSystemManager trafficSystemManager;
     private AfkManager afkManager;
     private HomeManager homeManager;
+    private MoneyManager moneyManager;
 
     private API api;
     private OtherPlugins otherPlugins;
@@ -169,6 +175,10 @@ public class Main extends JavaPlugin {
         new warp(this);
         new setwarp(this);
         new delwarp(this);
+
+        //Economy
+        new bal(this);
+        new eco(this);
     }
 
     private void regEvents() {
@@ -208,6 +218,7 @@ public class Main extends JavaPlugin {
         customConfigManager.registerAllCustomConfigs();
 
         this.homeManager = new HomeManager(this);
+        this.moneyManager = new MoneyManager(this, this.customConfigManager);
 
         this.jailManager = new JailManager(this.customConfigManager, this);
         this.jailManager.loadAllJails();
@@ -290,5 +301,9 @@ public class Main extends JavaPlugin {
 
     public HomeManager getHomeManager() {
         return homeManager;
+    }
+
+    public MoneyManager getMoneyManager() {
+        return moneyManager;
     }
 }

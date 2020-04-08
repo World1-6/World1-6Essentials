@@ -57,6 +57,7 @@ public class API {
     public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";
     public static final String EMERGENCY_TAG = PREFIX + "->&c[EMERGENCY]&r";
     public static final String SOMETHING_WENT_WRONG = "Something went wrong.";
+    public static final int DEFAULT_MONEY = 100;
     //...
 
     public API(Main plugin) {
@@ -183,6 +184,15 @@ public class API {
     public boolean isInteger(String input) {
         try {
             Integer.parseInt(input);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isLong(String input) {
+        try {
+            Long.parseLong(input);
             return true;
         } catch (Exception e) {
             return false;

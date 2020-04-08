@@ -13,6 +13,7 @@ public class CustomConfigManager {
     private CustomYmlManager playersYml;
     private CustomYmlManager firealarmsYml;
     private CustomYmlManager trafficLightYml;
+    private CustomYmlManager moneyYml;
 
     public CustomConfigManager(Main plugin) {
         this.plugin = plugin;
@@ -68,6 +69,12 @@ public class CustomConfigManager {
         this.trafficLightYml.reloadConfig();
         //...
 
+        //money.yml
+        this.moneyYml = new CustomYmlManager(this.plugin);
+        this.moneyYml.setup("money.yml");
+        this.moneyYml.saveConfig();
+        this.moneyYml.reloadConfig();
+        //...
     }
 
     public void saveAll() {
@@ -78,6 +85,7 @@ public class CustomConfigManager {
         this.playersYml.saveConfig();
         this.firealarmsYml.saveConfig();
         this.trafficLightYml.saveConfig();
+        this.moneyYml.saveConfig();
     }
 
     public void reloadAll() {
@@ -88,6 +96,7 @@ public class CustomConfigManager {
         this.playersYml.reloadConfig();
         this.firealarmsYml.reloadConfig();
         this.trafficLightYml.reloadConfig();
+        this.moneyYml.reloadConfig();
     }
 
     public CustomYmlManager getShitYml() {
@@ -116,5 +125,9 @@ public class CustomConfigManager {
 
     public CustomYmlManager getTrafficLightYml() {
         return trafficLightYml;
+    }
+
+    public CustomYmlManager getMoneyYml() {
+        return moneyYml;
     }
 }

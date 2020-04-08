@@ -51,6 +51,7 @@ public class PlayerInitializer {
         powerToolMap.put(player.getUniqueId(), new PowerToolObject());
 
         this.plugin.getHomeManager().load(player);
+        this.plugin.getMoneyManager().get(player.getUniqueId());
         this.afkObjectMap.put(player.getUniqueId(), new AfkObject(player));
 
         adminListPlayer.forEach((k) -> {
@@ -60,6 +61,8 @@ public class PlayerInitializer {
     }
 
     public void unload(Player player) {
+        this.plugin.getMoneyManager().save(player.getUniqueId());
+
         this.plugin.getSetListMap().clearSetListMap(player);
     }
 }

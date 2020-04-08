@@ -1,9 +1,6 @@
 package com.andrew121410.World16.Utils;
 
-import com.andrew121410.World16.Objects.AfkObject;
-import com.andrew121410.World16.Objects.KeyObject;
-import com.andrew121410.World16.Objects.LocationObject;
-import com.andrew121410.World16.Objects.PowerToolObject;
+import com.andrew121410.World16.Objects.*;
 import com.andrew121410.World16Elevators.Objects.ElevatorController;
 import com.andrew121410.World16FireAlarms.Objects.Screen.FireAlarmScreen;
 import com.andrew121410.World16FireAlarms.Objects.Screen.ScreenFocus;
@@ -30,6 +27,7 @@ public class SetListMap {
     private Map<UUID, ScreenFocus> screenFocusMap; //0
     private Map<UUID, PowerToolObject> powerToolMap; //0
     private Map<Player, Arrow> sitMap;
+    private Map<UUID, MoneyObject> moneyMap;
 
     private Map<String, UUID> uuidCache; //1
     private Map<String, Location> jails; //1
@@ -60,6 +58,7 @@ public class SetListMap {
         this.screenFocusMap = new HashMap<>();
         this.powerToolMap = new HashMap<>();
         this.sitMap = new HashMap<>();
+        this.moneyMap = new HashMap<>();
 
         this.uuidCache = new HashMap<>();
         this.jails = new HashMap<>();
@@ -111,6 +110,8 @@ public class SetListMap {
         powerToolMap.remove(p.getUniqueId());
 
         sitMap.remove(p);
+
+        moneyMap.remove(p.getUniqueId());
     }
 
     public void clearAllMaps() {
@@ -132,6 +133,7 @@ public class SetListMap {
         powerToolMap.clear();
         sitMap.clear();
         trafficSystemMap.clear();
+        moneyMap.clear();
     }
 
     public void clearAllLists(Player p) {
@@ -247,5 +249,9 @@ public class SetListMap {
 
     public Map<String, TrafficSystem> getTrafficSystemMap() {
         return trafficSystemMap;
+    }
+
+    public Map<UUID, MoneyObject> getMoneyMap() {
+        return moneyMap;
     }
 }

@@ -21,7 +21,7 @@ public class SimpleMath {
     }
 
     public List<Location> getHollowCube(Location corner1, Location corner2) {
-        List<Location> result = new ArrayList<Location>();
+        List<Location> result = new ArrayList<>();
         World world = corner1.getWorld();
         double minX = Math.min(corner1.getX(), corner2.getX());
         double minY = Math.min(corner1.getY(), corner2.getY());
