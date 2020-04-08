@@ -1,7 +1,7 @@
 package World16.TabComplete;
 
 import World16.Main.Main;
-import World16Elevators.Objects.ElevatorObject;
+import World16Elevators.Objects.ElevatorController;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -16,7 +16,7 @@ public class ElevatorTab implements TabCompleter {
 
     //Maps
     private Map<String, List<String>> tabCompleteMap;
-    private Map<String, ElevatorObject> elevatorObjectMap;
+    private Map<String, ElevatorController> elevatorControllerMap;
     //...
 
     private Main plugin;
@@ -28,6 +28,7 @@ public class ElevatorTab implements TabCompleter {
         tabCompleteMap.computeIfAbsent("elevator", k -> new ArrayList<>());
 
         if (tabCompleteMap.get("elevator").isEmpty()) {
+            tabCompleteMap.get("elevator").add("controller");
             tabCompleteMap.get("elevator").add("create");
             tabCompleteMap.get("elevator").add("floor");
             tabCompleteMap.get("elevator").add("delete");
@@ -41,7 +42,7 @@ public class ElevatorTab implements TabCompleter {
 //            tabCompleteMap.get("back").add("");
         }
 
-        this.elevatorObjectMap = this.plugin.getSetListMap().getElevatorObjectMap();
+        this.elevatorControllerMap = this.plugin.getSetListMap().getElevatorObjectMap();
     }
 
     @Override
@@ -55,40 +56,54 @@ public class ElevatorTab implements TabCompleter {
             return null;
         }
 
-        List<String> elevatorList = new ArrayList<>(this.elevatorObjectMap.keySet());
+        List<String> controllerList = new ArrayList<>(this.elevatorControllerMap.keySet());
 
         if (args.length == 1) {
             return TabUtils.getContainsString(args[0], tabCompleteMap.get("elevator"));
+        } else if (args[0].equalsIgnoreCase("controller")) {
+            if (args.length == 2) {
+                return TabUtils.getContainsString(args[1], Arrays.asList("create", "delete"));
+            } else if (args[1].equalsIgnoreCase("delete")) {
+                return TabUtils.getContainsString(args[2], controllerList);
+            }
         } else if (args[0].equalsIgnoreCase("delete")) {
-            return TabUtils.getContainsString(args[1], elevatorList);
+            if (args.length == 2) {
+                return TabUtils.getContainsString(args[1], controllerList);
+            }
         } else if (args[0].equalsIgnoreCase("rename")) {
-            return TabUtils.getContainsString(args[1], elevatorList);
+            if (args.length == 2) {
+                return TabUtils.getContainsString(args[1], controllerList);
+            }
+            return null;
         } else if (args[0].equalsIgnoreCase("floor")) {
             if (args.length == 2) {
                 return TabUtils.getContainsString(args[1], Arrays.asList("create", "door", "sign", "delete"));
             } else if (args.length == 3) {
-                return TabUtils.getContainsString(args[2], elevatorList);
+                return TabUtils.getContainsString(args[2], controllerList);
             }
+            return null;
         } else if (args[0].equalsIgnoreCase("call")) {
             if (args.length == 2) {
-                return TabUtils.getContainsString(args[1], elevatorList);
+                return TabUtils.getContainsString(args[1], controllerList);
             }
+            return null;
         } else if (args[0].equalsIgnoreCase("shaft")) {
             if (args.length == 2) {
-                return TabUtils.getContainsString(args[1], elevatorList);
-            } else if (args.length == 3) {
-                return TabUtils.getContainsString(args[2], Arrays.asList("ticksPerSecond", "doorHolderTicksPerSecond", "elevatorWaiterTicksPerSecond"));
+                return TabUtils.getContainsString(args[1], controllerList);
+            } else if (args.length == 4) {
+                return TabUtils.getContainsString(args[3], Arrays.asList("ticksPerSecond", "doorHolderTicksPerSecond", "elevatorWaiterTicksPerSecond"));
             }
+            return null;
         } else if (args[0].equalsIgnoreCase("stop")) {
             if (args.length == 2) {
-                return TabUtils.getContainsString(args[1], elevatorList);
+                return TabUtils.getContainsString(args[1], controllerList);
             }
+            return null;
         } else if (args[0].equalsIgnoreCase("tostring")) {
             if (args.length == 2) {
-                return TabUtils.getContainsString(args[1], elevatorList);
+                return TabUtils.getContainsString(args[1], controllerList);
             }
         }
-
         return null;
     }
 }

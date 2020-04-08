@@ -14,14 +14,14 @@ public class StopBy {
     }
 
     //GETTERS AND SETTERS
-    public boolean isGoUp() {
-        return goUp;
-    }
-
     public void setGoUp(boolean goUp) {
         if (goUp) this.stopByQueue = new PriorityQueue<>();
         else this.stopByQueue = new PriorityQueue<>(Collections.reverseOrder());
         this.goUp = goUp;
+    }
+
+    public boolean isGoUp() {
+        return goUp;
     }
 
     public ElevatorStatus toElevatorStatus() {

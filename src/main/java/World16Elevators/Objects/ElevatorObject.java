@@ -2,7 +2,6 @@ package World16Elevators.Objects;
 
 import World16.Main.Main;
 import World16.Utils.SimpleMath;
-import World16.Utils.SmoothTeleport;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -31,6 +30,8 @@ import java.util.stream.Collectors;
 @SerializableAs("ElevatorObject")
 public class ElevatorObject implements ConfigurationSerializable {
 
+    private String elevatorControllerName;
+
     private String elevatorName;
     private String world;
     private ElevatorMovement elevatorMovement;
@@ -55,13 +56,16 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     //Helpers
     private ElevatorMessageHelper elevatorMessageHelper;
+    //...
 
     private Queue<FloorQueueObject> floorQueueBuffer;
     private Queue<Integer> floorBuffer;
     private StopBy stopBy;
 
-    private boolean isInItBefore;
-    private boolean isInItAfter;
+    private boolean isPlayersInItBefore;
+    private boolean isPlayersInItAfter;
+
+    private FloorQueueObject whereItsCurrentlyGoing;
 
     public ElevatorObject(boolean fromSave, Main plugin, String world, String nameOfElevator, ElevatorMovement elevatorMovement, BoundingBox boundingBox) {
         if (plugin != null) this.plugin = plugin;
@@ -80,12 +84,14 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.locationUpPLUS = boundingBox.getMax().toLocation(getBukkitWorld());
 
         this.isGoing = false;
-        this.isFloorQueueGoing = false;
         this.isIdling = false;
+        this.isFloorQueueGoing = false;
         this.isEmergencyStop = false;
 
-        this.isInItBefore = false;
-        this.isInItAfter = false;
+        this.isPlayersInItBefore = false;
+        this.isPlayersInItAfter = false;
+
+        this.whereItsCurrentlyGoing = null;
 
         //Helpers
         this.elevatorMessageHelper = new ElevatorMessageHelper(plugin, this);
@@ -101,12 +107,12 @@ public class ElevatorObject implements ConfigurationSerializable {
         return getBukkitWorld().getNearbyEntities(SimpleMath.toBoundingBox(locationDownPLUS.toVector(), locationUpPLUS.toVector())).stream().filter(entity -> entity instanceof Player).map(entity -> (Player) entity).collect(Collectors.toList());
     }
 
-    public void callElevator(int whatFloor, int toWhatFloor) {
-        goToFloor(whatFloor, ElevatorStatus.DONT_KNOW);
-        goToFloor(toWhatFloor, ElevatorStatus.DONT_KNOW);
+    public void callElevator(int whatFloor, int toWhatFloor, ElevatorWho elevatorWho) {
+        goToFloor(whatFloor, ElevatorStatus.DONT_KNOW, elevatorWho);
+        goToFloor(toWhatFloor, ElevatorStatus.DONT_KNOW, elevatorWho);
     }
 
-    public void goToFloor(int floorNum, ElevatorStatus elevatorStatus) {
+    public void goToFloor(int floorNum, ElevatorStatus elevatorStatus, ElevatorWho elevatorWho) {
         boolean goUp;
 
         //Gets the floor before the elevator starts ticking.
@@ -126,7 +132,7 @@ public class ElevatorObject implements ConfigurationSerializable {
             return;
         }
         isGoing = true;
-        isInItBefore = !getPlayers().isEmpty();
+        isPlayersInItBefore = !getPlayers().isEmpty(); //Checks if player is in it already.
         floorBuffer.clear(); //Clears the floorBuffer
 
         //Checks if the elevator should go up or down.
@@ -139,105 +145,30 @@ public class ElevatorObject implements ConfigurationSerializable {
 
         this.elevatorMovement.setFloor(null); //Not on a floor.
 
-        //Tell the elevator to go down instead of up.
-        if (!goUp) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (isIdling) return;
-                    reCalculateFloorBuffer(goUp);
-                    FloorObject stopByFloor = null;
-                    if (!stopBy.getStopByQueue().isEmpty()) stopByFloor = getFloor(stopBy.getStopByQueue().peek());
+        this.whereItsCurrentlyGoing = new FloorQueueObject(floorNum, elevatorStatus);
 
-                    //Check's if at floor if so then stop the elvator.
-                    if (elevatorMovement.getAtDoor().getY() == floorObject.getMainDoor().getY()) {
-                        this.cancel();
-                        if (checkIfFloor(true, floorNum, floorObject, elevatorStatus, Optional.empty(), Optional.empty()))
-                            return;
-                    } else if (stopByFloor != null && elevatorMovement.getAtDoor().getY() == stopByFloor.getMainDoor().getY()) {
-                        if (checkIfFloor(false, floorNum, floorObject, elevatorStatus, Optional.of(stopBy), Optional.of(stopByFloor)))
-                            return;
-                    }
-
-//                    Stop's the elevator if emergencyStop is on.
-                    if (isEmergencyStop) {
-                        isIdling = false;
-                        isGoing = false;
-                        isEmergencyStop = false;
-                        this.cancel();
-                        return;
-                    }
-
-                    worldEditMoveDOWN();
-
-                    //TP THEM DOWN 1
-                    for (Player player : getPlayers()) {
-                        SmoothTeleport.teleport(player, player.getLocation().subtract(0, 1, 0));
-                    }
-
-                }
-            }.runTaskTimer(plugin, elevatorMovement.getTicksPerSecond(), elevatorMovement.getTicksPerSecond());
-            return;
-        }
-
-        //Tell the elevator to go up instead of down.
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (isIdling) return;
-                reCalculateFloorBuffer(goUp);
-                FloorObject stopByFloor = null;
-                if (!stopBy.getStopByQueue().isEmpty()) stopByFloor = getFloor(stopBy.getStopByQueue().peek());
-
-//                Check's if at floor if so then stop the elvator.
-                if (elevatorMovement.getAtDoor().getY() == floorObject.getMainDoor().getY()) {
-                    this.cancel();
-                    if (checkIfFloor(true, floorNum, floorObject, elevatorStatus, Optional.empty(), Optional.empty()))
-                        return;
-                } else if (stopByFloor != null && elevatorMovement.getAtDoor().getY() == stopByFloor.getMainDoor().getY()) {
-                    if (checkIfFloor(false, floorNum, floorObject, elevatorStatus, Optional.of(stopBy), Optional.of(stopByFloor)))
-                        return;
-                }
-
-//                Stop's the elevator if emergencyStop is on.
-                if (isEmergencyStop) {
-                    isIdling = false;
-                    isGoing = false;
-                    isEmergencyStop = false;
-                    this.cancel();
-                    return;
-                }
-
-                worldEditMoveUP();
-
-                //TP THEM UP 1
-                for (Player player : getPlayers()) {
-                    SmoothTeleport.teleport(player, player.getLocation().add(0, 1, 0));
-                }
-
-            }
-        }.runTaskTimer(plugin, elevatorMovement.getTicksPerSecond(), elevatorMovement.getTicksPerSecond());
+        //Start ticking the elevator.
+        new ElevatorRunnable(plugin, this, goUp, floorNum, elevatorStatus).runTask(plugin);
     }
 
-    private boolean checkIfFloor(boolean isReally, int floorNum, FloorObject floorObject, ElevatorStatus elevatorStatus, Optional<StopBy> stopBy, Optional<FloorObject> stopByFloorOp) {
-        if (isReally) {
-            elevatorMovement.setFloor(floorNum);
-            if (!isInItBefore) elevatorMessageHelper.start();
-            floorDone(floorObject, elevatorStatus);
-            doFloorIdle();
-            isGoing = false;
-        } else {
-            StopBy stopBy1 = stopBy.get();
-            isIdling = true;
-            stopBy1.getStopByQueue().remove();
-            elevatorMovement.setFloor(floorNum);
-            floorDone(stopByFloorOp.get(), elevatorStatus);
-            doFloorIdle();
-        }
-        return true;
+    protected void floorStop(int floorNum, FloorObject floorObject, ElevatorStatus elevatorStatus) {
+        elevatorMovement.setFloor(floorNum);
+        this.whereItsCurrentlyGoing = null;
+        if (!isPlayersInItBefore) elevatorMessageHelper.start();
+        floorDone(floorObject, elevatorStatus);
+        doFloorIdle();
+        isGoing = false;
     }
 
-    private void worldEditMoveUP() {
+    protected void floorStop(int floorNum, ElevatorStatus elevatorStatus, StopBy stopBy, FloorObject stopByFloorOp) {
+        isIdling = true;
+        stopBy.getStopByQueue().remove();
+        elevatorMovement.setFloor(floorNum);
+        floorDone(stopByFloorOp, elevatorStatus);
+        doFloorIdle();
+    }
+
+    protected void worldEditMoveUP() {
         WorldEditPlugin worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
 
         World world = BukkitAdapter.adapt(getBukkitWorld());
@@ -258,7 +189,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         locationDownPLUS.add(0, 1, 0);
     }
 
-    private void worldEditMoveDOWN() {
+    protected void worldEditMoveDOWN() {
         WorldEditPlugin worldEditPlugin = this.plugin.getOtherPlugins().getWorldEditPlugin();
 
         World world = BukkitAdapter.adapt(getBukkitWorld());
@@ -308,8 +239,8 @@ public class ElevatorObject implements ConfigurationSerializable {
                 for (SignObject signObject : floorObject.getSignList()) signObject.clearSign();
 
                 oldBlocks.forEach((k, v) -> k.getBlock().setType(v));
-                isInItAfter = !getPlayers().isEmpty();
-                if (!isInItAfter) elevatorMessageHelper.stop();
+                isPlayersInItAfter = !getPlayers().isEmpty();
+                if (!isPlayersInItAfter) elevatorMessageHelper.stop();
                 oldBlocks.clear();
             }
         }.runTaskLater(plugin, elevatorMovement.getDoorHolderTicksPerSecond());
@@ -325,7 +256,7 @@ public class ElevatorObject implements ConfigurationSerializable {
         else for (int num = this.elevatorMovement.getFloor() - 1; num > floor; num--) floorBuffer.add(num);
     }
 
-    private void reCalculateFloorBuffer(boolean goUp) {
+    protected void reCalculateFloorBuffer(boolean goUp) {
         Integer peek = this.floorBuffer.peek();
         if (peek == null) return;
 
@@ -351,7 +282,7 @@ public class ElevatorObject implements ConfigurationSerializable {
             public void run() {
                 if (!isGoing && !isIdling && !floorQueueBuffer.isEmpty()) {
                     FloorQueueObject floorQueueObject = floorQueueBuffer.peek();
-                    goToFloor(floorQueueObject.getFloorNumber(), floorQueueObject.getElevatorStatus());
+                    goToFloor(floorQueueObject.getFloorNumber(), floorQueueObject.getElevatorStatus(), ElevatorWho.FLOOR_QUEUE);
                     floorQueueBuffer.remove();
                 } else if (floorQueueBuffer.isEmpty()) {
                     isFloorQueueGoing = false;
@@ -381,22 +312,18 @@ public class ElevatorObject implements ConfigurationSerializable {
         this.floorsMap.putIfAbsent(floorObject.getFloor(), floorObject);
     }
 
+    public void deleteFloor(int floor) {
+        if (floor >= 1) this.topFloor--;
+        else if (floor < 0) this.topBottomFloor++;
+
+        this.floorsMap.remove(floor);
+    }
+
     public FloorObject getFloor(int floor) {
         if (this.floorsMap.get(floor) != null) {
             return this.floorsMap.get(floor);
         }
         return null;
-    }
-
-    public void removeFloor(int floor) {
-        floorsMap.remove(floor);
-    }
-
-    public String listAllFloors() {
-        Set<Integer> homeSet = this.floorsMap.keySet();
-        Integer[] integers = homeSet.toArray(new Integer[0]);
-        Arrays.sort(integers);
-        return Arrays.toString(integers);
     }
 
     public Integer[] listAllFloorsInt() {
@@ -411,7 +338,7 @@ public class ElevatorObject implements ConfigurationSerializable {
 
         List<BaseComponent[]> componentBuilders = new ArrayList<>();
         for (Integer integer : listAllFloorsInt()) {
-            componentBuilders.add(new ComponentBuilder(String.valueOf(integer)).color(ChatColor.GOLD).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/elevator call " + elevatorName.toLowerCase() + " " + integer)).create());
+            componentBuilders.add(new ComponentBuilder(String.valueOf(integer)).color(ChatColor.GOLD).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/elevator call " + elevatorControllerName + " " + elevatorName + " " + integer)).create());
         }
 
         ComponentBuilder componentBuilder = new ComponentBuilder(messageD).color(ChatColor.YELLOW).bold(true).append("\n");
@@ -428,6 +355,18 @@ public class ElevatorObject implements ConfigurationSerializable {
     }
 
     //GETTERS AND SETTERS
+    public ElevatorMessageHelper getElevatorMessageHelper() {
+        return elevatorMessageHelper;
+    }
+
+    public boolean isPlayersInItBefore() {
+        return isPlayersInItBefore;
+    }
+
+    public boolean isPlayersInItAfter() {
+        return isPlayersInItAfter;
+    }
+
     public String getElevatorName() {
         return elevatorName;
     }
@@ -554,6 +493,22 @@ public class ElevatorObject implements ConfigurationSerializable {
 
     public void setStopBy(StopBy stopBy) {
         this.stopBy = stopBy;
+    }
+
+    public String getElevatorControllerName() {
+        return elevatorControllerName;
+    }
+
+    public void setElevatorControllerName(String elevatorControllerName) {
+        this.elevatorControllerName = elevatorControllerName;
+    }
+
+    public FloorQueueObject getWhereItsCurrentlyGoing() {
+        return whereItsCurrentlyGoing;
+    }
+
+    public void setWhereItsCurrentlyGoing(FloorQueueObject whereItsCurrnetlyGoing) {
+        this.whereItsCurrentlyGoing = whereItsCurrnetlyGoing;
     }
 
     @Override
