@@ -1,8 +1,8 @@
 name: World1-6Essentials
-version: 0.1
+version: 1.0
 author: Andrew121410
-main: World16.Main.Main
-api-version: 1.14
+main: com.andrew121410.World16.Main.Main
+api-version: 1.15.2
 
 softdepend: [WorldEdit]
 
