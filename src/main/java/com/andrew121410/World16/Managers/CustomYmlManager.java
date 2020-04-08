@@ -14,74 +14,59 @@ public class CustomYmlManager {
 
     private Main plugin;
 
-    // Files & File Configs Here.
-    private FileConfiguration configcfg;
-    private File configfile;
+    private FileConfiguration fileConfiguration;
+    private File file;
 
-    //Strings
-    private String nameoffile;
-    //...
+    private String fileName;
 
     public CustomYmlManager(Main plugin) {
         this.plugin = plugin;
     }
 
-    // --------------------------------------------------------------------------------------------------------
-    public void setup(String nameoffile) {
-        this.nameoffile = nameoffile;
+    public void setup(String fileName) {
+        this.fileName = fileName;
 
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
         }
 
-        configfile = new File(plugin.getDataFolder(), this.nameoffile);
+        file = new File(plugin.getDataFolder(), this.fileName);
 
-        if (!configfile.exists()) {
+        if (!file.exists()) {
             try {
-                configfile.createNewFile();
+                file.createNewFile();
                 Bukkit.getServer().getConsoleSender()
-                        .sendMessage(Translate.chat(API.USELESS_TAG + " The {nameoffile} has been created.").replace("{nameoffile}", this.nameoffile));
+                        .sendMessage(Translate.chat(API.USELESS_TAG + " The {nameoffile} has been created.").replace("{nameoffile}", this.fileName));
             } catch (IOException e) {
                 Bukkit.getServer().getConsoleSender()
                         .sendMessage(Translate
-                                .chat(API.USELESS_TAG + " The {nameoffile} could not make for some reason.").replace("{nameoffile}", this.nameoffile));
+                                .chat(API.USELESS_TAG + " The {nameoffile} could not make for some reason.").replace("{nameoffile}", this.fileName));
             }
         }
 
-        configcfg = YamlConfiguration.loadConfiguration(configfile);
+        fileConfiguration = YamlConfiguration.loadConfiguration(file);
     }
 
     public FileConfiguration getConfig() {
-        return configcfg;
+        return fileConfiguration;
     }
 
     public void saveConfig() {
         try {
-            configcfg.save(configfile);
-            Bukkit.getServer().getConsoleSender()
-                    .sendMessage(Translate.chat(API.USELESS_TAG + " &aThe {nameoffile} has been saved.").replace("{nameoffile}", this.nameoffile));
+            fileConfiguration.save(file);
+            if (this.plugin.getApi().isDebug()) {
+                Bukkit.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " &aThe {name} has been saved.").replace("{name}", this.fileName));
+            }
         } catch (IOException e) {
             Bukkit.getServer().getConsoleSender()
-                    .sendMessage(Translate.chat(API.USELESS_TAG + " &cThe {nameoffile} has been NOT SAVED..").replace("{nameoffile}", this.nameoffile));
-        }
-    }
-
-    public void saveConfigSilent() {
-        try {
-            configcfg.save(configfile);
-        } catch (IOException e) {
-            Bukkit.getServer().getConsoleSender()
-                    .sendMessage(Translate.chat(API.USELESS_TAG + " &cThe {nameoffile} has been NOT SAVED..").replace("{nameoffile}", this.nameoffile));
+                    .sendMessage(Translate.chat(API.USELESS_TAG + " &cThe {name} has been NOT SAVED..").replace("{name}", this.fileName));
         }
     }
 
     public void reloadConfig() {
-        configcfg = YamlConfiguration.loadConfiguration(configfile);
-        Bukkit.getServer().getConsoleSender()
-                .sendMessage(Translate.chat(API.USELESS_TAG + " &6The {nameoffile} has been reloaded.").replace("{nameoffile}", this.nameoffile));
-    }
-
-    public void reloadConfigSilint() {
-        configcfg = YamlConfiguration.loadConfiguration(configfile);
+        fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (this.plugin.getApi().isDebug()) {
+            Bukkit.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " &6The {nameoffile} has been reloaded.").replace("{nameoffile}", this.fileName));
+        }
     }
 }

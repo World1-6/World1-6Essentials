@@ -166,7 +166,7 @@ public class API {
         }
 
         configinstance.getConfig().set(path, location);
-        configinstance.saveConfigSilent();
+        configinstance.saveConfig();
     }
 
     public Block getBlockPlayerIsLookingAt(Player player) {

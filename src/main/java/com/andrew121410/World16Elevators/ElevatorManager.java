@@ -34,7 +34,7 @@ public class ElevatorManager {
         ConfigurationSection elevatorControllersSection = this.elevatorsYml.getConfig().getConfigurationSection("ElevatorControllers");
         if (elevatorControllersSection == null) {
             elevatorControllersSection = this.elevatorsYml.getConfig().createSection("ElevatorControllers");
-            this.elevatorsYml.saveConfigSilent();
+            this.elevatorsYml.saveConfig();
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat("&c[ElevatorManager]&r&6 ElevatorControllers section has been created."));
             return;
         }
@@ -67,7 +67,7 @@ public class ElevatorManager {
         ConfigurationSection elevatorControllersSection = this.elevatorsYml.getConfig().getConfigurationSection("ElevatorControllers");
         if (elevatorControllersSection == null) {
             elevatorControllersSection = this.elevatorsYml.getConfig().createSection("ElevatorControllers");
-            this.elevatorsYml.saveConfigSilent();
+            this.elevatorsYml.saveConfig();
         }
 
         //For each elevator controller.
@@ -79,7 +79,7 @@ public class ElevatorManager {
             ConfigurationSection elevatorControllerSection = elevatorControllersSection.getConfigurationSection(controllerName);
             if (elevatorControllerSection == null) {
                 elevatorControllerSection = elevatorControllersSection.createSection(controllerName);
-                this.elevatorsYml.saveConfigSilent();
+                this.elevatorsYml.saveConfig();
             }
 
             elevatorControllerSection.set("ElevatorController", elevatorController);
@@ -89,7 +89,7 @@ public class ElevatorManager {
             ConfigurationSection elevatorsSection = elevatorControllerSection.getConfigurationSection(elevatorsLocation);
             if (elevatorsSection == null) {
                 elevatorsSection = elevatorControllerSection.createSection(elevatorsLocation);
-                this.elevatorsYml.saveConfigSilent();
+                this.elevatorsYml.saveConfig();
             }
 
             //For each elevator.
@@ -101,7 +101,7 @@ public class ElevatorManager {
                 ConfigurationSection elevatorSection = elevatorsSection.getConfigurationSection(elevatorName);
                 if (elevatorSection == null) {
                     elevatorSection = elevatorsSection.createSection(elevatorName);
-                    this.elevatorsYml.saveConfigSilent();
+                    this.elevatorsYml.saveConfig();
                 }
 
                 elevatorSection.set("ElevatorObject", elevatorObject);
@@ -110,7 +110,7 @@ public class ElevatorManager {
                 ConfigurationSection elevatorFloors = elevatorSection.getConfigurationSection("Floors");
                 if (elevatorFloors == null) {
                     elevatorFloors = elevatorSection.createSection("Floors");
-                    this.elevatorsYml.saveConfigSilent();
+                    this.elevatorsYml.saveConfig();
                 }
 
                 //For each floor do.
@@ -119,9 +119,9 @@ public class ElevatorManager {
                     FloorObject v2 = e.getValue();
                     elevatorFloors.set(String.valueOf(k2), v2);
                 }
-                this.elevatorsYml.saveConfigSilent();
+                this.elevatorsYml.saveConfig();
             }
-            this.elevatorsYml.saveConfigSilent();
+            this.elevatorsYml.saveConfig();
         }
     }
 
@@ -134,7 +134,7 @@ public class ElevatorManager {
         if (elevatorControllersSection == null) return;
 
         elevatorControllersSection.set(name.toLowerCase(), null);
-        this.elevatorsYml.saveConfigSilent();
+        this.elevatorsYml.saveConfig();
     }
 
     public void deleteElevator(String elevatorControllerName, String elevatorName) {
@@ -148,7 +148,7 @@ public class ElevatorManager {
         if (elevatorsSection == null) return;
 
         elevatorsSection.set(elevatorName, null);
-        this.elevatorsYml.saveConfigSilent();
+        this.elevatorsYml.saveConfig();
     }
 
     public void deleteFloorOfElevator(String elevatorControllerName, String elevatorName, int floorNum) {
@@ -163,6 +163,6 @@ public class ElevatorManager {
         if (elevatorFloors == null) return;
 
         elevatorFloors.set(String.valueOf(floorNum), null);
-        this.elevatorsYml.saveConfigSilent();
+        this.elevatorsYml.saveConfig();
     }
 }

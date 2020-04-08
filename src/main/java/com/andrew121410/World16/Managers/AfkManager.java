@@ -6,7 +6,6 @@ import com.andrew121410.World16.Utils.API;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,9 +30,7 @@ public class AfkManager {
         new BukkitRunnable() {
             @Override
             public void run() {
-                Iterator<Map.Entry<UUID, AfkObject>> iterator = afkMap.entrySet().iterator();
-                while (iterator.hasNext()) {
-                    Map.Entry<UUID, AfkObject> entry = iterator.next();
+                for (Map.Entry<UUID, AfkObject> entry : afkMap.entrySet()) {
                     Player player = plugin.getServer().getPlayer(entry.getKey());
                     String color = "&7";
 

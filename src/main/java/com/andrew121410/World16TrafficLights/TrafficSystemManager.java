@@ -32,7 +32,7 @@ public class TrafficSystemManager {
         ConfigurationSection mCS = trafficLightYML.getConfig().getConfigurationSection("TrafficSystems");
         if (mCS == null) {
             trafficLightYML.getConfig().createSection("TrafficSystems");
-            trafficLightYML.saveConfigSilent();
+            trafficLightYML.saveConfig();
             return; //DON'T LOAD
         }
 
@@ -65,7 +65,7 @@ public class TrafficSystemManager {
         ConfigurationSection mCS = trafficLightYML.getConfig().getConfigurationSection("TrafficSystems");
         if (mCS == null) {
             mCS = trafficLightYML.getConfig().createSection("TrafficSystems");
-            trafficLightYML.saveConfigSilent();
+            trafficLightYML.saveConfig();
         }
 
         for (Map.Entry<String, TrafficSystem> entry : trafficSystemMap.entrySet()) {
@@ -75,7 +75,7 @@ public class TrafficSystemManager {
             ConfigurationSection trafficSystem = mCS.getConfigurationSection(k);
             if (trafficSystem == null) {
                 trafficSystem = mCS.createSection(k);
-                this.trafficLightYML.saveConfigSilent();
+                this.trafficLightYML.saveConfig();
             }
 
             trafficSystem.set("TrafficSystem", v);
@@ -83,7 +83,7 @@ public class TrafficSystemManager {
             ConfigurationSection trafficLightSystems = trafficSystem.getConfigurationSection("TrafficLightSystems");
             if (trafficLightSystems == null) {
                 trafficLightSystems = trafficSystem.createSection("TrafficLightSystems");
-                this.trafficLightYML.saveConfigSilent();
+                this.trafficLightYML.saveConfig();
             }
             for (Map.Entry<Integer, TrafficLightSystem> e : v.getTrafficLightSystemMap().entrySet()) {
                 Integer key = e.getKey();
@@ -92,14 +92,14 @@ public class TrafficSystemManager {
                 ConfigurationSection trafficLightSystem = trafficLightSystems.getConfigurationSection(String.valueOf(key));
                 if (trafficLightSystem == null) {
                     trafficLightSystem = trafficLightSystems.createSection(String.valueOf(key));
-                    this.trafficLightYML.saveConfigSilent();
+                    this.trafficLightYML.saveConfig();
                 }
                 trafficLightSystem.set("TrafficLightSystem", value);
 
                 ConfigurationSection lights = trafficLightSystem.getConfigurationSection("Lights");
                 if (lights == null) {
                     lights = trafficLightSystem.createSection("Lights");
-                    this.trafficLightYML.saveConfigSilent();
+                    this.trafficLightYML.saveConfig();
                 }
                 for (Map.Entry<Integer, TrafficLight> mapEntry : value.getTrafficLightMap().entrySet()) {
                     Integer integer = mapEntry.getKey();
@@ -107,7 +107,7 @@ public class TrafficSystemManager {
                     lights.set(String.valueOf(integer), trafficLight);
                 }
             }
-            this.trafficLightYML.saveConfigSilent();
+            this.trafficLightYML.saveConfig();
         }
     }
 
@@ -121,7 +121,7 @@ public class TrafficSystemManager {
         if (mCS == null) return;
 
         mCS.set(key.toLowerCase(), null);
-        this.trafficLightYML.saveConfigSilent();
+        this.trafficLightYML.saveConfig();
     }
 
     public void deleteJunction(String key, String junctionKey) {
@@ -136,7 +136,7 @@ public class TrafficSystemManager {
         if (trafficLightSystems == null) return;
 
         trafficLightSystems.set(junctionKey, null);
-        this.trafficLightYML.saveConfigSilent();
+        this.trafficLightYML.saveConfig();
     }
 
     public void deleteLight(String key, String junctionKey, String lightKey) {
@@ -151,6 +151,6 @@ public class TrafficSystemManager {
         if (trafficLights == null) return;
 
         trafficLights.set(lightKey, null);
-        this.trafficLightYML.saveConfigSilent();
+        this.trafficLightYML.saveConfig();
     }
 }

@@ -17,10 +17,7 @@ import com.andrew121410.World16.Commands.warp.delwarp;
 import com.andrew121410.World16.Commands.warp.setwarp;
 import com.andrew121410.World16.Commands.warp.warp;
 import com.andrew121410.World16.Events.*;
-import com.andrew121410.World16.Managers.AfkManager;
-import com.andrew121410.World16.Managers.CustomConfigManager;
-import com.andrew121410.World16.Managers.JailManager;
-import com.andrew121410.World16.Managers.WarpManager;
+import com.andrew121410.World16.Managers.*;
 import com.andrew121410.World16.Utils.*;
 import com.andrew121410.World16.test.test1;
 import com.andrew121410.World16Elevators.ElevatorManager;
@@ -76,6 +73,7 @@ public class Main extends JavaPlugin {
     private FireAlarmManager fireAlarmManager;
     private TrafficSystemManager trafficSystemManager;
     private AfkManager afkManager;
+    private HomeManager homeManager;
 
     private API api;
     private OtherPlugins otherPlugins;
@@ -211,6 +209,8 @@ public class Main extends JavaPlugin {
 
         this.api = new API(this);
 
+        this.homeManager = new HomeManager(this);
+
         this.jailManager = new JailManager(this.customConfigManager, this);
         this.jailManager.loadAllJails();
 
@@ -295,5 +295,9 @@ public class Main extends JavaPlugin {
 
     public AfkManager getAfkManager() {
         return afkManager;
+    }
+
+    public HomeManager getHomeManager() {
+        return homeManager;
     }
 }

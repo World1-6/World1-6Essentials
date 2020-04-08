@@ -3,7 +3,6 @@ package com.andrew121410.World16.Utils;
 import com.andrew121410.CCUtils.storage.ISQL;
 import com.andrew121410.CCUtils.storage.SQLite;
 import com.andrew121410.World16.Main.Main;
-import com.andrew121410.World16.Managers.HomeManager;
 import com.andrew121410.World16.Managers.KeyManager;
 import com.andrew121410.World16.Objects.AfkObject;
 import com.andrew121410.World16.Objects.KeyObject;
@@ -25,10 +24,7 @@ public class PlayerInitializer {
     private List<Player> adminListPlayer;
 
     private ISQL isqlKeys;
-    private ISQL isqlHomes;
-
     private KeyManager keyapi;
-    private HomeManager homeManager;
 
     private Main plugin;
 
@@ -43,11 +39,9 @@ public class PlayerInitializer {
 
         //ISQL
         this.isqlKeys = new SQLite(this.plugin.getDataFolder(), "keys");
-        this.isqlHomes = new SQLite(this.plugin.getDataFolder(), "Homes");
         //...
 
         this.keyapi = new KeyManager(this.plugin, this.isqlKeys);
-        this.homeManager = new HomeManager(this.plugin, this.isqlHomes);
     }
 
     public void load(Player player) {
@@ -56,7 +50,7 @@ public class PlayerInitializer {
         backM.put(player.getUniqueId(), new LocationObject());
         powerToolMap.put(player.getUniqueId(), new PowerToolObject());
 
-        this.homeManager.getAllHomesFromISQL(this.isqlHomes, player);
+        this.plugin.getHomeManager().load(player);
         this.afkObjectMap.put(player.getUniqueId(), new AfkObject(player));
 
         adminListPlayer.forEach((k) -> {

@@ -1,173 +1,104 @@
 package com.andrew121410.World16.Managers;
 
 import com.andrew121410.CCUtils.storage.ISQL;
+import com.andrew121410.CCUtils.storage.SQLite;
+import com.andrew121410.CCUtils.storage.easy.EasySQL;
+import com.andrew121410.CCUtils.storage.easy.SQLDataStore;
 import com.andrew121410.World16.Main.Main;
-import com.andrew121410.World16.Utils.Translate;
-import org.bukkit.Bukkit;
+import com.google.common.collect.Multimap;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
 public class HomeManager {
 
-    private Map<UUID, Map<String, Location>> rawHomesMap;
+    private Map<UUID, Map<String, Location>> homesMap;
 
     private Main plugin;
+
+    private EasySQL easySQL;
     private ISQL isql;
 
-    public HomeManager(Main plugin, ISQL isql) {
+    public HomeManager(Main plugin) {
         this.plugin = plugin;
-        this.isql = isql;
+        this.homesMap = this.plugin.getSetListMap().getHomesMap();
 
-        this.rawHomesMap = this.plugin.getSetListMap().getHomesMap();
+        this.isql = new SQLite(this.plugin.getDataFolder(), "Homes");
+        this.easySQL = new EasySQL(isql, "Homes");
 
-        isql.connect();
-        isql.executeCommand("CREATE TABLE IF NOT EXISTS `Homes` (" +
-                "`UUID` TEXT," +
-                "`Date` TEXT," +
-                "`PlayerName` TEXT," +
-                "`HomeName` TEXT," +
-                "`X` TEXT," +
-                "`Y` TEXT," +
-                "`Z` TEXT," +
-                "`YAW` TEXT," +
-                "`PITCH` TEXT," +
-                "`World` TEXT" +
-                ");");
-        isql.disconnect();
+        List<String> columns = new ArrayList<>();
+        columns.add("UUID");
+        columns.add("Date");
+        columns.add("PlayerName");
+        columns.add("HomeName");
+        columns.add("X");
+        columns.add("Y");
+        columns.add("Z");
+        columns.add("YAW");
+        columns.add("PITCH");
+        columns.add("World");
+        easySQL.create(columns, false);
     }
 
-    public void getAllHomesFromISQL(ISQL isql, Player player) {
-        this.fixMaps(player.getUniqueId(), false);
+    public void load(Player player) {
+        Map<String, String> toGet = new HashMap<>();
+        toGet.put("UUID", String.valueOf(player.getUniqueId()));
+        Multimap<String, SQLDataStore> convert = easySQL.get(toGet);
+        this.homesMap.putIfAbsent(player.getUniqueId(), new HashMap<>());
+        convert.forEach((k, v) -> load(player, v));
+    }
 
-        isql.connect();
+    public void save(Player player, String homeName, Location location) {
+        this.homesMap.get(player.getUniqueId()).put(homeName.toLowerCase(), location);
 
-        ResultSet rs = isql.getResult("SELECT * FROM Homes WHERE (UUID='" + player.getUniqueId().toString() + "');");
+        SQLDataStore sqlDataStore = new SQLDataStore();
+        sqlDataStore.getMap().put("UUID", String.valueOf(player.getUniqueId()));
+        sqlDataStore.getMap().put("Date", "0");
+        sqlDataStore.getMap().put("PlayerName", player.getDisplayName());
+        sqlDataStore.getMap().put("HomeName", homeName.toLowerCase());
+        sqlDataStore.getMap().put("X", String.valueOf(location.getX()));
+        sqlDataStore.getMap().put("Y", String.valueOf(location.getY()));
+        sqlDataStore.getMap().put("Z", String.valueOf(location.getZ()));
+        sqlDataStore.getMap().put("YAW", String.valueOf(location.getYaw()));
+        sqlDataStore.getMap().put("PITCH", String.valueOf(location.getPitch()));
+        sqlDataStore.getMap().put("World", location.getWorld().getName());
         try {
-            while (rs.next()) {
-                String UUID = rs.getString("UUID");
-                String Date = rs.getString("Date");
-                String PlayerName = rs.getString("PlayerName");
-                String HomeName = rs.getString("HomeName");
-                String X = rs.getString("X");
-                String Y = rs.getString("Y");
-                String Z = rs.getString("Z");
-                String YAW = rs.getString("YAW");
-                String PITCH = rs.getString("PITCH");
-                String World = rs.getString("World");
-
-                rawHomesMap.get(player.getUniqueId()).put(HomeName, new Location(Bukkit.getServer().getWorld(World), Double.parseDouble(X), Double.parseDouble(Y), Double.parseDouble(Z), Float.parseFloat(YAW), Float.parseFloat(PITCH)));
-            }
+            easySQL.save(sqlDataStore);
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            isql.disconnect();
         }
     }
 
-    public Location getHome(Player player, String HomeName) {
-        this.fixMaps(player.getUniqueId(), true);
-
-        return rawHomesMap.get(player.getUniqueId()).get(HomeName);
+    public void delete(UUID uuid, String homeName) {
+        this.homesMap.get(uuid).remove(homeName.toLowerCase());
+        Map<String, String> toDelete = new HashMap<>();
+        toDelete.put("UUID", String.valueOf(uuid));
+        toDelete.put("HomeName", homeName.toLowerCase());
+        easySQL.delete(toDelete);
     }
 
-    public Location getHome(UUID uuid, String HomeName) {
-        this.fixMaps(uuid, true);
-
-        return rawHomesMap.get(uuid).get(HomeName);
+    public void deleteALL(UUID uuid) {
+        this.homesMap.get(uuid).clear();
+        Map<String, String> toDelete = new HashMap<>();
+        toDelete.put("UUID", String.valueOf(uuid));
+        easySQL.delete(toDelete);
     }
 
-    public void deleteHome(ISQL isql, Player player, String HomeName) {
-        this.fixMaps(player.getUniqueId(), true);
+    private void load(Player player, SQLDataStore sqlDataStore) {
+        String UUID = sqlDataStore.getMap().get("UUID");
+        String Date = sqlDataStore.getMap().get("Date");
+        String PlayerName = sqlDataStore.getMap().get("PlayerName");
+        String HomeName = sqlDataStore.getMap().get("HomeName");
+        String X = sqlDataStore.getMap().get("X");
+        String Y = sqlDataStore.getMap().get("Y");
+        String Z = sqlDataStore.getMap().get("Z");
+        String YAW = sqlDataStore.getMap().get("YAW");
+        String PITCH = sqlDataStore.getMap().get("PITCH");
+        String World = sqlDataStore.getMap().get("World");
 
-        rawHomesMap.get(player.getUniqueId()).remove(HomeName.toLowerCase());
-
-        deleteHomeFromISQL(isql, player, HomeName);
-    }
-
-    private void deleteHomeFromISQL(ISQL isql, Player player, String HomeName) {
-        isql.connect();
-        isql.executeCommand("DELETE FROM Homes WHERE UUID='" + player.getUniqueId() + "' AND HomeName='" + HomeName.toLowerCase() + "'");
-        isql.disconnect();
-    }
-
-    public void deleteAllHomesFromISQL(ISQL isql, Player player) {
-        isql.connect();
-        isql.executeCommand("DELETE FROM Homes WHERE UUID='" + player.getUniqueId() + "'");
-        isql.disconnect();
-        rawHomesMap.remove(player.getUniqueId());
-        player.kickPlayer("All homes has been cleared! Rejoin the server!");
-    }
-
-    public String listHomesInMap(Player player) {
-        this.fixMaps(player.getUniqueId(), true);
-
-        Set<String> homeSet = rawHomesMap.get(player.getUniqueId()).keySet();
-        String[] homeString = homeSet.toArray(new String[0]);
-        Arrays.sort(homeString);
-        String str = String.join(", ", homeString);
-        String homeListPrefix = "&6Homes:&r&7";
-        return Translate.chat(homeListPrefix + " " + str);
-    }
-
-    public void setHome(ISQL isql, Player player, String HomeName) {
-        this.fixMaps(player.getUniqueId(), true);
-
-        rawHomesMap.get(player.getUniqueId()).put(HomeName.toLowerCase(), player.getLocation());
-
-        setHomeToISQL(isql, player.getUniqueId(), player.getDisplayName(), HomeName, player.getLocation());
-    }
-
-    public void setHome(ISQL isql, UUID uuid, String PlayerName, String HomeName, Location location) {
-        this.fixMaps(uuid, true);
-
-        rawHomesMap.get(uuid).put(HomeName.toLowerCase(), location);
-
-        setHomeToISQL(isql, uuid, PlayerName, HomeName, location);
-    }
-
-    private void setHomeToISQL(ISQL isql, UUID uuid, String PlayerName, String HomeName, Location location) {
-        isql.connect();
-        PreparedStatement preparedStatement = isql.executeCommandPreparedStatement("INSERT INTO Homes (UUID,Date,PlayerName,HomeName,X,Y,Z,YAW,PITCH,World) VALUES (?,?,?,?,?,?,?,?,?,?);");
-        try {
-            preparedStatement.setString(1, uuid.toString());
-            preparedStatement.setString(2, "0");
-            preparedStatement.setString(3, PlayerName);
-            preparedStatement.setString(4, HomeName.toLowerCase());
-            preparedStatement.setString(5, String.valueOf(location.getX()));
-            preparedStatement.setString(6, String.valueOf(location.getY()));
-            preparedStatement.setString(7, String.valueOf(location.getZ()));
-            preparedStatement.setString(8, String.valueOf(location.getYaw()));
-            preparedStatement.setString(9, String.valueOf(location.getPitch()));
-            preparedStatement.setString(10, location.getWorld().getName());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            isql.disconnect();
-        }
-
-    }
-
-    public void unloadPlayerHomes(Player player) {
-        rawHomesMap.remove(player.getUniqueId());
-    }
-
-    private void fixMaps(UUID uuid, boolean getAllHomesFromISQL) {
-        if (rawHomesMap.get(uuid) == null) {
-            rawHomesMap.put(uuid, new HashMap<>());
-            if (getAllHomesFromISQL) {
-                Player player = Bukkit.getServer().getPlayer(uuid);
-                if (player == null || !player.isOnline()) {
-                    return;
-                }
-                this.getAllHomesFromISQL(isql, player);
-            }
-        }
-
+        Location location = new Location(this.plugin.getServer().getWorld(World), Double.parseDouble(X), Double.parseDouble(Y), Double.parseDouble(Z), Float.parseFloat(YAW), Float.parseFloat(PITCH));
+        this.homesMap.get(player.getUniqueId()).put(HomeName, location);
     }
 }

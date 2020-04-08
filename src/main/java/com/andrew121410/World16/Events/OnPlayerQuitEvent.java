@@ -32,7 +32,7 @@ public class OnPlayerQuitEvent implements Listener {
         //TEMP.yml
         ConfigurationSection configurationSection = this.api.getPlayersYML(customConfigManager, p);
         configurationSection.set("Gamemode", p.getGameMode().name());
-        this.customConfigManager.getPlayersYml().saveConfigSilent();
+        this.customConfigManager.getPlayersYml().saveConfig();
         //...
 
         this.plugin.getPlayerInitializer().unload(p);

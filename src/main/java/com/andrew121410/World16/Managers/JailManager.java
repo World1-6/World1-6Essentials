@@ -27,7 +27,7 @@ public class JailManager {
         ConfigurationSection cs = this.jailsYml.getConfig().getConfigurationSection("Jails");
         if (cs == null) {
             this.jailsYml.getConfig().createSection("Jails");
-            this.jailsYml.saveConfigSilent();
+            this.jailsYml.saveConfig();
             return;
         }
 
@@ -46,7 +46,7 @@ public class JailManager {
         ConfigurationSection cs = this.jailsYml.getConfig().getConfigurationSection("Jails");
         if (cs == null) {
             cs = this.jailsYml.getConfig().createSection("Jails");
-            this.jailsYml.saveConfigSilent();
+            this.jailsYml.saveConfig();
         }
 
         for (Map.Entry<String, Location> entry : this.jailsMap.entrySet()) {
@@ -56,11 +56,11 @@ public class JailManager {
             ConfigurationSection jailConfig = cs.getConfigurationSection(k.toLowerCase());
             if (jailConfig == null) {
                 jailConfig = cs.createSection(k.toLowerCase());
-                this.jailsYml.saveConfigSilent();
+                this.jailsYml.saveConfig();
             }
 
             jailConfig.set("Location", v);
-            this.jailsYml.saveConfigSilent();
+            this.jailsYml.saveConfig();
         }
     }
 
@@ -72,7 +72,7 @@ public class JailManager {
 
         ConfigurationSection jails = this.jailsYml.getConfig().getConfigurationSection("Jails");
         jails.set(jailName.toLowerCase(), null);
-        this.jailsYml.saveConfigSilent();
+        this.jailsYml.saveConfig();
         return true;
     }
 }

@@ -27,7 +27,7 @@ public class WarpManager {
         ConfigurationSection cs = this.warpsYml.getConfig().getConfigurationSection("Warps");
         if (cs == null) {
             cs = this.warpsYml.getConfig().createSection("Warps");
-            this.warpsYml.saveConfigSilent();
+            this.warpsYml.saveConfig();
             return;
         }
 
@@ -45,7 +45,7 @@ public class WarpManager {
         ConfigurationSection cs = this.warpsYml.getConfig().getConfigurationSection("Warps");
         if (cs == null) {
             cs = this.warpsYml.getConfig().createSection("Warps");
-            this.warpsYml.saveConfigSilent();
+            this.warpsYml.saveConfig();
         }
 
         for (Map.Entry<String, Location> entry : this.warpsMap.entrySet()) {
@@ -55,11 +55,11 @@ public class WarpManager {
             ConfigurationSection warpsConfig = cs.getConfigurationSection(k.toLowerCase());
             if (warpsConfig == null) {
                 warpsConfig = cs.createSection(k.toLowerCase());
-                this.warpsYml.saveConfigSilent();
+                this.warpsYml.saveConfig();
             }
 
             warpsConfig.set("Location", v);
-            this.warpsYml.saveConfigSilent();
+            this.warpsYml.saveConfig();
         }
     }
 
@@ -72,6 +72,6 @@ public class WarpManager {
 
         ConfigurationSection cs = this.warpsYml.getConfig().getConfigurationSection("Warps");
         cs.set(key.toLowerCase(), null);
-        this.warpsYml.saveConfigSilent();
+        this.warpsYml.saveConfig();
     }
 }

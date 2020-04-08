@@ -1,30 +1,33 @@
 package com.andrew121410.World16.Commands.home;
 
-import com.andrew121410.CCUtils.storage.ISQL;
-import com.andrew121410.CCUtils.storage.SQLite;
 import com.andrew121410.World16.Main.Main;
-import com.andrew121410.World16.Managers.HomeManager;
 import com.andrew121410.World16.Utils.API;
+import com.andrew121410.World16.Utils.Translate;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 public class homelist implements CommandExecutor {
 
-    private Main plugin;
+    private Map<UUID, Map<String, Location>> homesMap;
 
-    private ISQL isql;
-    private HomeManager homeManager;
+    private Main plugin;
     private API api;
 
     public homelist(Main plugin) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
 
-        isql = new SQLite(this.plugin.getDataFolder(), "Homes");
-        homeManager = new HomeManager(this.plugin, isql);
-        plugin.getCommand("homelist").setExecutor(this);
+        this.homesMap = this.plugin.getSetListMap().getHomesMap();
+
+        this.plugin.getCommand("homelist").setExecutor(this);
     }
 
     @Override
@@ -39,8 +42,13 @@ public class homelist implements CommandExecutor {
             api.PermissionErrorMessage(p);
             return true;
         }
+        Set<String> homeSet = homesMap.get(p.getUniqueId()).keySet();
+        String[] homeString = homeSet.toArray(new String[0]);
+        Arrays.sort(homeString);
+        String str = String.join(", ", homeString);
+        String homeListPrefix = "&6Homes:&r&7";
 
-        p.sendMessage(homeManager.listHomesInMap(p));
+        p.sendMessage(Translate.chat(homeListPrefix + " " + str));
         return true;
     }
 }
