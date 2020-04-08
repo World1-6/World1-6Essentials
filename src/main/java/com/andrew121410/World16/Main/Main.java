@@ -62,7 +62,6 @@ public class Main extends JavaPlugin {
 
     private SetListMap setListMap;
 
-    private DiscordBot discordBot;
     private PlayerInitializer playerInitializer;
 
     //Managers
@@ -95,7 +94,6 @@ public class Main extends JavaPlugin {
     }
 
     public void onDisable() {
-        this.discordBot.sendServerQuitMessage();
         this.jailManager.saveAllJails();
         this.warpManager.saveAllWarps();
         this.elevatorManager.saveAllElevators();
@@ -226,9 +224,6 @@ public class Main extends JavaPlugin {
         trafficSystemManager.loadAll();
 
         this.afkManager = new AfkManager(this);
-
-        this.discordBot = new DiscordBot(this, this.customConfigManager, this.api.isDiscordBotEnabled());
-        this.discordBot.sendServerStartMessage();
     }
 
     private void regElevators() {
@@ -275,10 +270,6 @@ public class Main extends JavaPlugin {
 
     public ElevatorManager getElevatorManager() {
         return elevatorManager;
-    }
-
-    public DiscordBot getDiscordBot() {
-        return discordBot;
     }
 
     public FireAlarmManager getFireAlarmManager() {

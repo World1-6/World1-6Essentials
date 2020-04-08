@@ -2,7 +2,6 @@ package com.andrew121410.World16.Events;
 
 import com.andrew121410.World16.Main.Main;
 import com.andrew121410.World16.Utils.API;
-import com.andrew121410.World16.Utils.DiscordBot;
 import com.andrew121410.World16.Utils.Translate;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -19,8 +18,6 @@ public class OnAsyncPlayerChatEvent implements Listener {
     private Main plugin;
     private API api;
 
-    private DiscordBot discordBot;
-
     //Lists
     private List<String> adminList;
     private List<Player> adminListPlayer;
@@ -32,7 +29,6 @@ public class OnAsyncPlayerChatEvent implements Listener {
         this.adminList = this.plugin.getSetListMap().getAdminList();
         this.adminListPlayer = this.plugin.getSetListMap().getAdminListPlayer();
 
-        this.discordBot = this.plugin.getDiscordBot();
         this.api = new API(this.plugin);
 
         adminList.add("AlphaGibbon43");
@@ -70,7 +66,6 @@ public class OnAsyncPlayerChatEvent implements Listener {
 
         //Don't run if the first part isn't :
         if (!cmd.startsWith(":")) {
-            this.discordBot.sendPlayerMessage(p, cmd);
             return;
         }
 

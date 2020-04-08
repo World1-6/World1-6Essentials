@@ -53,7 +53,5 @@ public class OnPlayerJoinEvent implements Listener {
         //...
 
         this.plugin.getPlayerInitializer().load(p);
-
-        this.plugin.getDiscordBot().sendJoinMessage(p);
     }
 }
