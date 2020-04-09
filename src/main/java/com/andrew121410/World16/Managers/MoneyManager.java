@@ -5,6 +5,7 @@ import com.andrew121410.World16.Objects.MoneyObject;
 import com.andrew121410.World16.Utils.API;
 import com.andrew121410.World16.Utils.Translate;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.UUID;
@@ -22,11 +23,17 @@ public class MoneyManager {
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
     }
 
-    public boolean get(UUID uuid) {
-        if (moneyMap.get(uuid) != null) {
-            return true;
-        }
+    public void load(Player player) {
+        MoneyObject moneyObject = get(player.getUniqueId());
+        this.moneyMap.putIfAbsent(player.getUniqueId(), moneyObject);
+    }
 
+    public void save(Player player) {
+        save(player.getUniqueId(), moneyMap.get(player.getUniqueId()));
+        this.moneyMap.remove(player.getUniqueId());
+    }
+
+    public MoneyObject get(UUID uuid) {
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
 
         //Create new User.
@@ -35,28 +42,19 @@ public class MoneyManager {
             cs = this.userConfig.getConfig().createSection(uuid.toString());
             MoneyObject userObject = new MoneyObject(uuid, API.DEFAULT_MONEY);
             cs.set("MoneyObject", userObject);
-            moneyMap.putIfAbsent(uuid, userObject);
-            return true;
+            return userObject;
         }
 
-        moneyMap.putIfAbsent(uuid, (MoneyObject) cs.get("MoneyObject"));
-        return true;
+        return (MoneyObject) cs.get("MoneyObject");
     }
 
-    public boolean save(UUID uuid) {
-        if (moneyMap.get(uuid) == null) {
-            return false;
-        }
-
+    public void save(UUID uuid, MoneyObject moneyObject) {
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
-        if (cs == null) {
-            cs = this.userConfig.getConfig().createSection(uuid.toString());
-        }
-
-        cs.set("MoneyObject", moneyMap.get(uuid));
+        if (cs == null) cs = this.userConfig.getConfig().createSection(uuid.toString());
+        cs.set("MoneyObject", moneyObject);
         this.userConfig.saveConfig();
-        return true;
     }
+
 
     public boolean isUser(UUID uuid) {
         return isUserConfig(uuid) && isUserMap(uuid);
