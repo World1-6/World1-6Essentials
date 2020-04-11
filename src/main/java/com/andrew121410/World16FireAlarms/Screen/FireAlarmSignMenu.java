@@ -1,4 +1,4 @@
-package com.andrew121410.World16FireAlarms.Objects.Screen;
+package com.andrew121410.World16FireAlarms.Screen;
 
 public enum FireAlarmSignMenu {
     WAITING,

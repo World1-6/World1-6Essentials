@@ -1,4 +1,4 @@
-package com.andrew121410.World16FireAlarms.Objects;
+package com.andrew121410.World16FireAlarms;
 
 import java.util.Optional;
 

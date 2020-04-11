@@ -1,11 +1,11 @@
-package com.andrew121410.World16FireAlarms.Objects.Screen;
+package com.andrew121410.World16FireAlarms.Screen;
 
 import com.andrew121410.World16.Main.Main;
 import com.andrew121410.World16.Utils.Translate;
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmReason;
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmTempo;
-import com.andrew121410.World16FireAlarms.Objects.Simple.SimpleFireAlarm;
-import com.andrew121410.World16FireAlarms.Objects.TroubleReason;
+import com.andrew121410.World16FireAlarms.FireAlarmReason;
+import com.andrew121410.World16FireAlarms.FireAlarmTempo;
+import com.andrew121410.World16FireAlarms.Simple.SimpleFireAlarm;
+import com.andrew121410.World16FireAlarms.TroubleReason;
 import com.andrew121410.World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -100,8 +100,8 @@ public class FireAlarmSignOS implements ConfigurationSerializable {
                 player.sendMessage(Translate.chat("Fire Alarm: " + this.fireAlarmName + " tempo has changed to " + FireAlarmTempo.MARCH_TIME.name()));
                 return true;
             } else if (line == 2) {
-                simpleFireAlarm.getFireAlarmSettings().setFireAlarmTempo(FireAlarmTempo.CODE3);
-                player.sendMessage(Translate.chat("Fire Alarm: " + this.fireAlarmName + " tempo has changed to " + FireAlarmTempo.CODE3.name()));
+                simpleFireAlarm.getFireAlarmSettings().setFireAlarmTempo(FireAlarmTempo.CODE_3);
+                player.sendMessage(Translate.chat("Fire Alarm: " + this.fireAlarmName + " tempo has changed to " + FireAlarmTempo.CODE_3.name()));
                 return true;
             }
             return true;

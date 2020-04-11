@@ -1,6 +1,6 @@
 package com.andrew121410.World16FireAlarms.interfaces;
 
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmSound;
+import com.andrew121410.World16FireAlarms.FireAlarmSound;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 

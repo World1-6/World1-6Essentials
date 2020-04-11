@@ -1,12 +1,12 @@
-package com.andrew121410.World16FireAlarms.Objects.Simple;
+package com.andrew121410.World16FireAlarms.Simple;
 
 import com.andrew121410.World16.Main.Main;
 import com.andrew121410.World16.Utils.SignUtils;
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmReason;
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmSettings;
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmStatus;
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmTempo;
-import com.andrew121410.World16FireAlarms.Objects.Screen.FireAlarmScreen;
+import com.andrew121410.World16FireAlarms.FireAlarmReason;
+import com.andrew121410.World16FireAlarms.FireAlarmSettings;
+import com.andrew121410.World16FireAlarms.FireAlarmStatus;
+import com.andrew121410.World16FireAlarms.FireAlarmTempo;
+import com.andrew121410.World16FireAlarms.Screen.FireAlarmScreen;
 import com.andrew121410.World16FireAlarms.interfaces.IFireAlarm;
 import com.andrew121410.World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
@@ -89,7 +89,7 @@ public class SimpleFireAlarm implements IFireAlarm, ConfigurationSerializable {
         if (fireAlarmSettings.getCommandTrigger() != null)
             this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), this.fireAlarmSettings.getCommandTrigger());
 
-        if (fireAlarmSettings.getFireAlarmTempo() == FireAlarmTempo.CODE3) setupCode3();
+        if (fireAlarmSettings.getFireAlarmTempo() == FireAlarmTempo.CODE_3) setupCode3();
         else if (fireAlarmSettings.getFireAlarmTempo() == FireAlarmTempo.MARCH_TIME) setupMarchTime();
 
         //Signs

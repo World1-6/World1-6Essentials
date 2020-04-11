@@ -23,7 +23,7 @@ public class lastjoin implements CommandExecutor {
         this.plugin = plugin;
 
         this.customConfigManager = customConfigManager;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("lastjoin").setExecutor(this);
     }
@@ -34,8 +34,8 @@ public class lastjoin implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
         Player p = (Player) sender;
+
         if (!p.hasPermission("world16.lastjoin")) {
             api.PermissionErrorMessage(p);
             return true;

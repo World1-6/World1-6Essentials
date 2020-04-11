@@ -1,6 +1,6 @@
-package com.andrew121410.World16FireAlarms.Objects.Simple;
+package com.andrew121410.World16FireAlarms.Simple;
 
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmSound;
+import com.andrew121410.World16FireAlarms.FireAlarmSound;
 import com.andrew121410.World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;
 import org.bukkit.Material;

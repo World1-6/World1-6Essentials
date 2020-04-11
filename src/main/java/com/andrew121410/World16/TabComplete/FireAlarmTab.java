@@ -1,7 +1,7 @@
 package com.andrew121410.World16.TabComplete;
 
 import com.andrew121410.World16.Main.Main;
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmTempo;
+import com.andrew121410.World16FireAlarms.FireAlarmTempo;
 import com.andrew121410.World16FireAlarms.interfaces.IFireAlarm;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;

@@ -26,12 +26,12 @@ import com.andrew121410.World16.test.test1;
 import com.andrew121410.World16Elevators.ElevatorManager;
 import com.andrew121410.World16Elevators.Objects.*;
 import com.andrew121410.World16FireAlarms.FireAlarmManager;
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmSettings;
-import com.andrew121410.World16FireAlarms.Objects.FireAlarmSound;
-import com.andrew121410.World16FireAlarms.Objects.Screen.FireAlarmScreen;
-import com.andrew121410.World16FireAlarms.Objects.Screen.FireAlarmSignOS;
-import com.andrew121410.World16FireAlarms.Objects.Simple.SimpleFireAlarm;
-import com.andrew121410.World16FireAlarms.Objects.Simple.SimpleStrobe;
+import com.andrew121410.World16FireAlarms.FireAlarmSettings;
+import com.andrew121410.World16FireAlarms.FireAlarmSound;
+import com.andrew121410.World16FireAlarms.Screen.FireAlarmScreen;
+import com.andrew121410.World16FireAlarms.Screen.FireAlarmSignOS;
+import com.andrew121410.World16FireAlarms.Simple.SimpleFireAlarm;
+import com.andrew121410.World16FireAlarms.Simple.SimpleStrobe;
 import com.andrew121410.World16TrafficLights.Objects.TrafficLight;
 import com.andrew121410.World16TrafficLights.Objects.TrafficLightSystem;
 import com.andrew121410.World16TrafficLights.Objects.TrafficSystem;
@@ -195,7 +195,6 @@ public class Main extends JavaPlugin {
         //...
         new OnAsyncPlayerChatEvent(this);
         new OnPlayerInteractEvent(this);
-        new OnPlayerMoveEvent(this);
         new OnBlockBreakEvent(this);
 
         //Inventory

@@ -25,7 +25,7 @@ public class debug implements CommandExecutor {
     public debug(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("debug1-6").setExecutor(this);
         this.plugin.getCommand("debug1-6").setTabCompleter(new DebugTab(this.plugin));

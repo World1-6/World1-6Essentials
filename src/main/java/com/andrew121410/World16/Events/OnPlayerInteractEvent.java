@@ -5,8 +5,8 @@ import com.andrew121410.World16.Managers.CustomConfigManager;
 import com.andrew121410.World16.Objects.PowerToolObject;
 import com.andrew121410.World16.Utils.API;
 import com.andrew121410.World16.Utils.SignUtils;
-import com.andrew121410.World16FireAlarms.Objects.Screen.FireAlarmScreen;
-import com.andrew121410.World16FireAlarms.Objects.Screen.ScreenFocus;
+import com.andrew121410.World16FireAlarms.Screen.FireAlarmScreen;
+import com.andrew121410.World16FireAlarms.Screen.ScreenFocus;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -60,7 +60,7 @@ public class OnPlayerInteractEvent implements Listener {
     }
 
     @EventHandler
-    public void playerinteract(PlayerInteractEvent event) {
+    public void playerInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
         Block block = event.getClickedBlock();
         Action action = event.getAction();
@@ -75,13 +75,15 @@ public class OnPlayerInteractEvent implements Listener {
             if (block.getBlockData() instanceof Stairs && api.getPlayersYML(customConfigManager, p).getBoolean("seats")) {
                 Stairs stairs = (Stairs) block.getBlockData();
 
-                if (block.getRelative(BlockFace.UP).getType() != Material.AIR) return;
-
-                Arrow arrow = (Arrow) block.getWorld().spawnEntity(block.getLocation().add(0.5D, 0.2D, 0.5D), EntityType.ARROW);
-                arrow.addScoreboardTag("plugin-seat");
-                arrow.setGravity(false);
-                arrow.addPassenger(p);
-                sitMap.put(p, arrow);
+                Block firstBlock = block.getRelative(BlockFace.UP);
+                Block secondBlock = firstBlock.getRelative(BlockFace.UP);
+                if (firstBlock.getType() == Material.AIR && secondBlock.getType() == Material.AIR) {
+                    Arrow arrow = (Arrow) block.getWorld().spawnEntity(block.getLocation().add(0.5D, 0.2D, 0.5D), EntityType.ARROW);
+                    arrow.addScoreboardTag("plugin-seat");
+                    arrow.setGravity(false);
+                    arrow.addPassenger(p);
+                    sitMap.put(p, arrow);
+                }
             }
 
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());

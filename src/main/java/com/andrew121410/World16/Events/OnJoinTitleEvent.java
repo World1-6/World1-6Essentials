@@ -20,7 +20,6 @@ public class OnJoinTitleEvent implements Listener {
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         TitleManager.sendTitle(e.getPlayer(), 10, 5 * 20, 10, Translate.chat(file.getString("TittleTOP")),

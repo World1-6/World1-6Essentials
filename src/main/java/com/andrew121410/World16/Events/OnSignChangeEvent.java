@@ -24,7 +24,7 @@ public class OnSignChangeEvent implements Listener {
     public void signChange(SignChangeEvent event) {
         Player player = event.getPlayer();
 
-        if (player.hasPermission("com.andrew121410.World16.sign.color") && api.isSignTranslateColors()) {
+        if (player.hasPermission("world16.sign.color") && api.isSignTranslateColors()) {
             for (int i = 0; i < 4; i++) {
                 String line = event.getLine(i);
                 if (line != null && !line.equals("")) event.setLine(i, Translate.chat(line));

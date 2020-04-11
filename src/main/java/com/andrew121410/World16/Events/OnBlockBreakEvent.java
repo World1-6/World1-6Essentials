@@ -1,7 +1,7 @@
 package com.andrew121410.World16.Events;
 
 import com.andrew121410.World16.Main.Main;
-import com.andrew121410.World16FireAlarms.Objects.Screen.FireAlarmScreen;
+import com.andrew121410.World16FireAlarms.Screen.FireAlarmScreen;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

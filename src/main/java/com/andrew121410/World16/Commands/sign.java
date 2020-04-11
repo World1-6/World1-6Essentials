@@ -25,7 +25,7 @@ public class sign implements CommandExecutor {
     public sign(Main plugin) {
         this.plugin = plugin;
 
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
         this.signUtils = new SignUtils(this.plugin);
 
         this.plugin.getCommand("sign").setExecutor(this);

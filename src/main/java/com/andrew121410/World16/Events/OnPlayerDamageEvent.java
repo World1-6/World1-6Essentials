@@ -24,7 +24,7 @@ public class OnPlayerDamageEvent implements Listener {
     }
 
     @EventHandler
-    public void eventdamage(EntityDamageEvent event) {
+    public void onDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
@@ -36,7 +36,7 @@ public class OnPlayerDamageEvent implements Listener {
     }
 
     @EventHandler
-    public void eventdamageby(EntityDamageByEntityEvent event) {
+    public void onDamageBy(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player)) {
             return;
         }

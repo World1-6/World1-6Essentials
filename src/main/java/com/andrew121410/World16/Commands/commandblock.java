@@ -18,7 +18,7 @@ public class commandblock implements CommandExecutor {
 
     public commandblock(Main getPlugin) {
         this.plugin = getPlugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("commandblock").setExecutor(this);
     }

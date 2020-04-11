@@ -15,8 +15,9 @@ public class ram implements CommandExecutor {
 
     public ram(Main plugin) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
-        plugin.getCommand("ram").setExecutor(this);
+        this.api = this.plugin.getApi();
+
+        this.plugin.getCommand("ram").setExecutor(this);
     }
 
     @Override
@@ -32,9 +33,15 @@ public class ram implements CommandExecutor {
             return true;
         }
 
-        p.sendMessage(Translate.chat("&6Maximum memory: &c" + (Runtime.getRuntime().maxMemory() / 1024 / 1024) + " MB."));
-        p.sendMessage(Translate.chat("&6Allocated memory: &c" + (Runtime.getRuntime().totalMemory() / 1024 / 1024) + " MB."));
-        p.sendMessage(Translate.chat("&6Free memory: &c" + (Runtime.getRuntime().freeMemory() / 1024 / 1024) + " MB."));
+        long maxMemory = (Runtime.getRuntime().maxMemory() / 1024 / 1024);
+        long allocatedMemory = (Runtime.getRuntime().totalMemory() / 1024 / 1024);
+        long freeMemory = (Runtime.getRuntime().freeMemory() / 1024 / 1024);
+        long usedMemory = allocatedMemory - freeMemory;
+
+        p.sendMessage(Translate.chat("&6Maximum memory: &c" + maxMemory + " MB."));
+        p.sendMessage(Translate.chat("&6Allocated memory: &c" + allocatedMemory + " MB."));
+        p.sendMessage(Translate.chat("&6Free memory: &c" + freeMemory + " MB."));
+        p.sendMessage(Translate.chat("&6Used memory: &c " + usedMemory + " MB."));
         return true;
     }
 }

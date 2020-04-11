@@ -55,7 +55,6 @@ public class MoneyManager {
         this.userConfig.saveConfig();
     }
 
-
     public boolean isUser(UUID uuid) {
         return isUserConfig(uuid) && isUserMap(uuid);
     }

@@ -4,7 +4,7 @@ import com.andrew121410.World16.Main.Main;
 import com.andrew121410.World16.Managers.CustomConfigManager;
 import com.andrew121410.World16.Managers.CustomYmlManager;
 import com.andrew121410.World16.Utils.Translate;
-import com.andrew121410.World16FireAlarms.Objects.Screen.FireAlarmScreen;
+import com.andrew121410.World16FireAlarms.Screen.FireAlarmScreen;
 import com.andrew121410.World16FireAlarms.interfaces.IFireAlarm;
 import com.andrew121410.World16FireAlarms.interfaces.IStrobe;
 import org.bukkit.Location;

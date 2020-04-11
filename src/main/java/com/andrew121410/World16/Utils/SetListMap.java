@@ -2,8 +2,8 @@ package com.andrew121410.World16.Utils;
 
 import com.andrew121410.World16.Objects.*;
 import com.andrew121410.World16Elevators.Objects.ElevatorController;
-import com.andrew121410.World16FireAlarms.Objects.Screen.FireAlarmScreen;
-import com.andrew121410.World16FireAlarms.Objects.Screen.ScreenFocus;
+import com.andrew121410.World16FireAlarms.Screen.FireAlarmScreen;
+import com.andrew121410.World16FireAlarms.Screen.ScreenFocus;
 import com.andrew121410.World16FireAlarms.interfaces.IFireAlarm;
 import com.andrew121410.World16TrafficLights.Objects.TrafficSystem;
 import org.bukkit.Location;
