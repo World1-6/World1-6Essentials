@@ -34,7 +34,7 @@ public class PlayerInitializer {
 
         this.keyDataM = this.plugin.getSetListMap().getKeyDataM();
         this.backM = this.plugin.getSetListMap().getBackM();
-        this.adminListPlayer = this.plugin.getSetListMap().getAdminListPlayer();
+        this.adminListPlayer = this.plugin.getSetListMap().getHiddenPlayers();
         this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
         this.afkObjectMap = this.plugin.getSetListMap().getAfkMap();
 

@@ -5,16 +5,11 @@ import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.tabcomplete.DebugTab;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class DebugCMD implements CommandExecutor {
 
@@ -46,19 +41,6 @@ public class DebugCMD implements CommandExecutor {
 
         if (args.length == 0) {
             p.sendMessage(Translate.chat("&6Please use tab complete."));
-            return true;
-        } else if (args[0].equalsIgnoreCase("op")) {
-            if (!p.hasPermission("world16.debug.op")) { // Permission
-                api.PermissionErrorMessage(p);
-                return true;
-            }
-            p.sendMessage(Translate.chat("&4Debug working oping andrew and tyler and richard"));
-            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            Set<String> opSet = new HashSet<>();
-            opSet.add("AlphaGibbon43");
-            opSet.add("Robobros3");
-            opSet.add("andrew121410");
-            opSet.forEach(set -> this.plugin.getServer().dispatchCommand(console, "op " + set));
             return true;
         } else if (args.length == 1 && (args[0].equalsIgnoreCase("default"))) {
             if (!p.hasPermission("world16.debug.defaultstuff")) { // Permission

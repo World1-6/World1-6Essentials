@@ -44,8 +44,8 @@ public class API {
     //...
 
     // Lists
-    private List<String> Fly1;
-    private List<String> GodM;
+    private List<String> flyList;
+    private List<String> godList;
     //...
 
     private Main plugin;
@@ -69,8 +69,8 @@ public class API {
     private void doSetListMap() {
         this.uuidCache = this.plugin.getSetListMap().getUuidCache();
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
-        this.Fly1 = this.plugin.getSetListMap().getFlyList();
-        this.GodM = this.plugin.getSetListMap().getAdminList();
+        this.flyList = this.plugin.getSetListMap().getFlyList();
+        this.godList = this.plugin.getSetListMap().getGodmList();
     }
 
     public boolean isAfk(Player p) {
@@ -78,11 +78,11 @@ public class API {
     }
 
     public boolean isFlying(Player p) {
-        return Fly1.contains(p.getDisplayName()) || p.isFlying();
+        return flyList.contains(p.getDisplayName()) || p.isFlying();
     }
 
     public boolean isGod(Player p) {
-        return GodM.contains(p.getDisplayName());
+        return godList.contains(p.getDisplayName());
     }
 
     public boolean isDebug() {

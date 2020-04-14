@@ -30,9 +30,8 @@ public class SetListMap {
 
     private List<String> flyList; //0
     private List<String> godmList; //0
-    private List<Player> adminListPlayer; //0
+    private List<Player> hiddenPlayers; //0
 
-    private List<String> adminList; //1
     private List<String> soundsList; //1
     private List<String> spyCommandBlock; //1
 
@@ -57,9 +56,8 @@ public class SetListMap {
         //Lists
         this.flyList = new ArrayList<>();
         this.godmList = new ArrayList<>();
-        this.adminListPlayer = new ArrayList<>();
+        this.hiddenPlayers = new ArrayList<>();
 
-        this.adminList = new ArrayList<>();
         this.soundsList = new ArrayList<>();
         this.spyCommandBlock = new ArrayList<>();
     }
@@ -119,14 +117,13 @@ public class SetListMap {
 
         godmList.remove(p.getDisplayName());
 
-        adminListPlayer.remove(p);
+        hiddenPlayers.remove(p);
     }
 
     public void clearAllLists() {
         flyList.clear();
         godmList.clear();
-        adminListPlayer.clear();
-        adminList.clear();
+        hiddenPlayers.clear();
         soundsList.clear();
         spyCommandBlock.clear();
     }
@@ -181,12 +178,8 @@ public class SetListMap {
         return godmList;
     }
 
-    public List<Player> getAdminListPlayer() {
-        return adminListPlayer;
-    }
-
-    public List<String> getAdminList() {
-        return adminList;
+    public List<Player> getHiddenPlayers() {
+        return hiddenPlayers;
     }
 
     public Map<String, Location> getWarpsMap() {

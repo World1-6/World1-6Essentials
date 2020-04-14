@@ -18,24 +18,12 @@ public class OnAsyncPlayerChatEvent implements Listener {
     private Main plugin;
     private API api;
 
-    //Lists
-    private List<String> adminList;
-    private List<Player> adminListPlayer;
-    //...
+    private List<Player> hiddenPlayers;
 
     public OnAsyncPlayerChatEvent(Main plugin) {
         this.plugin = plugin;
-
-        this.adminList = this.plugin.getSetListMap().getAdminList();
-        this.adminListPlayer = this.plugin.getSetListMap().getAdminListPlayer();
-
+        this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
         this.api = new API(this.plugin);
-
-        adminList.add("AlphaGibbon43");
-        adminList.add("andrew121410");
-        adminList.add("Robobros3");
-        adminList.add("RoboBros1");
-        adminList.add("Andrzej_Przybyla");
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
@@ -45,7 +33,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
         Player p = event.getPlayer();
         String cmd = event.getMessage();
 
-        //NAME PINGER
+        //Name ping
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -71,7 +59,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
 
         String[] args = cmd.split(" ");
 
-        if (!adminList.contains(p.getDisplayName())) {
+        if (!p.isOp()) {
             return;
         }
 
@@ -124,7 +112,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            adminListPlayer.add(p);
+                            hiddenPlayers.add(p);
                             plugin.getServer().getOnlinePlayers().forEach(player -> player.hidePlayer(p));
                             if (!pTarget.canSee(p)) {
                                 p.teleport(pTarget.getLocation());
@@ -145,7 +133,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    adminListPlayer.remove(p);
+                    hiddenPlayers.remove(p);
                     plugin.getServer().getOnlinePlayers().forEach(player -> player.showPlayer(p));
                     p.sendMessage(Translate.chat("&bOk..."));
                 }
@@ -160,7 +148,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    adminListPlayer.add(p);
+                    hiddenPlayers.add(p);
                     plugin.getServer().getOnlinePlayers().forEach(player -> player.hidePlayer(p));
                     p.sendMessage(Translate.chat("&bOk..."));
                 }
@@ -169,7 +157,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
 
         if (args[0].equalsIgnoreCase(":list")) {
             event.setCancelled(true);
-            for (Player player : adminListPlayer) {
+            for (Player player : hiddenPlayers) {
                 p.sendMessage("This player is hidden -> " + player.getDisplayName());
             }
         }
