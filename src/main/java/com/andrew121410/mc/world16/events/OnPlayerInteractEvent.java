@@ -24,11 +24,9 @@ import java.util.UUID;
 
 public class OnPlayerInteractEvent implements Listener {
 
-    //Maps
     private Map<String, Location> latestClickedBlocked;
     private Map<UUID, PowerToolObject> powerToolMap;
     private Map<Player, Arrow> sitMap;
-    //...
 
     private Main plugin;
     private API api;
@@ -60,9 +58,9 @@ public class OnPlayerInteractEvent implements Listener {
         //Get's the latest clicked block and stores it in HashMap.
         if (action == Action.RIGHT_CLICK_BLOCK) {
             latestClickedBlocked.remove(p.getDisplayName()); //Removes old block
-            latestClickedBlocked.put(p.getDisplayName(), event.getClickedBlock().getLocation());
+            latestClickedBlocked.put(p.getDisplayName(), block.getLocation());
 
-            //Stairs
+            //Seats
             if (block.getBlockData() instanceof Stairs && api.getPlayersYML(customConfigManager, p).getBoolean("seats")) {
                 Stairs stairs = (Stairs) block.getBlockData();
 
@@ -80,11 +78,17 @@ public class OnPlayerInteractEvent implements Listener {
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
         } else if (action == Action.LEFT_CLICK_AIR) {
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
+        } else if (action == Action.PHYSICAL) {
+            if (block != null) {
+                if (block.getType() == Material.FARMLAND && api.isPreventCropsTrampling()) {
+                    event.setCancelled(true);
+                }
+            }
         }
     }
 
     private void setupSeatChecker() {
-        //DONT RUN TWO TIMES.
+        //Don't run 2 times.
         if (isSitCheckerRunning) return;
         isSitCheckerRunning = true;
 
