@@ -1,6 +1,9 @@
 package com.andrew121410.mc.world16.utils;
 
-import com.andrew121410.mc.world16.objects.*;
+import com.andrew121410.mc.world16.objects.AfkObject;
+import com.andrew121410.mc.world16.objects.KeyObject;
+import com.andrew121410.mc.world16.objects.LocationObject;
+import com.andrew121410.mc.world16.objects.PowerToolObject;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -15,13 +18,11 @@ public class SetListMap {
     private Map<String, KeyObject> keyDataM; //0
     private Map<UUID, LocationObject> backM; //0
     private Map<Player, Player> tpaM; //0
-    private Map<String, Map<String, List<Location>>> eRamRaw; //0
     private Map<String, Location> latestClickedBlocked; //0
     private Map<UUID, AfkObject> afkMap; //0
     private Map<UUID, Map<String, Location>> homesMap; //0
     private Map<UUID, PowerToolObject> powerToolMap; //0
     private Map<Player, Arrow> sitMap;
-    private Map<UUID, MoneyObject> moneyMap;
 
     private Map<String, UUID> uuidCache; //1
     private Map<String, Location> jails; //1
@@ -35,18 +36,16 @@ public class SetListMap {
     private List<String> soundsList; //1
     private List<String> spyCommandBlock; //1
 
-    //Constucer
+    //Constructor
     public SetListMap() {
         this.keyDataM = new HashMap<>();
         this.backM = new HashMap<>();
         this.tpaM = new LinkedHashMap<>();
-        this.eRamRaw = new HashMap<>();
         this.latestClickedBlocked = new HashMap<>();
         this.afkMap = new HashMap<>();
         this.homesMap = new HashMap<>();
         this.powerToolMap = new HashMap<>();
         this.sitMap = new HashMap<>();
-        this.moneyMap = new HashMap<>();
 
         this.uuidCache = new HashMap<>();
         this.jails = new HashMap<>();
@@ -80,8 +79,6 @@ public class SetListMap {
 
         tpaM.remove(p);
 
-        eRamRaw.remove(p.getDisplayName());
-
         latestClickedBlocked.remove(p.getDisplayName());
 
         afkMap.remove(p.getUniqueId());
@@ -91,15 +88,12 @@ public class SetListMap {
         powerToolMap.remove(p.getUniqueId());
 
         sitMap.remove(p);
-
-        moneyMap.remove(p.getUniqueId());
     }
 
     public void clearAllMaps() {
         keyDataM.clear();
         backM.clear();
         tpaM.clear();
-        eRamRaw.clear();
         latestClickedBlocked.clear();
         afkMap.clear();
         uuidCache.clear();
@@ -109,7 +103,6 @@ public class SetListMap {
         warpsMap.clear();
         powerToolMap.clear();
         sitMap.clear();
-        moneyMap.clear();
     }
 
     public void clearAllLists(Player p) {
@@ -142,10 +135,6 @@ public class SetListMap {
         return tpaM;
     }
 
-    public Map<String, Map<String, List<Location>>> geteRamRaw() {
-        return eRamRaw;
-    }
-
     public Map<String, Location> getLatestClickedBlocked() {
         return latestClickedBlocked;
     }
@@ -174,7 +163,7 @@ public class SetListMap {
         return flyList;
     }
 
-    public List<String> getGodmList() {
+    public List<String> getGodList() {
         return godmList;
     }
 
@@ -200,9 +189,5 @@ public class SetListMap {
 
     public List<String> getSpyCommandBlock() {
         return spyCommandBlock;
-    }
-
-    public Map<UUID, MoneyObject> getMoneyMap() {
-        return moneyMap;
     }
 }

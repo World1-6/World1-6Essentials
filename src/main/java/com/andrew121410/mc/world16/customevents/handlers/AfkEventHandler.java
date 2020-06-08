@@ -1,7 +1,7 @@
 package com.andrew121410.mc.world16.customevents.handlers;
 
 import com.andrew121410.mc.world16.Main;
-import com.andrew121410.mc.world16.customevents.Events.AfkCustomEvent;
+import com.andrew121410.mc.world16.customevents.events.AfkCustomEvent;
 
 public class AfkEventHandler {
 

@@ -24,7 +24,7 @@ public class GodCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = new API(this.plugin);
 
-        this.godm = this.plugin.getSetListMap().getGodmList();
+        this.godm = this.plugin.getSetListMap().getGodList();
 
         this.plugin.getCommand("god").setExecutor(this);
     }

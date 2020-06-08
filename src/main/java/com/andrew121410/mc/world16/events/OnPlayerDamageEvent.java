@@ -13,13 +13,11 @@ public class OnPlayerDamageEvent implements Listener {
 
     private Main plugin;
 
-    private List<String> godm;
+    private List<String> godList;
 
     public OnPlayerDamageEvent(Main getPlugin) {
         this.plugin = getPlugin;
-
-        this.godm = this.plugin.getSetListMap().getGodmList();
-
+        this.godList = this.plugin.getSetListMap().getGodList();
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
@@ -30,7 +28,7 @@ public class OnPlayerDamageEvent implements Listener {
         }
         Player p = (Player) event.getEntity();
 
-        if (godm.contains(p.getDisplayName())) {
+        if (godList.contains(p.getDisplayName())) {
             event.setCancelled(true);
         }
     }
@@ -42,7 +40,7 @@ public class OnPlayerDamageEvent implements Listener {
         }
         Player p = (Player) event.getEntity();
 
-        if (godm.contains(p.getDisplayName())) {
+        if (godList.contains(p.getDisplayName())) {
             event.setCancelled(true);
         }
     }

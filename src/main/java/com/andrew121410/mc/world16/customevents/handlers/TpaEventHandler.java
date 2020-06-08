@@ -1,7 +1,7 @@
 package com.andrew121410.mc.world16.customevents.handlers;
 
 import com.andrew121410.mc.world16.Main;
-import com.andrew121410.mc.world16.customevents.Events.TpaCustomEvent;
+import com.andrew121410.mc.world16.customevents.events.TpaCustomEvent;
 
 public class TpaEventHandler {
 

@@ -38,27 +38,22 @@ import java.util.concurrent.TimeUnit;
 
 public class API {
 
-    // Maps
     private Map<String, UUID> uuidCache;
     private Map<UUID, AfkObject> afkMap;
-    //...
 
-    // Lists
     private List<String> flyList;
     private List<String> godList;
-    //...
 
     private Main plugin;
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "4/11/2020";
+    public static final String DATE_OF_VERSION = "6/8/2020";
     public static final String PREFIX = "[&9World1-6Ess&r]";
     public static final String USELESS_TAG = PREFIX + "->[&bUSELESS&r]";
     public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";
     public static final String EMERGENCY_TAG = PREFIX + "->&c[EMERGENCY]&r";
     public static final String SOMETHING_WENT_WRONG = "Something went wrong.";
-    public static final int DEFAULT_MONEY = 100;
     //...
 
     public API(Main plugin) {
@@ -69,8 +64,9 @@ public class API {
     private void doSetListMap() {
         this.uuidCache = this.plugin.getSetListMap().getUuidCache();
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
+
         this.flyList = this.plugin.getSetListMap().getFlyList();
-        this.godList = this.plugin.getSetListMap().getGodmList();
+        this.godList = this.plugin.getSetListMap().getGodList();
     }
 
     public boolean isAfk(Player p) {
@@ -87,22 +83,6 @@ public class API {
 
     public boolean isDebug() {
         return plugin.getConfig().getString("debug").equalsIgnoreCase("true");
-    }
-
-    public boolean isElevatorsEnabled() {
-        return plugin.getConfig().getString("elevators").equalsIgnoreCase("true");
-    }
-
-    public boolean isFireAlarmsEnabled() {
-        return plugin.getConfig().getString("firealarms").equalsIgnoreCase("true");
-    }
-
-    public boolean isDiscordBotEnabled() {
-        return plugin.getConfig().getString("discordbot").equalsIgnoreCase("true");
-    }
-
-    public boolean isTrafficSystemEnabled() {
-        return plugin.getConfig().getString("trafficsystem").equalsIgnoreCase("true");
     }
 
     public boolean isSignTranslateColors() {
@@ -180,6 +160,18 @@ public class API {
         if (configurationSection == null)
             configurationSection = customConfigManager.getPlayersYml().getConfig().createSection("UUID." + player.getUniqueId());
         return configurationSection;
+    }
+
+    public void doAfk(Player player, String color) {
+        if (afkMap.get(player.getUniqueId()).isAfk()) {
+            this.plugin.getServer().broadcastMessage(Translate.chat("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
+            this.afkMap.get(player.getUniqueId()).restart(player);
+            new UnAfkEventHandler(this.plugin, player.getDisplayName());
+        } else if (!afkMap.get(player.getUniqueId()).isAfk()) {
+            this.plugin.getServer().broadcastMessage(Translate.chat("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
+            this.afkMap.get(player.getUniqueId()).setAfk(true, player.getLocation());
+            new AfkEventHandler(this.plugin, player.getDisplayName()); //CALLS THE EVENT.
+        }
     }
 
     public boolean isInteger(String input) {
@@ -264,18 +256,6 @@ public class API {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-    public void doAfk(Player player, String color) {
-        if (afkMap.get(player.getUniqueId()).isAfk()) {
-            this.plugin.getServer().broadcastMessage(Translate.chat("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
-            this.afkMap.get(player.getUniqueId()).restart(player);
-            new UnAfkEventHandler(this.plugin, player.getDisplayName());
-        } else if (!afkMap.get(player.getUniqueId()).isAfk()) {
-            this.plugin.getServer().broadcastMessage(Translate.chat("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
-            this.afkMap.get(player.getUniqueId()).setAfk(true, player.getLocation());
-            new AfkEventHandler(this.plugin, player.getDisplayName()); //CALLS THE EVENT.
         }
     }
 

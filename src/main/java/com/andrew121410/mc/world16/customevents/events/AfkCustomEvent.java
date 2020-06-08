@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16.customevents.Events;
+package com.andrew121410.mc.world16.customevents.events;
 
 import com.andrew121410.mc.world16.Main;
 import org.bukkit.entity.Player;
