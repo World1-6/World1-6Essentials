@@ -26,10 +26,10 @@ public class RamCMD implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
+        Player player = (Player) sender;
 
-        if (!p.hasPermission("world16.ram")) {
-            api.PermissionErrorMessage(p);
+        if (!player.hasPermission("world16.ram")) {
+            api.PermissionErrorMessage(player);
             return true;
         }
 
@@ -38,10 +38,10 @@ public class RamCMD implements CommandExecutor {
         long freeMemory = (Runtime.getRuntime().freeMemory() / 1024 / 1024);
         long usedMemory = allocatedMemory - freeMemory;
 
-        p.sendMessage(Translate.chat("&6Maximum memory: &c" + maxMemory + " MB."));
-        p.sendMessage(Translate.chat("&6Allocated memory: &c" + allocatedMemory + " MB."));
-        p.sendMessage(Translate.chat("&6Free memory: &c" + freeMemory + " MB."));
-        p.sendMessage(Translate.chat("&6Used memory: &c " + usedMemory + " MB."));
+        player.sendMessage(Translate.chat("&6Maximum memory: &c" + maxMemory + " MB."));
+        player.sendMessage(Translate.chat("&6Allocated memory: &c" + allocatedMemory + " MB."));
+        player.sendMessage(Translate.chat("&6Free memory: &c" + freeMemory + " MB."));
+        player.sendMessage(Translate.chat("&6Used memory: &c" + usedMemory + " MB."));
         return true;
     }
 }
