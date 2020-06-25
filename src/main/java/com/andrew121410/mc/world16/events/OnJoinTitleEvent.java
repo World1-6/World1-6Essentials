@@ -11,20 +11,20 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class OnJoinTitleEvent implements Listener {
 
     private Main plugin;
-    private FileConfiguration file;
+    private FileConfiguration config;
 
     public OnJoinTitleEvent(Main plugin) {
         this.plugin = plugin;
-        this.file = this.plugin.getConfig();
+        this.config = this.plugin.getConfig();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        TitleManager.sendTitle(e.getPlayer(), 10, 5 * 20, 10, Translate.chat(file.getString("TittleTOP")),
-                Translate.chat(file.getString("TittleBOTTOM")));
-        TitleManager.sendTabTitle(e.getPlayer(), Translate.chat(file.getString("TablistTOP")),
-                Translate.chat(file.getString("TablistBOTTOM")));
+        TitleManager.sendTitle(e.getPlayer(), 10, 5 * 20, 10, Translate.chat(config.getString("TittleTOP")),
+                Translate.chat(config.getString("TittleBOTTOM")));
+        TitleManager.sendTabTitle(e.getPlayer(), Translate.chat(config.getString("TablistTOP")),
+                Translate.chat(config.getString("TablistBOTTOM")));
     }
 }
