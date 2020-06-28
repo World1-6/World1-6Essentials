@@ -100,8 +100,6 @@ permissions:
       world16.back: true
       world16.back.death: true
       world16.back.tp: true
-      world16.back.set: true
-      world16.back.goto: true
 
   world16.bed:
     description: Allows to do bed

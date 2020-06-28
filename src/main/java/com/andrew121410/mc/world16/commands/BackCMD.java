@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16.commands;
 
 import com.andrew121410.mc.world16.Main;
-import com.andrew121410.mc.world16.objects.LocationObject;
 import com.andrew121410.mc.world16.tabcomplete.BackTab;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -18,29 +17,19 @@ import java.util.UUID;
 
 public class BackCMD implements CommandExecutor {
 
+    private Map<UUID, Map<String, Location>> backMap;
+
     private Main plugin;
     private API api;
 
-    //Maps
-    private Map<UUID, LocationObject> backm;
-    //...
-
     public BackCMD(Main plugin) {
         this.plugin = plugin;
-
-        this.api = new API(this.plugin);
-
-        this.backm = this.plugin.getSetListMap().getBackM();
+        this.api = this.plugin.getApi();
+        this.backMap = this.plugin.getSetListMap().getBackMap();
 
         this.plugin.getCommand("back").setExecutor(this);
         this.plugin.getCommand("back").setTabCompleter(new BackTab(this.plugin));
     }
-
-    /**
-     * Death ID for getLocation is 1;
-     * Tp ID for GetLocation is 2;
-     * Set ID for GetLocation is 3;
-     */
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -48,89 +37,52 @@ public class BackCMD implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
+        Player player = (Player) sender;
 
-        LocationObject back = this.backm.get(p.getUniqueId());
-
-        if (back == null) {
-            backm.putIfAbsent(p.getUniqueId(), new LocationObject());
-            p.sendMessage(Translate.chat("[&cBack&r] &cHey, If you see something broke in /back report this to Andrew121410#2035 on discord."));
-            return true;
-        }
+        Map<String, Location> playerBackMap = this.backMap.get(player.getUniqueId());
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat("[&cBack&r] &a&oHere's all of the back commands/sub."));
-            p.sendMessage(Translate.chat("&6/back death"));
-            p.sendMessage(Translate.chat("&6/back tp"));
-            p.sendMessage(Translate.chat("&6/back set"));
-            p.sendMessage(Translate.chat("&6/back goto"));
+            player.sendMessage(Translate.chat("[&cBack&r] &a&oHere's all of the back commands/sub."));
+            player.sendMessage(Translate.chat("&6/back death"));
+            player.sendMessage(Translate.chat("&6/back tp"));
             return true;
         }
 
-        //DEATH
         if (args[0].equalsIgnoreCase("death")) {
-            if (!p.hasPermission("world16.back.death")) {
-                api.PermissionErrorMessage(p);
+            if (!player.hasPermission("world16.back.death")) {
+                api.PermissionErrorMessage(player);
                 return true;
             }
-            if (back.getLocation(1) != null) {
-                Location deathlocation = back.getLocation(1);
-
-                //Checks if it's Lava Or Water.
-                if (deathlocation.getBlock().isLiquid() || deathlocation.getBlock().getRelative(BlockFace.DOWN).isLiquid()) {
-                    deathlocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.OAK_LOG);
-                    deathlocation.getBlock().getRelative(BlockFace.EAST).setType(Material.OAK_LOG);
-                    deathlocation.getBlock().getRelative(BlockFace.NORTH).setType(Material.OAK_LOG);
-                    deathlocation.getBlock().getRelative(BlockFace.WEST).setType(Material.OAK_LOG);
-                    deathlocation.getBlock().getRelative(BlockFace.SOUTH).setType(Material.OAK_LOG);
-                    deathlocation.getBlock().setType(Material.AIR);
-                }
-
-                p.teleport(deathlocation);
-                return true;
-            } else {
-                p.sendMessage(Translate.chat("[&cBack&r] &eLooks like you didn't die?"));
+            Location deathLocation = playerBackMap.get("Death");
+            if (deathLocation == null) {
+                player.sendMessage(Translate.chat("&4No death back location was found..."));
                 return true;
             }
 
-            //TP
+            //Checks if it's Lava Or Water.
+            if (deathLocation.getBlock().isLiquid() || deathLocation.getBlock().getRelative(BlockFace.DOWN).isLiquid()) {
+                deathLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.OAK_LOG);
+                deathLocation.getBlock().getRelative(BlockFace.EAST).setType(Material.OAK_LOG);
+                deathLocation.getBlock().getRelative(BlockFace.NORTH).setType(Material.OAK_LOG);
+                deathLocation.getBlock().getRelative(BlockFace.WEST).setType(Material.OAK_LOG);
+                deathLocation.getBlock().getRelative(BlockFace.SOUTH).setType(Material.OAK_LOG);
+                deathLocation.getBlock().setType(Material.AIR);
+            }
+
+            player.teleport(deathLocation);
+            player.sendMessage(Translate.chat("&6Teleporting..."));
         } else if (args[0].equalsIgnoreCase("tp")) {
-            if (!p.hasPermission("world16.back.tp")) {
-                api.PermissionErrorMessage(p);
+            if (!player.hasPermission("world16.back.tp")) {
+                api.PermissionErrorMessage(player);
                 return true;
             }
-            if (back.getLocation(2) != null) {
-                p.teleport(back.getLocation(2));
-                return true;
-            } else {
-                p.sendMessage(Translate.chat("[&cBack&r] &eLooks like you didn't teleport yet."));
+            Location tpLocation = playerBackMap.get("Tp");
+            if (tpLocation == null) {
+                player.sendMessage(Translate.chat("&4No tp back location was found..."));
                 return true;
             }
-
-            //SET
-        } else if (args[0].equalsIgnoreCase("set")) {
-            if (!p.hasPermission("world16.back.set")) {
-                api.PermissionErrorMessage(p);
-                return true;
-            }
-            back.setLocation("set", 3, p.getLocation());
-            p.sendMessage(Translate.chat("[&cBack&r] &aYour back location has been set."));
-            return true;
-
-            //GOTO
-        } else if (args[0].equalsIgnoreCase("goto")) {
-            if (!p.hasPermission("world16.back.goto")) {
-                api.PermissionErrorMessage(p);
-                return true;
-            }
-            if (back.getLocation(3) != null) {
-                p.teleport(back.getLocation(3));
-                p.sendMessage(Translate.chat("[&cBack&r] &6Done."));
-                return true;
-            } else {
-                p.sendMessage(Translate.chat("[&cBack&r] &eLooks like you didn't &aset&e a back location yet."));
-                return true;
-            }
+            player.teleport(tpLocation);
+            player.sendMessage(Translate.chat("&6Teleporting..."));
         }
         return true;
     }

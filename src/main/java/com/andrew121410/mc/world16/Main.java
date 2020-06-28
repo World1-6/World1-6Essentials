@@ -138,7 +138,6 @@ public class Main extends JavaPlugin {
         new OnPlayerTeleportEvent(this);
         //...
         new OnPlayerBedEnterEvent(this);
-        new OnJoinTitleEvent(this);
         //...
         new OnAsyncPlayerChatEvent(this);
         new OnPlayerInteractEvent(this);

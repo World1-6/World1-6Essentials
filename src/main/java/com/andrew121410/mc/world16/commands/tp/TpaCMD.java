@@ -28,7 +28,7 @@ public class TpaCMD implements CommandExecutor {
         this.customConfigManager = customConfigManager;
         this.api = new API(this.plugin);
 
-        this.tpam = this.plugin.getSetListMap().getTpaM();
+        this.tpam = this.plugin.getSetListMap().getTpaMap();
 
         this.plugin.getCommand("tpa").setExecutor(this);
     }

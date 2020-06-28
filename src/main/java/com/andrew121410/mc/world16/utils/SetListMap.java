@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16.utils;
 
 import com.andrew121410.mc.world16.objects.AfkObject;
-import com.andrew121410.mc.world16.objects.LocationObject;
 import com.andrew121410.mc.world16.objects.PowerToolObject;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
@@ -14,8 +13,8 @@ public class SetListMap {
     // 0 TO CLEAR AFTER THE PLAYER LEAVES
     // 1 TO ONLY CLEAR WHEN THE SERVER SHUTS DOWN
 
-    private Map<UUID, LocationObject> backM; //0
-    private Map<Player, Player> tpaM; //0
+    private Map<UUID, Map<String, Location>> backMap; //0
+    private Map<Player, Player> tpaMap; //0
     private Map<String, Location> latestClickedBlocked; //0
     private Map<UUID, AfkObject> afkMap; //0
     private Map<UUID, Map<String, Location>> homesMap; //0
@@ -28,7 +27,7 @@ public class SetListMap {
     private Map<String, Location> warpsMap; //1
 
     private List<String> flyList; //0
-    private List<String> godmList; //0
+    private List<String> godList; //0
     private List<Player> hiddenPlayers; //0
 
     private List<String> soundsList; //1
@@ -36,8 +35,8 @@ public class SetListMap {
 
     //Constructor
     public SetListMap() {
-        this.backM = new HashMap<>();
-        this.tpaM = new LinkedHashMap<>();
+        this.backMap = new HashMap<>();
+        this.tpaMap = new LinkedHashMap<>();
         this.latestClickedBlocked = new HashMap<>();
         this.afkMap = new HashMap<>();
         this.homesMap = new HashMap<>();
@@ -51,7 +50,7 @@ public class SetListMap {
 
         //Lists
         this.flyList = new ArrayList<>();
-        this.godmList = new ArrayList<>();
+        this.godList = new ArrayList<>();
         this.hiddenPlayers = new ArrayList<>();
 
         this.soundsList = new ArrayList<>();
@@ -70,9 +69,9 @@ public class SetListMap {
     }
 
     public void clearAllMaps(Player p) {
-        backM.remove(p.getUniqueId());
+        backMap.remove(p.getUniqueId());
 
-        tpaM.remove(p);
+        tpaMap.remove(p);
 
         latestClickedBlocked.remove(p.getDisplayName());
 
@@ -86,8 +85,8 @@ public class SetListMap {
     }
 
     public void clearAllMaps() {
-        backM.clear();
-        tpaM.clear();
+        backMap.clear();
+        tpaMap.clear();
         latestClickedBlocked.clear();
         afkMap.clear();
         uuidCache.clear();
@@ -102,14 +101,14 @@ public class SetListMap {
     public void clearAllLists(Player p) {
         flyList.remove(p.getDisplayName());
 
-        godmList.remove(p.getDisplayName());
+        godList.remove(p.getDisplayName());
 
         hiddenPlayers.remove(p);
     }
 
     public void clearAllLists() {
         flyList.clear();
-        godmList.clear();
+        godList.clear();
         hiddenPlayers.clear();
         soundsList.clear();
         spyCommandBlock.clear();
@@ -117,12 +116,12 @@ public class SetListMap {
 
     //Getters
 
-    public Map<UUID, LocationObject> getBackM() {
-        return backM;
+    public Map<UUID, Map<String, Location>> getBackMap() {
+        return backMap;
     }
 
-    public Map<Player, Player> getTpaM() {
-        return tpaM;
+    public Map<Player, Player> getTpaMap() {
+        return tpaMap;
     }
 
     public Map<String, Location> getLatestClickedBlocked() {
@@ -154,7 +153,7 @@ public class SetListMap {
     }
 
     public List<String> getGodList() {
-        return godmList;
+        return godList;
     }
 
     public List<Player> getHiddenPlayers() {

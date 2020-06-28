@@ -61,7 +61,7 @@ public class DebugCMD implements CommandExecutor {
                 api.PermissionErrorMessage(p);
                 return true;
             }
-            String date = api.Time();
+            String date = api.time();
             p.sendMessage(Translate.chat("Time/Data:-> " + date));
             return true;
         } else if (args[0].equalsIgnoreCase("reload")) {
