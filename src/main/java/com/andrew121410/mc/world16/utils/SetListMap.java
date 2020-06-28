@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16.utils;
 
 import com.andrew121410.mc.world16.objects.AfkObject;
-import com.andrew121410.mc.world16.objects.KeyObject;
 import com.andrew121410.mc.world16.objects.LocationObject;
 import com.andrew121410.mc.world16.objects.PowerToolObject;
 import org.bukkit.Location;
@@ -15,7 +14,6 @@ public class SetListMap {
     // 0 TO CLEAR AFTER THE PLAYER LEAVES
     // 1 TO ONLY CLEAR WHEN THE SERVER SHUTS DOWN
 
-    private Map<String, KeyObject> keyDataM; //0
     private Map<UUID, LocationObject> backM; //0
     private Map<Player, Player> tpaM; //0
     private Map<String, Location> latestClickedBlocked; //0
@@ -38,7 +36,6 @@ public class SetListMap {
 
     //Constructor
     public SetListMap() {
-        this.keyDataM = new HashMap<>();
         this.backM = new HashMap<>();
         this.tpaM = new LinkedHashMap<>();
         this.latestClickedBlocked = new HashMap<>();
@@ -73,8 +70,6 @@ public class SetListMap {
     }
 
     public void clearAllMaps(Player p) {
-        keyDataM.remove(p.getDisplayName());
-
         backM.remove(p.getUniqueId());
 
         tpaM.remove(p);
@@ -91,7 +86,6 @@ public class SetListMap {
     }
 
     public void clearAllMaps() {
-        keyDataM.clear();
         backM.clear();
         tpaM.clear();
         latestClickedBlocked.clear();
@@ -122,10 +116,6 @@ public class SetListMap {
     }
 
     //Getters
-
-    public Map<String, KeyObject> getKeyDataM() {
-        return keyDataM;
-    }
 
     public Map<UUID, LocationObject> getBackM() {
         return backM;

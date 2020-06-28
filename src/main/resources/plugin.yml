@@ -19,7 +19,6 @@ commands:
   echest:
   setspawn:
   sign:
-  key:
   colors:
   setjail:
   jail:
@@ -154,9 +153,6 @@ permissions:
     default: op
   world16.isafk:
     description: Allows to do isafk
-    default: true
-  world16.key:
-    description: Allows to do key
     default: true
   world16.night:
     description: Allows to do night

@@ -3,9 +3,7 @@ package com.andrew121410.mc.world16.utils;
 import com.andrew121410.CCUtils.storage.ISQL;
 import com.andrew121410.CCUtils.storage.SQLite;
 import com.andrew121410.mc.world16.Main;
-import com.andrew121410.mc.world16.managers.KeyManager;
 import com.andrew121410.mc.world16.objects.AfkObject;
-import com.andrew121410.mc.world16.objects.KeyObject;
 import com.andrew121410.mc.world16.objects.LocationObject;
 import com.andrew121410.mc.world16.objects.PowerToolObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -17,7 +15,6 @@ import java.util.UUID;
 
 public class PlayerInitializer {
 
-    private Map<String, KeyObject> keyDataM;
     private Map<UUID, LocationObject> backM;
     private Map<UUID, PowerToolObject> powerToolMap;
     private Map<UUID, AfkObject> afkObjectMap;
@@ -25,14 +22,12 @@ public class PlayerInitializer {
     private List<Player> adminListPlayer;
 
     private ISQL isqlKeys;
-    private KeyManager keyapi;
 
     private Main plugin;
 
     public PlayerInitializer(Main plugin) {
         this.plugin = plugin;
 
-        this.keyDataM = this.plugin.getSetListMap().getKeyDataM();
         this.backM = this.plugin.getSetListMap().getBackM();
         this.adminListPlayer = this.plugin.getSetListMap().getHiddenPlayers();
         this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
@@ -41,13 +36,9 @@ public class PlayerInitializer {
         //ISQL
         this.isqlKeys = new SQLite(this.plugin.getDataFolder(), "keys");
         //...
-
-        this.keyapi = new KeyManager(this.plugin, this.isqlKeys);
     }
 
     public void load(Player player) {
-        keyDataM.put(player.getDisplayName(), new KeyObject(player.getDisplayName(), 1, "null"));
-        keyapi.getAllKeysISQL(player.getDisplayName(), isqlKeys);
         backM.put(player.getUniqueId(), new LocationObject());
         powerToolMap.put(player.getUniqueId(), new PowerToolObject());
 
