@@ -48,7 +48,7 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "6/25/2020";
+    public static final String DATE_OF_VERSION = "6/28/2020";
     public static final String PREFIX = "[&9World1-6Ess&r]";
     public static final String USELESS_TAG = PREFIX + "->[&bUSELESS&r]";
     public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";
@@ -93,12 +93,12 @@ public class API {
         return plugin.getConfig().getString("preventCropsTrampling").equalsIgnoreCase("true");
     }
 
-    public String FormatTime(LocalDateTime time) {
+    public String formatTime(LocalDateTime time) {
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
         return time.format(myFormatObj);
     }
 
-    public String Time() {
+    public String time() {
         LocalDateTime time = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
         return time.format(myFormatObj);
@@ -112,7 +112,9 @@ public class API {
 
     public String getServerVersion() {
         String version = this.plugin.getServer().getVersion();
-        if (version.contains("1.15")) {
+        if (version.contains("1.16")) {
+            return "1.16";
+        } else if (version.contains("1.15")) {
             return "1.15";
         } else if (version.contains("1.14")) {
             return "1.14";

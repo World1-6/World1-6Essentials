@@ -76,7 +76,6 @@ public class Main extends JavaPlugin {
         new RamCMD(this);
         new EChestCMD(this);
         new SignCMD(this);
-        new KeyCMD(this); //KEY COMMAND
         new ColorsCMD(this);
         new AfkCMD(this);
         new FlySpeedCMD(this, this.customConfigManager);
@@ -139,7 +138,6 @@ public class Main extends JavaPlugin {
         new OnPlayerTeleportEvent(this);
         //...
         new OnPlayerBedEnterEvent(this);
-        new OnJoinTitleEvent(this);
         //...
         new OnAsyncPlayerChatEvent(this);
         new OnPlayerInteractEvent(this);

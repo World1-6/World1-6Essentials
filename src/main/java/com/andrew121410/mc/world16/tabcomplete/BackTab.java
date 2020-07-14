@@ -27,8 +27,6 @@ public class BackTab implements TabCompleter {
         if (tabCompleteMap.get("back").isEmpty()) {
             tabCompleteMap.get("back").add("death");
             tabCompleteMap.get("back").add("tp");
-            tabCompleteMap.get("back").add("set");
-            tabCompleteMap.get("back").add("goto");
 //            tabCompleteMap.get("back").add("");
         }
     }

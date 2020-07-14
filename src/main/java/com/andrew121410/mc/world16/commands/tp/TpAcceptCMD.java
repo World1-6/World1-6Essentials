@@ -27,7 +27,7 @@ public class TpAcceptCMD implements CommandExecutor {
         this.customYmlManager = customConfigManager;
         this.api = new API(this.plugin);
 
-        this.tpam = this.plugin.getSetListMap().getTpaM();
+        this.tpam = this.plugin.getSetListMap().getTpaMap();
 
         this.plugin.getCommand("tpaccept").setExecutor(this);
     }

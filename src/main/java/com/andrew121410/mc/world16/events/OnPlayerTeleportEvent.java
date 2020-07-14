@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16.events;
 
 import com.andrew121410.mc.world16.Main;
-import com.andrew121410.mc.world16.objects.LocationObject;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,32 +14,27 @@ public class OnPlayerTeleportEvent implements Listener {
 
     private Main plugin;
 
-    private Map<UUID, LocationObject> backm;
+    private Map<UUID, Map<String, Location>> backMap;
 
     public OnPlayerTeleportEvent(Main plugin) {
         this.plugin = plugin;
-
-        this.backm = this.plugin.getSetListMap().getBackM();
+        this.backMap = this.plugin.getSetListMap().getBackMap();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler
     public void OnTp(PlayerTeleportEvent event) {
-        Player p = event.getPlayer();
-
+        Player player = event.getPlayer();
         Location to = event.getTo();
         Location from = event.getFrom();
 
         // Only save location if teleporting more than 5 blocks.
         if (!to.getWorld().equals(from.getWorld()) || to.distanceSquared(from) > 25) {
-            LocationObject back = this.backm.get(p.getUniqueId());
-            if (back != null) {
-                back.setLocation("tp", 2, from);
-            } else {
-                LocationObject locationObject = new LocationObject();
-                locationObject.setLocation("tp", 2, from);
-                backm.put(p.getUniqueId(), locationObject);
+            Map<String, Location> playerBackMap = this.backMap.get(player.getUniqueId());
+            if (playerBackMap != null) {
+                playerBackMap.remove("Tp");
+                playerBackMap.put("Tp", player.getLocation());
             }
         }
     }
