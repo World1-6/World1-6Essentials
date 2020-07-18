@@ -50,13 +50,11 @@ public class HomeManager {
         convert.forEach((k, v) -> load(player, v));
     }
 
-    public void save(Player player, String homeName, Location location) {
-        this.homesMap.get(player.getUniqueId()).put(homeName.toLowerCase(), location);
-
+    public void save(UUID uuid, String playerName, String homeName, Location location) {
         SQLDataStore sqlDataStore = new SQLDataStore();
-        sqlDataStore.getMap().put("UUID", String.valueOf(player.getUniqueId()));
+        sqlDataStore.getMap().put("UUID", String.valueOf(uuid));
         sqlDataStore.getMap().put("Date", "0");
-        sqlDataStore.getMap().put("PlayerName", player.getDisplayName());
+        sqlDataStore.getMap().put("PlayerName", playerName);
         sqlDataStore.getMap().put("HomeName", homeName.toLowerCase());
         sqlDataStore.getMap().put("X", String.valueOf(location.getX()));
         sqlDataStore.getMap().put("Y", String.valueOf(location.getY()));

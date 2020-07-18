@@ -1,7 +1,3 @@
-TittleTOP: ''
-TittleBOTTOM: ''
-TablistTOP: ''
-TablistBOTTOM: ''
 debug: 'false'
 signTranslateColors: 'true'
 preventCropsTrampling: 'false'

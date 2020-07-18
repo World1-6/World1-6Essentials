@@ -4,12 +4,20 @@ import com.andrew121410.mc.world16.Main;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.tabcomplete.DebugTab;
 import com.andrew121410.mc.world16.utils.API;
+import com.andrew121410.mc.world16.utils.DataTranslator;
+import com.andrew121410.mc.world16.utils.Software;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Map;
+import java.util.UUID;
 
 public class DebugCMD implements CommandExecutor {
 
@@ -42,25 +50,7 @@ public class DebugCMD implements CommandExecutor {
         if (args.length == 0) {
             p.sendMessage(Translate.chat("&6Please use tab complete."));
             return true;
-        } else if (args.length == 1 && (args[0].equalsIgnoreCase("default"))) {
-            if (!p.hasPermission("world16.debug.defaultstuff")) { // Permission
-                api.PermissionErrorMessage(p);
-                return true;
-            }
-            this.plugin.getConfig().set("TittleTOP", "&f&l[&4World 1-6&f&l]");
-            this.plugin.getConfig().set("TittleBOTTOM", "&9&oHome Of Minecraft Fire Alarms.");
-            this.plugin.getConfig().set("TablistTOP", "&f&l[&4World 1-6&f&l]");
-            this.plugin.getConfig().set("TablistBOTTOM", "&9&oHome Of Minecraft Fire Alarms.");
-            this.plugin.saveConfig();
-            this.plugin.reloadConfig();
-            p.sendMessage(Translate.chat("&bOK..."));
-            return true;
-            //DATE
         } else if (args.length == 1 && (args[0].equalsIgnoreCase("date"))) {
-            if (!p.hasPermission("world16.debug.date")) { // Permission
-                api.PermissionErrorMessage(p);
-                return true;
-            }
             String date = api.time();
             p.sendMessage(Translate.chat("Time/Data:-> " + date));
             return true;
@@ -104,6 +94,16 @@ public class DebugCMD implements CommandExecutor {
                 }
                 p.sendMessage(Translate.chat("&aEveryones data has been unloaded."));
                 return true;
+            }
+        } else if (args[0].equalsIgnoreCase("convert")) {
+            if (args.length == 3 && args[2].equalsIgnoreCase("homes")) {
+                DataTranslator dataTranslator = new DataTranslator();
+                Map<UUID, Map<String, Location>> homesFrom = dataTranslator.convertHomesFrom(Software.valueOf(args[1]));
+                Instant start = Instant.now();
+                homesFrom.forEach(((uuid, map) -> map.forEach((homeName, location) -> this.plugin.getHomeManager().save(uuid, this.plugin.getServer().getOfflinePlayer(uuid).getName(), homeName, location))));
+                Instant finish = Instant.now();
+                long timeElapsed = Duration.between(start, finish).toMillis();
+                p.sendMessage(Translate.chat("&6Home data has been transferred took " + timeElapsed + "Ms"));
             }
         }
         return true;
