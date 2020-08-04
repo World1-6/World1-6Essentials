@@ -92,7 +92,7 @@ public class Main extends JavaPlugin {
         new WorkBenchCMD(this, this.customConfigManager);
         new LastJoinCMD(this, this.customConfigManager);
         new PowerToolCMD(this, this.customConfigManager);
-        new USafeEnchantmentCMD(this, this.customConfigManager);
+        new UnSafeEnchatmentCMD(this, this.customConfigManager);
         new SeatsCMD(this, this.customConfigManager);
         new CommandBlockFindCMD(this);
 
