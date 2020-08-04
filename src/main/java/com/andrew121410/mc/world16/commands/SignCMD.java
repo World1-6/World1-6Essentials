@@ -2,9 +2,9 @@ package com.andrew121410.mc.world16.commands;
 
 import com.andrew121410.mc.world16.Main;
 import com.andrew121410.mc.world16.utils.API;
+import com.andrew121410.mc.world16utils.blocks.sign.SignUtils;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.sign.SignUtils;
-import org.bukkit.Material;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -26,8 +26,7 @@ public class SignCMD implements CommandExecutor {
         this.plugin = plugin;
 
         this.api = this.plugin.getApi();
-        this.signUtils = new SignUtils(this.plugin);
-
+        this.signUtils = this.plugin.getWrappers().getSignUtils();
         this.plugin.getCommand("sign").setExecutor(this);
     }
 
@@ -51,7 +50,7 @@ public class SignCMD implements CommandExecutor {
             p.sendMessage(Translate.chat("&6/sign edit &9<Edits sign>"));
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("give")) {
-            ItemStack item1 = new ItemStack(Material.OAK_SIGN, 1);
+            ItemStack item1 = new ItemStack(XMaterial.OAK_SIGN.parseMaterial(), 1);
             item1.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
             p.getInventory().addItem(item1);
             return true;

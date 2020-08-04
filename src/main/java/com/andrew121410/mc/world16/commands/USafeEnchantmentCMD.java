@@ -4,13 +4,14 @@ import com.andrew121410.mc.world16.Main;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.NamespacedKey;
+import com.cryptomorin.xseries.XEnchantment;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Optional;
 
 public class USafeEnchantmentCMD implements CommandExecutor {
 
@@ -43,15 +44,15 @@ public class USafeEnchantmentCMD implements CommandExecutor {
 
         if (args.length == 2) {
             ItemStack mainHand = p.getInventory().getItemInMainHand();
-            Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(args[0].toLowerCase()));
+            Optional<XEnchantment> xEnchantment = XEnchantment.matchXEnchantment(args[0]);
             int level = api.asIntOrDefault(args[1], 0);
 
-            if (enchantment == null) {
+            if (!xEnchantment.isPresent()) {
                 p.sendMessage(Translate.chat("&cLooks like that's not a enchantment."));
                 return true;
             }
 
-            mainHand.addUnsafeEnchantment(enchantment, level);
+            mainHand.addUnsafeEnchantment(xEnchantment.get().parseEnchantment(), level);
             return true;
         } else {
             p.sendMessage(Translate.chat("&cUsage: &6/unsafenchant <Enchant> <Level>"));

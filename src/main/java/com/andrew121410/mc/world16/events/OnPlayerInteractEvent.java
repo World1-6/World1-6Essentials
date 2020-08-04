@@ -5,12 +5,8 @@ import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.objects.PowerToolObject;
 import com.andrew121410.mc.world16.utils.API;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -60,27 +56,25 @@ public class OnPlayerInteractEvent implements Listener {
             latestClickedBlocked.remove(p.getDisplayName()); //Removes old block
             latestClickedBlocked.put(p.getDisplayName(), block.getLocation());
 
-            //Seats
-            if (block.getBlockData() instanceof Stairs && api.getPlayersYML(customConfigManager, p).getBoolean("seats")) {
-                Stairs stairs = (Stairs) block.getBlockData();
-
-                Block firstBlock = block.getRelative(BlockFace.UP);
-                Block secondBlock = firstBlock.getRelative(BlockFace.UP);
-                if (firstBlock.getType() == Material.AIR && secondBlock.getType() == Material.AIR) {
-                    Arrow arrow = (Arrow) block.getWorld().spawnEntity(block.getLocation().add(0.5D, 0.2D, 0.5D), EntityType.ARROW);
-                    arrow.addScoreboardTag("plugin-seat");
-                    arrow.setGravity(false);
-                    arrow.addPassenger(p);
-                    sitMap.put(p, arrow);
-                }
-            }
+            //Seats @TODO Make this system nicer.
+//            if (this.plugin.getWrappers().getBlockUtils().isStairs(block) && api.getPlayersYML(customConfigManager, p).getBoolean("seats")) {
+//                Block firstBlock = block.getRelative(BlockFace.UP);
+//                Block secondBlock = firstBlock.getRelative(BlockFace.UP);
+//                if (firstBlock.getType() == Material.AIR && secondBlock.getType() == Material.AIR) {
+//                    Arrow arrow = (Arrow) block.getWorld().spawnEntity(block.getLocation().add(0.5D, 0.2D, 0.5D), EntityType.ARROW);
+//                    arrow.addScoreboardTag("plugin-seat");
+//                    arrow.setGravity(false);
+//                    arrow.addPassenger(p);
+//                    sitMap.put(p, arrow);
+//                }
+//            }
 
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
         } else if (action == Action.LEFT_CLICK_AIR) {
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
         } else if (action == Action.PHYSICAL) {
             if (block != null) {
-                if (block.getType() == Material.FARMLAND && api.isPreventCropsTrampling()) {
+                if (this.plugin.getWrappers().getBlockUtils().isFarmLand(block) && api.isPreventCropsTrampling()) {
                     event.setCancelled(true);
                 }
             }

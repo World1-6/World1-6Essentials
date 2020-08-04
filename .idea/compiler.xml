@@ -7,10 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="world1-6essentials" />
+        <module name="World1-6Essentials" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="World1-6Essentials" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

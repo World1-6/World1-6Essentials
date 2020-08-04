@@ -4,6 +4,7 @@ import com.andrew121410.mc.world16.Main;
 import com.andrew121410.mc.world16.tabcomplete.BackTab;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -61,11 +62,11 @@ public class BackCMD implements CommandExecutor {
 
             //Checks if it's Lava Or Water.
             if (deathLocation.getBlock().isLiquid() || deathLocation.getBlock().getRelative(BlockFace.DOWN).isLiquid()) {
-                deathLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.OAK_LOG);
-                deathLocation.getBlock().getRelative(BlockFace.EAST).setType(Material.OAK_LOG);
-                deathLocation.getBlock().getRelative(BlockFace.NORTH).setType(Material.OAK_LOG);
-                deathLocation.getBlock().getRelative(BlockFace.WEST).setType(Material.OAK_LOG);
-                deathLocation.getBlock().getRelative(BlockFace.SOUTH).setType(Material.OAK_LOG);
+                deathLocation.getBlock().getRelative(BlockFace.DOWN).setType(XMaterial.OAK_LOG.parseMaterial());
+                deathLocation.getBlock().getRelative(BlockFace.EAST).setType(XMaterial.OAK_LOG.parseMaterial());
+                deathLocation.getBlock().getRelative(BlockFace.NORTH).setType(XMaterial.OAK_LOG.parseMaterial());
+                deathLocation.getBlock().getRelative(BlockFace.WEST).setType(XMaterial.OAK_LOG.parseMaterial());
+                deathLocation.getBlock().getRelative(BlockFace.SOUTH).setType(XMaterial.OAK_LOG.parseMaterial());
                 deathLocation.getBlock().setType(Material.AIR);
             }
 

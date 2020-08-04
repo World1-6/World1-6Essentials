@@ -2,7 +2,7 @@ package com.andrew121410.mc.world16.commands;
 
 import com.andrew121410.mc.world16.Main;
 import com.andrew121410.mc.world16.utils.API;
-import org.bukkit.Sound;
+import com.cryptomorin.xseries.XSound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,7 +34,7 @@ public class EChestCMD implements CommandExecutor {
         }
 
         p.openInventory(p.getEnderChest());
-        p.playSound(p.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 10.0f, 1.0f);
+        p.playSound(p.getLocation(), XSound.BLOCK_ENDER_CHEST_OPEN.parseSound(), 10.0f, 1.0f);
         return true;
     }
 }

@@ -19,10 +19,7 @@ import com.andrew121410.mc.world16.commands.warp.WarpCMD;
 import com.andrew121410.mc.world16.events.*;
 import com.andrew121410.mc.world16.managers.*;
 import com.andrew121410.mc.world16.test.test1;
-import com.andrew121410.mc.world16.utils.API;
-import com.andrew121410.mc.world16.utils.Metrics;
-import com.andrew121410.mc.world16.utils.PlayerInitializer;
-import com.andrew121410.mc.world16.utils.SetListMap;
+import com.andrew121410.mc.world16.utils.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -30,6 +27,7 @@ public class Main extends JavaPlugin {
     private static Main plugin;
 
     private SetListMap setListMap;
+    private Wrappers wrappers;
 
     private PlayerInitializer playerInitializer;
 
@@ -45,6 +43,8 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         this.setListMap = new SetListMap();
+        this.api = new API(this);
+        this.wrappers = new Wrappers(this);
 
         regCustomManagers();
         regFileConfigGEN();
@@ -153,8 +153,6 @@ public class Main extends JavaPlugin {
     }
 
     private void regCustomManagers() {
-        this.api = new API(this);
-
         this.customConfigManager = new CustomConfigManager(this);
         customConfigManager.registerAllCustomConfigs();
 
@@ -208,5 +206,9 @@ public class Main extends JavaPlugin {
 
     public HomeManager getHomeManager() {
         return homeManager;
+    }
+
+    public Wrappers getWrappers() {
+        return wrappers;
     }
 }
