@@ -4,7 +4,6 @@ import com.andrew121410.mc.world16.Main;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,14 +11,14 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class USafeEnchantmentCMD implements CommandExecutor {
+public class UnSafeEnchatmentCMD implements CommandExecutor {
 
     private Main plugin;
     private API api;
 
     private CustomConfigManager customConfigManager;
 
-    public USafeEnchantmentCMD(Main plugin, CustomConfigManager customConfigManager) {
+    public UnSafeEnchatmentCMD(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
 
         this.customConfigManager = customConfigManager;
@@ -43,7 +42,7 @@ public class USafeEnchantmentCMD implements CommandExecutor {
 
         if (args.length == 2) {
             ItemStack mainHand = p.getInventory().getItemInMainHand();
-            Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(args[0].toLowerCase()));
+            Enchantment enchantment = this.plugin.getWrappers().getEnchantmentUtils().getByName(args[0]);
             int level = api.asIntOrDefault(args[1], 0);
 
             if (enchantment == null) {

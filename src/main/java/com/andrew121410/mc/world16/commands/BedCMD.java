@@ -3,7 +3,7 @@ package com.andrew121410.mc.world16.commands;
 import com.andrew121410.mc.world16.Main;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16.utils.InventoryUtils;
-import org.bukkit.Material;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -35,7 +35,7 @@ public class BedCMD implements CommandExecutor {
             return true;
         }
 
-        ItemStack item = InventoryUtils.createItem(Material.RED_BED, 1, "Bed", "Bed");
+        ItemStack item = InventoryUtils.createItem(XMaterial.RED_BED.parseMaterial(), 1, "Bed", "Bed");
         p.getInventory().addItem(item);
         return true;
     }
