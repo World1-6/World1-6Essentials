@@ -3,7 +3,6 @@ package com.andrew121410.mc.world16.utils;
 import com.andrew121410.mc.world16.objects.AfkObject;
 import com.andrew121410.mc.world16.objects.PowerToolObject;
 import org.bukkit.Location;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -19,10 +18,8 @@ public class SetListMap {
     private Map<UUID, AfkObject> afkMap; //0
     private Map<UUID, Map<String, Location>> homesMap; //0
     private Map<UUID, PowerToolObject> powerToolMap; //0
-    private Map<Player, Arrow> sitMap;
 
     private Map<String, UUID> uuidCache; //1
-    private Map<String, Location> jails; //1
     private Map<String, List<String>> tabCompleteMap; //1
     private Map<String, Location> warpsMap; //1
 
@@ -41,10 +38,8 @@ public class SetListMap {
         this.afkMap = new HashMap<>();
         this.homesMap = new HashMap<>();
         this.powerToolMap = new HashMap<>();
-        this.sitMap = new HashMap<>();
 
         this.uuidCache = new HashMap<>();
-        this.jails = new HashMap<>();
         this.tabCompleteMap = new HashMap<>();
         this.warpsMap = new HashMap<>();
 
@@ -80,8 +75,6 @@ public class SetListMap {
         homesMap.remove(p.getUniqueId());
 
         powerToolMap.remove(p.getUniqueId());
-
-        sitMap.remove(p);
     }
 
     public void clearAllMaps() {
@@ -90,12 +83,10 @@ public class SetListMap {
         latestClickedBlocked.clear();
         afkMap.clear();
         uuidCache.clear();
-        jails.clear();
         tabCompleteMap.clear();
         homesMap.clear();
         warpsMap.clear();
         powerToolMap.clear();
-        sitMap.clear();
     }
 
     public void clearAllLists(Player p) {
@@ -140,10 +131,6 @@ public class SetListMap {
         return uuidCache;
     }
 
-    public Map<String, Location> getJails() {
-        return jails;
-    }
-
     public Map<String, List<String>> getTabCompleteMap() {
         return tabCompleteMap;
     }
@@ -170,10 +157,6 @@ public class SetListMap {
 
     public Map<UUID, PowerToolObject> getPowerToolMap() {
         return powerToolMap;
-    }
-
-    public Map<Player, Arrow> getSitMap() {
-        return sitMap;
     }
 
     public List<String> getSpyCommandBlock() {

@@ -8,7 +8,6 @@ public class CustomConfigManager {
     private Main plugin;
 
     private CustomYmlManager shitYml;
-    private CustomYmlManager jailsYml;
     private CustomYmlManager warpsYml;
     private CustomYmlManager playersYml;
 
@@ -22,13 +21,6 @@ public class CustomConfigManager {
         this.shitYml.setup("shit.yml");
         this.shitYml.saveConfig();
         this.shitYml.reloadConfig();
-        //...
-
-        //jails.yml
-        this.jailsYml = new CustomYmlManager(this.plugin, false);
-        this.jailsYml.setup("jails.yml");
-        this.jailsYml.saveConfig();
-        this.jailsYml.reloadConfig();
         //...
 
         //warps.yml
@@ -48,24 +40,18 @@ public class CustomConfigManager {
 
     public void saveAll() {
         this.shitYml.saveConfig();
-        this.jailsYml.saveConfig();
         this.warpsYml.saveConfig();
         this.playersYml.saveConfig();
     }
 
     public void reloadAll() {
         this.shitYml.reloadConfig();
-        this.jailsYml.reloadConfig();
         this.warpsYml.reloadConfig();
         this.playersYml.reloadConfig();
     }
 
     public CustomYmlManager getShitYml() {
         return shitYml;
-    }
-
-    public CustomYmlManager getJailsYml() {
-        return jailsYml;
     }
 
     public CustomYmlManager getWarpsYml() {

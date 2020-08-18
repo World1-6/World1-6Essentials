@@ -20,9 +20,6 @@ commands:
   setspawn:
   sign:
   colors:
-  setjail:
-  jail:
-  deljail:
   afk:
   fs:
   isafk:
@@ -54,7 +51,6 @@ commands:
   delwarp:
   powertool:
   unsafenchant:
-  seats:
   commandblockfind:
   bal:
     aliases:
@@ -205,24 +201,12 @@ permissions:
   world16.delwarp:
     description: Allows to do delwarp
     default: true
-  world16.jail:
-    description: Allows to do jail
-    default: true
-  world16.setjail:
-    description: Allows to do setjail
-    default: op
-  world16.deljail:
-    description: Allows to do deljail
-    default: op
   world16.powertool:
     description: Allows to do powertool
     default: op
   world16.unsafenchant:
     description: Allows to do unsafenchant
     default: op
-  world16.seats:
-    description: Allows to do seats
-    default: true
   world16.commandblockfind:
     description: Allows to do commandblockfind
     default: op

@@ -5,9 +5,6 @@ import com.andrew121410.mc.world16.commands.home.DelhomeCMD;
 import com.andrew121410.mc.world16.commands.home.HomeCMD;
 import com.andrew121410.mc.world16.commands.home.HomeListCMD;
 import com.andrew121410.mc.world16.commands.home.SetHomeCMD;
-import com.andrew121410.mc.world16.commands.jail.DelHomeCMD;
-import com.andrew121410.mc.world16.commands.jail.JailCMD;
-import com.andrew121410.mc.world16.commands.jail.SetJailCMD;
 import com.andrew121410.mc.world16.commands.spawn.SetSpawnCMD;
 import com.andrew121410.mc.world16.commands.spawn.SpawnCMD;
 import com.andrew121410.mc.world16.commands.tp.TpAcceptCMD;
@@ -17,7 +14,10 @@ import com.andrew121410.mc.world16.commands.warp.DelwarpCMD;
 import com.andrew121410.mc.world16.commands.warp.SetWarpCMD;
 import com.andrew121410.mc.world16.commands.warp.WarpCMD;
 import com.andrew121410.mc.world16.events.*;
-import com.andrew121410.mc.world16.managers.*;
+import com.andrew121410.mc.world16.managers.AfkManager;
+import com.andrew121410.mc.world16.managers.CustomConfigManager;
+import com.andrew121410.mc.world16.managers.HomeManager;
+import com.andrew121410.mc.world16.managers.WarpManager;
 import com.andrew121410.mc.world16.test.test1;
 import com.andrew121410.mc.world16.utils.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,7 +33,6 @@ public class Main extends JavaPlugin {
 
     //Managers
     private CustomConfigManager customConfigManager;
-    private JailManager jailManager;
     private WarpManager warpManager;
     private AfkManager afkManager;
     private HomeManager homeManager;
@@ -58,7 +57,6 @@ public class Main extends JavaPlugin {
     }
 
     public void onDisable() {
-        this.jailManager.saveAllJails();
         this.warpManager.saveAllWarps();
         this.setListMap.clearSetListMap();
         getLogger().info("[World1-6Essentials] is now disabled.");
@@ -93,7 +91,6 @@ public class Main extends JavaPlugin {
         new LastJoinCMD(this, this.customConfigManager);
         new PowerToolCMD(this, this.customConfigManager);
         new UnSafeEnchatmentCMD(this, this.customConfigManager);
-        new SeatsCMD(this, this.customConfigManager);
         new CommandBlockFindCMD(this);
 
         //Gamemode commands
@@ -116,11 +113,6 @@ public class Main extends JavaPlugin {
         new HomeCMD(this);
         new HomeListCMD(this);
         new SetHomeCMD(this);
-
-        //Jails
-        new JailCMD(this, this.customConfigManager);
-        new SetJailCMD(this, this.customConfigManager);
-        new DelHomeCMD(this, this.customConfigManager);
 
         //Warps
         new WarpCMD(this);
@@ -158,9 +150,6 @@ public class Main extends JavaPlugin {
 
         this.homeManager = new HomeManager(this);
 
-        this.jailManager = new JailManager(this.customConfigManager, this);
-        this.jailManager.loadAllJails();
-
         this.warpManager = new WarpManager(this, this.customConfigManager);
         this.warpManager.loadAllWarps();
 
@@ -182,10 +171,6 @@ public class Main extends JavaPlugin {
 
     public CustomConfigManager getCustomConfigManager() {
         return customConfigManager;
-    }
-
-    public JailManager getJailManager() {
-        return jailManager;
     }
 
     public WarpManager getWarpManager() {
