@@ -21,14 +21,15 @@ public class OnPlayerBedEnterEvent implements Listener {
 
     @EventHandler
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
-        Player p = event.getPlayer();
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                p.getLocation().getWorld().setTime(0);
-                Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
-            }
-        }.runTaskLater(this.plugin, 60L);
+        Player player = event.getPlayer();
+        if (event.getBedEnterResult() == PlayerBedEnterEvent.BedEnterResult.OK) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.getLocation().getWorld().setTime(0);
+                    Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
+                }
+            }.runTaskLater(this.plugin, 60L);
+        }
     }
 }
