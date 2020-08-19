@@ -12,22 +12,24 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class OnPlayerBedEnterEvent implements Listener {
 
     private Main plugin;
+    private boolean isSomeoneInBed = false;
 
     public OnPlayerBedEnterEvent(Main plugin) {
         this.plugin = plugin;
-
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
-        if (event.getBedEnterResult() == PlayerBedEnterEvent.BedEnterResult.OK) {
+        if (event.getBedEnterResult() == PlayerBedEnterEvent.BedEnterResult.OK && !this.isSomeoneInBed) {
+            this.isSomeoneInBed = true;
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     player.getLocation().getWorld().setTime(0);
                     Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
+                    isSomeoneInBed = false;
                 }
             }.runTaskLater(this.plugin, 60L);
         }
