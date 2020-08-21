@@ -45,6 +45,7 @@ public class CustomConfigManager {
     }
 
     public void reloadAll() {
+        this.plugin.reloadConfig();
         this.shitYml.reloadConfig();
         this.warpsYml.reloadConfig();
         this.playersYml.reloadConfig();
