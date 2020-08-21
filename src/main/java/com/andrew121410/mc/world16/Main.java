@@ -27,7 +27,7 @@ public class Main extends JavaPlugin {
     private static Main plugin;
 
     private SetListMap setListMap;
-    private Wrappers wrappers;
+    private OtherPlugins otherPlugins;
 
     private PlayerInitializer playerInitializer;
 
@@ -43,7 +43,7 @@ public class Main extends JavaPlugin {
         plugin = this;
         this.setListMap = new SetListMap();
         this.api = new API(this);
-        this.wrappers = new Wrappers(this);
+        this.otherPlugins = new OtherPlugins(this);
 
         regCustomManagers();
         regFileConfigGEN();
@@ -193,7 +193,7 @@ public class Main extends JavaPlugin {
         return homeManager;
     }
 
-    public Wrappers getWrappers() {
-        return wrappers;
+    public OtherPlugins getOtherPlugins() {
+        return otherPlugins;
     }
 }

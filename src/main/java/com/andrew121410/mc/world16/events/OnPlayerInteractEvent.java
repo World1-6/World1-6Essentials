@@ -1,20 +1,18 @@
 package com.andrew121410.mc.world16.events;
 
 import com.andrew121410.mc.world16.Main;
-import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.objects.PowerToolObject;
 import com.andrew121410.mc.world16.utils.API;
+import com.andrew121410.mc.world16utils.utils.UniverseBlockUtils;
+import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -52,7 +50,7 @@ public class OnPlayerInteractEvent implements Listener {
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
         } else if (action == Action.PHYSICAL) {
             if (block != null) {
-                if (this.plugin.getWrappers().getBlockUtils().isFarmLand(block) && api.isPreventCropsTrampling()) {
+                if (UniverseBlockUtils.isFarmLand(XMaterial.matchXMaterial(block.getType())) && api.isPreventCropsTrampling()) {
                     event.setCancelled(true);
                 }
             }

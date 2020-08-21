@@ -42,7 +42,7 @@ public class UnSafeEnchatmentCMD implements CommandExecutor {
 
         if (args.length == 2) {
             ItemStack mainHand = p.getInventory().getItemInMainHand();
-            Enchantment enchantment = this.plugin.getWrappers().getEnchantmentUtils().getByName(args[0]);
+            Enchantment enchantment = this.plugin.getOtherPlugins().getWorld16Utils().getClassWrappers().getEnchantmentUtils().getByName(args[0]);
             int level = api.asIntOrDefault(args[1], 0);
 
             if (enchantment == null) {

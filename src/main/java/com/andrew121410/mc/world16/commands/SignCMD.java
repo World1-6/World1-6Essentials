@@ -26,7 +26,7 @@ public class SignCMD implements CommandExecutor {
         this.plugin = plugin;
 
         this.api = this.plugin.getApi();
-        this.signUtils = this.plugin.getWrappers().getSignUtils();
+        this.signUtils = this.plugin.getOtherPlugins().getWorld16Utils().getClassWrappers().getSignUtils();
         this.plugin.getCommand("sign").setExecutor(this);
     }
 
