@@ -64,7 +64,7 @@ public class LastJoinCMD implements CommandExecutor {
 
             LocalDate date = Instant.ofEpochMilli(offlinePlayer.getLastPlayed()).atZone(ZoneId.systemDefault()).toLocalDate();
             String formattedDate = date.getYear() + "-" + date.getMonth() + "-" + date.getDayOfMonth();
-            p.sendMessage(Translate.chat("Player: " + offlinePlayer.getName() + " has last joined it " + formattedDate));
+            p.sendMessage(Translate.color("&6The last time " + offlinePlayer.getName() + " has played was " + formattedDate));
             return true;
         }
         return true;
