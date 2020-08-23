@@ -10,7 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -63,10 +62,9 @@ public class LastJoinCMD implements CommandExecutor {
                 return true;
             }
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             LocalDate date = Instant.ofEpochMilli(offlinePlayer.getLastPlayed()).atZone(ZoneId.systemDefault()).toLocalDate();
-            String formatted = simpleDateFormat.format(date);
-            p.sendMessage(Translate.chat("Player: " + offlinePlayer.getName() + " has last joined it " + formatted));
+            String formattedDate = date.getYear() + "-" + date.getMonth() + "-" + date.getDayOfMonth();
+            p.sendMessage(Translate.chat("Player: " + offlinePlayer.getName() + " has last joined it " + formattedDate));
             return true;
         }
         return true;
