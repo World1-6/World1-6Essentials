@@ -123,7 +123,7 @@ public class Main extends JavaPlugin {
     private void regEvents() {
         //Bukkit.getServer().getPluginManager().registerEvents(this, this);
         new OnPlayerJoinEvent(this, this.customConfigManager);
-        new OnPlayerQuitEvent(this, this.customConfigManager);
+        new OnPlayerQuitEvent(this);
         //...
         new OnPlayerDeathEvent(this);
         new OnPlayerDamageEvent(this);

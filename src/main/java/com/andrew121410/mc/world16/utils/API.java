@@ -48,13 +48,8 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "8/18/2020";
+    public static final String DATE_OF_VERSION = "8/22/2020";
     public static final String PREFIX = "[&9World1-6Ess&r]";
-    public static final String USELESS_TAG = PREFIX + "->[&bUSELESS&r]";
-    public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";
-    public static final String EMERGENCY_TAG = PREFIX + "->&c[EMERGENCY]&r";
-    public static final String SOMETHING_WENT_WRONG = "Something went wrong.";
-    //...
 
     public API(Main plugin) {
         this.plugin = plugin;
@@ -126,20 +121,20 @@ public class API {
         return null;
     }
 
-    public UUID getUUIDFromMojangAPI(String playername) {
-        if (uuidCache.get(playername) != null) return uuidCache.get(playername);
+    public UUID getUUIDFromMojangAPI(String playerName) {
+        if (uuidCache.get(playerName) != null) return uuidCache.get(playerName);
         URL url;
         UUID uuid1 = null;
         try {
-            url = new URL("https://api.mojang.com/users/profiles/minecraft/" + playername);
+            url = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
             String uuid = (String) ((JSONObject) new JSONParser()
                     .parse(new InputStreamReader(url.openStream()))).get("id");
             uuid1 = UUID.fromString(uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16) + "-"
                     + uuid.substring(16, 20) + "-" + uuid.substring(20, 32));
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
+        } catch (IOException | ParseException exception) {
+            exception.printStackTrace();
         }
-        uuidCache.put(playername, uuid1);
+        uuidCache.put(playerName, uuid1);
         return uuid1;
     }
 
@@ -267,27 +262,5 @@ public class API {
 
     public void PermissionErrorMessage(Player p) {
         p.sendMessage(Translate.chat("&4You do not have permission to do this command."));
-    }
-
-    private void ClearHashMapMessage(String place) {
-        plugin.getServer().getConsoleSender().sendMessage(Translate.chat(USELESS_TAG
-                + " Class: com.andrew121410.World16.Utils.API has cleared the HashMap of " + place + " For EVERY PLAYER"));
-    }
-
-    private void ClearHashMapMessage(String place, Player p) {
-        plugin.getServer().getConsoleSender().sendMessage(Translate.chat(USELESS_TAG
-                + " Class: com.andrew121410.World16.Utils.API has cleared the HashMap of " + place + " For Player: " + p
-                .getDisplayName()));
-    }
-
-    private void ClearArrayListMessage(String place) {
-        plugin.getServer().getConsoleSender().sendMessage(Translate.chat(USELESS_TAG
-                + " Class: com.andrew121410.World16.Utils.API has cleared the ArrayList of " + place + " For EVERY PLAYER"));
-    }
-
-    private void ClearArrayListMessage(String place, Player p) {
-        plugin.getServer().getConsoleSender().sendMessage(Translate.chat(USELESS_TAG
-                + " Class: com.andrew121410.World16.Utils.API has cleared the ArrayList of " + place + " For Player: " + p
-                .getDisplayName()));
     }
 }

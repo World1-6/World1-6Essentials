@@ -65,15 +65,10 @@ public class SetListMap {
 
     public void clearAllMaps(Player p) {
         backMap.remove(p.getUniqueId());
-
         tpaMap.remove(p);
-
         latestClickedBlocked.remove(p.getDisplayName());
-
         afkMap.remove(p.getUniqueId());
-
         homesMap.remove(p.getUniqueId());
-
         powerToolMap.remove(p.getUniqueId());
     }
 
@@ -82,18 +77,17 @@ public class SetListMap {
         tpaMap.clear();
         latestClickedBlocked.clear();
         afkMap.clear();
+        homesMap.clear();
+        powerToolMap.clear();
+
         uuidCache.clear();
         tabCompleteMap.clear();
-        homesMap.clear();
         warpsMap.clear();
-        powerToolMap.clear();
     }
 
     public void clearAllLists(Player p) {
         flyList.remove(p.getDisplayName());
-
         godList.remove(p.getDisplayName());
-
         hiddenPlayers.remove(p);
     }
 
@@ -104,8 +98,6 @@ public class SetListMap {
         soundsList.clear();
         spyCommandBlock.clear();
     }
-
-    //Getters
 
     public Map<UUID, Map<String, Location>> getBackMap() {
         return backMap;

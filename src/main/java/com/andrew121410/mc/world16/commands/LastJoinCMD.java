@@ -10,6 +10,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.UUID;
 
 public class LastJoinCMD implements CommandExecutor {
@@ -42,7 +46,7 @@ public class LastJoinCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat("&cUsage: /lastjoin <Player>"));
+            p.sendMessage(Translate.chat("&cUsage: &6/lastjoin <Player>"));
             return true;
         } else if (args.length == 1) {
             UUID uuid = this.api.getUUIDFromMojangAPI(args[0]);
@@ -59,8 +63,10 @@ public class LastJoinCMD implements CommandExecutor {
                 return true;
             }
 
-            String time = api.convertTime(offlinePlayer);
-            p.sendMessage(Translate.chat("Player: " + offlinePlayer.getName() + " has last joined it " + time));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            LocalDate date = Instant.ofEpochMilli(offlinePlayer.getLastPlayed()).atZone(ZoneId.systemDefault()).toLocalDate();
+            String formatted = simpleDateFormat.format(date);
+            p.sendMessage(Translate.chat("Player: " + offlinePlayer.getName() + " has last joined it " + formatted));
             return true;
         }
         return true;

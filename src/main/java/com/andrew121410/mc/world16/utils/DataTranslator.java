@@ -1,8 +1,8 @@
 package com.andrew121410.mc.world16.utils;
 
-import com.andrew121410.CCUtils.storage.SQLite;
-import com.andrew121410.CCUtils.storage.easy.EasySQL;
-import com.andrew121410.CCUtils.storage.easy.SQLDataStore;
+import com.andrew121410.ccutils.storage.SQLite;
+import com.andrew121410.ccutils.storage.easy.EasySQL;
+import com.andrew121410.ccutils.storage.easy.SQLDataStore;
 import com.google.common.collect.Multimap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

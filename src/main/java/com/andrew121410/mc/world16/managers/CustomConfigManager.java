@@ -39,6 +39,7 @@ public class CustomConfigManager {
     }
 
     public void saveAll() {
+        this.plugin.saveConfig();
         this.shitYml.saveConfig();
         this.warpsYml.saveConfig();
         this.playersYml.saveConfig();

@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16.Main;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.blocks.sign.SignUtils;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.cryptomorin.xseries.XMaterial;
+import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;

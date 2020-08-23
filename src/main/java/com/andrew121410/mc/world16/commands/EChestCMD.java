@@ -2,7 +2,7 @@ package com.andrew121410.mc.world16.commands;
 
 import com.andrew121410.mc.world16.Main;
 import com.andrew121410.mc.world16.utils.API;
-import com.cryptomorin.xseries.XSound;
+import com.andrew121410.mc.world16utils.utils.xutils.XSound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
