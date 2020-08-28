@@ -15,21 +15,15 @@ import java.util.Map;
 
 public class DelwarpCMD implements CommandExecutor {
 
-    //Maps
     private Map<String, Location> warpsMap;
-    //...
 
     private Main plugin;
-
     private API api;
-
     private WarpManager warpManager;
 
     public DelwarpCMD(Main plugin) {
         this.plugin = plugin;
-
         this.api = this.plugin.getApi();
-
         this.warpManager = this.plugin.getWarpManager();
 
         this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
@@ -57,7 +51,7 @@ public class DelwarpCMD implements CommandExecutor {
         } else if (args.length == 1) {
             String name = args[0].toLowerCase();
 
-            if (this.warpsMap.get(name) == null) {
+            if (!this.warpsMap.containsKey(name)) {
                 p.sendMessage(Translate.chat("&cThat's not a warp."));
                 return true;
             }

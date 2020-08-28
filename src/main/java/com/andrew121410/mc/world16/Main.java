@@ -20,7 +20,12 @@ import com.andrew121410.mc.world16.managers.HomeManager;
 import com.andrew121410.mc.world16.managers.WarpManager;
 import com.andrew121410.mc.world16.test.test1;
 import com.andrew121410.mc.world16.utils.*;
+import com.andrew121410.mc.world16utils.chat.Translate;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Collection;
 
 public class Main extends JavaPlugin {
 
@@ -53,13 +58,21 @@ public class Main extends JavaPlugin {
 
         this.playerInitializer = new PlayerInitializer(this);
 
-        getLogger().info("[World1-6Essentials] is now loaded!");
+        Collection<? extends Player> playerList = getServer().getOnlinePlayers();
+        if (!playerList.isEmpty()) {
+            //Ran when the plugin gets reloaded...
+            for (Player player : playerList) {
+                this.playerInitializer.load(player);
+            }
+            Bukkit.getServer().broadcastMessage(Translate.color("&cWorld1-6Essentials was reloaded while this isn't recommend it is supported."));
+        }
+
+        getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &2World1-6Essentials has been loaded."));
     }
 
     public void onDisable() {
-        this.warpManager.saveAllWarps();
         this.setListMap.clearSetListMap();
-        getLogger().info("[World1-6Essentials] is now disabled.");
+        getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &eWorld1-6Essentials has been unloaded."));
     }
 
     private void regCommands() {

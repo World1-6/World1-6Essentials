@@ -9,70 +9,51 @@ import java.util.Map;
 
 public class WarpManager {
 
-    //Maps
     private Map<String, Location> warpsMap;
-    //...
 
     private Main plugin;
-
     private CustomYmlManager warpsYml;
 
     public WarpManager(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.warpsYml = customConfigManager.getWarpsYml();
-
         this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
+        getConfigurationSection();
     }
 
     public void loadAllWarps() {
-        ConfigurationSection cs = this.warpsYml.getConfig().getConfigurationSection("Warps");
-        if (cs == null) {
-            cs = this.warpsYml.getConfig().createSection("Warps");
-            this.warpsYml.saveConfig();
-            return;
-        }
-
-        ConfigurationSection warpsConfig = null;
-
+        ConfigurationSection cs = getConfigurationSection();
         for (String key : cs.getKeys(false)) {
-            warpsConfig = cs.getConfigurationSection(key);
-
-            Location location = (Location) warpsConfig.get("Location");
+            ConfigurationSection warpCs = cs.getConfigurationSection(key);
+            Location location = (Location) warpCs.get("Location");
             this.warpsMap.putIfAbsent(key, location);
         }
     }
 
-    public void saveAllWarps() {
-        ConfigurationSection cs = this.warpsYml.getConfig().getConfigurationSection("Warps");
-        if (cs == null) {
-            cs = this.warpsYml.getConfig().createSection("Warps");
-            this.warpsYml.saveConfig();
-        }
-
-        for (Map.Entry<String, Location> entry : this.warpsMap.entrySet()) {
-            String k = entry.getKey();
-            Location v = entry.getValue();
-
-            ConfigurationSection warpsConfig = cs.getConfigurationSection(k.toLowerCase());
-            if (warpsConfig == null) {
-                warpsConfig = cs.createSection(k.toLowerCase());
-                this.warpsYml.saveConfig();
-            }
-
-            warpsConfig.set("Location", v);
-            this.warpsYml.saveConfig();
-        }
+    public void createWarp(String name, Location location) {
+        String newWarpName = name.toLowerCase();
+        this.warpsMap.put(newWarpName, location);
+        ConfigurationSection cs = getConfigurationSection();
+        ConfigurationSection warpCs = cs.createSection(newWarpName);
+        warpCs.set("Location", location);
+        this.warpsYml.saveConfig();
     }
 
-    public void deleteWarp(String key) {
-        if (this.warpsMap.get(key.toLowerCase()) == null) {
-            return;
-        }
-
-        this.warpsMap.remove(key);
-
-        ConfigurationSection cs = this.warpsYml.getConfig().getConfigurationSection("Warps");
-        cs.set(key.toLowerCase(), null);
+    public void deleteWarp(String name) {
+        String newWarpName = name.toLowerCase();
+        if (!this.warpsMap.containsKey(newWarpName)) return;
+        ConfigurationSection cs = getConfigurationSection();
+        cs.set(newWarpName, null);
         this.warpsYml.saveConfig();
+        this.warpsMap.remove(newWarpName);
+    }
+
+    private ConfigurationSection getConfigurationSection() {
+        ConfigurationSection cs = this.warpsYml.getConfig().getConfigurationSection("Warps");
+        if (cs == null) {
+            this.warpsYml.getConfig().createSection("Warps");
+            this.warpsYml.saveConfig();
+        }
+        return cs;
     }
 }

@@ -51,7 +51,7 @@ public class DebugCMD implements CommandExecutor {
             p.sendMessage(Translate.chat("&6Please use tab complete."));
             return true;
         } else if (args.length == 1 && (args[0].equalsIgnoreCase("date"))) {
-            String date = api.time();
+            String date = api.getTimeFormattedString();
             p.sendMessage(Translate.chat("Time/Data:-> " + date));
             return true;
         } else if (args[0].equalsIgnoreCase("reload")) {

@@ -14,17 +14,13 @@ import java.util.Map;
 
 public class WarpCMD implements CommandExecutor {
 
-    //Maps
     private Map<String, Location> warpsMap;
-    //...
 
     private Main plugin;
-
     private API api;
 
     public WarpCMD(Main plugin) {
         this.plugin = plugin;
-
         this.api = this.plugin.getApi();
 
         this.warpsMap = this.plugin.getSetListMap().getWarpsMap();

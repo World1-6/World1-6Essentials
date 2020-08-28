@@ -10,9 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.UUID;
 
 public class LastJoinCMD implements CommandExecutor {
@@ -20,12 +17,8 @@ public class LastJoinCMD implements CommandExecutor {
     private Main plugin;
     private API api;
 
-    private CustomConfigManager customConfigManager;
-
     public LastJoinCMD(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
-
-        this.customConfigManager = customConfigManager;
         this.api = this.plugin.getApi();
 
         this.plugin.getCommand("lastjoin").setExecutor(this);
@@ -49,22 +42,23 @@ public class LastJoinCMD implements CommandExecutor {
             return true;
         } else if (args.length == 1) {
             UUID uuid = this.api.getUUIDFromMojangAPI(args[0]);
+            OfflinePlayer offlinePlayer;
 
             if (uuid == null) {
                 p.sendMessage(Translate.chat("Looks like that isn't a player."));
                 return true;
             }
 
-            OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(uuid);
+            Player playerTarget = this.plugin.getServer().getPlayer(uuid);
+            if (playerTarget != null) offlinePlayer = playerTarget;
+            else offlinePlayer = this.plugin.getServer().getOfflinePlayer(uuid);
 
             if (!offlinePlayer.hasPlayedBefore()) {
                 p.sendMessage(Translate.chat("Looks like that player has never joined the server."));
                 return true;
             }
 
-            LocalDate date = Instant.ofEpochMilli(offlinePlayer.getLastPlayed()).atZone(ZoneId.systemDefault()).toLocalDate();
-            String formattedDate = date.getYear() + "-" + date.getMonth() + "-" + date.getDayOfMonth();
-            p.sendMessage(Translate.color("&6The last time " + offlinePlayer.getName() + " has played was " + formattedDate));
+            p.sendMessage(Translate.color("&6The last time " + offlinePlayer.getName() + " has played was " + api.getPlayerLastOnlineDateFormattedString(offlinePlayer)));
             return true;
         }
         return true;

@@ -16,7 +16,7 @@ public class CustomConfigManager {
     }
 
     public void registerAllCustomConfigs() {
-        //Shit.yml
+        //shit.yml
         this.shitYml = new CustomYmlManager(this.plugin, false);
         this.shitYml.setup("shit.yml");
         this.shitYml.saveConfig();

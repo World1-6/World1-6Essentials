@@ -20,15 +20,13 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The Bass API for World1-6Ess
@@ -48,7 +46,7 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "8/22/2020";
+    public static final String DATE_OF_VERSION = "8/28/2020";
     public static final String PREFIX = "[&9World1-6Ess&r]";
 
     public API(Main plugin) {
@@ -88,21 +86,16 @@ public class API {
         return plugin.getConfig().getString("preventCropsTrampling").equalsIgnoreCase("true");
     }
 
-    public String formatTime(LocalDateTime time) {
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
-        return time.format(myFormatObj);
+    public String getTimeFormattedString() {
+        ZonedDateTime zonedDateTime = ZonedDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("MM/dd/yyyy - hh:mm:ss a z");
+        return zonedDateTime.format(myFormatObj);
     }
 
-    public String time() {
-        LocalDateTime time = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
-        return time.format(myFormatObj);
-    }
-
-    public String convertTime(OfflinePlayer target) {
-        Format format = new SimpleDateFormat("MM-dd-YYYY-HH:mm:ss z");
-        Date date = new Date(TimeUnit.SECONDS.toMillis(target.getLastPlayed()));
-        return format.format(date);
+    public String getPlayerLastOnlineDateFormattedString(OfflinePlayer target) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy - hh:mm a z");
+        ZonedDateTime zonedDateTime = Instant.ofEpochMilli(target.getLastPlayed()).atZone(ZoneId.systemDefault());
+        return zonedDateTime.format(formatter);
     }
 
     public String getServerVersion() {

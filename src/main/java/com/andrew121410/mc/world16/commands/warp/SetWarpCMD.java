@@ -13,17 +13,13 @@ import java.util.Map;
 
 public class SetWarpCMD implements CommandExecutor {
 
-    //Maps
     private Map<String, Location> warpsMap;
-    //...
 
     private Main plugin;
-
     private API api;
 
     public SetWarpCMD(Main plugin) {
         this.plugin = plugin;
-
         this.api = this.plugin.getApi();
 
         this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
@@ -51,12 +47,12 @@ public class SetWarpCMD implements CommandExecutor {
             String name = args[0].toLowerCase();
             Location location = p.getLocation();
 
-            if (this.warpsMap.get(name) != null) {
+            if (this.warpsMap.containsKey(name)) {
                 p.sendMessage(Translate.chat("Looks like there is already a warp with that name..."));
                 return true;
             }
 
-            this.warpsMap.putIfAbsent(name, location);
+            this.plugin.getWarpManager().createWarp(name, location);
             p.sendMessage(Translate.chat("&6The warp: " + name + " has been set."));
             return true;
         }
