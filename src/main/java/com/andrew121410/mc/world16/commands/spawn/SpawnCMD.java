@@ -35,6 +35,11 @@ public class SpawnCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         Location spawn = this.api.getLocationFromFile(this.shitYml, "Spawn.default");
+        if (spawn == null) {
+            Location defaultSpawn = this.plugin.getServer().getWorlds().get(0).getSpawnLocation();
+            this.api.setLocationToFile(this.shitYml, "Spawn.default", defaultSpawn);
+            spawn = defaultSpawn;
+        }
 
         if (!p.hasPermission("world16.spawn")) {
             api.PermissionErrorMessage(p);

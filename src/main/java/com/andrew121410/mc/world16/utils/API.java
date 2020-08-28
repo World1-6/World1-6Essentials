@@ -140,7 +140,6 @@ public class API {
         if (configinstance == null || path == null || location == null) {
             return;
         }
-
         configinstance.getConfig().set(path, location);
         configinstance.saveConfig();
     }
