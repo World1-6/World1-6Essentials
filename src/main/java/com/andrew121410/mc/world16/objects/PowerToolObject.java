@@ -23,7 +23,7 @@ public class PowerToolObject {
     }
 
     public void runCommand(Player player, Material key) {
-        if (this.powerTools.get(key) == null) return;
+        if (!this.powerTools.containsKey(key)) return;
         player.performCommand(this.powerTools.get(key));
     }
 

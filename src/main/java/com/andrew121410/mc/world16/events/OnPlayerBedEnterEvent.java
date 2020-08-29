@@ -22,8 +22,8 @@ public class OnPlayerBedEnterEvent implements Listener {
     @EventHandler
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
-        if (event.getBedEnterResult() == PlayerBedEnterEvent.BedEnterResult.OK && !this.isSomeoneInBed) {
-            this.isSomeoneInBed = true;
+
+        if (this.plugin.getApi().getServerVersion().equals("1.12")) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -32,6 +32,18 @@ public class OnPlayerBedEnterEvent implements Listener {
                     isSomeoneInBed = false;
                 }
             }.runTaskLater(this.plugin, 60L);
+        } else {
+            if (event.getBedEnterResult() == PlayerBedEnterEvent.BedEnterResult.OK && !this.isSomeoneInBed) {
+                this.isSomeoneInBed = true;
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.getLocation().getWorld().setTime(0);
+                        Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
+                        isSomeoneInBed = false;
+                    }
+                }.runTaskLater(this.plugin, 60L);
+            }
         }
     }
 }

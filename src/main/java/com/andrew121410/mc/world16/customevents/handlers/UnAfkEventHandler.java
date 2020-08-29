@@ -7,7 +7,6 @@ public class UnAfkEventHandler {
 
     public UnAfkEventHandler(Main plugin, String p) {
         UnAfkCustomEvent event = new UnAfkCustomEvent(plugin, p);
-
         plugin.getServer().getPluginManager().callEvent(event);
     }
 }

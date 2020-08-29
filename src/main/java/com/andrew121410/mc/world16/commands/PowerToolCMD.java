@@ -22,15 +22,11 @@ public class PowerToolCMD implements CommandExecutor {
     private Main plugin;
     private API api;
 
-    private CustomConfigManager customConfigManager;
-
     public PowerToolCMD(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
+        this.api = this.plugin.getApi();
 
         this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
-
-        this.customConfigManager = customConfigManager;
-        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("powertool").setExecutor(this);
     }
@@ -62,8 +58,7 @@ public class PowerToolCMD implements CommandExecutor {
             char check = command[0].charAt(0);
             String s = Character.toString(check);
             if (s.equalsIgnoreCase("/")) {
-                p.sendMessage(Translate.chat("Looks like it contains a / in the beginning."));
-                return true;
+                p.sendMessage(Translate.chat("&4It looks like there's a / in the beginning it's supposed to be without a / but if you're doing WorldEdit make sure there's only 1 /"));
             }
 
             powerToolObject.registerPowerTool(itemInMainHand.getType(), realCommand);

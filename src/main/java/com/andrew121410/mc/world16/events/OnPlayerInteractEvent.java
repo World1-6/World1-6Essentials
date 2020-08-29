@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.Map;
 import java.util.UUID;
@@ -42,11 +43,11 @@ public class OnPlayerInteractEvent implements Listener {
 
         PowerToolObject powerToolObject = this.powerToolMap.get(p.getUniqueId());
         //Get's the latest clicked block and stores it in HashMap.
-        if (action == Action.RIGHT_CLICK_BLOCK) {
+        if (action == Action.RIGHT_CLICK_BLOCK && event.getHand() == EquipmentSlot.HAND) {
             latestClickedBlocked.remove(p.getDisplayName()); //Removes old block
             latestClickedBlocked.put(p.getDisplayName(), block.getLocation());
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
-        } else if (action == Action.LEFT_CLICK_AIR) {
+        } else if (action == Action.LEFT_CLICK_AIR && event.getHand() == EquipmentSlot.HAND) {
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
         } else if (action == Action.PHYSICAL) {
             if (block != null) {

@@ -7,7 +7,6 @@ public class TpaEventHandler {
 
     public TpaEventHandler(Main plugin, String p, String target) {
         TpaCustomEvent event = new TpaCustomEvent(plugin, p, target);
-
         plugin.getServer().getPluginManager().callEvent(event);
     }
 }
