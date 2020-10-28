@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.events;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.objects.PowerToolObject;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.utils.UniverseBlockUtils;
@@ -12,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.Map;
 import java.util.UUID;
@@ -22,10 +21,10 @@ public class OnPlayerInteractEvent implements Listener {
     private Map<String, Location> latestClickedBlocked;
     private Map<UUID, PowerToolObject> powerToolMap;
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public OnPlayerInteractEvent(Main plugin) {
+    public OnPlayerInteractEvent(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
@@ -43,11 +42,11 @@ public class OnPlayerInteractEvent implements Listener {
 
         PowerToolObject powerToolObject = this.powerToolMap.get(p.getUniqueId());
         //Get's the latest clicked block and stores it in HashMap.
-        if (action == Action.RIGHT_CLICK_BLOCK && event.getHand() == EquipmentSlot.HAND) {
+        if (action == Action.RIGHT_CLICK_BLOCK) {
             latestClickedBlocked.remove(p.getDisplayName()); //Removes old block
             latestClickedBlocked.put(p.getDisplayName(), block.getLocation());
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
-        } else if (action == Action.LEFT_CLICK_AIR && event.getHand() == EquipmentSlot.HAND) {
+        } else if (action == Action.LEFT_CLICK_AIR) {
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
         } else if (action == Action.PHYSICAL) {
             if (block != null) {

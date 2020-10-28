@@ -4,7 +4,7 @@ import com.andrew121410.ccutils.storage.ISQL;
 import com.andrew121410.ccutils.storage.SQLite;
 import com.andrew121410.ccutils.storage.easy.EasySQL;
 import com.andrew121410.ccutils.storage.easy.SQLDataStore;
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.google.common.collect.Multimap;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,12 +16,12 @@ public class HomeManager {
 
     private Map<UUID, Map<String, Location>> homesMap;
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private EasySQL easySQL;
     private ISQL isql;
 
-    public HomeManager(Main plugin) {
+    public HomeManager(World16Essentials plugin) {
         this.plugin = plugin;
         this.homesMap = this.plugin.getSetListMap().getHomesMap();
 
@@ -52,16 +52,16 @@ public class HomeManager {
 
     public void save(UUID uuid, String playerName, String homeName, Location location) {
         SQLDataStore sqlDataStore = new SQLDataStore();
-        sqlDataStore.getMap().put("UUID", String.valueOf(uuid));
-        sqlDataStore.getMap().put("Date", "0");
-        sqlDataStore.getMap().put("PlayerName", playerName);
-        sqlDataStore.getMap().put("HomeName", homeName.toLowerCase());
-        sqlDataStore.getMap().put("X", String.valueOf(location.getX()));
-        sqlDataStore.getMap().put("Y", String.valueOf(location.getY()));
-        sqlDataStore.getMap().put("Z", String.valueOf(location.getZ()));
-        sqlDataStore.getMap().put("YAW", String.valueOf(location.getYaw()));
-        sqlDataStore.getMap().put("PITCH", String.valueOf(location.getPitch()));
-        sqlDataStore.getMap().put("World", location.getWorld().getName());
+        sqlDataStore.put("UUID", String.valueOf(uuid));
+        sqlDataStore.put("Date", "0");
+        sqlDataStore.put("PlayerName", playerName);
+        sqlDataStore.put("HomeName", homeName.toLowerCase());
+        sqlDataStore.put("X", String.valueOf(location.getX()));
+        sqlDataStore.put("Y", String.valueOf(location.getY()));
+        sqlDataStore.put("Z", String.valueOf(location.getZ()));
+        sqlDataStore.put("YAW", String.valueOf(location.getYaw()));
+        sqlDataStore.put("PITCH", String.valueOf(location.getPitch()));
+        sqlDataStore.put("World", location.getWorld().getName());
         try {
             easySQL.save(sqlDataStore);
         } catch (SQLException e) {
@@ -85,16 +85,16 @@ public class HomeManager {
     }
 
     private void load(Player player, SQLDataStore sqlDataStore) {
-        String UUID = sqlDataStore.getMap().get("UUID");
-        String Date = sqlDataStore.getMap().get("Date");
-        String PlayerName = sqlDataStore.getMap().get("PlayerName");
-        String HomeName = sqlDataStore.getMap().get("HomeName");
-        String X = sqlDataStore.getMap().get("X");
-        String Y = sqlDataStore.getMap().get("Y");
-        String Z = sqlDataStore.getMap().get("Z");
-        String YAW = sqlDataStore.getMap().get("YAW");
-        String PITCH = sqlDataStore.getMap().get("PITCH");
-        String World = sqlDataStore.getMap().get("World");
+        String UUID = sqlDataStore.get("UUID");
+        String Date = sqlDataStore.get("Date");
+        String PlayerName = sqlDataStore.get("PlayerName");
+        String HomeName = sqlDataStore.get("HomeName");
+        String X = sqlDataStore.get("X");
+        String Y = sqlDataStore.get("Y");
+        String Z = sqlDataStore.get("Z");
+        String YAW = sqlDataStore.get("YAW");
+        String PITCH = sqlDataStore.get("PITCH");
+        String World = sqlDataStore.get("World");
 
         Location location = new Location(this.plugin.getServer().getWorld(World), Double.parseDouble(X), Double.parseDouble(Y), Double.parseDouble(Z), Float.parseFloat(YAW), Float.parseFloat(PITCH));
         this.homesMap.get(player.getUniqueId()).put(HomeName, location);

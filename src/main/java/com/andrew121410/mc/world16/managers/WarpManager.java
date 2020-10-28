@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.managers;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,10 +11,10 @@ public class WarpManager {
 
     private Map<String, Location> warpsMap;
 
-    private Main plugin;
+    private World16Essentials plugin;
     private CustomYmlManager warpsYml;
 
-    public WarpManager(Main plugin, CustomConfigManager customConfigManager) {
+    public WarpManager(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.warpsYml = customConfigManager.getWarpsYml();
         this.warpsMap = this.plugin.getSetListMap().getWarpsMap();

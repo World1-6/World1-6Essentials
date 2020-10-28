@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands.home;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Location;
@@ -18,10 +18,10 @@ public class HomeListCMD implements CommandExecutor {
 
     private Map<UUID, Map<String, Location>> homesMap;
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public HomeListCMD(Main plugin) {
+    public HomeListCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
 
@@ -39,7 +39,7 @@ public class HomeListCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.home")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
         Set<String> homeSet = homesMap.get(p.getUniqueId()).keySet();

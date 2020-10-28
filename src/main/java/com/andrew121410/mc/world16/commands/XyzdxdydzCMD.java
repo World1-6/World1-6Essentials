@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -13,11 +13,11 @@ import org.bukkit.entity.Player;
 
 public class XyzdxdydzCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private API api;
 
-    public XyzdxdydzCMD(Main plugin) {
+    public XyzdxdydzCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
 
@@ -33,7 +33,7 @@ public class XyzdxdydzCMD implements CommandExecutor {
 
         Player p = (Player) sender;
         if (!p.hasPermission("world16.xyzdxdydz")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 

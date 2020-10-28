@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands.spawn;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -12,12 +12,12 @@ import org.bukkit.entity.Player;
 
 public class SetSpawnCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
     private CustomYmlManager shitYml;
 
-    public SetSpawnCMD(Main plugin, CustomConfigManager customConfigManager) {
+    public SetSpawnCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.shitYml = customConfigManager.getShitYml();
         this.api = this.plugin.getApi();
@@ -34,7 +34,7 @@ public class SetSpawnCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.setspawn")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 

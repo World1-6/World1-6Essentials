@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.managers;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.objects.AfkObject;
 import com.andrew121410.mc.world16.utils.API;
 import org.bukkit.entity.Player;
@@ -13,10 +13,10 @@ public class AfkManager {
 
     private Map<UUID, AfkObject> afkMap;
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public AfkManager(Main plugin) {
+    public AfkManager(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 

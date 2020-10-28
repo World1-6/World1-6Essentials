@@ -1,11 +1,10 @@
 package com.andrew121410.mc.world16.events;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,11 +13,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class OnPlayerJoinEvent implements Listener {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private CustomConfigManager customConfigManager;
     private API api;
 
-    public OnPlayerJoinEvent(Main plugin, CustomConfigManager customConfigManager) {
+    public OnPlayerJoinEvent(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
         this.api = this.plugin.getApi();

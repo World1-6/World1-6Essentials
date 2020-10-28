@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.utils;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.objects.AfkObject;
 import com.andrew121410.mc.world16.objects.PowerToolObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -20,9 +20,9 @@ public class PlayerInitializer {
 
     private List<Player> hiddenPlayersList;
 
-    private Main plugin;
+    private World16Essentials plugin;
 
-    public PlayerInitializer(Main plugin) {
+    public PlayerInitializer(World16Essentials plugin) {
         this.plugin = plugin;
 
         this.backMap = this.plugin.getSetListMap().getBackMap();

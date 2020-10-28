@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.GameMode;
@@ -11,10 +11,10 @@ import org.bukkit.entity.Player;
 
 public class GmaCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public GmaCMD(Main plugin) {
+    public GmaCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
         plugin.getCommand("gma").setExecutor(this);
@@ -29,7 +29,7 @@ public class GmaCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.gma")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 
@@ -39,7 +39,7 @@ public class GmaCMD implements CommandExecutor {
             return true;
         } else if (args.length == 1) {
             if (!p.hasPermission("world16.gma.other")) {
-                api.PermissionErrorMessage(p);
+                api.permissionErrorMessage(p);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);

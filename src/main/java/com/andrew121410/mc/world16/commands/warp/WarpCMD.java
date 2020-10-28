@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands.warp;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.tabcomplete.WarpTab;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -16,10 +16,10 @@ public class WarpCMD implements CommandExecutor {
 
     private Map<String, Location> warpsMap;
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public WarpCMD(Main plugin) {
+    public WarpCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
@@ -38,7 +38,7 @@ public class WarpCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.warp")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 

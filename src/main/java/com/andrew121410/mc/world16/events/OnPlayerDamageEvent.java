@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.events;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,11 +11,11 @@ import java.util.List;
 
 public class OnPlayerDamageEvent implements Listener {
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private List<String> godList;
 
-    public OnPlayerDamageEvent(Main getPlugin) {
+    public OnPlayerDamageEvent(World16Essentials getPlugin) {
         this.plugin = getPlugin;
         this.godList = this.plugin.getSetListMap().getGodList();
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);

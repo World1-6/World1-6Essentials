@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.events;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -14,11 +14,11 @@ import java.util.List;
 
 public class OnServerCommandEvent implements Listener {
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private List<String> spyCommandBlock;
 
-    public OnServerCommandEvent(Main plugin) {
+    public OnServerCommandEvent(World16Essentials plugin) {
         this.plugin = plugin;
 
         this.spyCommandBlock = this.plugin.getSetListMap().getSpyCommandBlock();

@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.events;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Bukkit;
@@ -15,12 +15,12 @@ import java.util.List;
 
 public class OnAsyncPlayerChatEvent implements Listener {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
     private List<Player> hiddenPlayers;
 
-    public OnAsyncPlayerChatEvent(Main plugin) {
+    public OnAsyncPlayerChatEvent(World16Essentials plugin) {
         this.plugin = plugin;
         this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
         this.api = new API(this.plugin);
@@ -78,7 +78,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
         if (args[0].equalsIgnoreCase(":msg") || args[0].equalsIgnoreCase(":emsg")) {
             event.setCancelled(true);
             if (!p.hasPermission("world16.msg")) {
-                api.PermissionErrorMessage(p);
+                api.permissionErrorMessage(p);
                 return;
             }
             if (args.length == 1) {
@@ -101,7 +101,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
         if (args[0].equalsIgnoreCase(":tp")) {
             event.setCancelled(true);
             if (!p.hasPermission("world16.tp")) {
-                api.PermissionErrorMessage(p);
+                api.permissionErrorMessage(p);
                 return;
             }
             if (args.length == 1) {
@@ -127,7 +127,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
         if (args[0].equalsIgnoreCase(":unhide")) {
             event.setCancelled(true);
             if (!p.hasPermission("world16.unhide")) {
-                api.PermissionErrorMessage(p);
+                api.permissionErrorMessage(p);
                 return;
             }
             new BukkitRunnable() {
@@ -142,7 +142,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
         if (args[0].equalsIgnoreCase(":hide")) {
             event.setCancelled(true);
             if (!p.hasPermission("world16.hide")) {
-                api.PermissionErrorMessage(p);
+                api.permissionErrorMessage(p);
                 return;
             }
             new BukkitRunnable() {

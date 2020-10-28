@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.customevents.events;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -13,7 +13,7 @@ import org.bukkit.event.HandlerList;
 public class TpaCustomEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private Main plugin;
+    private World16Essentials plugin;
 
     String p;
     String target;
@@ -29,7 +29,7 @@ public class TpaCustomEvent extends Event {
 
     //CODE STARTS HERE
 
-    public TpaCustomEvent(Main plugin, String p, String target) {
+    public TpaCustomEvent(World16Essentials plugin, String p, String target) {
         this.plugin = plugin;
         this.p = p;
         this.target = target;
@@ -58,7 +58,7 @@ public class TpaCustomEvent extends Event {
      *
      * @return the plugin
      */
-    public Main getPlugin() {
+    public World16Essentials getPlugin() {
         return plugin;
     }
 

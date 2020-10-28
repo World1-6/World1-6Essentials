@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.tabcomplete;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -18,9 +18,9 @@ public class WarpTab implements TabCompleter {
     private Map<String, Location> warpsMap;
     //...
 
-    private Main plugin;
+    private World16Essentials plugin;
 
-    public WarpTab(Main plugin) {
+    public WarpTab(World16Essentials plugin) {
         this.plugin = plugin;
 
         this.warpsMap = this.plugin.getSetListMap().getWarpsMap();

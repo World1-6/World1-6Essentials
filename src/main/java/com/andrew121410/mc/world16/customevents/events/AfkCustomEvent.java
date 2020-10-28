@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.customevents.events;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -13,7 +13,7 @@ import org.bukkit.event.HandlerList;
 public class AfkCustomEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private Main plugin;
+    private World16Essentials plugin;
 
     String p;
 
@@ -28,7 +28,7 @@ public class AfkCustomEvent extends Event {
 
     //CODE STARTS HERE
 
-    public AfkCustomEvent(Main plugin, String p) {
+    public AfkCustomEvent(World16Essentials plugin, String p) {
         this.plugin = plugin;
         this.p = p;
     }
@@ -56,7 +56,7 @@ public class AfkCustomEvent extends Event {
      *
      * @return Returns the plugin
      */
-    public Main getPlugin() {
+    public World16Essentials getPlugin() {
         return plugin;
     }
 }

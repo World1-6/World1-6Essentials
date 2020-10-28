@@ -67,13 +67,13 @@ public class DataTranslator {
                     UUID uuid = UUID.fromString(k);
                     Map<String, Location> homesMap = new HashMap<>();
                     v.forEach(sqlDataStore -> {
-                        String homeName = sqlDataStore.getMap().get("HomeName");
-                        int world = Integer.parseInt(sqlDataStore.getMap().get("World"));
-                        double x = Double.parseDouble(sqlDataStore.getMap().get("X"));
-                        double y = Double.parseDouble(sqlDataStore.getMap().get("Y"));
-                        double z = Double.parseDouble(sqlDataStore.getMap().get("Z"));
-                        float yaw = Float.parseFloat(sqlDataStore.getMap().get("YAW"));
-                        float pitch = Float.parseFloat(sqlDataStore.getMap().get("PITCH"));
+                        String homeName = sqlDataStore.get("HomeName");
+                        int world = Integer.parseInt(sqlDataStore.get("World"));
+                        double x = Double.parseDouble(sqlDataStore.get("X"));
+                        double y = Double.parseDouble(sqlDataStore.get("Y"));
+                        double z = Double.parseDouble(sqlDataStore.get("Z"));
+                        float yaw = Float.parseFloat(sqlDataStore.get("YAW"));
+                        float pitch = Float.parseFloat(sqlDataStore.get("PITCH"));
                         Location location = new Location(Bukkit.getServer().getWorld(convertFromOldIntToBukkitStringWorld(world)), (int) x, (int) y, (int) z, yaw, pitch);
                         homesMap.put(homeName, location);
                     });
@@ -93,16 +93,16 @@ public class DataTranslator {
                     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
                     theMap.forEach((homeName, location) -> {
                         SQLDataStore sqlDataStore = new SQLDataStore();
-                        sqlDataStore.getMap().put("UUID", uuid.toString());
-                        sqlDataStore.getMap().put("Date", "0");
-                        sqlDataStore.getMap().put("PlayerName", offlinePlayer.getName());
-                        sqlDataStore.getMap().put("HomeName", homeName);
-                        sqlDataStore.getMap().put("X", String.valueOf(location.getBlockX()));
-                        sqlDataStore.getMap().put("Y", String.valueOf(location.getBlockY()));
-                        sqlDataStore.getMap().put("Z", String.valueOf(location.getBlockZ()));
-                        sqlDataStore.getMap().put("YAW", String.valueOf(location.getYaw()));
-                        sqlDataStore.getMap().put("PITCH", String.valueOf(location.getPitch()));
-                        sqlDataStore.getMap().put("World", String.valueOf(convertToOldIntToBukkitStringWorld(location.getWorld().getName())));
+                        sqlDataStore.put("UUID", uuid.toString());
+                        sqlDataStore.put("Date", "0");
+                        sqlDataStore.put("PlayerName", offlinePlayer.getName());
+                        sqlDataStore.put("HomeName", homeName);
+                        sqlDataStore.put("X", String.valueOf(location.getBlockX()));
+                        sqlDataStore.put("Y", String.valueOf(location.getBlockY()));
+                        sqlDataStore.put("Z", String.valueOf(location.getBlockZ()));
+                        sqlDataStore.put("YAW", String.valueOf(location.getYaw()));
+                        sqlDataStore.put("PITCH", String.valueOf(location.getPitch()));
+                        sqlDataStore.put("World", String.valueOf(convertToOldIntToBukkitStringWorld(location.getWorld().getName())));
                         try {
                             easySQL.save(sqlDataStore);
                         } catch (SQLException throwables) {

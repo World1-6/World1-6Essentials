@@ -1,17 +1,17 @@
 package com.andrew121410.mc.world16.managers;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 
 public class CustomConfigManager {
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private CustomYmlManager shitYml;
     private CustomYmlManager warpsYml;
     private CustomYmlManager playersYml;
 
-    public CustomConfigManager(Main plugin) {
+    public CustomConfigManager(World16Essentials plugin) {
         this.plugin = plugin;
     }
 

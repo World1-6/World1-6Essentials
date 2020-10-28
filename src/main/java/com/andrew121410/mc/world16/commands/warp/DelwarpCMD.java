@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands.warp;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.managers.WarpManager;
 import com.andrew121410.mc.world16.tabcomplete.WarpTab;
 import com.andrew121410.mc.world16.utils.API;
@@ -17,11 +17,11 @@ public class DelwarpCMD implements CommandExecutor {
 
     private Map<String, Location> warpsMap;
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
     private WarpManager warpManager;
 
-    public DelwarpCMD(Main plugin) {
+    public DelwarpCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
         this.warpManager = this.plugin.getWarpManager();
@@ -41,7 +41,7 @@ public class DelwarpCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.delwarp")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 

@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.utils;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.customevents.handlers.AfkEventHandler;
 import com.andrew121410.mc.world16.customevents.handlers.UnAfkEventHandler;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
@@ -42,14 +42,14 @@ public class API {
     private List<String> flyList;
     private List<String> godList;
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "8/28/2020";
+    public static final String DATE_OF_VERSION = "10/28/2020";
     public static final String PREFIX = "[&9World1-6Ess&r]";
 
-    public API(Main plugin) {
+    public API(World16Essentials plugin) {
         this.plugin = plugin;
         doSetListMap();
     }
@@ -167,72 +167,6 @@ public class API {
         }
     }
 
-    public boolean isInteger(String input) {
-        try {
-            Integer.parseInt(input);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean isLong(String input) {
-        try {
-            Long.parseLong(input);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean isBoolean(String boolean1) {
-        return boolean1.equalsIgnoreCase("true") || boolean1.equalsIgnoreCase("false");
-    }
-
-    public Integer asIntOrDefault(String input, int default1) {
-        try {
-            Integer.parseInt(input);
-            return Integer.valueOf(input);
-        } catch (Exception e) {
-            return default1;
-        }
-    }
-
-    public Long asLongOrDefault(String input, long default1) {
-        try {
-            Long.parseLong(input);
-            return Long.valueOf(input);
-        } catch (Exception e) {
-            return default1;
-        }
-    }
-
-    public Double asDoubleOrDefault(String input, double default1) {
-        try {
-            Double.parseDouble(input);
-            return Double.valueOf(input);
-        } catch (Exception e) {
-            return default1;
-        }
-    }
-
-    public float asFloatOrDefault(String input, float default1) {
-        try {
-            Float.parseFloat(input);
-            return Float.parseFloat(input);
-        } catch (Exception e) {
-            return default1;
-        }
-    }
-
-    public boolean asBooleanOrDefault(String boolean1, boolean default1) {
-        try {
-            return Boolean.parseBoolean(boolean1);
-        } catch (Exception e) {
-            return default1;
-        }
-    }
-
     public boolean isClass(String className) {
         try {
             Class.forName(className);
@@ -252,7 +186,7 @@ public class API {
         }
     }
 
-    public void PermissionErrorMessage(Player p) {
+    public void permissionErrorMessage(Player p) {
         p.sendMessage(Translate.chat("&4You do not have permission to do this command."));
     }
 }

@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands.warp;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Location;
@@ -15,10 +15,10 @@ public class SetWarpCMD implements CommandExecutor {
 
     private Map<String, Location> warpsMap;
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public SetWarpCMD(Main plugin) {
+    public SetWarpCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
@@ -36,7 +36,7 @@ public class SetWarpCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.setwarp")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 

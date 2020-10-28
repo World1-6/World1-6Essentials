@@ -43,12 +43,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-
-        <!-- Offcial WorldWdit API-->
-        <repository>
-            <id>enginehub-maven</id>
-            <url>http://maven.enginehub.org/repo/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -71,7 +65,8 @@
         <dependency>
             <groupId>com.github.andrew121410</groupId>
             <artifactId>CCUtilsJava</artifactId>
-            <version>08dbabecf6</version>
+            <version>232a45a5b5</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;
@@ -10,10 +10,10 @@ import org.bukkit.entity.Player;
 
 public class RamCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public RamCMD(Main plugin) {
+    public RamCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
@@ -29,7 +29,7 @@ public class RamCMD implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("world16.ram")) {
-            api.PermissionErrorMessage(player);
+            api.permissionErrorMessage(player);
             return true;
         }
 

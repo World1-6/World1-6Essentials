@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16.utils.InventoryUtils;
 import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
@@ -12,10 +12,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class BedCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public BedCMD(Main getPlugin) {
+    public BedCMD(World16Essentials getPlugin) {
         this.plugin = getPlugin;
         this.api = new API(this.plugin);
 
@@ -31,7 +31,7 @@ public class BedCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.bed")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 

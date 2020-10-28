@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.ccutils.utils.Utils;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -13,12 +14,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class UnSafeEnchatmentCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
     private CustomConfigManager customConfigManager;
 
-    public UnSafeEnchatmentCMD(Main plugin, CustomConfigManager customConfigManager) {
+    public UnSafeEnchatmentCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
 
         this.customConfigManager = customConfigManager;
@@ -36,14 +37,14 @@ public class UnSafeEnchatmentCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.unsafenchant")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 
         if (args.length == 2) {
             ItemStack mainHand = p.getInventory().getItemInMainHand();
             Enchantment enchantment = this.plugin.getOtherPlugins().getWorld16Utils().getClassWrappers().getEnchantmentUtils().getByName(args[0]);
-            int level = api.asIntOrDefault(args[1], 0);
+            int level = Utils.asIntegerOrElse(args[1], 0);
 
             if (enchantment == null) {
                 p.sendMessage(Translate.chat("&cLooks like that's not a enchantment."));

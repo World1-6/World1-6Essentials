@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.tabcomplete.BackTab;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -20,10 +20,10 @@ public class BackCMD implements CommandExecutor {
 
     private Map<UUID, Map<String, Location>> backMap;
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public BackCMD(Main plugin) {
+    public BackCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
         this.backMap = this.plugin.getSetListMap().getBackMap();
@@ -51,7 +51,7 @@ public class BackCMD implements CommandExecutor {
 
         if (args[0].equalsIgnoreCase("death")) {
             if (!player.hasPermission("world16.back.death")) {
-                api.PermissionErrorMessage(player);
+                api.permissionErrorMessage(player);
                 return true;
             }
             Location deathLocation = playerBackMap.get("Death");
@@ -74,7 +74,7 @@ public class BackCMD implements CommandExecutor {
             player.sendMessage(Translate.chat("&6Teleporting..."));
         } else if (args[0].equalsIgnoreCase("tp")) {
             if (!player.hasPermission("world16.back.tp")) {
-                api.PermissionErrorMessage(player);
+                api.permissionErrorMessage(player);
                 return true;
             }
             Location tpLocation = playerBackMap.get("Tp");

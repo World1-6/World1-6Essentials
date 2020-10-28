@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.events;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,11 +12,11 @@ import java.util.UUID;
 
 public class OnPlayerTeleportEvent implements Listener {
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private Map<UUID, Map<String, Location>> backMap;
 
-    public OnPlayerTeleportEvent(Main plugin) {
+    public OnPlayerTeleportEvent(World16Essentials plugin) {
         this.plugin = plugin;
         this.backMap = this.plugin.getSetListMap().getBackMap();
 

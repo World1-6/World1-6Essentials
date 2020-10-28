@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16.utils.CommandUtils;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class RunCommandsCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private API api;
 
@@ -25,7 +25,7 @@ public class RunCommandsCMD implements CommandExecutor {
 
     private CustomConfigManager customConfigManager;
 
-    public RunCommandsCMD(Main plugin, CustomConfigManager customConfigManager) {
+    public RunCommandsCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
         this.api = this.plugin.getApi();

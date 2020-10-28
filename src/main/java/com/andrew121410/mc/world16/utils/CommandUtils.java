@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16.utils;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.ccutils.utils.Utils;
+import com.andrew121410.mc.world16.World16Essentials;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 
@@ -8,11 +9,11 @@ import java.util.List;
 
 public class CommandUtils {
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private API api;
 
-    public CommandUtils(Main getPlugin) {
+    public CommandUtils(World16Essentials getPlugin) {
         this.plugin = getPlugin;
         this.api = new API(this.plugin);
     }
@@ -36,15 +37,15 @@ public class CommandUtils {
                         int finishNumber = 0;
 
                         if (letter.equalsIgnoreCase("X")) {
-                            toPlus = api.asIntOrDefault(a, 0);
+                            toPlus = Utils.asIntegerOrElse(a,0);
                             finishNumber = block.getX() + toPlus;
                         }
                         if (letter.equalsIgnoreCase("Y")) {
-                            toPlus = api.asIntOrDefault(a, 0);
+                            toPlus = Utils.asIntegerOrElse(a,0);
                             finishNumber = block.getY() + toPlus;
                         }
                         if (letter.equalsIgnoreCase("Z")) {
-                            toPlus = api.asIntOrDefault(a, 0);
+                            toPlus = Utils.asIntegerOrElse(a,0);
                             finishNumber = block.getZ() + toPlus;
                         }
                         commands[i] = String.valueOf(finishNumber);

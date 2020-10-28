@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -13,10 +13,10 @@ import java.util.Arrays;
 
 public class MsgCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public MsgCMD(Main plugin, CustomConfigManager customConfigManager) {
+    public MsgCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.api = new API(this.plugin);
 
@@ -32,7 +32,7 @@ public class MsgCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.msg") || !p.hasPermission("world16.emsg")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 

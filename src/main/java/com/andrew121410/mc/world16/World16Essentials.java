@@ -27,9 +27,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 
-public class Main extends JavaPlugin {
+public class World16Essentials extends JavaPlugin {
 
-    private static Main plugin;
+    private static World16Essentials plugin;
 
     private SetListMap setListMap;
     private OtherPlugins otherPlugins;
@@ -44,6 +44,7 @@ public class Main extends JavaPlugin {
 
     private API api;
 
+    @Override
     public void onEnable() {
         plugin = this;
         this.setListMap = new SetListMap();
@@ -70,6 +71,7 @@ public class Main extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &2World1-6Essentials has been loaded."));
     }
 
+    @Override
     public void onDisable() {
         this.setListMap.clearSetListMap();
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &eWorld1-6Essentials has been unloaded."));
@@ -174,7 +176,7 @@ public class Main extends JavaPlugin {
     }
 
     //Getters
-    public static Main getPlugin() {
+    public static World16Essentials getPlugin() {
         return plugin;
     }
 

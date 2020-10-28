@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.ccutils.utils.Utils;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16.utils.CommandUtils;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class WaitDoCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private API api;
 
@@ -26,7 +27,7 @@ public class WaitDoCMD implements CommandExecutor {
 
     private CustomConfigManager customConfigManager;
 
-    public WaitDoCMD(Main plugin, CustomConfigManager customConfigManager) {
+    public WaitDoCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
         this.api = this.plugin.getApi();
@@ -47,7 +48,7 @@ public class WaitDoCMD implements CommandExecutor {
             Block commandblock = cmdblock.getBlock();
 
             if (args.length >= 4) {
-                int sec = api.asIntOrDefault(args[0], 1);
+                int sec = Utils.asIntegerOrElse(args[0], 1);
                 String[] doStart = args[1].split(API.CUSTOM_COMMAND_FORMAT);
                 String[] doEnd = args[2].split(API.CUSTOM_COMMAND_FORMAT);
                 String[] doEverySec = args[3].split(API.CUSTOM_COMMAND_FORMAT);
@@ -55,7 +56,7 @@ public class WaitDoCMD implements CommandExecutor {
                 boolean debug = false;
 
                 if (args.length >= 5 && args[4] != null) {
-                    debug = api.asBooleanOrDefault(args[4], false);
+                    debug = Utils.asBooleanOrElse(args[4], false);
                 }
 
                 String doStartString = String.join(" ", doStart);
@@ -85,7 +86,7 @@ public class WaitDoCMD implements CommandExecutor {
 
         Player p = (Player) sender;
         if (!p.hasPermission("world16.waitdo")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
         p.sendMessage(Translate.chat("&4&lOnly command blocks right now!"));

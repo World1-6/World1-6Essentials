@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16.test;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import org.bukkit.command.Command;
@@ -10,12 +10,12 @@ import org.bukkit.entity.Player;
 
 public class test1 implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
     private CustomConfigManager customConfigManager;
 
-    public test1(Main plugin, CustomConfigManager customConfigManager) {
+    public test1(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
@@ -33,7 +33,7 @@ public class test1 implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.testee1")) {
-            api.PermissionErrorMessage(p);
+            api.permissionErrorMessage(p);
             return true;
         }
 

@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16.commands;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.ccutils.utils.Utils;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.managers.CustomConfigManager;
 import com.andrew121410.mc.world16.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -12,12 +13,12 @@ import org.bukkit.entity.Player;
 
 public class FlySpeedCMD implements CommandExecutor {
 
-    private Main plugin;
+    private World16Essentials plugin;
     private API api;
 
-    public FlySpeedCMD(Main plugin, CustomConfigManager customConfigManager) {
+    public FlySpeedCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("fs").setExecutor(this);
     }
@@ -31,7 +32,7 @@ public class FlySpeedCMD implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("world16.fs")) {
-            api.PermissionErrorMessage(player);
+            api.permissionErrorMessage(player);
             return true;
         }
 
@@ -40,52 +41,39 @@ public class FlySpeedCMD implements CommandExecutor {
             player.sendMessage(Translate.chat("&6Remember that the default flight speed is &a1"));
             return true;
         } else if (args.length == 1) {
-            String oldnum = args[0];
+            Double theDouble = Utils.asDoubleOrElse(args[0], null);
 
-            double num = api.asDoubleOrDefault(oldnum, Double.MAX_VALUE);
-//            int num1 = (int) num;
-
-            if (num == Double.MAX_VALUE) {
-                player.sendMessage(Translate.chat("That isn't a int"));
+            if (theDouble == null) {
+                player.sendMessage(Translate.chat("&cThat isn't a integer..."));
                 return true;
             }
 
-            if ((num > -1) && (num < 11)) {
-                float flyspeed = (float) (num / 10.0D);
-                player.setFlySpeed(flyspeed);
-                player.sendMessage(ChatColor.GOLD + "[FlySpeed]  " + ChatColor.YELLOW + "Your flyspeed now equals: " + ChatColor.RED + "[" + flyspeed * 10.0F + "]" + ChatColor.YELLOW + "!");
-                return true;
+            if ((theDouble > -1) && (theDouble < 11)) {
+                float flySpeed = (float) (theDouble / 10.0D);
+                player.setFlySpeed(flySpeed);
+                player.sendMessage(ChatColor.GOLD + "[FlySpeed] " + ChatColor.YELLOW + "Your fly-speed now equals: " + ChatColor.RED + "[" + flySpeed * 10.0F + "]" + ChatColor.YELLOW + "!");
             } else {
-                player.sendMessage(ChatColor.GOLD + "[FlySpeed]  " + ChatColor.RED + "Your input is not valid! must be between 0 and 10.");
-                return true;
+                player.sendMessage(ChatColor.GOLD + "[FlySpeed] " + ChatColor.RED + "Your input is not valid! must be between 0 and 10.");
             }
+            return true;
         }
         Player target = plugin.getServer().getPlayerExact(args[0]);
         if (target != null && target.isOnline()) {
             if (!player.hasPermission("world16.fs.other")) {
-                api.PermissionErrorMessage(player);
+                api.permissionErrorMessage(player);
                 return true;
             }
-            String oldnum = args[1];
-            double num = Double.parseDouble(oldnum);
-            int num1 = (int) num;
-            if ((num1 > -1) && (num1 < 11)) {
-                double num2 = num1;
-                float flyspeed = (float) (num2 / 10.0D);
-
-                target.setFlySpeed(flyspeed);
-                player.sendMessage(Translate.chat(
-                        "&eYou has have set " + target.getDisplayName() + " flight speed too &a"
-                                + flyspeed * 10.0F));
+            Double theDouble = Utils.asDoubleOrElse(args[1], null);
+            if ((theDouble > -1) && (theDouble < 11)) {
+                float flySpeed = (float) (theDouble / 10.0D);
+                target.setFlySpeed(flySpeed);
+                player.sendMessage(Translate.chat("&eYou has have set " + target.getDisplayName() + " flight speed too &a" + flySpeed * 10.0F));
             } else {
-                player.sendMessage(ChatColor.GOLD + "[FlySpeed]  " + ChatColor.RED
-                        + "Your input is not valid! must be between 0 and 10.");
+                player.sendMessage(ChatColor.GOLD + "[FlySpeed] " + ChatColor.RED + "Your input is not valid! must be between 0 and 10.");
                 return true;
             }
         } else {
-            player.sendMessage(
-                    Translate.chat("&4Usage: &9/fs <&aNumber&9> OR /fs <&cPlayer&9> <&aNumber&9>"));
-            return true;
+            player.sendMessage(Translate.chat("&4Usage: &9/fs <&aNumber&9> OR /fs <&cPlayer&9> <&aNumber&9>"));
         }
         return true;
     }

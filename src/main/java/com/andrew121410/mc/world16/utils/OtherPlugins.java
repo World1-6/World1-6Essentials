@@ -1,16 +1,16 @@
 package com.andrew121410.mc.world16.utils;
 
-import com.andrew121410.mc.world16.Main;
+import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16utils.World16Utils;
 import org.bukkit.plugin.Plugin;
 
 public class OtherPlugins {
 
-    private Main plugin;
+    private World16Essentials plugin;
 
     private World16Utils world16Utils;
 
-    public OtherPlugins(Main plugin) {
+    public OtherPlugins(World16Essentials plugin) {
         this.plugin = plugin;
 
         setupWorld16Utils();
