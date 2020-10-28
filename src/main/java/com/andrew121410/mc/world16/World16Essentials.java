@@ -68,6 +68,7 @@ public class World16Essentials extends JavaPlugin {
             Bukkit.getServer().broadcastMessage(Translate.color("&cWorld1-6Essentials was reloaded while this isn't recommend it is supported."));
         }
 
+        pluginLoadMessage();
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &2World1-6Essentials has been loaded."));
     }
 
@@ -173,6 +174,21 @@ public class World16Essentials extends JavaPlugin {
 
     private void regBStats() {
         new Metrics(this);
+    }
+
+    private void pluginLoadMessage() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(" \r\n&2");
+        stringBuilder.append("__        __         _     _ _        __\n" +
+                "\\ \\      / /__  _ __| | __| / |      / /_\n" +
+                " \\ \\ /\\ / / _ \\| '__| |/ _` | |_____| '_ \\\n" +
+                "  \\ V  V / (_) | |  | | (_| | |_____| (_) |\n" +
+                "   \\_/\\_/ \\___/|_|  |_|\\__,_|_|      \\___/\n" +
+                "\n");
+        stringBuilder.append("&6Developer: &dAndrew121410\r\n");
+        stringBuilder.append("&3Date of version: &e" + API.DATE_OF_VERSION + "");
+        stringBuilder.append(" \r\n");
+        getServer().getConsoleSender().sendMessage(Translate.color(stringBuilder.toString()));
     }
 
     //Getters

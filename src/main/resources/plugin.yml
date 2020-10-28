@@ -2,7 +2,6 @@ name: World1-6Essentials
 version: 1.0
 author: Andrew121410
 main: com.andrew121410.mc.world16.World16Essentials
-api-version: 1.16
 
 depend:
   - World1-6Utils
