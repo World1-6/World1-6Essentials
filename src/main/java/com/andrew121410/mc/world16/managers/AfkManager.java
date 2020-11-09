@@ -6,6 +6,7 @@ import com.andrew121410.mc.world16.utils.API;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,8 +31,18 @@ public class AfkManager {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (Map.Entry<UUID, AfkObject> entry : afkMap.entrySet()) {
-                    Player player = plugin.getServer().getPlayer(entry.getKey());
+                Iterator<Map.Entry<UUID, AfkObject>> iterator = afkMap.entrySet().iterator();
+
+                while (iterator.hasNext()) {
+                    Map.Entry<UUID, AfkObject> entry = iterator.next();
+                    UUID uuid = entry.getKey();
+                    AfkObject afkObject = entry.getValue();
+
+                    Player player = plugin.getServer().getPlayer(uuid);
+                    if (player == null || !player.isOnline()) {
+                        iterator.remove();
+                        return;
+                    }
                     String color = "&7";
 
                     //Checks if player is op if so then change the color to red.
@@ -40,12 +51,12 @@ public class AfkManager {
                     }
 
                     //Don't run if player is already AFK.
-                    if (entry.getValue().isAfk()) return;
+                    if (afkObject.isAfk()) return;
 
                     //Checks if the player has not moved in 3 min if not afk them if so restart().
-                    if (player.getLocation().equals(entry.getValue().getLocation())) {
+                    if (player.getLocation().equals(afkObject.getLocation())) {
                         api.doAfk(player, color);
-                    } else entry.getValue().restart(player);
+                    } else afkObject.restart(player);
                 }
             }
         }.runTaskTimer(plugin, 1200L, 2400L);
@@ -54,10 +65,18 @@ public class AfkManager {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (Map.Entry<UUID, AfkObject> entry : afkMap.entrySet()) {
+                Iterator<Map.Entry<UUID, AfkObject>> iterator = afkMap.entrySet().iterator();
+
+                while (iterator.hasNext()) {
+                    Map.Entry<UUID, AfkObject> entry = iterator.next();
                     UUID uuid = entry.getKey();
                     AfkObject afkObject = entry.getValue();
+
                     Player player = plugin.getServer().getPlayer(uuid);
+                    if (player == null || !player.isOnline()) {
+                        iterator.remove();
+                        return;
+                    }
                     String color = "&7";
 
                     //Checks if player is op if so then change the color to red.
