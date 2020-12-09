@@ -2,8 +2,8 @@ package com.andrew121410.mc.world16.commands;
 
 import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.utils.API;
-import com.andrew121410.mc.world16utils.blocks.sign.SignUtils;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.sign.SignUtils;
 import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
