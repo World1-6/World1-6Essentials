@@ -108,6 +108,7 @@ public class World16Essentials extends JavaPlugin {
         new PowerToolCMD(this, this.customConfigManager);
         new UnSafeEnchatmentCMD(this, this.customConfigManager);
         new CommandBlockFindCMD(this);
+        new SudoCMD(this);
 
         //Gamemode commands
         new GmcCMD(this);

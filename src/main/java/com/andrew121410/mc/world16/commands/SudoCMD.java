@@ -19,7 +19,7 @@ public class SudoCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.plugin.getCommand("workbench").setExecutor(this);
+        this.plugin.getCommand("sudo").setExecutor(this);
     }
 
     @Override
@@ -30,6 +30,7 @@ public class SudoCMD implements CommandExecutor {
                     sender.sendMessage("Player wasn't found.");
                 } else sender.sendMessage("The command was ran successfully for the user.");
             }
+            return true;
         }
         Player p = (Player) sender;
 
