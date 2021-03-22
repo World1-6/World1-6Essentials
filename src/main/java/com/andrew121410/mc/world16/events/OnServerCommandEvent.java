@@ -15,12 +15,10 @@ import java.util.List;
 public class OnServerCommandEvent implements Listener {
 
     private World16Essentials plugin;
-
     private List<String> spyCommandBlock;
 
     public OnServerCommandEvent(World16Essentials plugin) {
         this.plugin = plugin;
-
         this.spyCommandBlock = this.plugin.getSetListMap().getSpyCommandBlock();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
@@ -34,7 +32,7 @@ public class OnServerCommandEvent implements Listener {
             while (iterator.hasNext()) {
                 String s = iterator.next();
                 if (event.getCommand().contains(s)) {
-                    this.plugin.getServer().broadcastMessage(Translate.chat("&cSPY FOUND&e->&r F: " + s + " L: " + blockCommandSender.getBlock().getLocation().toString()));
+                    this.plugin.getServer().broadcastMessage(Translate.chat("&c&lSPY FOUND&e->&r Found: " + s + " Location: X:" + blockCommandSender.getBlock().getLocation().getX() + " Y: " + blockCommandSender.getBlock().getLocation().getY() + " Z: " + blockCommandSender.getBlock().getLocation().getZ()));
                     ComponentBuilder components = new ComponentBuilder(Translate.chat("[&eCLICK ME TO TP TO IT EASY&r]")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + blockCommandSender.getBlock().getLocation().getBlockX() + " " + blockCommandSender.getBlock().getLocation().getBlockY() + " " + blockCommandSender.getBlock().getLocation().getBlockZ()));
                     this.plugin.getServer().spigot().broadcast(components.create());
                     iterator.remove();
