@@ -54,10 +54,7 @@ commands:
   powertool:
   unsafenchant:
   commandblockfind:
-  bal:
-    aliases:
-      - money
-  eco:
+  sudo:
 
   gmc:
     aliases:
@@ -211,4 +208,7 @@ permissions:
     default: op
   world16.commandblockfind:
     description: Allows to do commandblockfind
+    default: op
+  world16.sudo:
+    description: Allows you to do sudo
     default: op

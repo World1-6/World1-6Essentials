@@ -33,7 +33,7 @@ public class OnPlayerJoinEvent implements Listener {
         //Join message stuff.
         Bukkit.broadcastMessage(Translate.chat(API.PREFIX + " &6Welcome Back! " + p.getDisplayName()));
         p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
-        p.sendMessage(Translate.chat("&4World1-6Ess Last Time Updated Was " + API.DATE_OF_VERSION));
+        if (p.isOp()) p.sendMessage(Translate.chat("&4World1-6Essentials was last updated on " + API.DATE_OF_VERSION));
         //...
 
         this.plugin.getPlayerInitializer().load(p);
