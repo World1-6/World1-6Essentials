@@ -3,7 +3,7 @@ package com.andrew121410.mc.world16.events;
 import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.objects.PowerToolObject;
 import com.andrew121410.mc.world16.utils.API;
-import com.andrew121410.mc.world16utils.utils.UniverseBlockUtils;
+import com.andrew121410.mc.world16utils.blocks.UniversalBlockUtils;
 import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -50,7 +50,7 @@ public class OnPlayerInteractEvent implements Listener {
             powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
         } else if (action == Action.PHYSICAL) {
             if (block != null) {
-                if (UniverseBlockUtils.isFarmLand(XMaterial.matchXMaterial(block.getType())) && api.isPreventCropsTrampling()) {
+                if (UniversalBlockUtils.isFarmLand(XMaterial.matchXMaterial(block.getType())) && api.isPreventCropsTrampling()) {
                     event.setCancelled(true);
                 }
             }

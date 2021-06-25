@@ -46,7 +46,7 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "3/22/2021";
+    public static final String DATE_OF_VERSION = "6/25/2021";
     public static final String PREFIX = "[&9World1-6Ess&r]";
 
     public API(World16Essentials plugin) {
