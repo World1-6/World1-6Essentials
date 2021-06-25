@@ -2,8 +2,8 @@ package com.andrew121410.mc.world16.commands;
 
 import com.andrew121410.mc.world16.World16Essentials;
 import com.andrew121410.mc.world16.utils.API;
+import com.andrew121410.mc.world16utils.blocks.BlockUtils;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.sign.SignUtils;
 import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -20,13 +20,13 @@ public class SignCMD implements CommandExecutor {
     private World16Essentials plugin;
 
     private API api;
-    private SignUtils signUtils;
+    private BlockUtils blockUtils;
 
     public SignCMD(World16Essentials plugin) {
         this.plugin = plugin;
 
         this.api = this.plugin.getApi();
-        this.signUtils = this.plugin.getOtherPlugins().getWorld16Utils().getClassWrappers().getSignUtils();
+        this.blockUtils = this.plugin.getOtherPlugins().getWorld16Utils().getClassWrappers().getBlockUtils();
         this.plugin.getCommand("sign").setExecutor(this);
     }
 
@@ -64,7 +64,7 @@ public class SignCMD implements CommandExecutor {
             }
 
             Sign sign = (Sign) state;
-            signUtils.edit(p, sign);
+            blockUtils.edit(p, sign);
             return true;
         }
         return true;
