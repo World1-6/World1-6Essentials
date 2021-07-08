@@ -92,7 +92,7 @@ public class World16Essentials extends JavaPlugin {
         new SignCMD(this);
         new ColorsCMD(this);
         new AfkCMD(this);
-        new FlySpeedCMD(this, this.customConfigManager);
+        new FlySpeedCMD(this);
         new IsAfkCMD(this);
         new BackCMD(this);
         new BroadcastCMD(this, this.customConfigManager);

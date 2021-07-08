@@ -24,6 +24,9 @@ commands:
   colors:
   afk:
   fs:
+    aliases:
+      - flyspeed
+      - fspeed
   isafk:
   testee1:
   food:

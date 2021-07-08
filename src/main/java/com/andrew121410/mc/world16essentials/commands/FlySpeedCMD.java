@@ -11,16 +11,24 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+
 public class FlySpeedCMD implements CommandExecutor {
 
     private World16Essentials plugin;
     private API api;
 
-    public FlySpeedCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
+    public FlySpeedCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
         this.plugin.getCommand("fs").setExecutor(this);
+        this.plugin.getCommand("fs").setTabCompleter((commandSender, command, s, args) -> {
+            if (args.length == 1) {
+                return Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+            }
+            return null;
+        });
     }
 
     @Override
