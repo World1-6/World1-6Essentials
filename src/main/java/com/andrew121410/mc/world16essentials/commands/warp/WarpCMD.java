@@ -38,7 +38,7 @@ public class WarpCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.warp")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

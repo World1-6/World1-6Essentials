@@ -41,7 +41,7 @@ public class TpDenyCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.tpdeny")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

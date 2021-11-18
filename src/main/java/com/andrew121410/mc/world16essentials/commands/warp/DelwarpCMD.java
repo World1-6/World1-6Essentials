@@ -41,7 +41,7 @@ public class DelwarpCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.delwarp")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

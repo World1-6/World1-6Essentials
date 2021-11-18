@@ -30,7 +30,7 @@ public class GmsCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.gms")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 
@@ -40,7 +40,7 @@ public class GmsCMD implements CommandExecutor {
             return true;
         } else if (args.length == 1) {
             if (!p.hasPermission("world16.gms.other")) {
-                api.permissionErrorMessage(p);
+                api.sendPermissionErrorMessage(p);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);

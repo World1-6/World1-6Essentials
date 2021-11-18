@@ -78,7 +78,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
         if (args[0].equalsIgnoreCase(":msg") || args[0].equalsIgnoreCase(":emsg")) {
             event.setCancelled(true);
             if (!p.hasPermission("world16.msg")) {
-                api.permissionErrorMessage(p);
+                api.sendPermissionErrorMessage(p);
                 return;
             }
             if (args.length == 1) {
@@ -101,7 +101,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
         if (args[0].equalsIgnoreCase(":tp")) {
             event.setCancelled(true);
             if (!p.hasPermission("world16.tp")) {
-                api.permissionErrorMessage(p);
+                api.sendPermissionErrorMessage(p);
                 return;
             }
             if (args.length == 1) {
@@ -127,7 +127,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
         if (args[0].equalsIgnoreCase(":unhide")) {
             event.setCancelled(true);
             if (!p.hasPermission("world16.unhide")) {
-                api.permissionErrorMessage(p);
+                api.sendPermissionErrorMessage(p);
                 return;
             }
             new BukkitRunnable() {
@@ -142,7 +142,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
         if (args[0].equalsIgnoreCase(":hide")) {
             event.setCancelled(true);
             if (!p.hasPermission("world16.hide")) {
-                api.permissionErrorMessage(p);
+                api.sendPermissionErrorMessage(p);
                 return;
             }
             new BukkitRunnable() {

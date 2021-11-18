@@ -32,7 +32,7 @@ public class CommandBlockCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.commandblock")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

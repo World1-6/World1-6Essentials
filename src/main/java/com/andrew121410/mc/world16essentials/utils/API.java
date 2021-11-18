@@ -5,10 +5,8 @@ import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
@@ -44,7 +42,7 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "7/7/2021";
+    public static final String DATE_OF_VERSION = "11/17/2021";
     public static final String PREFIX = "[&9World1-6Ess&r]";
 
     public API(World16Essentials plugin) {
@@ -131,21 +129,17 @@ public class API {
         return uuid1;
     }
 
-    public Location getLocationFromFile(CustomYmlManager configinstance, String path) {
-        if (configinstance == null || path == null) return null;
-        return (Location) configinstance.getConfig().get(path);
+    public Location getLocationFromFile(CustomYmlManager customYmlManager, String path) {
+        if (customYmlManager == null || path == null) return null;
+        return (Location) customYmlManager.getConfig().get(path);
     }
 
-    public void setLocationToFile(CustomYmlManager configinstance, String path, Location location) {
-        if (configinstance == null || path == null || location == null) {
+    public void setLocationToFile(CustomYmlManager customYmlManager, String path, Location location) {
+        if (customYmlManager == null || path == null || location == null) {
             return;
         }
-        configinstance.getConfig().set(path, location);
-        configinstance.saveConfig();
-    }
-
-    public Block getBlockPlayerIsLookingAt(Player player) {
-        return player.getTargetBlock(null, 5);
+        customYmlManager.getConfig().set(path, location);
+        customYmlManager.saveConfig();
     }
 
     public ConfigurationSection getPlayersYML(CustomConfigManager customConfigManager, Player player) {
@@ -156,35 +150,17 @@ public class API {
     }
 
     public void doAfk(Player player, String color) {
-        if (afkMap.get(player.getUniqueId()).isAfk()) {
+        AfkObject afkObject = this.afkMap.get(player.getUniqueId());
+        if (afkObject.isAfk()) {
             this.plugin.getServer().broadcastMessage(Translate.chat("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
-            this.afkMap.get(player.getUniqueId()).restart(player);
-        } else if (!afkMap.get(player.getUniqueId()).isAfk()) {
+            afkObject.restart(player);
+        } else {
             this.plugin.getServer().broadcastMessage(Translate.chat("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
-            this.afkMap.get(player.getUniqueId()).setAfk(true, player.getLocation());
+            afkObject.setAfk(true, player.getLocation());
         }
     }
 
-    public boolean isClass(String className) {
-        try {
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
-    public Class<?> getNMSClass(String name) {
-        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-        try {
-            return Class.forName("net.minecraft.server." + version + "." + name);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public void permissionErrorMessage(Player p) {
+    public void sendPermissionErrorMessage(Player p) {
         p.sendMessage(Translate.chat("&4You do not have permission to do this command."));
     }
 }

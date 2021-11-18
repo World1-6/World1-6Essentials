@@ -31,7 +31,7 @@ public class BroadcastCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.broadcast")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

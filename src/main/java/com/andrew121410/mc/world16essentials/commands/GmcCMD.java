@@ -30,7 +30,7 @@ public class GmcCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.gmc")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 
@@ -40,7 +40,7 @@ public class GmcCMD implements CommandExecutor {
             return true;
         } else if (args.length == 1) {
             if (!p.hasPermission("world16.gmc.other")) {
-                api.permissionErrorMessage(p);
+                api.sendPermissionErrorMessage(p);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);

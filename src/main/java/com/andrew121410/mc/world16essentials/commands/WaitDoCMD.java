@@ -86,7 +86,7 @@ public class WaitDoCMD implements CommandExecutor {
 
         Player p = (Player) sender;
         if (!p.hasPermission("world16.waitdo")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
         p.sendMessage(Translate.chat("&4&lOnly command blocks right now!"));

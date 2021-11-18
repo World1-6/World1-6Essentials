@@ -4,6 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.blocks.BlockUtils;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.player.PlayerUtils;
 import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -45,7 +46,7 @@ public class SignCMD implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("world16.sign")) {
-            api.permissionErrorMessage(player);
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
@@ -60,7 +61,7 @@ public class SignCMD implements CommandExecutor {
             player.getInventory().addItem(item1);
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("edit")) {
-            Block block = this.api.getBlockPlayerIsLookingAt(player);
+            Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
             BlockState state = block.getState();
 
             if (!(state instanceof Sign)) {

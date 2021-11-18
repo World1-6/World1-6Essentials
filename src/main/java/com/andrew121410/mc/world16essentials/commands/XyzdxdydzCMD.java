@@ -32,7 +32,7 @@ public class XyzdxdydzCMD implements CommandExecutor {
 
         Player player = (Player) sender;
         if (!player.hasPermission("world16.xyzdxdydz")) {
-            api.permissionErrorMessage(player);
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 

@@ -32,7 +32,7 @@ public class WorkBenchCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.workbench")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

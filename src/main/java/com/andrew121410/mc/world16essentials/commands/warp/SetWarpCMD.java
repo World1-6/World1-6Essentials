@@ -36,7 +36,7 @@ public class SetWarpCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.setwarp")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

@@ -29,7 +29,7 @@ public class IsAfkCMD implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("world16.isafk")) {
-            api.permissionErrorMessage(player);
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 

@@ -22,6 +22,7 @@ import com.andrew121410.mc.world16essentials.test.test1;
 import com.andrew121410.mc.world16essentials.utils.*;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -68,6 +69,16 @@ public class World16Essentials extends JavaPlugin {
             Bukkit.getServer().broadcastMessage(Translate.color("&cWorld1-6Essentials was reloaded while this isn't recommend it is supported."));
         }
 
+        //Should we keep spawn chunks in memory
+        String shouldWeKeepSpawnChunksInMemory = (String) this.customConfigManager.getShitYml().getConfig().get("World.ShouldKeepSpawnInMemory");
+        if (shouldWeKeepSpawnChunksInMemory != null) {
+            if (shouldWeKeepSpawnChunksInMemory.equalsIgnoreCase("false")) {
+                for (World world : this.getServer().getWorlds()) {
+                    world.setKeepSpawnInMemory(false);
+                }
+            }
+        }
+
         pluginLoadMessage();
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &2World1-6Essentials has been loaded."));
     }
@@ -109,6 +120,7 @@ public class World16Essentials extends JavaPlugin {
         new UnSafeEnchatmentCMD(this, this.customConfigManager);
         new CommandBlockFindCMD(this);
         new SudoCMD(this);
+        new ShouldKeepSpawnChunksLoadedCMD(this);
 
         //Gamemode commands
         new GmcCMD(this);

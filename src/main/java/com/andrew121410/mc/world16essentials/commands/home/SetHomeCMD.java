@@ -36,7 +36,7 @@ public class SetHomeCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.home")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
         String defaultHomeName = "home";

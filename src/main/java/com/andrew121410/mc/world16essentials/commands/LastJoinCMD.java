@@ -33,7 +33,7 @@ public class LastJoinCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.lastjoin")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

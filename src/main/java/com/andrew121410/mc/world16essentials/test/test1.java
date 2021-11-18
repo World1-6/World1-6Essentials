@@ -33,7 +33,7 @@ public class test1 implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.testee1")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

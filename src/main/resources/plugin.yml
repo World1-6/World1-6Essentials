@@ -58,6 +58,7 @@ commands:
   unsafenchant:
   commandblockfind:
   sudo:
+  shouldkeepspawnchunksloaded:
 
   gmc:
     aliases:
@@ -214,4 +215,7 @@ permissions:
     default: op
   world16.sudo:
     description: Allows you to do sudo
+    default: op
+  world16.shouldkeepspawnchunksloaded:
+    description: Allows you to do shouldkeepspawnchunksloaded
     default: op

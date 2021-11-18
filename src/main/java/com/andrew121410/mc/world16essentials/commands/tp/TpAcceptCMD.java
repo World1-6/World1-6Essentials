@@ -41,7 +41,7 @@ public class TpAcceptCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.tpaccept")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

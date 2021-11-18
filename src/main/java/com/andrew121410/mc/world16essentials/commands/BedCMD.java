@@ -31,7 +31,7 @@ public class BedCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.bed")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

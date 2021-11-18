@@ -42,7 +42,7 @@ public class SpawnCMD implements CommandExecutor {
         }
 
         if (!p.hasPermission("world16.spawn")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 
@@ -52,7 +52,7 @@ public class SpawnCMD implements CommandExecutor {
             return true;
         } else if (args.length == 1) {
             if (!p.hasPermission("world16.spawn.other")) {
-                api.permissionErrorMessage(p);
+                api.sendPermissionErrorMessage(p);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);

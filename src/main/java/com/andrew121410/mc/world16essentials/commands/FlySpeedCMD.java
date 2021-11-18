@@ -2,7 +2,6 @@ package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.ccutils.utils.Utils;
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.ChatColor;
@@ -40,7 +39,7 @@ public class FlySpeedCMD implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("world16.fs")) {
-            api.permissionErrorMessage(player);
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
@@ -68,7 +67,7 @@ public class FlySpeedCMD implements CommandExecutor {
         Player target = plugin.getServer().getPlayerExact(args[0]);
         if (target != null && target.isOnline()) {
             if (!player.hasPermission("world16.fs.other")) {
-                api.permissionErrorMessage(player);
+                api.sendPermissionErrorMessage(player);
                 return true;
             }
             Double theDouble = Utils.asDoubleOrElse(args[1], null);

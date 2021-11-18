@@ -29,7 +29,7 @@ public class AfkCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.afk")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 
@@ -41,7 +41,7 @@ public class AfkCMD implements CommandExecutor {
             return true;
         } else if (args.length == 1) {
             if (!p.hasPermission("world16.afk.other")) {
-                api.permissionErrorMessage(p);
+                api.sendPermissionErrorMessage(p);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);

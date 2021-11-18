@@ -37,7 +37,7 @@ public class UnSafeEnchatmentCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.unsafenchant")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

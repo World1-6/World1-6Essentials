@@ -117,7 +117,7 @@ public class WFormatCMD implements CommandExecutor {
 
         Player p = (Player) sender;
         if (!p.hasPermission("world16.wformat")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
         if (args.length == 0) {

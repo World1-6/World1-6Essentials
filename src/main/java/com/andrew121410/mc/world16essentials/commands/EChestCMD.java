@@ -29,7 +29,7 @@ public class EChestCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.echest")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

@@ -35,7 +35,7 @@ public class SudoCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.sudo")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

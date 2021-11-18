@@ -39,7 +39,7 @@ public class HomeListCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.home")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
         Set<String> homeSet = homesMap.get(p.getUniqueId()).keySet();

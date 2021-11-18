@@ -29,7 +29,7 @@ public class RamCMD implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("world16.ram")) {
-            api.permissionErrorMessage(player);
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 

@@ -29,7 +29,7 @@ public class NightCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.night")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

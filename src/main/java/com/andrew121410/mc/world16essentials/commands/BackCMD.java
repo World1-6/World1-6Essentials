@@ -51,7 +51,7 @@ public class BackCMD implements CommandExecutor {
 
         if (args[0].equalsIgnoreCase("death")) {
             if (!player.hasPermission("world16.back.death")) {
-                api.permissionErrorMessage(player);
+                api.sendPermissionErrorMessage(player);
                 return true;
             }
             Location deathLocation = playerBackMap.get("Death");
@@ -74,7 +74,7 @@ public class BackCMD implements CommandExecutor {
             player.sendMessage(Translate.chat("&6Teleporting..."));
         } else if (args[0].equalsIgnoreCase("tp")) {
             if (!player.hasPermission("world16.back.tp")) {
-                api.permissionErrorMessage(player);
+                api.sendPermissionErrorMessage(player);
                 return true;
             }
             Location tpLocation = playerBackMap.get("Tp");

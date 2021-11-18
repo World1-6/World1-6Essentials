@@ -32,7 +32,7 @@ public class MsgCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.msg") || !p.hasPermission("world16.emsg")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 

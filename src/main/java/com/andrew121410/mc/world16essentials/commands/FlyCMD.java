@@ -38,7 +38,7 @@ public class FlyCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.fly")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 
@@ -47,7 +47,7 @@ public class FlyCMD implements CommandExecutor {
             return true;
         } else if (args.length == 1) {
             if (!p.hasPermission("world16.fly.other")) {
-                api.permissionErrorMessage(p);
+                api.sendPermissionErrorMessage(p);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);

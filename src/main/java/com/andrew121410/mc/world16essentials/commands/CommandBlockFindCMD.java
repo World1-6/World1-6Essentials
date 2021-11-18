@@ -36,7 +36,7 @@ public class CommandBlockFindCMD implements CommandExecutor {
         Player p = (Player) sender;
 
         if (!p.hasPermission("world16.commandblockfind")) {
-            api.permissionErrorMessage(p);
+            api.sendPermissionErrorMessage(p);
             return true;
         }
 
