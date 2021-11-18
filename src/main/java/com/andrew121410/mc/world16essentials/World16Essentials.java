@@ -23,6 +23,7 @@ import com.andrew121410.mc.world16essentials.utils.*;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -70,11 +71,19 @@ public class World16Essentials extends JavaPlugin {
         }
 
         //Should we keep spawn chunks in memory
-        String shouldWeKeepSpawnChunksInMemory = (String) this.customConfigManager.getShitYml().getConfig().get("World.ShouldKeepSpawnInMemory");
-        if (shouldWeKeepSpawnChunksInMemory != null) {
-            if (shouldWeKeepSpawnChunksInMemory.equalsIgnoreCase("false")) {
-                for (World world : this.getServer().getWorlds()) {
-                    world.setKeepSpawnInMemory(false);
+        ConfigurationSection worldsConfigurationSection = this.customConfigManager.getShitYml().getConfig().getConfigurationSection("Worlds");
+        if (worldsConfigurationSection != null) {
+            for (String worldString : worldsConfigurationSection.getKeys(false)) {
+                ConfigurationSection worldConfigurationSection = worldsConfigurationSection.getConfigurationSection(worldString);
+                if (worldConfigurationSection == null) continue;
+                World world = this.getServer().getWorld(worldString);
+                String shouldWeKeepSpawnChunksInMemory = (String) worldConfigurationSection.get("ShouldKeepSpawnInMemory");
+                if (shouldWeKeepSpawnChunksInMemory != null && world != null) {
+                    if (shouldWeKeepSpawnChunksInMemory.equalsIgnoreCase("true")) {
+                        world.setKeepSpawnInMemory(true);
+                    } else if (shouldWeKeepSpawnChunksInMemory.equalsIgnoreCase("false")) {
+                        world.setKeepSpawnInMemory(false);
+                    }
                 }
             }
         }

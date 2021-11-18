@@ -36,18 +36,17 @@ public class OnPlayerInteractEvent implements Listener {
 
     @EventHandler
     public void playerInteract(PlayerInteractEvent event) {
-        Player p = event.getPlayer();
+        Player player = event.getPlayer();
         Block block = event.getClickedBlock();
         Action action = event.getAction();
 
-        PowerToolObject powerToolObject = this.powerToolMap.get(p.getUniqueId());
-        //Get's the latest clicked block and stores it in HashMap.
-        if (action == Action.RIGHT_CLICK_BLOCK) {
-            latestClickedBlocked.remove(p.getDisplayName()); //Removes old block
-            latestClickedBlocked.put(p.getDisplayName(), block.getLocation());
-            powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
+        PowerToolObject powerToolObject = this.powerToolMap.get(player.getUniqueId());
+        if (action == Action.RIGHT_CLICK_BLOCK && block != null) {
+            this.latestClickedBlocked.remove(player.getDisplayName());
+            this.latestClickedBlocked.put(player.getDisplayName(), block.getLocation());
+            powerToolObject.runCommand(player, player.getInventory().getItemInMainHand().getType());
         } else if (action == Action.LEFT_CLICK_AIR) {
-            powerToolObject.runCommand(p, p.getInventory().getItemInMainHand().getType());
+            powerToolObject.runCommand(player, player.getInventory().getItemInMainHand().getType());
         } else if (action == Action.PHYSICAL) {
             if (block != null) {
                 if (UniversalBlockUtils.isFarmLand(XMaterial.matchXMaterial(block.getType())) && api.isPreventCropsTrampling()) {

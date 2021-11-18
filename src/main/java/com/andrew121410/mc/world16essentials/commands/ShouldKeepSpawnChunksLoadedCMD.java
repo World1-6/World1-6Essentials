@@ -37,13 +37,13 @@ public class ShouldKeepSpawnChunksLoadedCMD implements CommandExecutor {
             String string = args[0];
             if (string.equalsIgnoreCase("true")) {
                 player.getWorld().setKeepSpawnInMemory(true);
-                this.plugin.getCustomConfigManager().getShitYml().getConfig().set("World.ShouldKeepSpawnInMemory", "true");
+                this.plugin.getCustomConfigManager().getShitYml().getConfig().set("Worlds." + player.getWorld().getName() + ".ShouldKeepSpawnInMemory", "true");
                 this.plugin.getCustomConfigManager().getShitYml().saveConfig();
                 player.sendMessage(Translate.color("&eSpawn chunks will NOW be kept in memory EVEN if nobody is in them."));
                 return true;
             } else if (string.equalsIgnoreCase("false")) {
                 player.getWorld().setKeepSpawnInMemory(false);
-                this.plugin.getCustomConfigManager().getShitYml().getConfig().set("World.ShouldKeepSpawnInMemory", "false");
+                this.plugin.getCustomConfigManager().getShitYml().getConfig().set("Worlds." + player.getWorld().getName() + ".ShouldKeepSpawnInMemory", "false");
                 this.plugin.getCustomConfigManager().getShitYml().saveConfig();
                 player.sendMessage(Translate.color("&eSpawn chunks will NOT stay loaded if nobody is in them now."));
                 return true;

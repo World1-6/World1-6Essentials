@@ -42,7 +42,7 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "11/17/2021";
+    public static final String DATE_OF_VERSION = "11/18/2021";
     public static final String PREFIX = "[&9World1-6Ess&r]";
 
     public API(World16Essentials plugin) {
@@ -113,20 +113,21 @@ public class API {
     }
 
     public UUID getUUIDFromMojangAPI(String playerName) {
-        if (uuidCache.get(playerName) != null) return uuidCache.get(playerName);
+        if (this.uuidCache.containsKey(playerName)) return this.uuidCache.get(playerName);
+
         URL url;
-        UUID uuid1 = null;
+        UUID uuid = null;
         try {
             url = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
-            String uuid = (String) ((JSONObject) new JSONParser()
+            String uuidRaw = (String) ((JSONObject) new JSONParser()
                     .parse(new InputStreamReader(url.openStream()))).get("id");
-            uuid1 = UUID.fromString(uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16) + "-"
-                    + uuid.substring(16, 20) + "-" + uuid.substring(20, 32));
+            uuid = UUID.fromString(uuidRaw.substring(0, 8) + "-" + uuidRaw.substring(8, 12) + "-" + uuidRaw.substring(12, 16) + "-"
+                    + uuidRaw.substring(16, 20) + "-" + uuidRaw.substring(20, 32));
         } catch (IOException | ParseException exception) {
             exception.printStackTrace();
         }
-        uuidCache.put(playerName, uuid1);
-        return uuid1;
+        this.uuidCache.put(playerName, uuid);
+        return uuid;
     }
 
     public Location getLocationFromFile(CustomYmlManager customYmlManager, String path) {
@@ -160,7 +161,7 @@ public class API {
         }
     }
 
-    public void sendPermissionErrorMessage(Player p) {
-        p.sendMessage(Translate.chat("&4You do not have permission to do this command."));
+    public void sendPermissionErrorMessage(Player player) {
+        player.sendMessage(Translate.chat("&4You do not have permission to do this command."));
     }
 }
