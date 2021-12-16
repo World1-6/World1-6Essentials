@@ -19,8 +19,12 @@ import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.managers.HomeManager;
 import com.andrew121410.mc.world16essentials.managers.WarpManager;
 import com.andrew121410.mc.world16essentials.test.test1;
-import com.andrew121410.mc.world16essentials.utils.*;
+import com.andrew121410.mc.world16essentials.utils.API;
+import com.andrew121410.mc.world16essentials.utils.OtherPlugins;
+import com.andrew121410.mc.world16essentials.utils.PlayerInitializer;
+import com.andrew121410.mc.world16essentials.utils.SetListMap;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -53,11 +57,11 @@ public class World16Essentials extends JavaPlugin {
         this.api = new API(this);
         this.otherPlugins = new OtherPlugins(this);
 
-        regCustomManagers();
-        regFileConfigGEN();
-        regEvents();
-        regCommands();
-        regBStats();
+        registerCustomManagers();
+        registerMainConfig();
+        registerListeners();
+        registerCommands();
+        registerBStats();
 
         this.playerInitializer = new PlayerInitializer(this);
 
@@ -98,7 +102,7 @@ public class World16Essentials extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &eWorld1-6Essentials has been unloaded."));
     }
 
-    private void regCommands() {
+    private void registerCommands() {
         new DayCMD(this);
         new NightCMD(this);
         new FeedCMD(this);
@@ -124,7 +128,7 @@ public class World16Essentials extends JavaPlugin {
         new WFormatCMD(this, this.customConfigManager);
         new XyzdxdydzCMD(this);
         new WorkBenchCMD(this, this.customConfigManager);
-        new LastJoinCMD(this, this.customConfigManager);
+        new LastJoinCMD(this);
         new PowerToolCMD(this, this.customConfigManager);
         new UnSafeEnchatmentCMD(this, this.customConfigManager);
         new CommandBlockFindCMD(this);
@@ -158,7 +162,7 @@ public class World16Essentials extends JavaPlugin {
         new DelwarpCMD(this);
     }
 
-    private void regEvents() {
+    private void registerListeners() {
         //Bukkit.getServer().getPluginManager().registerEvents(this, this);
         new OnPlayerJoinEvent(this, this.customConfigManager);
         new OnPlayerQuitEvent(this);
@@ -176,13 +180,13 @@ public class World16Essentials extends JavaPlugin {
         new OnSignChangeEvent(this);
     }
 
-    private void regFileConfigGEN() {
+    private void registerMainConfig() {
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
         this.reloadConfig();
     }
 
-    private void regCustomManagers() {
+    private void registerCustomManagers() {
         this.customConfigManager = new CustomConfigManager(this);
         customConfigManager.registerAllCustomConfigs();
 
@@ -194,21 +198,12 @@ public class World16Essentials extends JavaPlugin {
         this.afkManager = new AfkManager(this);
     }
 
-    private void regBStats() {
-        new Metrics(this);
+    private void registerBStats() {
+        new Metrics(this, 3011);
     }
 
     private void pluginLoadMessage() {
-        String stringBuilder = " \r\n&2" +
-                "__        __         _     _ _        __\n" +
-                "\\ \\      / /__  _ __| | __| / |      / /_\n" +
-                " \\ \\ /\\ / / _ \\| '__| |/ _` | |_____| '_ \\\n" +
-                "  \\ V  V / (_) | |  | | (_| | |_____| (_) |\n" +
-                "   \\_/\\_/ \\___/|_|  |_|\\__,_|_|      \\___/\n" +
-                "\n" +
-                "&6Developer: &dAndrew121410\r\n" +
-                "&3Date of version: &e" + API.DATE_OF_VERSION + "" +
-                " \r\n";
+        String stringBuilder = " \r\n&2" + "__        __         _     _ _        __\n" + "\\ \\      / /__  _ __| | __| / |      / /_\n" + " \\ \\ /\\ / / _ \\| '__| |/ _` | |_____| '_ \\\n" + "  \\ V  V / (_) | |  | | (_| | |_____| (_) |\n" + "   \\_/\\_/ \\___/|_|  |_|\\__,_|_|      \\___/\n" + "\n" + "&6Developer: &dAndrew121410\r\n" + "&3Date of version: &e" + API.DATE_OF_VERSION + "" + " \r\n";
         getServer().getConsoleSender().sendMessage(Translate.color(stringBuilder));
     }
 

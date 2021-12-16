@@ -5,6 +5,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.utils.EnchantmentUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -43,7 +44,7 @@ public class UnSafeEnchatmentCMD implements CommandExecutor {
 
         if (args.length == 2) {
             ItemStack mainHand = p.getInventory().getItemInMainHand();
-            Enchantment enchantment = this.plugin.getOtherPlugins().getWorld16Utils().getClassWrappers().getEnchantmentUtils().getByName(args[0]);
+            Enchantment enchantment = EnchantmentUtils.getByName(args[0]);
             int level = Utils.asIntegerOrElse(args[1], 0);
 
             if (enchantment == null) {

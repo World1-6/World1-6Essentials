@@ -3,9 +3,8 @@ package com.andrew121410.mc.world16essentials.listeners;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.PowerToolObject;
 import com.andrew121410.mc.world16essentials.utils.API;
-import com.andrew121410.mc.world16utils.blocks.UniversalBlockUtils;
-import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,7 +48,7 @@ public class OnPlayerInteractEvent implements Listener {
             powerToolObject.runCommand(player, player.getInventory().getItemInMainHand().getType());
         } else if (action == Action.PHYSICAL) {
             if (block != null) {
-                if (UniversalBlockUtils.isFarmLand(XMaterial.matchXMaterial(block.getType())) && api.isPreventCropsTrampling()) {
+                if (block.getType() == Material.FARMLAND && api.isPreventCropsTrampling()) {
                     event.setCancelled(true);
                 }
             }

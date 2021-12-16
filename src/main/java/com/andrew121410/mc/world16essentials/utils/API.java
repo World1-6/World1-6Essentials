@@ -9,13 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -23,12 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-/**
- * The Bass API for World1-6Ess
- *
- * @author Andrew121410
- */
 
 public class API {
 
@@ -42,7 +30,7 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "11/18/2021";
+    public static final String DATE_OF_VERSION = "12/16/2021";
     public static final String PREFIX = "[&9World1-6Ess&r]";
 
     public API(World16Essentials plugin) {
@@ -96,7 +84,9 @@ public class API {
 
     public String getServerVersion() {
         String version = this.plugin.getServer().getVersion();
-        if (version.contains("1.17")) {
+        if (version.contains("1.18")) {
+            return "1.18";
+        } else if (version.contains("1.17")) {
             return "1.17";
         } else if (version.contains("1.16")) {
             return "1.16";
@@ -110,24 +100,6 @@ public class API {
             return "1.12";
         }
         return null;
-    }
-
-    public UUID getUUIDFromMojangAPI(String playerName) {
-        if (this.uuidCache.containsKey(playerName)) return this.uuidCache.get(playerName);
-
-        URL url;
-        UUID uuid = null;
-        try {
-            url = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
-            String uuidRaw = (String) ((JSONObject) new JSONParser()
-                    .parse(new InputStreamReader(url.openStream()))).get("id");
-            uuid = UUID.fromString(uuidRaw.substring(0, 8) + "-" + uuidRaw.substring(8, 12) + "-" + uuidRaw.substring(12, 16) + "-"
-                    + uuidRaw.substring(16, 20) + "-" + uuidRaw.substring(20, 32));
-        } catch (IOException | ParseException exception) {
-            exception.printStackTrace();
-        }
-        this.uuidCache.put(playerName, uuid);
-        return uuid;
     }
 
     public Location getLocationFromFile(CustomYmlManager customYmlManager, String path) {
