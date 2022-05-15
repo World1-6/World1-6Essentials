@@ -134,6 +134,7 @@ public class World16Essentials extends JavaPlugin {
         new CommandBlockFindCMD(this);
         new SudoCMD(this);
         new ShouldKeepSpawnChunksLoadedCMD(this);
+        new CountAllEntities(this);
 
         //Gamemode commands
         new GmcCMD(this);

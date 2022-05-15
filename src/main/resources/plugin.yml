@@ -220,3 +220,6 @@ permissions:
   world16.shouldkeepspawnchunksloaded:
     description: Allows you to do shouldkeepspawnchunksloaded
     default: op
+  world16.countallentities:
+    description: Allows you to do countallentities
+    default: op
