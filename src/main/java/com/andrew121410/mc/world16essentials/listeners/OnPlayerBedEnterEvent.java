@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class OnPlayerBedEnterEvent implements Listener {
 
@@ -23,27 +22,13 @@ public class OnPlayerBedEnterEvent implements Listener {
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
 
-        if (this.plugin.getApi().getServerVersion().equals("1.12")) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    player.getLocation().getWorld().setTime(0);
-                    Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
-                    isSomeoneInBed = false;
-                }
-            }.runTaskLater(this.plugin, 60L);
-        } else {
-            if (event.getBedEnterResult() == PlayerBedEnterEvent.BedEnterResult.OK && !this.isSomeoneInBed) {
-                this.isSomeoneInBed = true;
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        player.getLocation().getWorld().setTime(0);
-                        Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
-                        isSomeoneInBed = false;
-                    }
-                }.runTaskLater(this.plugin, 60L);
-            }
+        if (event.getBedEnterResult() == PlayerBedEnterEvent.BedEnterResult.OK && !this.isSomeoneInBed) {
+            this.isSomeoneInBed = true;
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+                player.getLocation().getWorld().setTime(0);
+                Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
+                isSomeoneInBed = false;
+            }, 60L);
         }
     }
 }

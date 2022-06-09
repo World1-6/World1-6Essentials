@@ -22,7 +22,7 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "12/16/2021";
+    public static final String DATE_OF_VERSION = "6/8/2022";
     public static final String PREFIX = "[&9World1-6Ess&r]";
     private Map<String, UUID> uuidCache;
     private Map<UUID, AfkObject> afkMap;
@@ -77,26 +77,6 @@ public class API {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy - hh:mm a z");
         ZonedDateTime zonedDateTime = Instant.ofEpochMilli(target.getLastPlayed()).atZone(ZoneId.systemDefault());
         return zonedDateTime.format(formatter);
-    }
-
-    public String getServerVersion() {
-        String version = this.plugin.getServer().getVersion();
-        if (version.contains("1.18")) {
-            return "1.18";
-        } else if (version.contains("1.17")) {
-            return "1.17";
-        } else if (version.contains("1.16")) {
-            return "1.16";
-        } else if (version.contains("1.15")) {
-            return "1.15";
-        } else if (version.contains("1.14")) {
-            return "1.14";
-        } else if (version.contains("1.13")) {
-            return "1.13";
-        } else if (version.contains("1.12")) {
-            return "1.12";
-        }
-        return null;
     }
 
     public Location getLocationFromFile(CustomYmlManager customYmlManager, String path) {
