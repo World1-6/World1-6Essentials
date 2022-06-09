@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 
 public class RamCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public RamCMD(World16Essentials plugin) {
         this.plugin = plugin;

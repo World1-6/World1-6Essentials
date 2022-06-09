@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 
 public class DelhomeCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public DelhomeCMD(World16Essentials plugin) {
         this.plugin = plugin;
@@ -24,14 +24,13 @@ public class DelhomeCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.home")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.home")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
         String defaultHomeName = "home";
@@ -40,13 +39,13 @@ public class DelhomeCMD implements CommandExecutor {
             defaultHomeName = args[0].toLowerCase();
 
             if (defaultHomeName.equalsIgnoreCase("@allHomes")) {
-                this.plugin.getHomeManager().deleteALL(p.getUniqueId());
+                this.plugin.getHomeManager().deleteALL(player.getUniqueId());
                 return true;
             }
         }
 
-        this.plugin.getHomeManager().delete(p.getUniqueId(), defaultHomeName);
-        p.sendMessage(Translate.chat("&9[Homes] &cHome deleted."));
+        this.plugin.getHomeManager().delete(player.getUniqueId(), defaultHomeName);
+        player.sendMessage(Translate.chat("&9[Homes] &cHome deleted."));
         return true;
     }
 }

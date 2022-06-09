@@ -16,14 +16,14 @@ import java.util.UUID;
 
 public class HomeListCMD implements CommandExecutor {
 
-    private Map<UUID, Map<String, Location>> homesMap;
+    private final Map<UUID, Map<String, Location>> homesMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public HomeListCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.homesMap = this.plugin.getSetListMap().getHomesMap();
 
@@ -32,23 +32,22 @@ public class HomeListCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.home")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.home")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
-        Set<String> homeSet = homesMap.get(p.getUniqueId()).keySet();
+        Set<String> homeSet = homesMap.get(player.getUniqueId()).keySet();
         String[] homeString = homeSet.toArray(new String[0]);
         Arrays.sort(homeString);
         String str = String.join(", ", homeString);
         String homeListPrefix = "&6Homes:&r&7";
 
-        p.sendMessage(Translate.chat(homeListPrefix + " " + str));
+        player.sendMessage(Translate.chat(homeListPrefix + " " + str));
         return true;
     }
 }

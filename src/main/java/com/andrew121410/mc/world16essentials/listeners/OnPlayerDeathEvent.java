@@ -12,9 +12,9 @@ import java.util.UUID;
 
 public class OnPlayerDeathEvent implements Listener {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
-    private Map<UUID, Map<String, Location>> backMap;
+    private final Map<UUID, Map<String, Location>> backMap;
 
     public OnPlayerDeathEvent(World16Essentials plugin) {
         this.plugin = plugin;

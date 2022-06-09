@@ -12,23 +12,23 @@ public class SetListMap {
     // 0 TO CLEAR AFTER THE PLAYER LEAVES
     // 1 TO ONLY CLEAR WHEN THE SERVER SHUTS DOWN
 
-    private Map<UUID, Map<String, Location>> backMap; //0
-    private Map<Player, Player> tpaMap; //0
-    private Map<String, Location> latestClickedBlocked; //0
-    private Map<UUID, AfkObject> afkMap; //0
-    private Map<UUID, Map<String, Location>> homesMap; //0
-    private Map<UUID, PowerToolObject> powerToolMap; //0
+    private final Map<UUID, Map<String, Location>> backMap; //0
+    private final Map<Player, Player> tpaMap; //0
+    private final Map<String, Location> latestClickedBlocked; //0
+    private final Map<UUID, AfkObject> afkMap; //0
+    private final Map<UUID, Map<String, Location>> homesMap; //0
+    private final Map<UUID, PowerToolObject> powerToolMap; //0
 
-    private Map<String, UUID> uuidCache; //1
-    private Map<String, List<String>> tabCompleteMap; //1
-    private Map<String, Location> warpsMap; //1
+    private final Map<String, UUID> uuidCache; //1
+    private final Map<String, List<String>> tabCompleteMap; //1
+    private final Map<String, Location> warpsMap; //1
 
-    private List<String> flyList; //0
-    private List<String> godList; //0
-    private List<Player> hiddenPlayers; //0
+    private final List<String> flyList; //0
+    private final List<String> godList; //0
+    private final List<Player> hiddenPlayers; //0
 
-    private List<String> soundsList; //1
-    private List<String> spyCommandBlock; //1
+    private final List<String> soundsList; //1
+    private final List<String> spyCommandBlock; //1
 
     //Constructor
     public SetListMap() {

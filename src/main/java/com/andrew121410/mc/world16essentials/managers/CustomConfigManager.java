@@ -5,7 +5,7 @@ import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 
 public class CustomConfigManager {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
     private CustomYmlManager shitYml;
     private CustomYmlManager warpsYml;

@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class WarpManager {
 
-    private Map<String, Location> warpsMap;
+    private final Map<String, Location> warpsMap;
 
-    private World16Essentials plugin;
-    private CustomYmlManager warpsYml;
+    private final World16Essentials plugin;
+    private final CustomYmlManager warpsYml;
 
     public WarpManager(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;

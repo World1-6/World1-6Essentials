@@ -13,12 +13,12 @@ import java.util.Optional;
 
 public class HealCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public HealCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("heal").setExecutor(this);
     }

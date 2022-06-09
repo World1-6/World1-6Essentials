@@ -21,9 +21,9 @@ import java.util.Objects;
 
 public class SignCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
-    private BlockUtils blockUtils;
+    private final World16Essentials plugin;
+    private final API api;
+    private final BlockUtils blockUtils;
 
     public SignCMD(World16Essentials plugin) {
         this.plugin = plugin;

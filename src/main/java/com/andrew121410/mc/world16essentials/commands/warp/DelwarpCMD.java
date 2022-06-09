@@ -15,11 +15,11 @@ import java.util.Map;
 
 public class DelwarpCMD implements CommandExecutor {
 
-    private Map<String, Location> warpsMap;
+    private final Map<String, Location> warpsMap;
 
-    private World16Essentials plugin;
-    private API api;
-    private WarpManager warpManager;
+    private final World16Essentials plugin;
+    private final API api;
+    private final WarpManager warpManager;
 
     public DelwarpCMD(World16Essentials plugin) {
         this.plugin = plugin;
@@ -34,30 +34,29 @@ public class DelwarpCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.delwarp")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.delwarp")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat("&cUsage: &6/delwarp <Name>"));
+            player.sendMessage(Translate.chat("&cUsage: &6/delwarp <Name>"));
             return true;
         } else if (args.length == 1) {
             String name = args[0].toLowerCase();
 
             if (!this.warpsMap.containsKey(name)) {
-                p.sendMessage(Translate.chat("&cThat's not a warp."));
+                player.sendMessage(Translate.chat("&cThat's not a warp."));
                 return true;
             }
 
             this.warpManager.deleteWarp(name);
-            p.sendMessage(Translate.chat("&eThe warp: " + name + " has been deleted."));
+            player.sendMessage(Translate.chat("&eThe warp: " + name + " has been deleted."));
             return true;
         }
         return true;

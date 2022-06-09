@@ -11,9 +11,9 @@ import java.util.List;
 
 public class OnPlayerDamageEvent implements Listener {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
-    private List<String> godList;
+    private final List<String> godList;
 
     public OnPlayerDamageEvent(World16Essentials getPlugin) {
         this.plugin = getPlugin;

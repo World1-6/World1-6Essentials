@@ -15,10 +15,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class UnSafeEnchatmentCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
-    private CustomConfigManager customConfigManager;
+    private final CustomConfigManager customConfigManager;
 
     public UnSafeEnchatmentCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;

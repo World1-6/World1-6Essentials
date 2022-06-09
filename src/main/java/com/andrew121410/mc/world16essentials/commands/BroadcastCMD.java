@@ -11,13 +11,13 @@ import org.bukkit.entity.Player;
 
 public class BroadcastCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
-    private API api;
+    private final API api;
 
     public BroadcastCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("broadcast").setExecutor(this);
     }

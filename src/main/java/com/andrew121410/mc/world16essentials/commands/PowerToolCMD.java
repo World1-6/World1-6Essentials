@@ -17,10 +17,10 @@ import java.util.UUID;
 
 public class PowerToolCMD implements CommandExecutor {
 
-    private Map<UUID, PowerToolObject> powerToolMap;
+    private final Map<UUID, PowerToolObject> powerToolMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public PowerToolCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;

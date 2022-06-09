@@ -10,12 +10,12 @@ import org.bukkit.entity.Player;
 
 public class EChestCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public EChestCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("echest").setExecutor(this);
     }

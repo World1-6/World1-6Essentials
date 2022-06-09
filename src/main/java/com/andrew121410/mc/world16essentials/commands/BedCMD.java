@@ -12,12 +12,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class BedCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public BedCMD(World16Essentials getPlugin) {
         this.plugin = getPlugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("bed").setExecutor(this);
     }

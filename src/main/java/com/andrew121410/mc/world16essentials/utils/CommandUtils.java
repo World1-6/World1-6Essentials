@@ -9,13 +9,13 @@ import java.util.List;
 
 public class CommandUtils {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
-    private API api;
+    private final API api;
 
     public CommandUtils(World16Essentials getPlugin) {
         this.plugin = getPlugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
     }
 
     public void runCommands(CommandSender commandSender, List<String[]> args) {
@@ -37,15 +37,15 @@ public class CommandUtils {
                         int finishNumber = 0;
 
                         if (letter.equalsIgnoreCase("X")) {
-                            toPlus = Utils.asIntegerOrElse(a,0);
+                            toPlus = Utils.asIntegerOrElse(a, 0);
                             finishNumber = block.getX() + toPlus;
                         }
                         if (letter.equalsIgnoreCase("Y")) {
-                            toPlus = Utils.asIntegerOrElse(a,0);
+                            toPlus = Utils.asIntegerOrElse(a, 0);
                             finishNumber = block.getY() + toPlus;
                         }
                         if (letter.equalsIgnoreCase("Z")) {
-                            toPlus = Utils.asIntegerOrElse(a,0);
+                            toPlus = Utils.asIntegerOrElse(a, 0);
                             finishNumber = block.getZ() + toPlus;
                         }
                         commands[i] = String.valueOf(finishNumber);

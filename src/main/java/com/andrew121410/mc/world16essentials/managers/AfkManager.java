@@ -12,10 +12,10 @@ import java.util.UUID;
 
 public class AfkManager {
 
-    private Map<UUID, AfkObject> afkMap;
+    private final Map<UUID, AfkObject> afkMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public AfkManager(World16Essentials plugin) {
         this.plugin = plugin;

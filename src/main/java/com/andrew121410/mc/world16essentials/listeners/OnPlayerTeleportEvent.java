@@ -12,9 +12,9 @@ import java.util.UUID;
 
 public class OnPlayerTeleportEvent implements Listener {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
-    private Map<UUID, Map<String, Location>> backMap;
+    private final Map<UUID, Map<String, Location>> backMap;
 
     public OnPlayerTeleportEvent(World16Essentials plugin) {
         this.plugin = plugin;

@@ -15,10 +15,10 @@ public class HomeListTab implements TabCompleter {
     //This is just a reminder for myself to not copy this because it won't work with other stuff since it's custom coded.
 
     //Lists
-    private Map<UUID, Map<String, Location>> rawHomesMap;
+    private final Map<UUID, Map<String, Location>> rawHomesMap;
     //...
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
     public HomeListTab(World16Essentials plugin) {
         this.plugin = plugin;

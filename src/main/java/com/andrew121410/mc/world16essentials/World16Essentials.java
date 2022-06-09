@@ -50,6 +50,11 @@ public class World16Essentials extends JavaPlugin {
 
     private API api;
 
+    //Getters
+    public static World16Essentials getPlugin() {
+        return plugin;
+    }
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -145,7 +150,7 @@ public class World16Essentials extends JavaPlugin {
         //Tpa commands
         new TpaCMD(this, this.customConfigManager);
         new TpAcceptCMD(this, this.customConfigManager);
-        new TpDenyCMD(this, this.customConfigManager);
+        new TpDenyCMD(this);
 
         //Spawn commands
         new SpawnCMD(this, this.customConfigManager);
@@ -206,11 +211,6 @@ public class World16Essentials extends JavaPlugin {
     private void pluginLoadMessage() {
         String stringBuilder = " \r\n&2" + "__        __         _     _ _        __\n" + "\\ \\      / /__  _ __| | __| / |      / /_\n" + " \\ \\ /\\ / / _ \\| '__| |/ _` | |_____| '_ \\\n" + "  \\ V  V / (_) | |  | | (_| | |_____| (_) |\n" + "   \\_/\\_/ \\___/|_|  |_|\\__,_|_|      \\___/\n" + "\n" + "&6Developer: &dAndrew121410\r\n" + "&3Date of version: &e" + API.DATE_OF_VERSION + "" + " \r\n";
         getServer().getConsoleSender().sendMessage(Translate.color(stringBuilder));
-    }
-
-    //Getters
-    public static World16Essentials getPlugin() {
-        return plugin;
     }
 
     public SetListMap getSetListMap() {

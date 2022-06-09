@@ -11,12 +11,12 @@ import org.bukkit.entity.Player;
 
 public class GmaCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public GmaCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
         plugin.getCommand("gma").setExecutor(this);
     }
 

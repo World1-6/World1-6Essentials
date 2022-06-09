@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 
 public class RunCommandsCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
-    private API api;
+    private final API api;
 
-    private CommandUtils commandUtils;
+    private final CommandUtils commandUtils;
 
-    private CustomConfigManager customConfigManager;
+    private final CustomConfigManager customConfigManager;
 
     public RunCommandsCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;

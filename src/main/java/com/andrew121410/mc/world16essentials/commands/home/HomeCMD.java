@@ -15,16 +15,16 @@ import java.util.UUID;
 
 public class HomeCMD implements CommandExecutor {
 
-    private Map<UUID, Map<String, Location>> rawHomesMap;
+    private final Map<UUID, Map<String, Location>> homesMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public HomeCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
-        this.rawHomesMap = this.plugin.getSetListMap().getHomesMap();
+        this.homesMap = this.plugin.getSetListMap().getHomesMap();
 
         this.plugin.getCommand("home").setExecutor(this);
         this.plugin.getCommand("home").setTabCompleter(new HomeListTab(this.plugin));
@@ -33,14 +33,13 @@ public class HomeCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.home")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.home")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
         String defaultHomeName = "home";
@@ -48,13 +47,13 @@ public class HomeCMD implements CommandExecutor {
         if (args.length == 1) {
             defaultHomeName = args[0].toLowerCase();
         }
-        Location home = this.rawHomesMap.get(p.getUniqueId()).get(defaultHomeName.toLowerCase());
+        Location home = this.homesMap.get(player.getUniqueId()).get(defaultHomeName.toLowerCase());
 
         if (home != null) {
-            p.teleport(home);
-            p.sendMessage(Translate.chat("&6Teleporting..."));
+            player.teleport(home);
+            player.sendMessage(Translate.chat("&6Teleporting..."));
         } else {
-            p.sendMessage(Translate.chat("&9[Homes] &4Home not found?"));
+            player.sendMessage(Translate.chat("&9[Homes] &4Home not found?"));
         }
         return true;
     }

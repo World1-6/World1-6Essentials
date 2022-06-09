@@ -14,10 +14,10 @@ import java.util.Map;
 public class BackTab implements TabCompleter {
 
     //Maps
-    private Map<String, List<String>> tabCompleteMap;
+    private final Map<String, List<String>> tabCompleteMap;
     //...
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
     public BackTab(World16Essentials plugin) {
         this.plugin = plugin;

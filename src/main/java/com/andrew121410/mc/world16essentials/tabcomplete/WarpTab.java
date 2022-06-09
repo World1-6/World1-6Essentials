@@ -15,10 +15,10 @@ import java.util.Map;
 public class WarpTab implements TabCompleter {
 
     //Maps
-    private Map<String, Location> warpsMap;
+    private final Map<String, Location> warpsMap;
     //...
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
     public WarpTab(World16Essentials plugin) {
         this.plugin = plugin;

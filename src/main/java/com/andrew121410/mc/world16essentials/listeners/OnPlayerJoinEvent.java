@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class OnPlayerJoinEvent implements Listener {
 
-    private World16Essentials plugin;
-    private CustomConfigManager customConfigManager;
-    private API api;
+    private final World16Essentials plugin;
+    private final CustomConfigManager customConfigManager;
+    private final API api;
 
     public OnPlayerJoinEvent(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;

@@ -20,18 +20,15 @@ import java.util.UUID;
 
 public class API {
 
-    private Map<String, UUID> uuidCache;
-    private Map<UUID, AfkObject> afkMap;
-
-    private List<String> flyList;
-    private List<String> godList;
-
-    private World16Essentials plugin;
-
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
     public static final String DATE_OF_VERSION = "12/16/2021";
     public static final String PREFIX = "[&9World1-6Ess&r]";
+    private Map<String, UUID> uuidCache;
+    private Map<UUID, AfkObject> afkMap;
+    private List<String> flyList;
+    private List<String> godList;
+    private final World16Essentials plugin;
 
     public API(World16Essentials plugin) {
         this.plugin = plugin;

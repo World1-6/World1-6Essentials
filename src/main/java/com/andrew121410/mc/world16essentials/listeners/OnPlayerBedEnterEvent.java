@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class OnPlayerBedEnterEvent implements Listener {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
     private boolean isSomeoneInBed = false;
 
     public OnPlayerBedEnterEvent(World16Essentials plugin) {

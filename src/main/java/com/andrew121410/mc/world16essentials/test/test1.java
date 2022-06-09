@@ -10,10 +10,10 @@ import org.bukkit.entity.Player;
 
 public class test1 implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
-    private CustomConfigManager customConfigManager;
+    private final CustomConfigManager customConfigManager;
 
     public test1(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;

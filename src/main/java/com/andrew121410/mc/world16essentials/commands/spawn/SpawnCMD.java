@@ -13,10 +13,10 @@ import org.bukkit.entity.Player;
 
 public class SpawnCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
-    private CustomYmlManager shitYml;
+    private final CustomYmlManager shitYml;
 
     public SpawnCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
@@ -28,11 +28,10 @@ public class SpawnCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
         Location spawn = this.api.getLocationFromFile(this.shitYml, "Spawn.default");
         if (spawn == null) {
@@ -41,18 +40,18 @@ public class SpawnCMD implements CommandExecutor {
             spawn = defaultSpawn;
         }
 
-        if (!p.hasPermission("world16.spawn")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.spawn")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
         if (args.length == 0) {
-            p.teleport(spawn);
-            p.sendMessage(Translate.chat("&6Teleporting..."));
+            player.teleport(spawn);
+            player.sendMessage(Translate.chat("&6Teleporting..."));
             return true;
         } else if (args.length == 1) {
-            if (!p.hasPermission("world16.spawn.other")) {
-                api.sendPermissionErrorMessage(p);
+            if (!player.hasPermission("world16.spawn.other")) {
+                api.sendPermissionErrorMessage(player);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);
@@ -62,7 +61,7 @@ public class SpawnCMD implements CommandExecutor {
             }
             return true;
         } else {
-            p.sendMessage(Translate.chat("&cUsage: for yourself do /spawn OR /spawn <Player>"));
+            player.sendMessage(Translate.chat("&cUsage: for yourself do /spawn OR /spawn <Player>"));
         }
         return true;
     }

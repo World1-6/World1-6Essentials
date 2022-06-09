@@ -15,15 +15,15 @@ import java.util.List;
 
 public class OnAsyncPlayerChatEvent implements Listener {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
-    private List<Player> hiddenPlayers;
+    private final List<Player> hiddenPlayers;
 
     public OnAsyncPlayerChatEvent(World16Essentials plugin) {
         this.plugin = plugin;
         this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }

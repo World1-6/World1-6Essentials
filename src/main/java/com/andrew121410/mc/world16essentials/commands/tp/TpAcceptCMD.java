@@ -13,47 +13,44 @@ import java.util.Map;
 
 public class TpAcceptCMD implements CommandExecutor {
 
-    //Maps
-    private Map<Player, Player> tpam;
-    //...
+    private final Map<Player, Player> tpaMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
-    private CustomConfigManager customYmlManager;
+    private final CustomConfigManager customYmlManager;
 
     public TpAcceptCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customYmlManager = customConfigManager;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
-        this.tpam = this.plugin.getSetListMap().getTpaMap();
+        this.tpaMap = this.plugin.getSetListMap().getTpaMap();
 
         this.plugin.getCommand("tpaccept").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.tpaccept")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.tpaccept")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
         if (args.length == 0) {
-            Player tpa = this.tpam.get(p);
+            Player tpa = this.tpaMap.get(player);
             if (tpa != null) {
-                tpa.teleport(p);
-                tpa.sendMessage(Translate.chat("[&eTPA&r] &a" + p.getDisplayName() + " has accepted your tpa request."));
-                this.tpam.remove(p);
+                tpa.teleport(player);
+                tpa.sendMessage(Translate.chat("[&eTPA&r] &a" + player.getDisplayName() + " has accepted your tpa request."));
+                this.tpaMap.remove(player);
                 return true;
             } else {
-                p.sendMessage(Translate.chat("&e[TPA]&r &cLooks like you don't have any tpa request."));
+                player.sendMessage(Translate.chat("&e[TPA]&r &cLooks like you don't have any tpa request."));
             }
             return true;
         }

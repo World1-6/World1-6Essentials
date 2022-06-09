@@ -18,10 +18,10 @@ import java.util.UUID;
 
 public class BackCMD implements CommandExecutor {
 
-    private Map<UUID, Map<String, Location>> backMap;
+    private final Map<UUID, Map<String, Location>> backMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public BackCMD(World16Essentials plugin) {
         this.plugin = plugin;

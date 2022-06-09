@@ -14,8 +14,8 @@ import java.util.List;
 
 public class OnServerCommandEvent implements Listener {
 
-    private World16Essentials plugin;
-    private List<String> spyCommandBlock;
+    private final World16Essentials plugin;
+    private final List<String> spyCommandBlock;
 
     public OnServerCommandEvent(World16Essentials plugin) {
         this.plugin = plugin;

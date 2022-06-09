@@ -14,15 +14,15 @@ import java.util.Optional;
 public class GodCMD implements CommandExecutor {
 
     //Lists
-    private List<String> godm;
+    private final List<String> godm;
     //...
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public GodCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.godm = this.plugin.getSetListMap().getGodList();
 

@@ -15,9 +15,9 @@ import java.util.Map;
 
 public class DebugTab implements TabCompleter {
 
-    private Map<String, List<String>> tabCompleteMap;
+    private final Map<String, List<String>> tabCompleteMap;
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
     public DebugTab(World16Essentials plugin) {
         this.plugin = plugin;

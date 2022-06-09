@@ -13,10 +13,10 @@ import java.util.List;
 
 public class CommandBlockFindCMD implements CommandExecutor {
 
-    private List<String> spyCommandBlock;
+    private final List<String> spyCommandBlock;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public CommandBlockFindCMD(World16Essentials plugin) {
         this.plugin = plugin;

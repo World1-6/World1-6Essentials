@@ -18,15 +18,15 @@ import java.util.Arrays;
 
 public class WFormatCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
-    private CustomConfigManager customConfigManager;
+    private final CustomConfigManager customConfigManager;
 
     public WFormatCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("wformat").setExecutor(this);
     }

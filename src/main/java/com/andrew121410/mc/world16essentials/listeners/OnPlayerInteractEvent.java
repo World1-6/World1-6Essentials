@@ -17,11 +17,11 @@ import java.util.UUID;
 
 public class OnPlayerInteractEvent implements Listener {
 
-    private Map<String, Location> latestClickedBlocked;
-    private Map<UUID, PowerToolObject> powerToolMap;
+    private final Map<String, Location> latestClickedBlocked;
+    private final Map<UUID, PowerToolObject> powerToolMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public OnPlayerInteractEvent(World16Essentials plugin) {
         this.plugin = plugin;

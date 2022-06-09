@@ -10,12 +10,12 @@ import org.bukkit.entity.Player;
 
 public class AfkCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public AfkCMD(World16Essentials getPlugin) {
         this.plugin = getPlugin;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("afk").setExecutor(this);
     }

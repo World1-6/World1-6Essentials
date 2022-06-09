@@ -10,15 +10,15 @@ import org.bukkit.entity.Player;
 
 public class WorkBenchCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
-    private CustomConfigManager customConfigManager;
+    private final CustomConfigManager customConfigManager;
 
     public WorkBenchCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
         this.plugin.getCommand("workbench").setExecutor(this);
     }

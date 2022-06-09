@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class OnPlayerQuitEvent implements Listener {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
     public OnPlayerQuitEvent(World16Essentials plugin) {
         this.plugin = plugin;

@@ -14,12 +14,12 @@ import java.util.*;
 
 public class HomeManager {
 
-    private Map<UUID, Map<String, Location>> homesMap;
+    private final Map<UUID, Map<String, Location>> homesMap;
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
-    private EasySQL easySQL;
-    private ISQL isql;
+    private final EasySQL easySQL;
+    private final ISQL isql;
 
     public HomeManager(World16Essentials plugin) {
         this.plugin = plugin;

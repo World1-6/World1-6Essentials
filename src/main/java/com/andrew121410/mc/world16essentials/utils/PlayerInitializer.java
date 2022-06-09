@@ -14,13 +14,13 @@ import java.util.UUID;
 
 public class PlayerInitializer {
 
-    private Map<UUID, Map<String, Location>> backMap;
-    private Map<UUID, PowerToolObject> powerToolMap;
-    private Map<UUID, AfkObject> afkObjectMap;
+    private final Map<UUID, Map<String, Location>> backMap;
+    private final Map<UUID, PowerToolObject> powerToolMap;
+    private final Map<UUID, AfkObject> afkObjectMap;
 
-    private List<Player> hiddenPlayersList;
+    private final List<Player> hiddenPlayersList;
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
     public PlayerInitializer(World16Essentials plugin) {
         this.plugin = plugin;

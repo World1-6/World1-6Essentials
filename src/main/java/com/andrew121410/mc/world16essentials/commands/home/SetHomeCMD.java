@@ -14,10 +14,10 @@ import java.util.UUID;
 
 public class SetHomeCMD implements CommandExecutor {
 
-    private Map<UUID, Map<String, Location>> homesMap;
+    private final Map<UUID, Map<String, Location>> homesMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public SetHomeCMD(World16Essentials plugin) {
         this.plugin = plugin;
@@ -29,14 +29,13 @@ public class SetHomeCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.home")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.home")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
         String defaultHomeName = "home";
@@ -45,9 +44,9 @@ public class SetHomeCMD implements CommandExecutor {
             defaultHomeName = args[0].toLowerCase();
         }
 
-        this.plugin.getHomeManager().save(p.getUniqueId(), p.getDisplayName(), defaultHomeName, p.getLocation());
-        this.homesMap.get(p.getUniqueId()).put(defaultHomeName.toLowerCase(), p.getLocation());
-        p.sendMessage(Translate.chat("&9[Homes] &2Your home has been set!"));
+        this.plugin.getHomeManager().save(player.getUniqueId(), player.getDisplayName(), defaultHomeName, player.getLocation());
+        this.homesMap.get(player.getUniqueId()).put(defaultHomeName.toLowerCase(), player.getLocation());
+        player.sendMessage(Translate.chat("&9[Homes] &2Your home has been set!"));
         return true;
     }
 }

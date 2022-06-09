@@ -13,48 +13,45 @@ import java.util.Map;
 
 public class TpaCMD implements CommandExecutor {
 
-    //Maps
-    private Map<Player, Player> tpam;
-    //...
+    private final Map<Player, Player> tpaMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
-    private CustomConfigManager customConfigManager;
+    private final CustomConfigManager customConfigManager;
 
     public TpaCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
-        this.api = new API(this.plugin);
+        this.api = this.plugin.getApi();
 
-        this.tpam = this.plugin.getSetListMap().getTpaMap();
+        this.tpaMap = this.plugin.getSetListMap().getTpaMap();
 
         this.plugin.getCommand("tpa").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.tpa")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.tpa")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat("[&eTPA&r] &cUsage: /tpa <Player>"));
+            player.sendMessage(Translate.chat("[&eTPA&r] &cUsage: /tpa <Player>"));
         } else if (args.length == 1) {
             Player target = plugin.getServer().getPlayerExact(args[0]); //Get the player
             if (target != null && target.isOnline()) {
-                tpam.put(target, p);
-                p.sendMessage(Translate.chat("[&eTPA&r] &9Sent tpa request too " + target.getDisplayName()));
-                sendTpaRequestMessage(p, target);
+                tpaMap.put(target, player);
+                player.sendMessage(Translate.chat("[&eTPA&r] &9Sent tpa request too " + target.getDisplayName()));
+                sendTpaRequestMessage(player, target);
             } else {
-                p.sendMessage("&4Looks like that player is offline.");
+                player.sendMessage("&4Looks like that player is offline.");
             }
             return true;
         }

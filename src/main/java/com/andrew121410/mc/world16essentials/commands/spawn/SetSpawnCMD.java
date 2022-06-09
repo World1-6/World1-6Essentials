@@ -12,10 +12,10 @@ import org.bukkit.entity.Player;
 
 public class SetSpawnCMD implements CommandExecutor {
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
-    private CustomYmlManager shitYml;
+    private final CustomYmlManager shitYml;
 
     public SetSpawnCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
@@ -27,19 +27,18 @@ public class SetSpawnCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.setspawn")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.setspawn")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
-        this.api.setLocationToFile(this.shitYml, "Spawn.default", p.getLocation());
-        p.sendMessage(Translate.chat("&6Spawn location set for group default."));
+        this.api.setLocationToFile(this.shitYml, "Spawn.default", player.getLocation());
+        player.sendMessage(Translate.chat("&6Spawn location set for group default."));
         return true;
     }
 }

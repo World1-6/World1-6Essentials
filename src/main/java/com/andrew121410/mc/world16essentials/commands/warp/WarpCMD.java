@@ -14,10 +14,10 @@ import java.util.Map;
 
 public class WarpCMD implements CommandExecutor {
 
-    private Map<String, Location> warpsMap;
+    private final Map<String, Location> warpsMap;
 
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public WarpCMD(World16Essentials plugin) {
         this.plugin = plugin;

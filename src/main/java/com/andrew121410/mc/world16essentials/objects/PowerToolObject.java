@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class PowerToolObject {
 
-    private Map<Material, String> powerTools;
+    private final Map<Material, String> powerTools;
 
     public PowerToolObject() {
         this.powerTools = new HashMap<>();

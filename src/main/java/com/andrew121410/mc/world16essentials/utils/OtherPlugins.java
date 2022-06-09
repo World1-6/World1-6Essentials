@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 
 public class OtherPlugins {
 
-    private World16Essentials plugin;
+    private final World16Essentials plugin;
 
     private World16Utils world16Utils;
 

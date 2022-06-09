@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CountAllEntities implements CommandExecutor {
-    private World16Essentials plugin;
-    private API api;
+    private final World16Essentials plugin;
+    private final API api;
 
     public CountAllEntities(World16Essentials plugin) {
         this.plugin = plugin;
