@@ -48,7 +48,7 @@ public class DebugTab implements TabCompleter {
             return TabUtils.getContainsString(args[0], tabCompleteMap.get("debug1-6"));
         } else if (args[0].equalsIgnoreCase("convert")) {
             if (args.length == 2) {
-                List<String> typesOfSoftwareList = Arrays.asList(Software.ESSENTIALS_X.name(), Software.ANDREWS_ESSENTIALS_FABRIC_MOD.name());
+                List<String> typesOfSoftwareList = Arrays.asList(Software.ESSENTIALS_X.name());
                 return TabUtils.getContainsString(args[1], typesOfSoftwareList);
             } else if (args.length == 3) {
                 return TabUtils.getContainsString(args[2], Arrays.asList("homes"));
