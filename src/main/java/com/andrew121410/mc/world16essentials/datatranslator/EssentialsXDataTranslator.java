@@ -32,17 +32,19 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     @Override
     public boolean convertFrom() {
         this.homesFrom();
+        this.warpsFrom();
         return true;
     }
 
     @Override
     public boolean convertTo() {
         this.homesTo();
+        this.warpsTo();
         return true;
     }
 
-    private boolean homesFrom() {
-        if (hasEssentialsConfigFolder() == null) return false;
+    private void homesFrom() {
+        if (hasEssentialsConfigFolder() == null) return;
 
         List<File> userDataFiles = getAllUserDataYmlFiles();
         for (File userDataFile : userDataFiles) {
@@ -67,12 +69,11 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 this.plugin.getHomeManager().save(uuid, "null", homeName, location);
             }
         }
-        return true;
     }
 
-    private boolean homesTo() {
+    private void homesTo() {
         Essentials essentials = getEssentials();
-        if (essentials == null) return false;
+        if (essentials == null) return;
 
         // Load all homes including offline players
         Map<UUID, Map<String, Location>> allHomes = this.plugin.getHomeManager().loadAllHomesForAllPlayersIncludingOfflinePlayers();
@@ -91,7 +92,34 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 homes.forEach(myEssentialsUser::setHome);
             }
         }
-        return true;
+    }
+
+    private void warpsFrom() {
+        Essentials essentials = getEssentials();
+
+        for (String warpName : essentials.getWarps().getList()) {
+            Location location = null;
+            try {
+                location = essentials.getWarps().getWarp(warpName);
+            } catch (Exception ignored) {
+
+            }
+
+            if (location != null) {
+                this.plugin.getWarpManager().createWarp(warpName, location);
+            }
+        }
+    }
+
+    private void warpsTo() {
+        Essentials essentials = getEssentials();
+
+        this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
+            try {
+                essentials.getWarps().setWarp(warpName, location);
+            } catch (Exception ignored) {
+            }
+        });
     }
 
     public Essentials getEssentials() {
