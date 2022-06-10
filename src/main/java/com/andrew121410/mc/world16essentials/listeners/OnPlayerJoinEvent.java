@@ -14,12 +14,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class OnPlayerJoinEvent implements Listener {
 
     private final World16Essentials plugin;
-    private final CustomConfigManager customConfigManager;
     private final API api;
 
-    public OnPlayerJoinEvent(World16Essentials plugin, CustomConfigManager customConfigManager) {
+    public OnPlayerJoinEvent(World16Essentials plugin) {
         this.plugin = plugin;
-        this.customConfigManager = customConfigManager;
         this.api = this.plugin.getApi();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
@@ -27,15 +25,15 @@ public class OnPlayerJoinEvent implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        Player p = event.getPlayer();
+        Player player = event.getPlayer();
         event.setJoinMessage("");
 
-        //Join message stuff.
-        Bukkit.broadcastMessage(Translate.chat(API.PREFIX + " &6Welcome Back! " + p.getDisplayName()));
-        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
-        if (p.isOp()) p.sendMessage(Translate.chat("&4World1-6Essentials was last updated on " + API.DATE_OF_VERSION));
-        //...
+        Bukkit.broadcastMessage(Translate.chat(api.getPrefix() + " &6Welcome Back! " + player.getDisplayName()));
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
+        if (player.isOp()) {
+            player.sendMessage(Translate.chat("&4World1-6Essentials was last updated on " + API.DATE_OF_VERSION));
+        }
 
-        this.plugin.getPlayerInitializer().load(p);
+        this.plugin.getPlayerInitializer().load(player);
     }
 }

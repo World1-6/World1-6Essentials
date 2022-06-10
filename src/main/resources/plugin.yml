@@ -63,6 +63,8 @@ commands:
   sudo:
   shouldkeepspawnchunksloaded:
   countallentities:
+  hide:
+  unhide:
 
   gmc:
     aliases:
@@ -225,4 +227,7 @@ permissions:
     default: op
   world16.countallentities:
     description: Allows you to do countallentities
+    default: op
+  world16.hide:
+    description: Allows you to do hide or unhide
     default: op

@@ -12,9 +12,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class OnPlayerQuitEvent implements Listener {
 
     private final World16Essentials plugin;
+    private final API api;
 
     public OnPlayerQuitEvent(World16Essentials plugin) {
         this.plugin = plugin;
+        this.api = this.plugin.getApi();
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
@@ -24,6 +26,6 @@ public class OnPlayerQuitEvent implements Listener {
 
         this.plugin.getPlayerInitializer().unload(p);
         event.setQuitMessage("");
-        Bukkit.broadcastMessage(Translate.chat(API.PREFIX + " &5Bye Bye, " + p.getDisplayName()));
+        Bukkit.broadcastMessage(Translate.chat(api.getPrefix() + " &5Bye Bye, " + p.getDisplayName()));
     }
 }

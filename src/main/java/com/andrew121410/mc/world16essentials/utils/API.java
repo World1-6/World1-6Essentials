@@ -22,9 +22,8 @@ public class API {
 
     //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "6/8/2022";
-    public static final String PREFIX = "[&9World1-6Ess&r]";
-    private Map<String, UUID> uuidCache;
+    public static final String DATE_OF_VERSION = "6/10/2022";
+    private final String prefix;
     private Map<UUID, AfkObject> afkMap;
     private List<String> flyList;
     private List<String> godList;
@@ -32,11 +31,12 @@ public class API {
 
     public API(World16Essentials plugin) {
         this.plugin = plugin;
+        this.prefix = this.plugin.getConfig().getString("prefix");
+
         doSetListMap();
     }
 
     private void doSetListMap() {
-        this.uuidCache = this.plugin.getSetListMap().getUuidCache();
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
 
         this.flyList = this.plugin.getSetListMap().getFlyList();
@@ -112,5 +112,9 @@ public class API {
 
     public void sendPermissionErrorMessage(Player player) {
         player.sendMessage(Translate.chat("&4You do not have permission to do this command."));
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 }

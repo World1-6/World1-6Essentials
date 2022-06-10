@@ -140,6 +140,8 @@ public class World16Essentials extends JavaPlugin {
         new SudoCMD(this);
         new ShouldKeepSpawnChunksLoadedCMD(this);
         new CountAllEntities(this);
+        new HideCMD(this);
+        new UnhideCMD(this);
 
         //Gamemode commands
         new GmcCMD(this);
@@ -170,7 +172,7 @@ public class World16Essentials extends JavaPlugin {
 
     private void registerListeners() {
         //Bukkit.getServer().getPluginManager().registerEvents(this, this);
-        new OnPlayerJoinEvent(this, this.customConfigManager);
+        new OnPlayerJoinEvent(this);
         new OnPlayerQuitEvent(this);
         //...
         new OnPlayerDeathEvent(this);

@@ -19,7 +19,6 @@ public class SetListMap {
     private final Map<UUID, Map<String, Location>> homesMap; //0
     private final Map<UUID, PowerToolObject> powerToolMap; //0
 
-    private final Map<String, UUID> uuidCache; //1
     private final Map<String, List<String>> tabCompleteMap; //1
     private final Map<String, Location> warpsMap; //1
 
@@ -39,7 +38,6 @@ public class SetListMap {
         this.homesMap = new HashMap<>();
         this.powerToolMap = new HashMap<>();
 
-        this.uuidCache = new HashMap<>();
         this.tabCompleteMap = new HashMap<>();
         this.warpsMap = new HashMap<>();
 
@@ -80,7 +78,6 @@ public class SetListMap {
         homesMap.clear();
         powerToolMap.clear();
 
-        uuidCache.clear();
         tabCompleteMap.clear();
         warpsMap.clear();
     }
@@ -117,10 +114,6 @@ public class SetListMap {
 
     public Map<UUID, Map<String, Location>> getHomesMap() {
         return homesMap;
-    }
-
-    public Map<String, UUID> getUuidCache() {
-        return uuidCache;
     }
 
     public Map<String, List<String>> getTabCompleteMap() {

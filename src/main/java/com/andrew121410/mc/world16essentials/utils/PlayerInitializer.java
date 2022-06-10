@@ -21,9 +21,11 @@ public class PlayerInitializer {
     private final List<Player> hiddenPlayersList;
 
     private final World16Essentials plugin;
+    private final API api;
 
     public PlayerInitializer(World16Essentials plugin) {
         this.plugin = plugin;
+        this.api = this.plugin.getApi();
 
         this.backMap = this.plugin.getSetListMap().getBackMap();
         this.hiddenPlayersList = this.plugin.getSetListMap().getHiddenPlayers();
@@ -38,9 +40,10 @@ public class PlayerInitializer {
         this.plugin.getHomeManager().load(player);
         this.afkObjectMap.put(player.getUniqueId(), new AfkObject(player));
 
+        String color = player.isOp() ? "&4" : "&7";
         hiddenPlayersList.forEach((k) -> {
-            player.hidePlayer(k);
-            k.sendMessage(Translate.chat("[&9World1-6&r] &9Player: " + player.getDisplayName() + " &cnow cannot see you,"));
+            player.hidePlayer(this.plugin, k);
+            k.sendMessage(Translate.chat(api.getPrefix() + " " + color + player.getDisplayName() + " &cnow cannot see you,"));
         });
     }
 
