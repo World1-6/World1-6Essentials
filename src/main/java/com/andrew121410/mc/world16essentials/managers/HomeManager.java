@@ -46,8 +46,51 @@ public class HomeManager {
         Map<String, String> toGet = new HashMap<>();
         toGet.put("UUID", String.valueOf(player.getUniqueId()));
         Multimap<String, SQLDataStore> convert = easySQL.get(toGet);
-        this.homesMap.putIfAbsent(player.getUniqueId(), new HashMap<>());
-        convert.forEach((k, v) -> load(player, v));
+
+        Map<String, Location> homes = new HashMap<>();
+        convert.forEach((key, value) -> homes.putAll(loadHome(value)));
+
+        this.homesMap.putIfAbsent(player.getUniqueId(), homes);
+    }
+
+    public Map<UUID, Map<String, Location>> loadAllHomesForAllPlayersIncludingOfflinePlayers() {
+        Map<UUID, Map<String, Location>> homes = new HashMap<>();
+
+        try {
+            Multimap<String, SQLDataStore> convert = easySQL.getEverything();
+            convert.forEach((key, value) -> {
+                UUID uuid = UUID.fromString(value.get("UUID"));
+                Map<String, Location> home = loadHome(value);
+
+                if (homes.containsKey(uuid)) {
+                    homes.get(uuid).putAll(home);
+                } else {
+                    homes.put(uuid, home);
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return homes;
+    }
+
+    private Map<String, Location> loadHome(SQLDataStore sqlDataStore) {
+        Map<String, Location> homes = new HashMap<>();
+
+        String UUID = sqlDataStore.get("UUID");
+        String Date = sqlDataStore.get("Date");
+        String PlayerName = sqlDataStore.get("PlayerName");
+        String HomeName = sqlDataStore.get("HomeName");
+        String X = sqlDataStore.get("X");
+        String Y = sqlDataStore.get("Y");
+        String Z = sqlDataStore.get("Z");
+        String YAW = sqlDataStore.get("YAW");
+        String PITCH = sqlDataStore.get("PITCH");
+        String World = sqlDataStore.get("World");
+
+        Location location = new Location(this.plugin.getServer().getWorld(World), Double.parseDouble(X), Double.parseDouble(Y), Double.parseDouble(Z), Float.parseFloat(YAW), Float.parseFloat(PITCH));
+        homes.put(HomeName, location);
+        return homes;
     }
 
     public void save(UUID uuid, String playerName, String homeName, Location location) {
@@ -82,21 +125,5 @@ public class HomeManager {
         Map<String, String> toDelete = new HashMap<>();
         toDelete.put("UUID", String.valueOf(uuid));
         easySQL.delete(toDelete);
-    }
-
-    private void load(Player player, SQLDataStore sqlDataStore) {
-        String UUID = sqlDataStore.get("UUID");
-        String Date = sqlDataStore.get("Date");
-        String PlayerName = sqlDataStore.get("PlayerName");
-        String HomeName = sqlDataStore.get("HomeName");
-        String X = sqlDataStore.get("X");
-        String Y = sqlDataStore.get("Y");
-        String Z = sqlDataStore.get("Z");
-        String YAW = sqlDataStore.get("YAW");
-        String PITCH = sqlDataStore.get("PITCH");
-        String World = sqlDataStore.get("World");
-
-        Location location = new Location(this.plugin.getServer().getWorld(World), Double.parseDouble(X), Double.parseDouble(Y), Double.parseDouble(Z), Float.parseFloat(YAW), Float.parseFloat(PITCH));
-        this.homesMap.get(player.getUniqueId()).put(HomeName, location);
     }
 }

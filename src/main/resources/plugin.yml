@@ -6,6 +6,8 @@ api-version: 1.18
 
 depend:
   - World1-6Utils
+softdepend:
+  - EssentialsX
 
 commands:
   World1-6Essentials:

@@ -1,7 +1,7 @@
 package com.andrew121410.mc.world16essentials.tabcomplete;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.utils.Software;
+import com.andrew121410.mc.world16essentials.datatranslator.Software;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,23 +35,20 @@ public class DebugTab implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alies, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             return null;
         }
-        Player p = (Player) sender;
 
-        if (!cmd.getName().equalsIgnoreCase("debug1-6") || !p.hasPermission("world16.debug")) {
-            return null;
-        }
+        if (!player.hasPermission("world16.debug")) return null;
 
         if (args.length == 1) {
             return TabUtils.getContainsString(args[0], tabCompleteMap.get("debug1-6"));
         } else if (args[0].equalsIgnoreCase("convert")) {
             if (args.length == 2) {
-                List<String> typesOfSoftwareList = Arrays.asList(Software.ESSENTIALS_X.name());
-                return TabUtils.getContainsString(args[1], typesOfSoftwareList);
+                return TabUtils.getContainsString(args[1], Arrays.asList("from", "to"));
             } else if (args.length == 3) {
-                return TabUtils.getContainsString(args[2], Arrays.asList("homes"));
+                List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).toList();
+                return TabUtils.getContainsString(args[1], typesOfSoftwareList);
             }
         }
         return null;
