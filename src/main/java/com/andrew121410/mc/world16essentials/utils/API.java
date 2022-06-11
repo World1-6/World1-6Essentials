@@ -5,6 +5,7 @@ import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
+import com.andrew121410.mc.world16utils.utils.ccutils.utils.StringDataTimeBuilder;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -77,17 +78,17 @@ public class API {
 
     public String getTimeSinceLogin(Player player) {
         long loginTime = timeOfLoginMap.get(player.getUniqueId());
-        return StringDataTimeBuilder.makeString(loginTime, System.currentTimeMillis());
+        return StringDataTimeBuilder.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false);
     }
 
     public String getTimeSinceLastLogin(OfflinePlayer offlinePlayer) {
         long lastPlayed = offlinePlayer.getLastPlayed();
-        return StringDataTimeBuilder.makeString(lastPlayed, System.currentTimeMillis());
+        return StringDataTimeBuilder.makeIntoEnglishWords(lastPlayed, System.currentTimeMillis(), false);
     }
 
     public String getTimeSinceFirstLogin(OfflinePlayer offlinePlayer) {
         long firstPlayed = offlinePlayer.getFirstPlayed();
-        return StringDataTimeBuilder.makeString(firstPlayed, System.currentTimeMillis());
+        return StringDataTimeBuilder.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false);
     }
 
     public boolean didPlayerJustJoin(Player player) {

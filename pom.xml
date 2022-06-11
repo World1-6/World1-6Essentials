@@ -87,13 +87,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.andrew121410</groupId>
-            <artifactId>CCUtilsJava</artifactId>
-            <version>dcf8b07c</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>net.essentialsx</groupId>
             <artifactId>EssentialsX</artifactId>
             <version>2.19.0</version>
