@@ -20,7 +20,11 @@ public class API {
     public static final String DATE_OF_VERSION = "6/10/2022";
 
     private final World16Essentials plugin;
-    private final String prefix;
+
+    // Config
+    private String prefix;
+    private boolean signTranslateColors;
+    private boolean preventCropsTrampling;
 
     private final Map<UUID, Long> timeOfLoginMap;
     private final Map<UUID, AfkObject> afkMap;
@@ -31,7 +35,11 @@ public class API {
 
     public API(World16Essentials plugin) {
         this.plugin = plugin;
+
+        // Config
         this.prefix = this.plugin.getConfig().getString("prefix");
+        this.signTranslateColors = this.plugin.getConfig().getBoolean("signTranslateColors");
+        this.preventCropsTrampling = this.plugin.getConfig().getBoolean("preventCropsTrampling");
 
         this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
@@ -41,20 +49,16 @@ public class API {
         this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
     }
 
-    public boolean isAfk(Player p) {
-        return afkMap.get(p.getUniqueId()).isAfk();
+    public boolean isAfk(Player player) {
+        return afkMap.get(player.getUniqueId()).isAfk();
     }
 
-    public boolean isFlying(Player p) {
-        return flyList.contains(p.getDisplayName()) || p.isFlying();
+    public boolean isFlying(Player player) {
+        return flyList.contains(player.getDisplayName()) || player.isFlying();
     }
 
-    public boolean isGod(Player p) {
-        return godList.contains(p.getDisplayName());
-    }
-
-    public boolean isDebug() {
-        return plugin.getConfig().getString("debug").equalsIgnoreCase("true");
+    public boolean isGod(Player player) {
+        return godList.contains(player.getDisplayName());
     }
 
     public boolean isHidden(Player player) {
@@ -83,12 +87,34 @@ public class API {
         return minutes < 1;
     }
 
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+        this.plugin.getConfig().set("prefix", prefix);
+        this.plugin.saveConfig();
+    }
+
     public boolean isSignTranslateColors() {
-        return plugin.getConfig().getString("signTranslateColors").equalsIgnoreCase("true");
+        return signTranslateColors;
+    }
+
+    public void setSignTranslateColors(boolean signTranslateColors) {
+        this.signTranslateColors = signTranslateColors;
+        this.plugin.getConfig().set("signTranslateColors", signTranslateColors);
+        this.plugin.saveConfig();
     }
 
     public boolean isPreventCropsTrampling() {
-        return plugin.getConfig().getString("preventCropsTrampling").equalsIgnoreCase("true");
+        return preventCropsTrampling;
+    }
+
+    public void setPreventCropsTrampling(boolean preventCropsTrampling) {
+        this.preventCropsTrampling = preventCropsTrampling;
+        this.plugin.getConfig().set("preventCropsTrampling", preventCropsTrampling);
+        this.plugin.saveConfig();
     }
 
     public Location getLocationFromFile(CustomYmlManager customYmlManager, String path) {
@@ -124,9 +150,5 @@ public class API {
 
     public void sendPermissionErrorMessage(Player player) {
         player.sendMessage(Translate.chat("&4You do not have permission to do this command."));
-    }
-
-    public String getPrefix() {
-        return prefix;
     }
 }

@@ -1,4 +1,3 @@
 prefix: "[&9World1-6&r]"
-debug: 'false'
-signTranslateColors: 'true'
-preventCropsTrampling: 'false'
+signTranslateColors: true
+preventCropsTrampling: false

@@ -7,6 +7,9 @@ import com.andrew121410.mc.world16essentials.commands.home.HomeListCMD;
 import com.andrew121410.mc.world16essentials.commands.home.SetHomeCMD;
 import com.andrew121410.mc.world16essentials.commands.spawn.SetSpawnCMD;
 import com.andrew121410.mc.world16essentials.commands.spawn.SpawnCMD;
+import com.andrew121410.mc.world16essentials.commands.time.FirstJoinedCMD;
+import com.andrew121410.mc.world16essentials.commands.time.LastJoinCMD;
+import com.andrew121410.mc.world16essentials.commands.time.TimeOfLoginCMD;
 import com.andrew121410.mc.world16essentials.commands.tp.TpAcceptCMD;
 import com.andrew121410.mc.world16essentials.commands.tp.TpDenyCMD;
 import com.andrew121410.mc.world16essentials.commands.tp.TpaCMD;
@@ -139,6 +142,7 @@ public class World16Essentials extends JavaPlugin {
         new CountAllEntities(this);
         new HideCMD(this);
         new UnhideCMD(this);
+        new ConfigCMD(this);
 
         // Time
         new LastJoinCMD(this);
