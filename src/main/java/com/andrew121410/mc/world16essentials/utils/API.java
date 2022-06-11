@@ -68,6 +68,13 @@ public class API {
         return StringDataTimeBuilder.makeString(firstPlayed, System.currentTimeMillis());
     }
 
+    public boolean didPlayerJustJoin(Player player) {
+        long loginTime = timeOfLoginMap.get(player.getUniqueId());
+        long timeElapsed = System.currentTimeMillis() - loginTime;
+        long minutes = (timeElapsed % (1000 * 60 * 60)) / (1000 * 60);
+        return minutes < 1;
+    }
+
     public boolean isSignTranslateColors() {
         return plugin.getConfig().getString("signTranslateColors").equalsIgnoreCase("true");
     }

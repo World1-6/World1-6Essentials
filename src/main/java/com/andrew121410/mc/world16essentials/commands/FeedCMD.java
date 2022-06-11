@@ -22,34 +22,34 @@ public class FeedCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.feed")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.feed")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
         if (args.length == 0) {
-            p.setFoodLevel(20);
-            p.sendMessage(Translate.chat("&6There you go."));
+            player.setFoodLevel(20);
+            player.sendMessage(Translate.color("&6You Have Been Feeded."));
             return true;
         } else if (args.length == 1) {
-            if (!p.hasPermission("world16.feed.other")) {
-                api.sendPermissionErrorMessage(p);
+            if (!player.hasPermission("world16.feed.other")) {
+                api.sendPermissionErrorMessage(player);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);
             if (target != null && target.isOnline()) {
                 target.setFoodLevel(20);
-                p.sendMessage(Translate.chat("&6There you go you just feed " + target.getDisplayName()));
+                target.sendMessage(Translate.color("&6You Have Been Feeded."));
+                player.sendMessage(Translate.color("&6You Have Feeded &e" + target.getName() + "&6."));
             }
             return true;
         } else {
-            p.sendMessage(Translate.chat("&cUsage: for yourself do /feed OR /feed <Player>"));
+            player.sendMessage(Translate.color("&cUsage: /feed or /feed <player>"));
         }
         return true;
     }

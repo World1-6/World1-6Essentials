@@ -27,7 +27,7 @@ public class AfkManager {
     }
 
     private void afkChecker() {
-//        Checks if the player is afk. 3m
+        // Checks if the player is afk. 3m
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -43,25 +43,20 @@ public class AfkManager {
                         iterator.remove();
                         return;
                     }
-                    String color = "&7";
+                    String color = player.isOp() ? "&4" : "&7";
 
-                    //Checks if player is op if so then change the color to red.
-                    if (player.isOp()) {
-                        color = "&4";
-                    }
-
-                    //Don't run if player is already AFK.
+                    // Don't run if player is already AFK
                     if (afkObject.isAfk()) return;
 
-                    //Checks if the player has not moved in 3 min if not afk them if so restart().
-                    if (player.getLocation().equals(afkObject.getLocation())) {
+                    // Checks if the player has not moved in 3 min if not afk them if so restart()
+                    if (player.getLocation().equals(afkObject.getLocation()) && !api.didPlayerJustJoin(player)) {
                         api.doAfk(player, color);
                     } else afkObject.restart(player);
                 }
             }
         }.runTaskTimer(plugin, 1200L, 2400L);
 
-        //Checks if the player moves.
+        // Checks if the player moves
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -77,17 +72,12 @@ public class AfkManager {
                         iterator.remove();
                         return;
                     }
-                    String color = "&7";
+                    String color = player.isOp() ? "&4" : "&7";
 
-                    //Checks if player is op if so then change the color to red.
-                    if (player.isOp()) {
-                        color = "&4";
-                    }
-
-                    //If not afk don't run.
+                    // If not afk don't run
                     if (!afkObject.isAfk()) return;
 
-                    //Only if the player moves more then 3 blocks.
+                    // Only if the player moves more than 3 blocks
                     if (player.getLocation().distanceSquared(afkObject.getLocation()) > 9) {
                         api.doAfk(player, color);
                     }
