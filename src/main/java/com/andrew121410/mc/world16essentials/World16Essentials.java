@@ -133,7 +133,6 @@ public class World16Essentials extends JavaPlugin {
         new WFormatCMD(this, this.customConfigManager);
         new XyzdxdydzCMD(this);
         new WorkBenchCMD(this, this.customConfigManager);
-        new LastJoinCMD(this);
         new PowerToolCMD(this, this.customConfigManager);
         new UnSafeEnchatmentCMD(this, this.customConfigManager);
         new CommandBlockFindCMD(this);
@@ -142,6 +141,11 @@ public class World16Essentials extends JavaPlugin {
         new CountAllEntities(this);
         new HideCMD(this);
         new UnhideCMD(this);
+
+        // Time
+        new LastJoinCMD(this);
+        new TimeOfLoginCMD(this);
+        new FirstJoinedCMD(this);
 
         //Gamemode commands
         new GmcCMD(this);

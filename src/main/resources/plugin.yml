@@ -65,6 +65,8 @@ commands:
   countallentities:
   hide:
   unhide:
+  timeoflogin:
+  firstjoined:
 
   gmc:
     aliases:
@@ -230,4 +232,10 @@ permissions:
     default: op
   world16.hide:
     description: Allows you to do hide or unhide
+    default: op
+  world16.timeoflogin:
+    description: Allows you to do timeoflogin
+    default: op
+  world16.firstjoined:
+    description: Allows you to do firstjoined
     default: op

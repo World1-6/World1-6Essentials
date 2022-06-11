@@ -10,20 +10,17 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class API {
 
-    //Finals
     public static final String CUSTOM_COMMAND_FORMAT = "`";
     public static final String DATE_OF_VERSION = "6/10/2022";
+
     private final String prefix;
+    private final Map<UUID, Long> timeOfLoginMap;
     private Map<UUID, AfkObject> afkMap;
     private List<String> flyList;
     private List<String> godList;
@@ -33,12 +30,9 @@ public class API {
         this.plugin = plugin;
         this.prefix = this.plugin.getConfig().getString("prefix");
 
-        doSetListMap();
-    }
+        this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
 
-    private void doSetListMap() {
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
-
         this.flyList = this.plugin.getSetListMap().getFlyList();
         this.godList = this.plugin.getSetListMap().getGodList();
     }
@@ -59,24 +53,27 @@ public class API {
         return plugin.getConfig().getString("debug").equalsIgnoreCase("true");
     }
 
+    public String getTimeSinceLogin(Player player) {
+        long loginTime = timeOfLoginMap.get(player.getUniqueId());
+        return StringDataTimeBuilder.makeString(loginTime, System.currentTimeMillis());
+    }
+
+    public String getTimeSinceLastLogin(OfflinePlayer offlinePlayer) {
+        long lastPlayed = offlinePlayer.getLastPlayed();
+        return StringDataTimeBuilder.makeString(lastPlayed, System.currentTimeMillis());
+    }
+
+    public String getTimeSinceFirstLogin(OfflinePlayer offlinePlayer) {
+        long firstPlayed = offlinePlayer.getFirstPlayed();
+        return StringDataTimeBuilder.makeString(firstPlayed, System.currentTimeMillis());
+    }
+
     public boolean isSignTranslateColors() {
         return plugin.getConfig().getString("signTranslateColors").equalsIgnoreCase("true");
     }
 
     public boolean isPreventCropsTrampling() {
         return plugin.getConfig().getString("preventCropsTrampling").equalsIgnoreCase("true");
-    }
-
-    public String getTimeFormattedString() {
-        ZonedDateTime zonedDateTime = ZonedDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("MM/dd/yyyy - hh:mm:ss a z");
-        return zonedDateTime.format(myFormatObj);
-    }
-
-    public String getPlayerLastOnlineDateFormattedString(OfflinePlayer target) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy - hh:mm a z");
-        ZonedDateTime zonedDateTime = Instant.ofEpochMilli(target.getLastPlayed()).atZone(ZoneId.systemDefault());
-        return zonedDateTime.format(formatter);
     }
 
     public Location getLocationFromFile(CustomYmlManager customYmlManager, String path) {

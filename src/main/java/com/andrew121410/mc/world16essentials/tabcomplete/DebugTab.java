@@ -25,7 +25,6 @@ public class DebugTab implements TabCompleter {
 
         tabCompleteMap.computeIfAbsent("debug1-6", k -> new ArrayList<>());
         if (tabCompleteMap.get("debug1-6").isEmpty()) {
-            tabCompleteMap.get("debug1-6").add("date");
             tabCompleteMap.get("debug1-6").add("reload");
             tabCompleteMap.get("debug1-6").add("load");
             tabCompleteMap.get("debug1-6").add("unload");

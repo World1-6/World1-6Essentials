@@ -43,10 +43,6 @@ public class DebugCMD implements CommandExecutor {
         if (args.length == 0) {
             player.sendMessage(Translate.chat("&6Please use tab complete."));
             return true;
-        } else if (args.length == 1 && (args[0].equalsIgnoreCase("date"))) {
-            String date = api.getTimeFormattedString();
-            player.sendMessage(Translate.chat("Time/Data:-> " + date));
-            return true;
         } else if (args[0].equalsIgnoreCase("reload")) {
             player.sendMessage(Translate.chat("Reloading all configs might lag."));
             this.customConfigManager.reloadAll();

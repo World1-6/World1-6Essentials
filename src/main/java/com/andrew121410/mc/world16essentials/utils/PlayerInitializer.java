@@ -17,6 +17,7 @@ public class PlayerInitializer {
     private final Map<UUID, Map<String, Location>> backMap;
     private final Map<UUID, PowerToolObject> powerToolMap;
     private final Map<UUID, AfkObject> afkObjectMap;
+    private final Map<UUID, Long> timeOfLoginMap;
 
     private final List<Player> hiddenPlayersList;
 
@@ -31,11 +32,13 @@ public class PlayerInitializer {
         this.hiddenPlayersList = this.plugin.getSetListMap().getHiddenPlayers();
         this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
         this.afkObjectMap = this.plugin.getSetListMap().getAfkMap();
+        this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
     }
 
     public void load(Player player) {
         backMap.put(player.getUniqueId(), new HashMap<>());
         powerToolMap.put(player.getUniqueId(), new PowerToolObject());
+        timeOfLoginMap.put(player.getUniqueId(), System.currentTimeMillis());
 
         this.plugin.getHomeManager().load(player);
         this.afkObjectMap.put(player.getUniqueId(), new AfkObject(player));

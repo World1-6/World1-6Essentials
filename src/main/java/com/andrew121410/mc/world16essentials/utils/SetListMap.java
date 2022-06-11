@@ -18,6 +18,7 @@ public class SetListMap {
     private final Map<UUID, AfkObject> afkMap; //0
     private final Map<UUID, Map<String, Location>> homesMap; //0
     private final Map<UUID, PowerToolObject> powerToolMap; //0
+    private final Map<UUID, Long> timeOfLoginMap; //0
 
     private final Map<String, List<String>> tabCompleteMap; //1
     private final Map<String, Location> warpsMap; //1
@@ -37,6 +38,7 @@ public class SetListMap {
         this.afkMap = new HashMap<>();
         this.homesMap = new HashMap<>();
         this.powerToolMap = new HashMap<>();
+        this.timeOfLoginMap = new HashMap<>();
 
         this.tabCompleteMap = new HashMap<>();
         this.warpsMap = new HashMap<>();
@@ -48,6 +50,7 @@ public class SetListMap {
 
         this.soundsList = new ArrayList<>();
         this.spyCommandBlock = new ArrayList<>();
+
     }
 
     //METHODS
@@ -68,6 +71,7 @@ public class SetListMap {
         afkMap.remove(p.getUniqueId());
         homesMap.remove(p.getUniqueId());
         powerToolMap.remove(p.getUniqueId());
+        timeOfLoginMap.remove(p.getUniqueId());
     }
 
     public void clearAllMaps() {
@@ -77,6 +81,7 @@ public class SetListMap {
         afkMap.clear();
         homesMap.clear();
         powerToolMap.clear();
+        timeOfLoginMap.clear();
 
         tabCompleteMap.clear();
         warpsMap.clear();
@@ -146,5 +151,9 @@ public class SetListMap {
 
     public List<String> getSpyCommandBlock() {
         return spyCommandBlock;
+    }
+
+    public Map<UUID, Long> getTimeOfLoginMap() {
+        return timeOfLoginMap;
     }
 }

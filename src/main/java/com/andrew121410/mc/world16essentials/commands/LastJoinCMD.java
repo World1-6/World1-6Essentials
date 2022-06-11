@@ -20,11 +20,10 @@ public class LastJoinCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.lastjoin")) {
             this.plugin.getApi().sendPermissionErrorMessage(player);
@@ -42,7 +41,7 @@ public class LastJoinCMD implements CommandExecutor {
                 return true;
             }
 
-            player.sendMessage(Translate.color("&6The last time " + offlinePlayer.getName() + " has played was " + this.plugin.getApi().getPlayerLastOnlineDateFormattedString(offlinePlayer)));
+            player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.plugin.getApi().getTimeSinceLastLogin(offlinePlayer)));
         }
         return true;
     }
