@@ -19,22 +19,26 @@ public class API {
     public static final String CUSTOM_COMMAND_FORMAT = "`";
     public static final String DATE_OF_VERSION = "6/10/2022";
 
-    private final String prefix;
-    private final Map<UUID, Long> timeOfLoginMap;
-    private Map<UUID, AfkObject> afkMap;
-    private List<String> flyList;
-    private List<String> godList;
     private final World16Essentials plugin;
+    private final String prefix;
+
+    private final Map<UUID, Long> timeOfLoginMap;
+    private final Map<UUID, AfkObject> afkMap;
+
+    private final List<String> flyList;
+    private final List<String> godList;
+    private final List<Player> hiddenPlayers;
 
     public API(World16Essentials plugin) {
         this.plugin = plugin;
         this.prefix = this.plugin.getConfig().getString("prefix");
 
         this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
-
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
+
         this.flyList = this.plugin.getSetListMap().getFlyList();
         this.godList = this.plugin.getSetListMap().getGodList();
+        this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
     }
 
     public boolean isAfk(Player p) {
@@ -51,6 +55,10 @@ public class API {
 
     public boolean isDebug() {
         return plugin.getConfig().getString("debug").equalsIgnoreCase("true");
+    }
+
+    public boolean isHidden(Player player) {
+        return hiddenPlayers.contains(player);
     }
 
     public String getTimeSinceLogin(Player player) {

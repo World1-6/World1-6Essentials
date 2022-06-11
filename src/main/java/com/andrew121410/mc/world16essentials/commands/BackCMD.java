@@ -1,9 +1,9 @@
 package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.tabcomplete.BackTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.utils.TabUtils;
 import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,6 +13,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,17 +30,23 @@ public class BackCMD implements CommandExecutor {
         this.backMap = this.plugin.getSetListMap().getBackMap();
 
         this.plugin.getCommand("back").setExecutor(this);
-        this.plugin.getCommand("back").setTabCompleter(new BackTab(this.plugin));
+        this.plugin.getCommand("back").setTabCompleter((sender, command, s, args) -> {
+            if (!(sender instanceof Player player)) return null;
+            if (!player.hasPermission("world16.back")) return null;
+
+            if (args.length == 1) {
+                return TabUtils.getContainsString(args[0], Arrays.asList("death", "tp"));
+            }
+            return null;
+        });
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player player = (Player) sender;
-
         Map<String, Location> playerBackMap = this.backMap.get(player.getUniqueId());
 
         if (args.length == 0) {

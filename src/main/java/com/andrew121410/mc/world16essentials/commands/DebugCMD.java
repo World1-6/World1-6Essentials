@@ -4,14 +4,17 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.datatranslator.DataTranslator;
 import com.andrew121410.mc.world16essentials.datatranslator.Software;
 import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
-import com.andrew121410.mc.world16essentials.tabcomplete.DebugTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.utils.TabUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class DebugCMD implements CommandExecutor {
 
@@ -25,7 +28,22 @@ public class DebugCMD implements CommandExecutor {
         this.api = this.plugin.getApi();
 
         this.plugin.getCommand("debug1-6").setExecutor(this);
-        this.plugin.getCommand("debug1-6").setTabCompleter(new DebugTab(this.plugin));
+        this.plugin.getCommand("debug1-6").setTabCompleter((sender, command, s, args) -> {
+            if (!(sender instanceof Player player)) return null;
+            if (!player.hasPermission("world16.debug")) return null;
+
+            if (args.length == 1) {
+                return TabUtils.getContainsString(args[0], Arrays.asList("reload", "load", "unload", "convert"));
+            } else if (args[0].equalsIgnoreCase("convert")) {
+                if (args.length == 2) {
+                    return TabUtils.getContainsString(args[1], Arrays.asList("from", "to"));
+                } else if (args.length == 3) {
+                    List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).toList();
+                    return TabUtils.getContainsString(args[2], typesOfSoftwareList);
+                }
+            }
+            return null;
+        });
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16essentials.tabcomplete;
+package com.andrew121410.mc.world16essentials.sharedtabcomplete;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
@@ -14,35 +14,22 @@ import java.util.Map;
 
 public class WarpTab implements TabCompleter {
 
-    //Maps
     private final Map<String, Location> warpsMap;
-    //...
 
     private final World16Essentials plugin;
 
     public WarpTab(World16Essentials plugin) {
         this.plugin = plugin;
-
         this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alies, String[] args) {
-        if (!(sender instanceof Player)) {
-            return null;
-        }
-        Player p = (Player) sender;
-
-        if (!p.hasPermission("world16.warp")) {
-            return null;
-        }
+        if (!(sender instanceof Player player)) return null;
+        if (!player.hasPermission("world16.warp")) return null;
 
         List<String> keys = new ArrayList<>(this.warpsMap.keySet());
-
-        if (args.length == 1) {
-            return TabUtils.getContainsString(args[0], keys);
-        }
-
+        if (args.length == 1) return TabUtils.getContainsString(args[0], keys);
         return null;
     }
 }

@@ -1,7 +1,7 @@
 package com.andrew121410.mc.world16essentials.commands.home;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.tabcomplete.HomeListTab;
+import com.andrew121410.mc.world16essentials.sharedtabcomplete.HomeListTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;

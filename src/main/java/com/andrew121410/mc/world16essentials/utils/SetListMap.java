@@ -20,7 +20,6 @@ public class SetListMap {
     private final Map<UUID, PowerToolObject> powerToolMap; //0
     private final Map<UUID, Long> timeOfLoginMap; //0
 
-    private final Map<String, List<String>> tabCompleteMap; //1
     private final Map<String, Location> warpsMap; //1
 
     private final List<String> flyList; //0
@@ -40,7 +39,6 @@ public class SetListMap {
         this.powerToolMap = new HashMap<>();
         this.timeOfLoginMap = new HashMap<>();
 
-        this.tabCompleteMap = new HashMap<>();
         this.warpsMap = new HashMap<>();
 
         //Lists
@@ -83,7 +81,6 @@ public class SetListMap {
         powerToolMap.clear();
         timeOfLoginMap.clear();
 
-        tabCompleteMap.clear();
         warpsMap.clear();
     }
 
@@ -119,10 +116,6 @@ public class SetListMap {
 
     public Map<UUID, Map<String, Location>> getHomesMap() {
         return homesMap;
-    }
-
-    public Map<String, List<String>> getTabCompleteMap() {
-        return tabCompleteMap;
     }
 
     public List<String> getFlyList() {

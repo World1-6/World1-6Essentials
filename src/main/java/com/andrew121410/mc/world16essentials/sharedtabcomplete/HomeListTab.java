@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16essentials.tabcomplete;
+package com.andrew121410.mc.world16essentials.sharedtabcomplete;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
@@ -12,41 +12,29 @@ import java.util.*;
 
 public class HomeListTab implements TabCompleter {
 
-    //This is just a reminder for myself to not copy this because it won't work with other stuff since it's custom coded.
-
-    //Lists
     private final Map<UUID, Map<String, Location>> rawHomesMap;
-    //...
 
     private final World16Essentials plugin;
 
     public HomeListTab(World16Essentials plugin) {
         this.plugin = plugin;
-
         this.rawHomesMap = this.plugin.getSetListMap().getHomesMap();
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alies, String[] args) {
-        if (!(sender instanceof Player)) {
-            return null;
-        }
-        Player p = (Player) sender;
-
-        if (!p.hasPermission("world16.home")) {
-            return null;
-        }
+        if (!(sender instanceof Player player)) return null;
+        if (!player.hasPermission("world16.home")) return null;
 
         if (args.length == 1) {
-            if (rawHomesMap.get(p.getUniqueId()) == null) {
-                p.kickPlayer("[HomeTabComplete] You where not in the memory so NPE was caused.");
+            if (rawHomesMap.get(player.getUniqueId()) == null) {
+                player.kickPlayer("[HomeTabComplete] You where not in the memory so NPE was caused.");
                 return null;
             }
-            Set<String> homeSet = rawHomesMap.get(p.getUniqueId()).keySet();
+            Set<String> homeSet = rawHomesMap.get(player.getUniqueId()).keySet();
             String[] homeString = homeSet.toArray(new String[0]);
             return TabUtils.getContainsString(args[0], Arrays.asList(homeString));
         }
-
         return null;
     }
 }

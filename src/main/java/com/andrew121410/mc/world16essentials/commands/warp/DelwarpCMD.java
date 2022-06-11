@@ -2,7 +2,7 @@ package com.andrew121410.mc.world16essentials.commands.warp;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.managers.WarpManager;
-import com.andrew121410.mc.world16essentials.tabcomplete.WarpTab;
+import com.andrew121410.mc.world16essentials.sharedtabcomplete.WarpTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Location;
