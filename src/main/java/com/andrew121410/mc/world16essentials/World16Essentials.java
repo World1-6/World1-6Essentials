@@ -52,7 +52,6 @@ public class World16Essentials extends JavaPlugin {
 
     private API api;
 
-    //Getters
     public static World16Essentials getPlugin() {
         return plugin;
     }
@@ -61,16 +60,19 @@ public class World16Essentials extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         this.setListMap = new SetListMap();
-        this.api = new API(this);
-        this.otherPlugins = new OtherPlugins(this);
 
-        registerCustomManagers();
+        // Load configs first
         registerMainConfig();
+        this.customConfigManager = new CustomConfigManager(this);
+        customConfigManager.registerAllCustomConfigs();
+
+        this.otherPlugins = new OtherPlugins(this);
+        this.api = new API(this);
+        registerManagers();
+        this.playerInitializer = new PlayerInitializer(this);
+
         registerListeners();
         registerCommands();
-        registerBStats();
-
-        this.playerInitializer = new PlayerInitializer(this);
 
         Collection<? extends Player> playerList = getServer().getOnlinePlayers();
         if (!playerList.isEmpty()) {
@@ -100,6 +102,7 @@ public class World16Essentials extends JavaPlugin {
         }
 
         pluginLoadMessage();
+        registerBStats(); // Register bStats last
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &2World1-6Essentials has been loaded."));
     }
 
@@ -200,10 +203,7 @@ public class World16Essentials extends JavaPlugin {
         this.reloadConfig();
     }
 
-    private void registerCustomManagers() {
-        this.customConfigManager = new CustomConfigManager(this);
-        customConfigManager.registerAllCustomConfigs();
-
+    private void registerManagers() {
         this.homeManager = new HomeManager(this);
 
         this.warpManager = new WarpManager(this, this.customConfigManager);

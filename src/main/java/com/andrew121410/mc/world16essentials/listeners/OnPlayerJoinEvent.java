@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16essentials.listeners;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Bukkit;
@@ -28,7 +27,8 @@ public class OnPlayerJoinEvent implements Listener {
         Player player = event.getPlayer();
         event.setJoinMessage("");
 
-        Bukkit.broadcastMessage(Translate.chat(api.getPrefix() + " &6Welcome Back! " + player.getDisplayName()));
+        String message = player.hasPlayedBefore() ? this.api.getWelcomeBackMessage() : this.api.getFirstJoinedMessage();
+        Bukkit.broadcastMessage(api.parseMessage(player, message));
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
         if (player.isOp()) {
             player.sendMessage(Translate.chat("&4World1-6Essentials was last updated on " + API.DATE_OF_VERSION));

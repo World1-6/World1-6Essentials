@@ -22,9 +22,14 @@ public class API {
     private final World16Essentials plugin;
 
     // Config
-    private String prefix;
     private boolean signTranslateColors;
     private boolean preventCropsTrampling;
+
+    // Messages
+    private String prefix;
+    private String welcomeBackMessage;
+    private String firstJoinedMessage;
+    private String leaveMessage;
 
     private final Map<UUID, Long> timeOfLoginMap;
     private final Map<UUID, AfkObject> afkMap;
@@ -37,9 +42,14 @@ public class API {
         this.plugin = plugin;
 
         // Config
-        this.prefix = this.plugin.getConfig().getString("prefix");
         this.signTranslateColors = this.plugin.getConfig().getBoolean("signTranslateColors");
         this.preventCropsTrampling = this.plugin.getConfig().getBoolean("preventCropsTrampling");
+
+        // Messages
+        this.prefix = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("prefix");
+        this.welcomeBackMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("welcomeBackMessage");
+        this.firstJoinedMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("firstJoinedMessage");
+        this.leaveMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("leaveMessage");
 
         this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
@@ -87,16 +97,7 @@ public class API {
         return minutes < 1;
     }
 
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-        this.plugin.getConfig().set("prefix", prefix);
-        this.plugin.saveConfig();
-    }
-
+    // Config
     public boolean isSignTranslateColors() {
         return signTranslateColors;
     }
@@ -115,6 +116,47 @@ public class API {
         this.preventCropsTrampling = preventCropsTrampling;
         this.plugin.getConfig().set("preventCropsTrampling", preventCropsTrampling);
         this.plugin.saveConfig();
+    }
+
+    // Messages
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("prefix", prefix);
+        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
+    }
+
+    public String getWelcomeBackMessage() {
+        return welcomeBackMessage;
+    }
+
+    public void setWelcomeBackMessage(String welcomeBackMessage) {
+        this.welcomeBackMessage = welcomeBackMessage;
+        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("welcomeBackMessage", welcomeBackMessage);
+        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
+    }
+
+    public String getFirstJoinedMessage() {
+        return firstJoinedMessage;
+    }
+
+    public void setFirstJoinedMessage(String firstJoinedMessage) {
+        this.firstJoinedMessage = firstJoinedMessage;
+        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("firstJoinedMessage", firstJoinedMessage);
+        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
+    }
+
+    public String getLeaveMessage() {
+        return leaveMessage;
+    }
+
+    public void setLeaveMessage(String leaveMessage) {
+        this.leaveMessage = leaveMessage;
+        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("leaveMessage", leaveMessage);
+        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
     }
 
     public Location getLocationFromFile(CustomYmlManager customYmlManager, String path) {
@@ -146,6 +188,12 @@ public class API {
             this.plugin.getServer().broadcastMessage(Translate.chat("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
             afkObject.setAfk(true, player.getLocation());
         }
+    }
+
+    public String parseMessage(Player player, String message) {
+        message = message.replaceAll("%player%", player.getDisplayName());
+        message = message.replaceAll("%prefix%", this.prefix);
+        return Translate.color(message);
     }
 
     public void sendPermissionErrorMessage(Player player) {

@@ -2,7 +2,6 @@ package com.andrew121410.mc.world16essentials.listeners;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
-import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,11 +20,11 @@ public class OnPlayerQuitEvent implements Listener {
     }
 
     @EventHandler
-    public void onQUIT(PlayerQuitEvent event) {
-        Player p = event.getPlayer();
-
-        this.plugin.getPlayerInitializer().unload(p);
+    public void onQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
         event.setQuitMessage("");
-        Bukkit.broadcastMessage(Translate.chat(api.getPrefix() + " &5Bye Bye, " + p.getDisplayName()));
+
+        this.plugin.getPlayerInitializer().unload(player);
+        Bukkit.broadcastMessage(api.parseMessage(player, api.getLeaveMessage()));
     }
 }

@@ -25,13 +25,25 @@ public class ConfigCMD implements CommandExecutor {
             if (!player.hasPermission("world16.config")) return null;
 
             if (args.length == 1) {
-                return TabUtils.getContainsString(args[0], Arrays.asList("setprefix", "signTranslateColors", "preventCropsTrampling"));
-            } else if (args[0].equalsIgnoreCase("setprefix")) {
-                return TabUtils.getContainsString(args[1], Collections.singletonList(api.getPrefix()));
+                return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "messages"));
             } else if (args[0].equalsIgnoreCase("signTranslateColors")) {
                 return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
             } else if (args[0].equalsIgnoreCase("preventCropsTrampling")) {
                 return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
+            } else if (args[0].equalsIgnoreCase("messages")) {
+                if (args.length == 2) {
+                    return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinedMessage", "leaveMessage"));
+                } else {
+                    if (args[1].equalsIgnoreCase("prefix")) {
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getPrefix()));
+                    } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getWelcomeBackMessage()));
+                    } else if (args[1].equalsIgnoreCase("firstJoinedMessage")) {
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getFirstJoinedMessage()));
+                    } else if (args[1].equalsIgnoreCase("leaveMessage")) {
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getLeaveMessage()));
+                    }
+                }
             }
             return null;
         });
@@ -51,15 +63,28 @@ public class ConfigCMD implements CommandExecutor {
         if (args.length == 0) {
             player.sendMessage(Translate.color("&cUsage: /config1-6 <config> <value>"));
         } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("setprefix")) {
-                api.setPrefix(args[1]);
-                player.sendMessage(Translate.color("&aPrefix set to &6" + args[1]));
-            } else if (args[0].equalsIgnoreCase("signTranslateColors")) {
+            if (args[0].equalsIgnoreCase("signTranslateColors")) {
                 api.setSignTranslateColors(args[1].equalsIgnoreCase("true"));
                 player.sendMessage(Translate.color("&aSign translate colors set to &6" + args[1]));
             } else if (args[0].equalsIgnoreCase("preventCropsTrampling")) {
                 api.setPreventCropsTrampling(args[1].equalsIgnoreCase("true"));
                 player.sendMessage(Translate.color("&aPrevent crops trampling set to &6" + args[1]));
+            }
+        } else if (args.length >= 3 && args[0].equalsIgnoreCase("messages")) {
+            String[] ourArgs = Arrays.copyOfRange(args, 2, args.length);
+            String message = String.join(" ", ourArgs);
+            if (args[1].equalsIgnoreCase("prefix")) {
+                api.setPrefix(args[2]);
+                player.sendMessage(Translate.color("&aPrefix set to &6" + args[2]));
+            } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
+                api.setWelcomeBackMessage(message);
+                player.sendMessage(Translate.color("&aWelcome back message set to &6" + message));
+            } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
+                api.setFirstJoinedMessage(message);
+                player.sendMessage(Translate.color("&aFirst join message set to &6" + message));
+            } else if (args[1].equalsIgnoreCase("leaveMessage")) {
+                api.setLeaveMessage(message);
+                player.sendMessage(Translate.color("&aLeave message set to &6" + message));
             }
         }
         return true;

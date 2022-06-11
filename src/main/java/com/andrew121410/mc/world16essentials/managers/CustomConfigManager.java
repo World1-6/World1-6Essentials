@@ -10,6 +10,7 @@ public class CustomConfigManager {
     private CustomYmlManager shitYml;
     private CustomYmlManager warpsYml;
     private CustomYmlManager playersYml;
+    private CustomYmlManager messagesYml;
 
     public CustomConfigManager(World16Essentials plugin) {
         this.plugin = plugin;
@@ -36,6 +37,23 @@ public class CustomConfigManager {
         this.playersYml.saveConfig();
         this.playersYml.reloadConfig();
         //...
+
+        //messages.yml
+        this.messagesYml = new CustomYmlManager(this.plugin, false);
+        this.messagesYml.setup("messages.yml");
+        setupDefaultsForMessages();
+        this.messagesYml.saveConfig();
+        this.messagesYml.reloadConfig();
+        //...
+    }
+
+    private void setupDefaultsForMessages() {
+        this.messagesYml.getConfig().addDefault("prefix", "[&9World1-6&r]");
+        this.messagesYml.getConfig().addDefault("welcomeBackMessage", "%prefix% &6Welcome back, %player%!");
+        this.messagesYml.getConfig().addDefault("firstJoinedMessage", "%prefix% &6Welcome to the server, %player%!");
+        this.messagesYml.getConfig().addDefault("leaveMessage", "%prefix% &6%player% has left the server.");
+
+        this.messagesYml.getConfig().options().copyDefaults(true);
     }
 
     public void saveAll() {
@@ -43,6 +61,7 @@ public class CustomConfigManager {
         this.shitYml.saveConfig();
         this.warpsYml.saveConfig();
         this.playersYml.saveConfig();
+        this.messagesYml.saveConfig();
     }
 
     public void reloadAll() {
@@ -50,6 +69,7 @@ public class CustomConfigManager {
         this.shitYml.reloadConfig();
         this.warpsYml.reloadConfig();
         this.playersYml.reloadConfig();
+        this.messagesYml.reloadConfig();
     }
 
     public CustomYmlManager getShitYml() {
@@ -62,5 +82,9 @@ public class CustomConfigManager {
 
     public CustomYmlManager getPlayersYml() {
         return playersYml;
+    }
+
+    public CustomYmlManager getMessagesYml() {
+        return messagesYml;
     }
 }
