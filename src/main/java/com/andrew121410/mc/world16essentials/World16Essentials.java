@@ -18,7 +18,6 @@ import com.andrew121410.mc.world16essentials.managers.AfkManager;
 import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.managers.HomeManager;
 import com.andrew121410.mc.world16essentials.managers.WarpManager;
-import com.andrew121410.mc.world16essentials.test.test1;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16essentials.utils.OtherPlugins;
 import com.andrew121410.mc.world16essentials.utils.PlayerInitializer;
@@ -127,7 +126,6 @@ public class World16Essentials extends JavaPlugin {
         new BroadcastCMD(this, this.customConfigManager);
         new GodCMD(this);
         new MsgCMD(this, this.customConfigManager);
-        new test1(this, this.customConfigManager);
         new WaitDoCMD(this, this.customConfigManager);
         new RunCommandsCMD(this, this.customConfigManager);
         new WFormatCMD(this, this.customConfigManager);
