@@ -47,7 +47,7 @@ public class DebugTab implements TabCompleter {
                 return TabUtils.getContainsString(args[1], Arrays.asList("from", "to"));
             } else if (args.length == 3) {
                 List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).toList();
-                return TabUtils.getContainsString(args[1], typesOfSoftwareList);
+                return TabUtils.getContainsString(args[2], typesOfSoftwareList);
             }
         }
         return null;
