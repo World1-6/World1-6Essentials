@@ -40,12 +40,12 @@
         </plugins>
     </build>
 
-<!--    <pluginRepositories>-->
-<!--        <pluginRepository>-->
-<!--            <id>apache.snapshots</id>-->
-<!--            <url>https://repository.apache.org/snapshots/</url>-->
-<!--        </pluginRepository>-->
-<!--    </pluginRepositories>-->
+    <!--    <pluginRepositories>-->
+    <!--        <pluginRepository>-->
+    <!--            <id>apache.snapshots</id>-->
+    <!--            <url>https://repository.apache.org/snapshots/</url>-->
+    <!--        </pluginRepository>-->
+    <!--    </pluginRepositories>-->
 
     <repositories>
         <repository>
@@ -73,9 +73,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.andrew121410.mc</groupId>
-            <artifactId>World1-6Utils-Plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.github.World1-6.World1-6Utils</groupId>
+            <artifactId>World1-6Utils-API</artifactId>
+            <version>20b35ad8</version>
             <scope>provided</scope>
         </dependency>
 
