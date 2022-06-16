@@ -45,7 +45,7 @@ public class LastJoinCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            new GUIMultipageListWindow(makeGUIButtons(player), 45).open(player);
+            new GUIMultipageListWindow("Last Join", 54, makeGUIButtons(player), 45).open(player);
             return true;
         } else if (args.length == 1) {
             OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
