@@ -132,16 +132,17 @@ public class LastJoinCMD implements CommandExecutor {
     }
 
     private void setToTheRealSlots(List<LastJoinGUIButton> guiButtonList) {
-        int i = -1;
+        int i = 0;
         int max = 45;
 
         for (GUIButton guiButton : guiButtonList) {
+            guiButton.setSlot(i);
+
             if (i < max) {
                 i++;
             } else {
-                i = -1;
+                i = 0;
             }
-            guiButton.setSlot(i);
         }
     }
 
