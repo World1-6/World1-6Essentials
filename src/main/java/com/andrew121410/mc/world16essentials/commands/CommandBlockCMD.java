@@ -2,7 +2,7 @@ package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
-import com.andrew121410.mc.world16essentials.utils.InventoryUtils;
+import com.andrew121410.mc.world16utils.utils.InventoryUtils;
 import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

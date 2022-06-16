@@ -20,6 +20,8 @@ commands:
   heal:
   night:
   ram:
+    aliases:
+      - gc
   spawn:
   echest:
   setspawn:
@@ -50,7 +52,6 @@ commands:
     aliases:
       - homes
   sethome:
-  lastjoin:
   warp:
     aliases:
       - to
@@ -64,6 +65,9 @@ commands:
   countallentities:
   hide:
   unhide:
+  lastjoin:
+    ailases:
+      - lastonline
   timeoflogin:
   firstjoined:
   config1-6:

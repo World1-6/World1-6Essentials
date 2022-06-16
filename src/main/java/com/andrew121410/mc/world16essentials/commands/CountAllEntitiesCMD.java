@@ -12,11 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CountAllEntities implements CommandExecutor {
+public class CountAllEntitiesCMD implements CommandExecutor {
     private final World16Essentials plugin;
     private final API api;
 
-    public CountAllEntities(World16Essentials plugin) {
+    public CountAllEntitiesCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 

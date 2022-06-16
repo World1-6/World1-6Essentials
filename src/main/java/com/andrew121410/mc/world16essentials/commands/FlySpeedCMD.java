@@ -4,7 +4,6 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.Utils;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,11 +31,10 @@ public class FlySpeedCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.fs")) {
             api.sendPermissionErrorMessage(player);
@@ -51,16 +49,16 @@ public class FlySpeedCMD implements CommandExecutor {
             Double theDouble = Utils.asDoubleOrElse(args[0], null);
 
             if (theDouble == null) {
-                player.sendMessage(Translate.chat("&cThat isn't a integer..."));
+                player.sendMessage(Translate.chat("&cThat is not a valid number."));
                 return true;
             }
 
             if ((theDouble > -1) && (theDouble < 11)) {
                 float flySpeed = (float) (theDouble / 10.0D);
                 player.setFlySpeed(flySpeed);
-                player.sendMessage(ChatColor.GOLD + "[FlySpeed] " + ChatColor.YELLOW + "Your fly-speed now equals: " + ChatColor.RED + "[" + flySpeed * 10.0F + "]" + ChatColor.YELLOW + "!");
+                player.sendMessage(Translate.chat("&6Your fly speed has been set to &a" + theDouble));
             } else {
-                player.sendMessage(ChatColor.GOLD + "[FlySpeed] " + ChatColor.RED + "Your input is not valid! must be between 0 and 10.");
+                player.sendMessage(Translate.chat("&cYour fly speed must be between &a0 &cand &a10"));
             }
             return true;
         }
@@ -76,7 +74,7 @@ public class FlySpeedCMD implements CommandExecutor {
                 target.setFlySpeed(flySpeed);
                 player.sendMessage(Translate.chat("&eYou has have set " + target.getDisplayName() + " flight speed too &a" + flySpeed * 10.0F));
             } else {
-                player.sendMessage(ChatColor.GOLD + "[FlySpeed] " + ChatColor.RED + "Your input is not valid! must be between 0 and 10.");
+                player.sendMessage(Translate.chat("&cYour fly speed must be between &a0 &cand &a10"));
                 return true;
             }
         } else {

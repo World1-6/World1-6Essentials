@@ -2,7 +2,8 @@ package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
-import com.andrew121410.mc.world16essentials.utils.InventoryUtils;
+import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.utils.InventoryUtils;
 import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,19 +25,19 @@ public class BedCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.bed")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.bed")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
         ItemStack item = InventoryUtils.createItem(XMaterial.RED_BED.parseMaterial(), 1, "Bed", "Bed");
-        p.getInventory().addItem(item);
+        player.getInventory().addItem(item);
+        player.sendMessage(Translate.color("&6You have been given a Bed."));
         return true;
     }
 }

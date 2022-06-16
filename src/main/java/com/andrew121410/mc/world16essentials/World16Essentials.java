@@ -141,11 +141,11 @@ public class World16Essentials extends JavaPlugin {
         new XyzdxdydzCMD(this);
         new WorkBenchCMD(this, this.customConfigManager);
         new PowerToolCMD(this, this.customConfigManager);
-        new UnSafeEnchatmentCMD(this, this.customConfigManager);
+        new UnSafeEnchatmentCMD(this);
         new CommandBlockFindCMD(this);
         new SudoCMD(this);
         new ShouldKeepSpawnChunksLoadedCMD(this);
-        new CountAllEntities(this);
+        new CountAllEntitiesCMD(this);
         new HideCMD(this);
         new UnhideCMD(this);
         new ConfigCMD(this);

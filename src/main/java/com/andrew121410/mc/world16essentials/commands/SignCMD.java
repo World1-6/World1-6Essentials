@@ -37,11 +37,10 @@ public class SignCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.sign")) {
             api.sendPermissionErrorMessage(player);
@@ -62,12 +61,11 @@ public class SignCMD implements CommandExecutor {
             Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
             BlockState state = block.getState();
 
-            if (!(state instanceof Sign)) {
+            if (!(state instanceof Sign sign)) {
                 player.sendMessage(Translate.chat("&4This isn't a sign."));
                 return true;
             }
 
-            Sign sign = (Sign) state;
             UniversalBlockUtils.editSign(player, sign);
             return true;
         }
