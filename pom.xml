@@ -74,7 +74,7 @@
 
         <dependency>
             <groupId>com.github.World1-6.World1-6Utils</groupId>
-            <artifactId>World1-6Utils-API</artifactId>
+            <artifactId>World1-6Utils-Plugin</artifactId>
             <version>20b35ad8</version>
             <scope>provided</scope>
         </dependency>
