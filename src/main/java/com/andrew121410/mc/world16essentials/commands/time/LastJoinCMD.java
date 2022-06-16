@@ -139,7 +139,7 @@ public class LastJoinCMD implements CommandExecutor {
             if (i < max) {
                 i++;
             } else {
-                i = 0;
+                i = -0;
             }
             guiButton.setSlot(i);
         }
