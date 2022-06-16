@@ -39,6 +39,7 @@ public class World16Essentials extends JavaPlugin {
 
     private static World16Essentials plugin;
 
+    private Updater updater;
     private SetListMap setListMap;
     private OtherPlugins otherPlugins;
 
@@ -59,6 +60,7 @@ public class World16Essentials extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        this.updater = new Updater(this);
         this.setListMap = new SetListMap();
 
         // Load configs first
@@ -104,6 +106,13 @@ public class World16Essentials extends JavaPlugin {
         pluginLoadMessage();
         registerBStats(); // Register bStats last
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &2World1-6Essentials has been loaded."));
+
+        // Check if the plugin is up to date
+        getServer().getScheduler().runTaskAsynchronously(this, () -> {
+            if (updater.shouldUpdate()) {
+                getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &2A new version of World1-6Essentials is available."));
+            }
+        });
     }
 
     @Override
@@ -118,7 +127,7 @@ public class World16Essentials extends JavaPlugin {
         new FeedCMD(this);
         new HealCMD(this);
         new FlyCMD(this);
-        new DebugCMD(this, this.customConfigManager);
+        new DebugCMD(this, this.customConfigManager, this.updater);
         new CommandBlockCMD(this);
         new BedCMD(this);
         new RamCMD(this);

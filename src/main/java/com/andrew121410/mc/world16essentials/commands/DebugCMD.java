@@ -1,5 +1,6 @@
 package com.andrew121410.mc.world16essentials.commands;
 
+import com.andrew121410.mc.world16essentials.Updater;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.datatranslator.DataTranslator;
 import com.andrew121410.mc.world16essentials.datatranslator.Software;
@@ -21,10 +22,12 @@ public class DebugCMD implements CommandExecutor {
     private final World16Essentials plugin;
     private final CustomConfigManager customConfigManager;
     private final API api;
+    private final Updater updater;
 
-    public DebugCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
+    public DebugCMD(World16Essentials plugin, CustomConfigManager customConfigManager, Updater updater) {
         this.plugin = plugin;
         this.customConfigManager = customConfigManager;
+        this.updater = updater;
         this.api = this.plugin.getApi();
 
         this.plugin.getCommand("debug1-6").setExecutor(this);
@@ -118,6 +121,18 @@ public class DebugCMD implements CommandExecutor {
                     dataTranslator.convertTo(software);
                 }
             }
+        } else if (args[0].equalsIgnoreCase("update")) {
+            player.sendMessage("Checking for updates...");
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
+                if (this.updater.shouldUpdate()) {
+                    player.sendMessage("An update is available!");
+                    player.sendMessage("Downloading update...");
+                    String message = this.updater.update();
+                    player.sendMessage(message);
+                } else {
+                    player.sendMessage("You are up to date.");
+                }
+            });
         }
         return true;
     }
