@@ -128,8 +128,8 @@ public class LastJoinCMD implements CommandExecutor {
             }));
         }
 
-        setToTheRealSlots(guiButtons);
         sortByLeastToGreatestTime(guiButtons);
+        setToTheRealSlots(guiButtons);
 
         return guiButtons;
     }
@@ -156,13 +156,33 @@ public class LastJoinCMD implements CommandExecutor {
 class LastJoinGUIButton extends ClickEventButton {
 
     private final long lastTimePlayed;
+    private final ItemStack itemStack;
 
     public LastJoinGUIButton(Long lastTimePlayed, int slot, ItemStack itemStack, Consumer<GUIClickEvent> consumer) {
         super(slot, itemStack, consumer);
         this.lastTimePlayed = lastTimePlayed;
+        this.itemStack = itemStack;
     }
 
     public long getLastTimePlayed() {
         return lastTimePlayed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LastJoinGUIButton that = (LastJoinGUIButton) o;
+
+        if (lastTimePlayed != that.lastTimePlayed) return false;
+        return itemStack != null ? itemStack.equals(that.itemStack) : that.itemStack == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (lastTimePlayed ^ (lastTimePlayed >>> 32));
+        result = 31 * result + (itemStack != null ? itemStack.hashCode() : 0);
+        return result;
     }
 }
