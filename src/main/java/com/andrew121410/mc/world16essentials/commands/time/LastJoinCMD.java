@@ -7,6 +7,7 @@ import com.andrew121410.mc.world16utils.gui.AdvanceGUIWindow;
 import com.andrew121410.mc.world16utils.gui.buttons.GUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.GUIClickEvent;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
+import com.andrew121410.mc.world16utils.gui.buttons.defaults.NoEventButton;
 import com.andrew121410.mc.world16utils.utils.InventoryUtils;
 import com.andrew121410.mc.world16utils.utils.Utils;
 import com.google.common.collect.Lists;
@@ -48,7 +49,7 @@ public class LastJoinCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            openInventory(player);
+            new LastJoinGUI(this.plugin).open(player);
             return true;
         } else if (args.length == 1) {
             OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
@@ -62,55 +63,64 @@ public class LastJoinCMD implements CommandExecutor {
         }
         return true;
     }
+}
 
-    private void openInventory(Player player) {
-        AdvanceGUIWindow window = new AdvanceGUIWindow() {
+class LastJoinGUI extends AdvanceGUIWindow {
 
-            private int page = 0;
+    private final World16Essentials plugin;
+    private final API api;
 
-            @Override
-            public void onCreate(Player player) {
-                List<List<LastJoinGUIButton>> pages = Lists.partition(makeGUIButtons(player), 45);
-                List<GUIButton> bottomButtons = new ArrayList<>();
+    private boolean first = true;
+    private List<List<LastJoinGUIButton>> pages = new ArrayList<>();
+    private int page = 0;
 
-                if (page != 0) {
-                    bottomButtons.add(new ClickEventButton(45, InventoryUtils.createItem(Material.ARROW, 1, "Previous Page"), (guiClickEvent) -> {
-                        if (Utils.indexExists(pages, page - 1)) {
-                            page--;
-                            List<GUIButton> guiButtonList = new ArrayList<>(pages.get(page));
-                            guiButtonList.addAll(bottomButtons);
-                            this.update(guiButtonList, "Last Join", 54);
-                            this.open(player);
-                        }
-                    }));
-                }
+    public LastJoinGUI(World16Essentials plugin) {
+        this.plugin = plugin;
+        this.api = this.plugin.getApi();
+    }
 
-                if (pages.size() >= 2) {
-                    bottomButtons.add(new ClickEventButton(53, InventoryUtils.createItem(Material.ARROW, 1, "Go to next page"), (guiClickEvent) -> {
-                        if (Utils.indexExists(pages, page + 1)) {
-                            page++;
-                            List<GUIButton> guiButtonList = new ArrayList<>(pages.get(page));
-                            guiButtonList.addAll(bottomButtons);
-                            this.update(guiButtonList, "Last Join", 54);
-                            this.open(player);
-                        }
-                    }));
-                }
+    @Override
+    public void onCreate(Player player) {
+        if (pages.isEmpty()) {
+            pages = Lists.partition(makeGUIButtons(player), 45);
 
-                if (page == 0) {
-                    List<GUIButton> guiButtonList = new ArrayList<>(pages.get(0));
-                    guiButtonList.addAll(bottomButtons);
-                    this.update(guiButtonList, "Last Join", 54);
-                }
+            for (List<LastJoinGUIButton> lastJoinGUIButtons : pages) {
+                determineSlotNumbers(lastJoinGUIButtons);
             }
+        }
 
-            @Override
-            public void onClose(InventoryCloseEvent inventoryCloseEvent) {
+        List<GUIButton> bottomButtons = new ArrayList<>();
 
-            }
-        };
+        if (page != 0 && Utils.indexExists(pages, page - 1)) {
+            bottomButtons.add(new ClickEventButton(45, InventoryUtils.createItem(Material.ARROW, 1, "Previous Page"), (guiClickEvent) -> {
+                this.page--;
+                this.onCreate(player);
+            }));
+        }
 
-        window.open(player);
+        if (pages.size() >= 2 && Utils.indexExists(pages, page + 1)) {
+            bottomButtons.add(new ClickEventButton(53, InventoryUtils.createItem(Material.ARROW, 1, "Go to next page"), (guiClickEvent) -> {
+                this.page++;
+                this.onCreate(player);
+            }));
+        }
+
+        List<GUIButton> guiButtonList = new ArrayList<>(pages.get(page));
+
+        bottomButtons.add(new NoEventButton(49, InventoryUtils.createItem(Material.PAPER, 1, "Current Page", "&aCurrent Page: &6" + this.page)));
+        guiButtonList.addAll(bottomButtons);
+
+        this.update(guiButtonList, "Last Join", 54);
+        if (this.first) {
+            this.first = false;
+        } else {
+            this.refresh(player);
+        }
+    }
+
+    @Override
+    public void onClose(InventoryCloseEvent inventoryCloseEvent) {
+
     }
 
     private List<LastJoinGUIButton> makeGUIButtons(Player player) {
@@ -120,18 +130,21 @@ public class LastJoinCMD implements CommandExecutor {
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
             if (offlinePlayer == null || offlinePlayer.getName() == null) continue;
 
-            guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), 0, InventoryUtils.createItem(Material.PLAYER_HEAD, 1, offlinePlayer.getName(), api.getTimeSinceLastLogin(offlinePlayer)), (guiClickEvent) -> {
+            guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), -1, InventoryUtils.createItem(Material.PLAYER_HEAD, 1, offlinePlayer.getName(), api.getTimeSinceLastLogin(offlinePlayer)), (guiClickEvent) -> {
                 player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer)));
             }));
         }
 
         sortByLeastToGreatestTime(guiButtons);
-        setToTheRealSlots(guiButtons);
 
         return guiButtons;
     }
 
-    private void setToTheRealSlots(List<LastJoinGUIButton> guiButtonList) {
+    private void sortByLeastToGreatestTime(List<LastJoinGUIButton> guiButtons) {
+        guiButtons.sort(((o1, o2) -> Long.compare(o2.getLastTimePlayed(), o1.getLastTimePlayed())));
+    }
+
+    private void determineSlotNumbers(List<LastJoinGUIButton> guiButtonList) {
         int i = 0;
         int max = 45;
 
@@ -144,10 +157,6 @@ public class LastJoinCMD implements CommandExecutor {
                 i = 0;
             }
         }
-    }
-
-    private void sortByLeastToGreatestTime(List<LastJoinGUIButton> guiButtons) {
-        guiButtons.sort(((o1, o2) -> Long.compare(o2.getLastTimePlayed(), o1.getLastTimePlayed())));
     }
 }
 
