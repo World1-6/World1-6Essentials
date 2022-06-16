@@ -121,6 +121,8 @@ public class LastJoinCMD implements CommandExecutor {
 
         List<LastJoinGUIButton> guiButtons = new ArrayList<>();
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
+            if (offlinePlayer == null || offlinePlayer.getName() == null) continue;
+
             guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), 0, InventoryUtils.createItem(Material.PLAYER_HEAD, 1, offlinePlayer.getName(), api.getTimeSinceLastLogin(offlinePlayer)), (guiClickEvent) -> {
                 player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer)));
             }));
