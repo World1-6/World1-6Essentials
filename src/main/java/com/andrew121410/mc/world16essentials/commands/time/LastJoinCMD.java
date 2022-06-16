@@ -20,7 +20,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -80,7 +79,6 @@ public class LastJoinCMD implements CommandExecutor {
                             page--;
                             List<GUIButton> guiButtonList = new ArrayList<>(pages.get(page));
                             guiButtonList.addAll(bottomButtons);
-                            player.closeInventory();
                             this.update(guiButtonList, "Last Join", 54);
                             this.open(player);
                         }
@@ -93,7 +91,6 @@ public class LastJoinCMD implements CommandExecutor {
                             page++;
                             List<GUIButton> guiButtonList = new ArrayList<>(pages.get(page));
                             guiButtonList.addAll(bottomButtons);
-                            player.closeInventory();
                             this.update(guiButtonList, "Last Join", 54);
                             this.open(player);
                         }
@@ -149,7 +146,7 @@ public class LastJoinCMD implements CommandExecutor {
     }
 
     private void sortByLeastToGreatestTime(List<LastJoinGUIButton> guiButtons) {
-        guiButtons.sort(Comparator.comparingLong(LastJoinGUIButton::getLastTimePlayed));
+        guiButtons.sort(((o1, o2) -> Long.compare(o2.getLastTimePlayed(), o1.getLastTimePlayed())));
     }
 }
 
