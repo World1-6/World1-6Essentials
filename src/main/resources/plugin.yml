@@ -66,7 +66,7 @@ commands:
   hide:
   unhide:
   lastjoin:
-    ailases:
+    aliases:
       - lastonline
   timeoflogin:
   firstjoined:
