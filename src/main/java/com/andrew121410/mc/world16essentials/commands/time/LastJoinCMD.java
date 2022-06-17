@@ -7,9 +7,9 @@ import com.andrew121410.mc.world16utils.gui.GUIMultipageListWindow;
 import com.andrew121410.mc.world16utils.gui.buttons.GUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.GUIClickEvent;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
-import com.andrew121410.mc.world16utils.utils.InventoryUtils;
-import org.bukkit.Material;
+import com.andrew121410.mc.world16utils.player.PlayerUtils;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -45,7 +46,13 @@ public class LastJoinCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            new GUIMultipageListWindow("Last Join", 54, makeGUIButtons(player), 45).open(player);
+            GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", 54, makeGUIButtons(player), 45);
+
+            gui.setNextPageEvent(guiNextPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
+            gui.setPreviousPageEvent(guiPreviousPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
+
+            gui.open(player);
+            player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1f, 1f);
             return true;
         } else if (args.length == 1) {
             OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
@@ -67,7 +74,7 @@ public class LastJoinCMD implements CommandExecutor {
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
             if (offlinePlayer == null || offlinePlayer.getName() == null) continue;
 
-            guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), -1, InventoryUtils.createItem(Material.PLAYER_HEAD, 1, offlinePlayer.getName(), api.getTimeSinceLastLogin(offlinePlayer)), (guiClickEvent) -> {
+            guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), -1, PlayerUtils.getPlayerHead(offlinePlayer, offlinePlayer.getName(), Collections.singletonList(api.getTimeSinceLastLogin(offlinePlayer))), (guiClickEvent) -> {
                 player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer)));
             }));
         }
