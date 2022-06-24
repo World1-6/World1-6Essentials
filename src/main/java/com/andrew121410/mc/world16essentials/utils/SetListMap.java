@@ -1,5 +1,6 @@
 package com.andrew121410.mc.world16essentials.utils;
 
+import com.andrew121410.mc.world16essentials.commands.back.BackEnum;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16essentials.objects.PowerToolObject;
 import org.bukkit.Location;
@@ -12,7 +13,7 @@ public class SetListMap {
     // 0 TO CLEAR AFTER THE PLAYER LEAVES
     // 1 TO ONLY CLEAR WHEN THE SERVER SHUTS DOWN
 
-    private final Map<UUID, Map<String, Location>> backMap; //0
+    private final Map<UUID, Map<BackEnum, Location>> backMap; //0
     private final Map<Player, Player> tpaMap; //0
     private final Map<String, Location> latestClickedBlocked; //0
     private final Map<UUID, AfkObject> afkMap; //0
@@ -98,7 +99,7 @@ public class SetListMap {
         spyCommandBlock.clear();
     }
 
-    public Map<UUID, Map<String, Location>> getBackMap() {
+    public Map<UUID, Map<BackEnum, Location>> getBackMap() {
         return backMap;
     }
 

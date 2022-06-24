@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16essentials.utils;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16essentials.commands.back.BackEnum;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16essentials.objects.PowerToolObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 public class PlayerInitializer {
 
-    private final Map<UUID, Map<String, Location>> backMap;
+    private final Map<UUID, Map<BackEnum, Location>> backMap;
     private final Map<UUID, PowerToolObject> powerToolMap;
     private final Map<UUID, AfkObject> afkObjectMap;
     private final Map<UUID, Long> timeOfLoginMap;

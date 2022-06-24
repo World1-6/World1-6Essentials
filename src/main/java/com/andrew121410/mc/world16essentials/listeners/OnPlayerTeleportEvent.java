@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16essentials.listeners;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16essentials.commands.back.BackEnum;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,7 +15,7 @@ public class OnPlayerTeleportEvent implements Listener {
 
     private final World16Essentials plugin;
 
-    private final Map<UUID, Map<String, Location>> backMap;
+    private final Map<UUID, Map<BackEnum, Location>> backMap;
 
     public OnPlayerTeleportEvent(World16Essentials plugin) {
         this.plugin = plugin;
@@ -24,17 +25,17 @@ public class OnPlayerTeleportEvent implements Listener {
     }
 
     @EventHandler
-    public void OnTp(PlayerTeleportEvent event) {
+    public void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         Location to = event.getTo();
         Location from = event.getFrom();
 
         // Only save location if teleporting more than 5 blocks.
         if (!to.getWorld().equals(from.getWorld()) || to.distanceSquared(from) > 25) {
-            Map<String, Location> playerBackMap = this.backMap.get(player.getUniqueId());
+            Map<BackEnum, Location> playerBackMap = this.backMap.get(player.getUniqueId());
             if (playerBackMap != null) {
-                playerBackMap.remove("Tp");
-                playerBackMap.put("Tp", player.getLocation());
+                playerBackMap.remove(BackEnum.TELEPORT);
+                playerBackMap.put(BackEnum.TELEPORT, player.getLocation());
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16essentials;
 
 import com.andrew121410.mc.world16essentials.commands.*;
+import com.andrew121410.mc.world16essentials.commands.back.BackCMD;
 import com.andrew121410.mc.world16essentials.commands.home.DelhomeCMD;
 import com.andrew121410.mc.world16essentials.commands.home.HomeCMD;
 import com.andrew121410.mc.world16essentials.commands.home.HomeListCMD;

@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16essentials.commands;
+package com.andrew121410.mc.world16essentials.commands.back;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class BackCMD implements CommandExecutor {
 
-    private final Map<UUID, Map<String, Location>> backMap;
+    private final Map<UUID, Map<BackEnum, Location>> backMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -47,7 +47,7 @@ public class BackCMD implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Map<String, Location> playerBackMap = this.backMap.get(player.getUniqueId());
+        Map<BackEnum, Location> playerBackMap = this.backMap.get(player.getUniqueId());
 
         if (args.length == 0) {
             player.sendMessage(Translate.chat("[&cBack&r] &a&oHere's all of the back commands/sub."));
@@ -61,7 +61,7 @@ public class BackCMD implements CommandExecutor {
                 api.sendPermissionErrorMessage(player);
                 return true;
             }
-            Location deathLocation = playerBackMap.get("Death");
+            Location deathLocation = playerBackMap.get(BackEnum.DEATH);
             if (deathLocation == null) {
                 player.sendMessage(Translate.chat("&4No death back location was found..."));
                 return true;
@@ -84,7 +84,7 @@ public class BackCMD implements CommandExecutor {
                 api.sendPermissionErrorMessage(player);
                 return true;
             }
-            Location tpLocation = playerBackMap.get("Tp");
+            Location tpLocation = playerBackMap.get(BackEnum.TELEPORT);
             if (tpLocation == null) {
                 player.sendMessage(Translate.chat("&4No tp back location was found..."));
                 return true;

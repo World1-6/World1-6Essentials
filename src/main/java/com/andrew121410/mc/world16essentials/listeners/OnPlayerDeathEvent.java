@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16essentials.listeners;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16essentials.commands.back.BackEnum;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,7 +15,7 @@ public class OnPlayerDeathEvent implements Listener {
 
     private final World16Essentials plugin;
 
-    private final Map<UUID, Map<String, Location>> backMap;
+    private final Map<UUID, Map<BackEnum, Location>> backMap;
 
     public OnPlayerDeathEvent(World16Essentials plugin) {
         this.plugin = plugin;
@@ -26,10 +27,10 @@ public class OnPlayerDeathEvent implements Listener {
     public void OnDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        Map<String, Location> playerBackMap = this.backMap.get(player.getUniqueId());
+        Map<BackEnum, Location> playerBackMap = this.backMap.get(player.getUniqueId());
         if (playerBackMap != null) {
-            playerBackMap.remove("Death");
-            playerBackMap.put("Death", player.getLocation());
+            playerBackMap.remove(BackEnum.DEATH);
+            playerBackMap.put(BackEnum.DEATH, player.getLocation());
         }
     }
 }
