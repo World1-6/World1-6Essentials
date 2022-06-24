@@ -33,19 +33,20 @@ public class DelhomeCMD implements CommandExecutor {
             api.sendPermissionErrorMessage(player);
             return true;
         }
-        String defaultHomeName = "home";
+        String homeName = "home";
 
         if (args.length == 1) {
-            defaultHomeName = args[0].toLowerCase();
+            homeName = args[0].toLowerCase();
 
-            if (defaultHomeName.equalsIgnoreCase("@allHomes")) {
+            if (homeName.equalsIgnoreCase("@allHomes")) {
                 this.plugin.getHomeManager().deleteALL(player.getUniqueId());
+                player.sendMessage(Translate.color("&6Deleted All Homes."));
                 return true;
             }
         }
 
-        this.plugin.getHomeManager().delete(player.getUniqueId(), defaultHomeName);
-        player.sendMessage(Translate.chat("&9[Homes] &cHome deleted."));
+        this.plugin.getHomeManager().delete(player.getUniqueId(), homeName);
+        player.sendMessage(Translate.color("&c" + homeName + " &6Home Deleted."));
         return true;
     }
 }

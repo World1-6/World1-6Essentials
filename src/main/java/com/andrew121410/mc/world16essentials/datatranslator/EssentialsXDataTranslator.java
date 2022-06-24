@@ -66,7 +66,13 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 float yaw = (float) homeSelection.getDouble("yaw");
                 float pitch = (float) homeSelection.getDouble("pitch");
                 Location location = new Location(Bukkit.getWorld(worldUUID), x, y, z, yaw, pitch);
-                this.plugin.getHomeManager().save(uuid, "null", homeName, location);
+
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null && player.isOnline()) {
+                    this.plugin.getHomeManager().add(player, homeName, location);
+                } else {
+                    this.plugin.getHomeManager().save(uuid, "null", homeName, location);
+                }
             }
         }
     }

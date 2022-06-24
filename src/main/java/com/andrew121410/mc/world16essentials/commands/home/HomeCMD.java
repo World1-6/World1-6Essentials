@@ -42,18 +42,18 @@ public class HomeCMD implements CommandExecutor {
             api.sendPermissionErrorMessage(player);
             return true;
         }
-        String defaultHomeName = "home";
+        String homeName = "home";
 
         if (args.length == 1) {
-            defaultHomeName = args[0].toLowerCase();
+            homeName = args[0].toLowerCase();
         }
-        Location home = this.homesMap.get(player.getUniqueId()).get(defaultHomeName.toLowerCase());
+        Location home = this.homesMap.get(player.getUniqueId()).get(homeName.toLowerCase());
 
         if (home != null) {
             player.teleport(home);
             player.sendMessage(Translate.chat("&6Teleporting..."));
         } else {
-            player.sendMessage(Translate.chat("&9[Homes] &4Home not found?"));
+            player.sendMessage(Translate.chat("&cHome Not Found."));
         }
         return true;
     }

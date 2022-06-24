@@ -53,25 +53,24 @@ public class HomeManager {
         this.homesMap.putIfAbsent(player.getUniqueId(), homes);
     }
 
-    public Map<UUID, Map<String, Location>> loadAllHomesForAllPlayersIncludingOfflinePlayers() {
-        Map<UUID, Map<String, Location>> homes = new HashMap<>();
+    public void add(Player player, String homeName, Location location) {
+        this.homesMap.get(player.getUniqueId()).put(homeName, location);
+        save(player.getUniqueId(), player.getName(), homeName, location);
+    }
 
-        try {
-            Multimap<String, SQLDataStore> convert = easySQL.getEverything();
-            convert.forEach((key, value) -> {
-                UUID uuid = UUID.fromString(value.get("UUID"));
-                Map<String, Location> home = loadHome(value);
+    public void delete(UUID uuid, String homeName) {
+        this.homesMap.get(uuid).remove(homeName.toLowerCase());
+        Map<String, String> toDelete = new HashMap<>();
+        toDelete.put("UUID", String.valueOf(uuid));
+        toDelete.put("HomeName", homeName.toLowerCase());
+        easySQL.delete(toDelete);
+    }
 
-                if (homes.containsKey(uuid)) {
-                    homes.get(uuid).putAll(home);
-                } else {
-                    homes.put(uuid, home);
-                }
-            });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return homes;
+    public void deleteALL(UUID uuid) {
+        this.homesMap.get(uuid).clear();
+        Map<String, String> toDelete = new HashMap<>();
+        toDelete.put("UUID", String.valueOf(uuid));
+        easySQL.delete(toDelete);
     }
 
     private Map<String, Location> loadHome(SQLDataStore sqlDataStore) {
@@ -112,18 +111,24 @@ public class HomeManager {
         }
     }
 
-    public void delete(UUID uuid, String homeName) {
-        this.homesMap.get(uuid).remove(homeName.toLowerCase());
-        Map<String, String> toDelete = new HashMap<>();
-        toDelete.put("UUID", String.valueOf(uuid));
-        toDelete.put("HomeName", homeName.toLowerCase());
-        easySQL.delete(toDelete);
-    }
+    public Map<UUID, Map<String, Location>> loadAllHomesForAllPlayersIncludingOfflinePlayers() {
+        Map<UUID, Map<String, Location>> homes = new HashMap<>();
 
-    public void deleteALL(UUID uuid) {
-        this.homesMap.get(uuid).clear();
-        Map<String, String> toDelete = new HashMap<>();
-        toDelete.put("UUID", String.valueOf(uuid));
-        easySQL.delete(toDelete);
+        try {
+            Multimap<String, SQLDataStore> convert = easySQL.getEverything();
+            convert.forEach((key, value) -> {
+                UUID uuid = UUID.fromString(value.get("UUID"));
+                Map<String, Location> home = loadHome(value);
+
+                if (homes.containsKey(uuid)) {
+                    homes.get(uuid).putAll(home);
+                } else {
+                    homes.put(uuid, home);
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return homes;
     }
 }
