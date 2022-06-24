@@ -15,7 +15,6 @@ public class SetListMap {
 
     private final Map<UUID, Map<BackEnum, Location>> backMap; //0
     private final Map<Player, Player> tpaMap; //0
-    private final Map<String, Location> latestClickedBlocked; //0
     private final Map<UUID, AfkObject> afkMap; //0
     private final Map<UUID, Map<String, Location>> homesMap; //0
     private final Map<UUID, PowerToolObject> powerToolMap; //0
@@ -34,7 +33,6 @@ public class SetListMap {
     public SetListMap() {
         this.backMap = new HashMap<>();
         this.tpaMap = new LinkedHashMap<>();
-        this.latestClickedBlocked = new HashMap<>();
         this.afkMap = new HashMap<>();
         this.homesMap = new HashMap<>();
         this.powerToolMap = new HashMap<>();
@@ -66,7 +64,6 @@ public class SetListMap {
     public void clearAllMaps(Player p) {
         backMap.remove(p.getUniqueId());
         tpaMap.remove(p);
-        latestClickedBlocked.remove(p.getDisplayName());
         afkMap.remove(p.getUniqueId());
         homesMap.remove(p.getUniqueId());
         powerToolMap.remove(p.getUniqueId());
@@ -76,7 +73,6 @@ public class SetListMap {
     public void clearAllMaps() {
         backMap.clear();
         tpaMap.clear();
-        latestClickedBlocked.clear();
         afkMap.clear();
         homesMap.clear();
         powerToolMap.clear();
@@ -105,10 +101,6 @@ public class SetListMap {
 
     public Map<Player, Player> getTpaMap() {
         return tpaMap;
-    }
-
-    public Map<String, Location> getLatestClickedBlocked() {
-        return latestClickedBlocked;
     }
 
     public Map<UUID, AfkObject> getAfkMap() {
