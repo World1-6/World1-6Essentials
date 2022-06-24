@@ -5,8 +5,8 @@ import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.gui.GUIMultipageListWindow;
 import com.andrew121410.mc.world16utils.gui.buttons.GUIButton;
-import com.andrew121410.mc.world16utils.gui.buttons.GUIClickEvent;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
+import com.andrew121410.mc.world16utils.gui.buttons.events.GUIClickEvent;
 import com.andrew121410.mc.world16utils.player.PlayerUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -48,8 +48,7 @@ public class LastJoinCMD implements CommandExecutor {
         if (args.length == 0) {
             GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", 54, makeGUIButtons(player), 45);
 
-            gui.setNextPageEvent(guiNextPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
-            gui.setPreviousPageEvent(guiPreviousPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
+            gui.setPageEvent(guiNextPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
 
             gui.open(player);
             player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1f, 1f);
