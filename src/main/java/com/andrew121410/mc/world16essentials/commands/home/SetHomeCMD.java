@@ -39,7 +39,7 @@ public class SetHomeCMD implements CommandExecutor {
 
         this.plugin.getHomeManager().add(player, homeName, player.getLocation());
 
-        player.sendMessage(Translate.color("&6New Home: &c" + homeName + "&6 set to current location."));
+        player.sendMessage(Translate.color("&6New Home: &c" + homeName + "&6 set to your current location."));
         return true;
     }
 }

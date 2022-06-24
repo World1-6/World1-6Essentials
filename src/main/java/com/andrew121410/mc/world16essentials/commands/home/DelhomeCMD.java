@@ -46,7 +46,7 @@ public class DelhomeCMD implements CommandExecutor {
         }
 
         this.plugin.getHomeManager().delete(player.getUniqueId(), homeName);
-        player.sendMessage(Translate.color("&c" + homeName + " &6Home Deleted."));
+        player.sendMessage(Translate.color("&6Home &c" + homeName + " &6has been deleted."));
         return true;
     }
 }
