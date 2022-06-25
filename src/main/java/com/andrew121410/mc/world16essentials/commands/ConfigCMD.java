@@ -26,7 +26,7 @@ public class ConfigCMD implements CommandExecutor {
             if (!player.hasPermission("world16.config")) return null;
 
             if (args.length == 1) {
-                return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "messages"));
+                return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "spawnMobCap", "messages"));
             } else if (args[0].equalsIgnoreCase("signTranslateColors")) {
                 return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
             } else if (args[0].equalsIgnoreCase("preventCropsTrampling")) {
