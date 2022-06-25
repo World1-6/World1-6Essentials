@@ -48,7 +48,7 @@ public class SpawnMobCMD implements CommandExecutor {
         }
 
         if (args.length >= 1) {
-            Location location = PlayerUtils.getBlockPlayerIsLookingAt(player).getLocation();
+            Location location = PlayerUtils.getBlockPlayerIsLookingAt(player).getLocation().add(0, 1, 0);
 
             int amount = 1;
             if (args.length == 2) {
