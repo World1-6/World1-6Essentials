@@ -66,6 +66,11 @@ public class SpawnMobCMD implements CommandExecutor {
                 return true;
             }
 
+            if (amount > api.getSpawnMobCap()) {
+                player.sendMessage(Translate.color("&cYou Cannot Spawn More Than " + api.getSpawnMobCap() + " At Once."));
+                return true;
+            }
+
             for (int i = 0; i < amount; i++) {
                 player.getWorld().spawnEntity(location, entityType);
             }
