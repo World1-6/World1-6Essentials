@@ -1,2 +1,3 @@
 signTranslateColors: true
 preventCropsTrampling: false
+spawnMobCap: 10

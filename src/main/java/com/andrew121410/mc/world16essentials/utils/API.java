@@ -18,13 +18,14 @@ import java.util.UUID;
 public class API {
 
     public static final String CUSTOM_COMMAND_FORMAT = "`";
-    public static final String DATE_OF_VERSION = "6/23/2022";
+    public static final String DATE_OF_VERSION = "6/24/2022";
 
     private final World16Essentials plugin;
 
     // Config
     private boolean signTranslateColors;
     private boolean preventCropsTrampling;
+    private int spawnMobCap;
 
     // Messages
     private String prefix;
@@ -45,6 +46,7 @@ public class API {
         // Config
         this.signTranslateColors = this.plugin.getConfig().getBoolean("signTranslateColors");
         this.preventCropsTrampling = this.plugin.getConfig().getBoolean("preventCropsTrampling");
+        this.spawnMobCap = this.plugin.getConfig().getInt("spawnMobCap");
 
         // Messages
         this.prefix = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("prefix");
@@ -116,6 +118,16 @@ public class API {
     public void setPreventCropsTrampling(boolean preventCropsTrampling) {
         this.preventCropsTrampling = preventCropsTrampling;
         this.plugin.getConfig().set("preventCropsTrampling", preventCropsTrampling);
+        this.plugin.saveConfig();
+    }
+
+    public int getSpawnMobCap() {
+        return spawnMobCap;
+    }
+
+    public void setSpawnMobCap(int spawnMobCap) {
+        this.spawnMobCap = spawnMobCap;
+        this.plugin.getConfig().set("spawnMobCap", spawnMobCap);
         this.plugin.saveConfig();
     }
 

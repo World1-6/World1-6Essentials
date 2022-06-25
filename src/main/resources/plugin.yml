@@ -71,6 +71,7 @@ commands:
   timeoflogin:
   firstjoined:
   config1-6:
+  spawnmob:
 
   gmc:
     aliases:
@@ -245,4 +246,7 @@ permissions:
     default: op
   world16.config:
     description: Allows you to do config1-6
+    default: op
+  world16.spawnmob:
+    description: Allows you to do spawnmob
     default: op

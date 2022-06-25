@@ -150,6 +150,7 @@ public class World16Essentials extends JavaPlugin {
         new HideCMD(this);
         new UnhideCMD(this);
         new ConfigCMD(this);
+        new SpawnMobCMD(this);
 
         // Time
         new LastJoinCMD(this);
