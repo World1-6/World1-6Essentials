@@ -72,15 +72,18 @@ public class CMIDataTranslator implements IDataTranslator {
 
             CMIUser cmiUser = this.cmi.getPlayerManager().getUser(uuid);
 
-            homes.forEach((homeName, location) -> {
-                cmiUser.addHome(new CmiHome(homeName, new CMILocation(location)), true);
-            });
+            homes.forEach((homeName, location) -> cmiUser.addHome(new CmiHome(homeName, new CMILocation(location)), true));
         }
     }
 
     private void warpsTo() {
         this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
-            this.cmi.getWarpManager().addWarp(new CmiWarp(warpName, new CMILocation(location)));
+            CmiWarp cmiWarp = new CmiWarp(warpName, new CMILocation(location));
+
+            // Must set the creator on the warp, or else when /cmi warp is used, it will produce NullPointerException.
+            cmiWarp.setCreator(UUID.fromString("069a79f4-44e9-4726-a5be-fca90e38aaf5")); // Notches UUID
+
+            this.cmi.getWarpManager().addWarp(cmiWarp);
         });
     }
 }
