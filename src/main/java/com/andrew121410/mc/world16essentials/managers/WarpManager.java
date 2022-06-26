@@ -30,7 +30,7 @@ public class WarpManager {
         }
     }
 
-    public void createWarp(String name, Location location) {
+    public void add(String name, Location location) {
         String newWarpName = name.toLowerCase();
         this.warpsMap.put(newWarpName, location);
         ConfigurationSection cs = getConfigurationSection();
@@ -39,7 +39,7 @@ public class WarpManager {
         this.warpsYml.saveConfig();
     }
 
-    public void deleteWarp(String name) {
+    public void delete(String name) {
         String newWarpName = name.toLowerCase();
         if (!this.warpsMap.containsKey(newWarpName)) return;
         ConfigurationSection cs = getConfigurationSection();

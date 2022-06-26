@@ -7,6 +7,7 @@ import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.SQLDataStore;
 import com.google.common.collect.Multimap;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
@@ -53,9 +54,14 @@ public class HomeManager {
         this.homesMap.putIfAbsent(player.getUniqueId(), homes);
     }
 
-    public void add(Player player, String homeName, Location location) {
-        this.homesMap.get(player.getUniqueId()).put(homeName, location);
-        save(player.getUniqueId(), player.getName(), homeName, location);
+    public void add(OfflinePlayer offlinePlayer, String homeName, Location location) {
+        if (offlinePlayer == null) return;
+
+        if (offlinePlayer.isOnline()) {
+            this.homesMap.get(offlinePlayer.getUniqueId()).put(homeName, location);
+        }
+
+        save(offlinePlayer.getUniqueId(), offlinePlayer.getName(), homeName, location);
     }
 
     public void delete(UUID uuid, String homeName) {
@@ -92,7 +98,7 @@ public class HomeManager {
         return homes;
     }
 
-    public void save(UUID uuid, String playerName, String homeName, Location location) {
+    private void save(UUID uuid, String playerName, String homeName, Location location) {
         SQLDataStore sqlDataStore = new SQLDataStore();
         sqlDataStore.put("UUID", String.valueOf(uuid));
         sqlDataStore.put("Date", "0");

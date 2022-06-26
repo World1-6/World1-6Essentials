@@ -1,6 +1,8 @@
 package com.andrew121410.mc.world16essentials.datatranslator;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16essentials.datatranslator.cmi.CMIDataTranslator;
+import com.andrew121410.mc.world16essentials.datatranslator.essentialsx.EssentialsXDataTranslator;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,7 +21,6 @@ public class DataTranslator {
 
     public void convertFrom(Software software) {
         IDataTranslator iDataTranslator = getDataTranslator(software);
-        if (iDataTranslator == null) return;
 
         Instant start = Instant.now();
 
@@ -32,7 +33,6 @@ public class DataTranslator {
 
     public void convertTo(Software software) {
         IDataTranslator iDataTranslator = getDataTranslator(software);
-        if (iDataTranslator == null) return;
 
         Instant start = Instant.now();
 
@@ -50,12 +50,23 @@ public class DataTranslator {
             } else {
                 throw new IllegalArgumentException("EssentialsX plugin not found!");
             }
+        } else if (software == Software.CMI) {
+            if (hasCMIPlugin()) {
+                return new CMIDataTranslator(plugin);
+            } else {
+                throw new IllegalArgumentException("CMI plugin not found!");
+            }
+        } else {
+            throw new IllegalArgumentException("Unknown software: " + software.name());
         }
-        return null;
     }
 
     private boolean hasEssentialsXPlugin() {
         return Bukkit.getPluginManager().getPlugin("Essentials") != null;
+    }
+
+    private boolean hasCMIPlugin() {
+        return Bukkit.getPluginManager().getPlugin("CMI") != null;
     }
 
     public static FileConfiguration loadConfig(File file) {

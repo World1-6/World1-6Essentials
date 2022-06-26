@@ -55,7 +55,7 @@ public class DelwarpCMD implements CommandExecutor {
                 return true;
             }
 
-            this.warpManager.deleteWarp(name);
+            this.warpManager.delete(name);
             player.sendMessage(Translate.chat("&eThe warp: " + name + " has been deleted."));
             return true;
         }

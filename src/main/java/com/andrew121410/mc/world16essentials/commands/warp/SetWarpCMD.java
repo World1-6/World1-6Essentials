@@ -52,7 +52,7 @@ public class SetWarpCMD implements CommandExecutor {
                 return true;
             }
 
-            this.plugin.getWarpManager().createWarp(name, location);
+            this.plugin.getWarpManager().add(name, location);
             p.sendMessage(Translate.chat("&6The warp: " + name + " has been set."));
             return true;
         }

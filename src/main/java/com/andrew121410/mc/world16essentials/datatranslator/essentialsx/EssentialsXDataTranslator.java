@@ -1,6 +1,8 @@
-package com.andrew121410.mc.world16essentials.datatranslator;
+package com.andrew121410.mc.world16essentials.datatranslator.essentialsx;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16essentials.datatranslator.DataTranslator;
+import com.andrew121410.mc.world16essentials.datatranslator.IDataTranslator;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
@@ -67,12 +69,8 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 float pitch = (float) homeSelection.getDouble("pitch");
                 Location location = new Location(Bukkit.getWorld(worldUUID), x, y, z, yaw, pitch);
 
-                Player player = Bukkit.getPlayer(uuid);
-                if (player != null && player.isOnline()) {
-                    this.plugin.getHomeManager().add(player, homeName, location);
-                } else {
-                    this.plugin.getHomeManager().save(uuid, "null", homeName, location);
-                }
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+                this.plugin.getHomeManager().add(offlinePlayer, homeName, location);
             }
         }
     }
@@ -112,7 +110,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
             }
 
             if (location != null) {
-                this.plugin.getWarpManager().createWarp(warpName, location);
+                this.plugin.getWarpManager().add(warpName, location);
             }
         }
     }
