@@ -105,8 +105,16 @@ public class CMIReflectionAPI {
 
     //Global - used by homes, and warps
 
-    private Class<? extends JavaPlugin> getCMIPluginClass() {
-        return Bukkit.getPluginManager().getPlugin("CMI").getClass().asSubclass(JavaPlugin.class);
+    private Class<?> getCMIPluginClass() {
+        try {
+            JavaPlugin javaPlugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin("CMI");
+            ClassLoader classLoader = javaPlugin.getClass().getClassLoader();
+
+            return Class.forName("com.Zrips.CMI.CMI", false, classLoader);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private Object makeCMILocationObject(Location location) {

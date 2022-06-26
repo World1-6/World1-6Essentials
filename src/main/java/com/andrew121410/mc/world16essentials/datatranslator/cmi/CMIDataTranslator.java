@@ -1,22 +1,28 @@
 package com.andrew121410.mc.world16essentials.datatranslator.cmi;
 
+import com.Zrips.CMI.CMI;
+import com.Zrips.CMI.Containers.CMIUser;
+import com.Zrips.CMI.Modules.Homes.CmiHome;
+import com.Zrips.CMI.Modules.Warps.CmiWarp;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.datatranslator.IDataTranslator;
+import net.Zrips.CMILib.Container.CMILocation;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class CMIDataTranslator implements IDataTranslator {
 
     private final World16Essentials plugin;
-    private final CMIReflectionAPI cmiReflectionAPI;
+    private final CMI cmi;
 
     public CMIDataTranslator(World16Essentials plugin) {
         this.plugin = plugin;
-        this.cmiReflectionAPI = new CMIReflectionAPI();
+        this.cmi = (CMI) Bukkit.getPluginManager().getPlugin("CMI");
     }
 
     @Override
@@ -35,12 +41,15 @@ public class CMIDataTranslator implements IDataTranslator {
 
     private void homesFrom() {
         for (OfflinePlayer offlinePlayer : this.plugin.getServer().getOfflinePlayers()) {
-            Map<String, Location> homes = this.cmiReflectionAPI.getHomes(offlinePlayer.getUniqueId());
+            CMIUser cmiUser = this.cmi.getPlayerManager().getUser(offlinePlayer.getUniqueId());
+
+            LinkedHashMap<String, CmiHome> homes = cmiUser.getHomes();
             if (homes == null) continue;
 
-            for (Map.Entry<String, Location> entry : homes.entrySet()) {
+            for (Map.Entry<String, CmiHome> entry : homes.entrySet()) {
                 String homeName = entry.getKey();
-                Location location = entry.getValue();
+                CmiHome cmiHome = entry.getValue();
+                Location location = cmiHome.getLoc();
 
                 this.plugin.getHomeManager().add(offlinePlayer, homeName, location);
             }
@@ -48,14 +57,10 @@ public class CMIDataTranslator implements IDataTranslator {
     }
 
     private void warpsFrom() {
-        Map<String, Location> warps = this.cmiReflectionAPI.getWarps();
-
-        if (warps == null) {
-            Bukkit.broadcastMessage("Warps returned null for CMI");
-            return;
-        }
-
-        warps.forEach((warpName, warpLocation) -> this.plugin.getWarpManager().add(warpName, warpLocation));
+        this.cmi.getWarpManager().getWarps().forEach((warpName, warp) -> {
+            Location location = warp.getLoc();
+            this.plugin.getWarpManager().add(warpName, location);
+        });
     }
 
     private void homesTo() {
@@ -65,11 +70,17 @@ public class CMIDataTranslator implements IDataTranslator {
             UUID uuid = uuidMapEntry.getKey();
             Map<String, Location> homes = uuidMapEntry.getValue();
 
-            homes.forEach((homeName, location) -> this.cmiReflectionAPI.addHome(uuid, homeName, location));
+            CMIUser cmiUser = this.cmi.getPlayerManager().getUser(uuid);
+
+            homes.forEach((homeName, location) -> {
+                cmiUser.addHome(new CmiHome(homeName, new CMILocation(location)), true);
+            });
         }
     }
 
     private void warpsTo() {
-        this.plugin.getSetListMap().getWarpsMap().forEach(this.cmiReflectionAPI::addWarp);
+        this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
+            this.cmi.getWarpManager().addWarp(new CmiWarp(warpName, new CMILocation(location)));
+        });
     }
 }
