@@ -8,6 +8,7 @@ depend:
   - World1-6Utils
 softdepend:
   - EssentialsX
+  - CMI
 
 commands:
   World1-6Essentials:
