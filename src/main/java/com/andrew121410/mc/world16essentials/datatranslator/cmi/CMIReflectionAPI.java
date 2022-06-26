@@ -1,6 +1,8 @@
 package com.andrew121410.mc.world16essentials.datatranslator.cmi;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -92,7 +94,7 @@ public class CMIReflectionAPI {
 
     private Object getCMIPlayerManagerObject() {
         try {
-            Class<?> aClass = Class.forName("com.Zrips.CMI.CMI");
+            Class<?> aClass = getCMIPluginClass();
             Method method = aClass.getMethod("getPlayerManager");
             return method.invoke(aClass);
         } catch (Exception e) {
@@ -102,6 +104,10 @@ public class CMIReflectionAPI {
     }
 
     //Global - used by homes, and warps
+
+    private Class<? extends JavaPlugin> getCMIPluginClass() {
+        return Bukkit.getPluginManager().getPlugin("CMI").getClass().asSubclass(JavaPlugin.class);
+    }
 
     private Object makeCMILocationObject(Location location) {
         try {
@@ -199,7 +205,7 @@ public class CMIReflectionAPI {
 
     private Object getCMIWarpManagerObject() {
         try {
-            Class<?> aClass = Class.forName("com.Zrips.CMI.CMI");
+            Class<?> aClass = getCMIPluginClass();
             Method method = aClass.getMethod("getWarpManager");
             return method.invoke(aClass);
         } catch (Exception e) {
