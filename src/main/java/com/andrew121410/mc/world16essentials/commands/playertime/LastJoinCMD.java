@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16essentials.commands.time;
+package com.andrew121410.mc.world16essentials.commands.playertime;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;

@@ -1,8 +1,10 @@
 package com.andrew121410.mc.world16essentials.datatranslator;
 
+import com.Zrips.CMI.CMI;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.datatranslator.cmi.CMIDataTranslator;
 import com.andrew121410.mc.world16essentials.datatranslator.essentialsx.EssentialsXDataTranslator;
+import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -45,28 +47,24 @@ public class DataTranslator {
 
     private IDataTranslator getDataTranslator(Software software) {
         if (software == Software.ESSENTIALS_X) {
-            if (hasEssentialsXPlugin()) {
-                return new EssentialsXDataTranslator(plugin);
-            } else {
-                throw new IllegalArgumentException("EssentialsX plugin not found!");
+            Essentials essentials = this.plugin.getOtherPlugins().getEssentials();
+
+            if (essentials == null) {
+                throw new IllegalStateException("DataTranslator: Essentials plugin must be loaded to convert to/from EssentialsX");
             }
+
+            return new EssentialsXDataTranslator(this.plugin, essentials);
         } else if (software == Software.CMI) {
-            if (hasCMIPlugin()) {
-                return new CMIDataTranslator(plugin);
-            } else {
-                throw new IllegalArgumentException("CMI plugin not found!");
+            CMI cmi = this.plugin.getOtherPlugins().getCmi();
+
+            if (cmi == null) {
+                throw new IllegalStateException("DataTranslator: CMI plugin must be loaded to convert to/from CMI");
             }
+
+            return new CMIDataTranslator(this.plugin, cmi);
         } else {
             throw new IllegalArgumentException("Unknown software: " + software.name());
         }
-    }
-
-    private boolean hasEssentialsXPlugin() {
-        return Bukkit.getPluginManager().getPlugin("Essentials") != null;
-    }
-
-    private boolean hasCMIPlugin() {
-        return Bukkit.getPluginManager().getPlugin("CMI") != null;
     }
 
     public static FileConfiguration loadConfig(File file) {

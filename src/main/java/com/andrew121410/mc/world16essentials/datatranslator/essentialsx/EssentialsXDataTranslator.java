@@ -26,9 +26,11 @@ import java.util.stream.Collectors;
 public class EssentialsXDataTranslator implements IDataTranslator {
 
     private final World16Essentials plugin;
+    private final Essentials essentials;
 
-    public EssentialsXDataTranslator(World16Essentials plugin) {
+    public EssentialsXDataTranslator(World16Essentials plugin, Essentials essentials) {
         this.plugin = plugin;
+        this.essentials = essentials;
     }
 
     @Override
@@ -76,9 +78,6 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     }
 
     private void homesTo() {
-        Essentials essentials = getEssentials();
-        if (essentials == null) return;
-
         // Load all homes including offline players
         Map<UUID, Map<String, Location>> allHomes = this.plugin.getHomeManager().loadAllHomesForAllPlayersIncludingOfflinePlayers();
 
@@ -99,8 +98,6 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     }
 
     private void warpsFrom() {
-        Essentials essentials = getEssentials();
-
         for (String warpName : essentials.getWarps().getList()) {
             Location location = null;
             try {
@@ -116,18 +113,12 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     }
 
     private void warpsTo() {
-        Essentials essentials = getEssentials();
-
         this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
             try {
                 essentials.getWarps().setWarp(warpName, location);
             } catch (Exception ignored) {
             }
         });
-    }
-
-    public Essentials getEssentials() {
-        return (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
     }
 
     private File hasEssentialsConfigFolder() {

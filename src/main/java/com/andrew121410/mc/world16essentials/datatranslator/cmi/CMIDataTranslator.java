@@ -7,7 +7,6 @@ import com.Zrips.CMI.Modules.Warps.CmiWarp;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.datatranslator.IDataTranslator;
 import net.Zrips.CMILib.Container.CMILocation;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
@@ -20,9 +19,9 @@ public class CMIDataTranslator implements IDataTranslator {
     private final World16Essentials plugin;
     private final CMI cmi;
 
-    public CMIDataTranslator(World16Essentials plugin) {
+    public CMIDataTranslator(World16Essentials plugin, CMI cmi) {
         this.plugin = plugin;
-        this.cmi = (CMI) Bukkit.getPluginManager().getPlugin("CMI");
+        this.cmi = cmi;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class CMIDataTranslator implements IDataTranslator {
 
     private void homesFrom() {
         for (OfflinePlayer offlinePlayer : this.plugin.getServer().getOfflinePlayers()) {
-            CMIUser cmiUser = this.cmi.getPlayerManager().getUser(offlinePlayer.getUniqueId());
+            CMIUser cmiUser = this.cmi.getPlayerManager().getUser(offlinePlayer);
 
             LinkedHashMap<String, CmiHome> homes = cmiUser.getHomes();
             if (homes == null) continue;

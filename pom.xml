@@ -75,14 +75,14 @@
         <dependency>
             <groupId>com.github.World1-6.World1-6Utils</groupId>
             <artifactId>World1-6Utils-Plugin</artifactId>
-            <version>adfaec2d</version>
+            <version>23112478</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.github.World1-6.World1-6Utils</groupId>
             <artifactId>World1-6Utils_CMI_API</artifactId>
-            <version>adfaec2d</version>
+            <version>23112478</version>
             <scope>provided</scope>
         </dependency>
 

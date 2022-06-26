@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16essentials.commands;
+package com.andrew121410.mc.world16essentials.commands.gamemode;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
@@ -9,16 +9,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class GmsCMD implements CommandExecutor {
+public class GmaCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
     private final API api;
 
-    public GmsCMD(World16Essentials plugin) {
+    public GmaCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
-
-        this.plugin.getCommand("gms").setExecutor(this);
+        plugin.getCommand("gma").setExecutor(this);
     }
 
     @Override
@@ -29,30 +28,30 @@ public class GmsCMD implements CommandExecutor {
         }
         Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.gms")) {
+        if (!p.hasPermission("world16.gma")) {
             api.sendPermissionErrorMessage(p);
             return true;
         }
 
         if (args.length == 0) {
-            p.setGameMode(GameMode.SURVIVAL);
-            p.sendMessage(Translate.chat("&6Set game mode &csurvival&6 for " + ((Player) sender).getDisplayName()));
+            p.setGameMode(GameMode.ADVENTURE);
+            p.sendMessage(Translate.chat("&6Set game mode &cadventure&6 for " + ((Player) sender).getDisplayName()));
             return true;
         } else if (args.length == 1) {
-            if (!p.hasPermission("world16.gms.other")) {
+            if (!p.hasPermission("world16.gma.other")) {
                 api.sendPermissionErrorMessage(p);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);
             if (target != null && target.isOnline()) {
-                target.setGameMode(GameMode.SURVIVAL);
-                target.sendMessage(Translate.chat("&6Set game mode &csurvival&6 for " + target.getDisplayName()));
-                p.sendMessage(Translate.chat("&6Set game mode &csurvival&6 for " + target.getDisplayName()));
+                target.setGameMode(GameMode.ADVENTURE);
+                target.sendMessage(Translate.chat("&6Set game mode &cadventure&6 for " + target.getDisplayName()));
+                p.sendMessage(Translate.chat("&6Set game mode &cadventure&6 for " + target.getDisplayName()));
             }
             return true;
         } else {
-            p.sendMessage(Translate.chat("&aAliases: gms && gm0"));
-            p.sendMessage(Translate.chat("&cUsage: for yourself do /gms OR /gm0 OR /gms <Player> OR /gm0 <Player>"));
+            p.sendMessage(Translate.chat("&aAliases: gma && gm2"));
+            p.sendMessage(Translate.chat("&cUsage: for yourself do /gma OR /gm2 OR /gma <Player> OR /gm2 <Player>"));
         }
         return true;
     }
