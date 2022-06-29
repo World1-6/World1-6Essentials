@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -73,7 +72,7 @@ public class LastJoinCMD implements CommandExecutor {
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
             if (offlinePlayer == null || offlinePlayer.getName() == null) continue;
 
-            guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), -1, PlayerUtils.getPlayerHead(offlinePlayer, offlinePlayer.getName(), Collections.singletonList(api.getTimeSinceLastLogin(offlinePlayer))), (guiClickEvent) -> {
+            guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), -1, PlayerUtils.getPlayerHead(offlinePlayer, offlinePlayer.getName(), api.getTimeSinceLastLogin(offlinePlayer)), (guiClickEvent) -> {
                 player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer)));
             }));
         }
