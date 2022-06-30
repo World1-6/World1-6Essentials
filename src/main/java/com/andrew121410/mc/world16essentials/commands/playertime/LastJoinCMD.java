@@ -105,9 +105,8 @@ class LastJoinGUIButton extends ClickEventButton {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        LastJoinGUIButton that = (LastJoinGUIButton) o;
+        if (!(o instanceof LastJoinGUIButton that)) return false;
+        if (!super.equals(o)) return false;
 
         if (lastTimePlayed != that.lastTimePlayed) return false;
         return itemStack != null ? itemStack.equals(that.itemStack) : that.itemStack == null;
@@ -115,7 +114,8 @@ class LastJoinGUIButton extends ClickEventButton {
 
     @Override
     public int hashCode() {
-        int result = (int) (lastTimePlayed ^ (lastTimePlayed >>> 32));
+        int result = super.hashCode();
+        result = 31 * result + (int) (lastTimePlayed ^ (lastTimePlayed >>> 32));
         result = 31 * result + (itemStack != null ? itemStack.hashCode() : 0);
         return result;
     }
