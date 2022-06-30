@@ -39,13 +39,13 @@ public class LastJoinCMD implements CommandExecutor {
             return true;
         }
 
-        if (!player.hasPermission("world16.lastjoin")) {
+        if (!player.hasPermission("world16.lastjoin") || !player.hasPermission("world16.lastonline")) {
             this.plugin.getApi().sendPermissionErrorMessage(player);
             return true;
         }
 
         if (args.length == 0) {
-            GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", 54, makeGUIButtons(player), 45);
+            GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", makeGUIButtons(player), 45);
 
             gui.setPageEvent(guiNextPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
 
