@@ -45,7 +45,7 @@ public class LastJoinCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", makeGUIButtons(player), 45);
+            GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", makeGUIButtons(player), null);
 
             gui.setPageEvent(guiNextPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
 
@@ -60,7 +60,7 @@ public class LastJoinCMD implements CommandExecutor {
                 return true;
             }
 
-            player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer)));
+            player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
         }
         return true;
     }
@@ -73,7 +73,7 @@ public class LastJoinCMD implements CommandExecutor {
             if (offlinePlayer == null || offlinePlayer.getName() == null) continue;
 
             guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), -1, PlayerUtils.getPlayerHead(offlinePlayer, offlinePlayer.getName(), api.getTimeSinceLastLogin(offlinePlayer)), (guiClickEvent) -> {
-                player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer)));
+                player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
             }));
         }
 
