@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.gui.GUIMultipageListWindow;
-import com.andrew121410.mc.world16utils.gui.buttons.GUIButton;
+import com.andrew121410.mc.world16utils.gui.buttons.CloneableGUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
 import com.andrew121410.mc.world16utils.gui.buttons.events.GUIClickEvent;
 import com.andrew121410.mc.world16utils.player.PlayerUtils;
@@ -68,7 +68,7 @@ public class LastJoinCMD implements CommandExecutor {
         return true;
     }
 
-    private void makeGUIButtons(Player player, Consumer<List<GUIButton>> callback) {
+    private void makeGUIButtons(Player player, Consumer<List<CloneableGUIButton>> callback) {
         OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
 
         PlayerUtils.getPlayerHeads(List.of(offlinePlayers), (map) -> {
