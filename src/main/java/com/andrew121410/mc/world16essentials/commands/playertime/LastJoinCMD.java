@@ -45,12 +45,13 @@ public class LastJoinCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", makeGUIButtons(player), null);
-
-            gui.setPageEvent(guiNextPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
-
-            gui.open(player);
-            player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1f, 1f);
+            player.sendMessage(Translate.color("&ePlease wait while we get last join data, this will be slow the first time you use this command, because the player head cache isn't loaded."));
+            makeGUIButtons(player, guiButtonList -> {
+                GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", guiButtonList);
+                gui.setPageEvent(guiNextPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
+                gui.open(player);
+                player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1f, 1f);
+            });
             return true;
         } else if (args.length == 1) {
             OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
@@ -65,21 +66,22 @@ public class LastJoinCMD implements CommandExecutor {
         return true;
     }
 
-    private List<GUIButton> makeGUIButtons(Player player) {
+    private void makeGUIButtons(Player player, Consumer<List<GUIButton>> callback) {
         OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
 
-        List<LastJoinGUIButton> guiButtons = new ArrayList<>();
-        for (OfflinePlayer offlinePlayer : offlinePlayers) {
-            if (offlinePlayer == null || offlinePlayer.getName() == null) continue;
+        PlayerUtils.getPlayerHeads(List.of(offlinePlayers), (map) -> {
+            List<LastJoinGUIButton> guiButtons = new ArrayList<>();
 
-            guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), -1, PlayerUtils.getPlayerHead(offlinePlayer, offlinePlayer.getName(), api.getTimeSinceLastLogin(offlinePlayer)), (guiClickEvent) -> {
-                player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
-            }));
-        }
+            map.forEach((offlinePlayer, itemStack) -> {
+                guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), -1, itemStack, (guiClickEvent) -> {
+                    player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
+                }));
+            });
 
-        sortByLeastToGreatestTime(guiButtons);
+            sortByLeastToGreatestTime(guiButtons);
 
-        return new ArrayList<>(guiButtons);
+            callback.accept(new ArrayList<>(guiButtons));
+        });
     }
 
     private void sortByLeastToGreatestTime(List<LastJoinGUIButton> guiButtons) {
