@@ -27,6 +27,8 @@ public class LastJoinCMD implements CommandExecutor {
     private final World16Essentials plugin;
     private final API api;
 
+    private boolean isFirst = true;
+
     public LastJoinCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
@@ -47,10 +49,16 @@ public class LastJoinCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            player.sendMessage(Translate.color("&ePlease wait while we get last join data, this will be slow the first time you use this command, because the player head cache isn't loaded."));
+            if (this.isFirst) {
+                player.sendMessage(Translate.color("&ePlease wait while we get last join data, this will be slow the first time you use this command, because the player head cache isn't loaded."));
+                this.isFirst = false;
+            }
             makeGUIButtons(player, guiButtonList -> {
                 GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", guiButtonList);
-                gui.setPageEvent(guiNextPageEvent -> player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f));
+                gui.setPageEvent(guiNextPageEvent -> {
+                    if (guiNextPageEvent.isAfterPageCreation()) return;
+                    player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f);
+                });
                 gui.open(player);
                 player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1f, 1f);
             });
