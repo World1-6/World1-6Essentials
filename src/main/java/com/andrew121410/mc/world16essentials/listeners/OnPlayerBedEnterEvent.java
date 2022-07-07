@@ -1,7 +1,7 @@
 package com.andrew121410.mc.world16essentials.listeners;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16essentials.utils.API;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,10 +11,12 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 public class OnPlayerBedEnterEvent implements Listener {
 
     private final World16Essentials plugin;
+    private final API api;
     private boolean isSomeoneInBed = false;
 
     public OnPlayerBedEnterEvent(World16Essentials plugin) {
         this.plugin = plugin;
+        this.api = this.plugin.getApi();
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
@@ -26,7 +28,7 @@ public class OnPlayerBedEnterEvent implements Listener {
             this.isSomeoneInBed = true;
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
                 player.getLocation().getWorld().setTime(0);
-                Bukkit.broadcastMessage(Translate.chat("[&9World1-6&r]&6 Waky Waky Eggs And Baky&r."));
+                Bukkit.broadcastMessage(api.parseMessage(player, api.getBedMessage()));
                 isSomeoneInBed = false;
             }, 60L);
         }

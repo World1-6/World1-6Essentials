@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "7/4/2022";
+    public static final String DATE_OF_VERSION = "7/6/2022";
     public static final String CUSTOM_COMMAND_FORMAT = "`";
 
     private final World16Essentials plugin;
@@ -32,6 +32,7 @@ public class API {
     private String welcomeBackMessage;
     private String firstJoinedMessage;
     private String leaveMessage;
+    private String bedMessage;
 
     private final Map<UUID, Long> timeOfLoginMap;
     private final Map<UUID, AfkObject> afkMap;
@@ -53,6 +54,7 @@ public class API {
         this.welcomeBackMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("welcomeBackMessage");
         this.firstJoinedMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("firstJoinedMessage");
         this.leaveMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("leaveMessage");
+        this.bedMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("bedMessage");
 
         this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
@@ -171,6 +173,17 @@ public class API {
         this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("leaveMessage", leaveMessage);
         this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
     }
+
+    public String getBedMessage() {
+        return bedMessage;
+    }
+
+    public void setBedMessage(String bedMessage) {
+        this.bedMessage = bedMessage;
+        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("bedMessage", bedMessage);
+        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
+    }
+    // End of messages
 
     public Location getLocationFromFile(CustomYmlManager customYmlManager, String path) {
         if (customYmlManager == null || path == null) return null;

@@ -52,6 +52,7 @@ public class CustomConfigManager {
         this.messagesYml.getConfig().addDefault("welcomeBackMessage", "%prefix% &6Welcome back, %player%!");
         this.messagesYml.getConfig().addDefault("firstJoinedMessage", "%prefix% &6Welcome to the server, %player%!");
         this.messagesYml.getConfig().addDefault("leaveMessage", "%prefix% &6%player% has left the server.");
+        this.messagesYml.getConfig().addDefault("bedMessage", "%prefix% &6%player% has slept.");
 
         this.messagesYml.getConfig().options().copyDefaults(true);
     }

@@ -45,6 +45,8 @@ public class ConfigCMD implements CommandExecutor {
                         return TabUtils.getContainsString(args[2], Collections.singletonList(api.getFirstJoinedMessage()));
                     } else if (args[1].equalsIgnoreCase("leaveMessage")) {
                         return TabUtils.getContainsString(args[2], Collections.singletonList(api.getLeaveMessage()));
+                    } else if (args[1].equalsIgnoreCase("bedMessage")) {
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getBedMessage()));
                     }
                 }
             }
@@ -92,6 +94,9 @@ public class ConfigCMD implements CommandExecutor {
             } else if (args[1].equalsIgnoreCase("leaveMessage")) {
                 api.setLeaveMessage(message);
                 player.sendMessage(Translate.color("&aLeave message set to &6" + message));
+            } else if (args[1].equalsIgnoreCase("bedMessage")) {
+                api.setBedMessage(message);
+                player.sendMessage(Translate.color("&aBed message set to &6" + message));
             }
         }
         return true;
