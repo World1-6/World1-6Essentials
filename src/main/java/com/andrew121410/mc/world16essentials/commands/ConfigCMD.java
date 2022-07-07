@@ -27,15 +27,14 @@ public class ConfigCMD implements CommandExecutor {
 
             if (args.length == 1) {
                 return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "spawnMobCap", "messages"));
-            } else if (args[0].equalsIgnoreCase("signTranslateColors")) {
-                return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
-            } else if (args[0].equalsIgnoreCase("preventCropsTrampling")) {
+            } else if (args[0].equalsIgnoreCase("signTranslateColors")
+                    || args[0].equalsIgnoreCase("preventCropsTrampling")) {
                 return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
             } else if (args[0].equalsIgnoreCase("spawnMobCap")) {
                 return TabUtils.getContainsString(args[1], Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
             } else if (args[0].equalsIgnoreCase("messages")) {
                 if (args.length == 2) {
-                    return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinedMessage", "leaveMessage"));
+                    return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinedMessage", "leaveMessage", "bedMessage"));
                 } else {
                     if (args[1].equalsIgnoreCase("prefix")) {
                         return TabUtils.getContainsString(args[2], Collections.singletonList(api.getPrefix()));
