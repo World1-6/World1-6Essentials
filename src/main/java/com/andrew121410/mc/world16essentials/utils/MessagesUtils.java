@@ -1,8 +1,10 @@
 package com.andrew121410.mc.world16essentials.utils;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 public class MessagesUtils {
 
@@ -21,7 +23,17 @@ public class MessagesUtils {
         this.messagesYml = messagesYml;
         this.messagesConfig = messagesYml.getConfig();
 
-        // Defaults
+        // Add default messages if they don't exist.
+        addDefaults();
+
+        this.prefix = this.messagesConfig.getString("prefix");
+        this.welcomeBackMessage = this.messagesConfig.getString("welcomeBackMessage");
+        this.firstJoinedMessage = this.messagesConfig.getString("firstJoinedMessage");
+        this.leaveMessage = this.messagesConfig.getString("leaveMessage");
+        this.bedMessage = this.messagesConfig.getString("bedMessage");
+    }
+
+    private void addDefaults() {
         this.messagesConfig.addDefault("prefix", "[&9World1-6&r]");
         this.messagesConfig.addDefault("welcomeBackMessage", "%prefix% &6Welcome back, %player%!");
         this.messagesConfig.addDefault("firstJoinedMessage", "%prefix% &6Welcome to the server, %player%!");
@@ -31,13 +43,12 @@ public class MessagesUtils {
         this.messagesConfig.options().copyDefaults(true);
         this.messagesYml.saveConfig();
         this.messagesYml.reloadConfig();
+    }
 
-        // Load
-        this.prefix = this.messagesConfig.getString("prefix");
-        this.welcomeBackMessage = this.messagesConfig.getString("welcomeBackMessage");
-        this.firstJoinedMessage = this.messagesConfig.getString("firstJoinedMessage");
-        this.leaveMessage = this.messagesConfig.getString("leaveMessage");
-        this.bedMessage = this.messagesConfig.getString("bedMessage");
+    public String parseMessage(Player player, String message) {
+        message = message.replaceAll("%player%", player.getDisplayName());
+        message = message.replaceAll("%prefix%", this.prefix);
+        return Translate.color(message);
     }
 
     public String getPrefix() {

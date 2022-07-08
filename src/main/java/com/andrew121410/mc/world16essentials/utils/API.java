@@ -117,14 +117,12 @@ public class API {
         }
     }
 
-    public String parseMessage(Player player, String message) {
-        message = message.replaceAll("%player%", player.getDisplayName());
-        message = message.replaceAll("%prefix%", this.messagesUtils.getPrefix());
-        return Translate.color(message);
-    }
-
     public void sendPermissionErrorMessage(Player player) {
         player.sendMessage(Translate.chat("&4You do not have permission to do this command."));
+    }
+
+    public String parseMessage(Player player, String message) {
+        return this.getMessagesUtils().parseMessage(player, message);
     }
 
     public ConfigUtils getConfigUtils() {
