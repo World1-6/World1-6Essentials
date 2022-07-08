@@ -17,22 +17,14 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "7/6/2022";
+    public static final String DATE_OF_VERSION = "7/8/2022";
     public static final String CUSTOM_COMMAND_FORMAT = "`";
 
     private final World16Essentials plugin;
 
-    // Config
-    private boolean signTranslateColors;
-    private boolean preventCropsTrampling;
-    private int spawnMobCap;
-
-    // Messages
-    private String prefix;
-    private String welcomeBackMessage;
-    private String firstJoinedMessage;
-    private String leaveMessage;
-    private String bedMessage;
+    // Configuration Utils
+    private final ConfigUtils configUtils;
+    private final MessagesUtils messagesUtils;
 
     private final Map<UUID, Long> timeOfLoginMap;
     private final Map<UUID, AfkObject> afkMap;
@@ -44,17 +36,9 @@ public class API {
     public API(World16Essentials plugin) {
         this.plugin = plugin;
 
-        // Config
-        this.signTranslateColors = this.plugin.getConfig().getBoolean("signTranslateColors");
-        this.preventCropsTrampling = this.plugin.getConfig().getBoolean("preventCropsTrampling");
-        this.spawnMobCap = this.plugin.getConfig().getInt("spawnMobCap");
-
-        // Messages
-        this.prefix = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("prefix");
-        this.welcomeBackMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("welcomeBackMessage");
-        this.firstJoinedMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("firstJoinedMessage");
-        this.leaveMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("leaveMessage");
-        this.bedMessage = this.plugin.getCustomConfigManager().getMessagesYml().getConfig().getString("bedMessage");
+        // Configuration Utils
+        this.configUtils = this.plugin.getCustomConfigManager().getConfigUtils();
+        this.messagesUtils = this.plugin.getCustomConfigManager().getMessagesUtils();
 
         this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
@@ -102,89 +86,6 @@ public class API {
         return minutes < 1;
     }
 
-    // Config
-    public boolean isSignTranslateColors() {
-        return signTranslateColors;
-    }
-
-    public void setSignTranslateColors(boolean signTranslateColors) {
-        this.signTranslateColors = signTranslateColors;
-        this.plugin.getConfig().set("signTranslateColors", signTranslateColors);
-        this.plugin.saveConfig();
-    }
-
-    public boolean isPreventCropsTrampling() {
-        return preventCropsTrampling;
-    }
-
-    public void setPreventCropsTrampling(boolean preventCropsTrampling) {
-        this.preventCropsTrampling = preventCropsTrampling;
-        this.plugin.getConfig().set("preventCropsTrampling", preventCropsTrampling);
-        this.plugin.saveConfig();
-    }
-
-    public int getSpawnMobCap() {
-        return spawnMobCap;
-    }
-
-    public void setSpawnMobCap(int spawnMobCap) {
-        this.spawnMobCap = spawnMobCap;
-        this.plugin.getConfig().set("spawnMobCap", spawnMobCap);
-        this.plugin.saveConfig();
-    }
-
-    // Messages
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("prefix", prefix);
-        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
-    }
-
-    public String getWelcomeBackMessage() {
-        return welcomeBackMessage;
-    }
-
-    public void setWelcomeBackMessage(String welcomeBackMessage) {
-        this.welcomeBackMessage = welcomeBackMessage;
-        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("welcomeBackMessage", welcomeBackMessage);
-        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
-    }
-
-    public String getFirstJoinedMessage() {
-        return firstJoinedMessage;
-    }
-
-    public void setFirstJoinedMessage(String firstJoinedMessage) {
-        this.firstJoinedMessage = firstJoinedMessage;
-        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("firstJoinedMessage", firstJoinedMessage);
-        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
-    }
-
-    public String getLeaveMessage() {
-        return leaveMessage;
-    }
-
-    public void setLeaveMessage(String leaveMessage) {
-        this.leaveMessage = leaveMessage;
-        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("leaveMessage", leaveMessage);
-        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
-    }
-
-    public String getBedMessage() {
-        return bedMessage;
-    }
-
-    public void setBedMessage(String bedMessage) {
-        this.bedMessage = bedMessage;
-        this.plugin.getCustomConfigManager().getMessagesYml().getConfig().set("bedMessage", bedMessage);
-        this.plugin.getCustomConfigManager().getMessagesYml().saveConfig();
-    }
-    // End of messages
-
     public Location getLocationFromFile(CustomYmlManager customYmlManager, String path) {
         if (customYmlManager == null || path == null) return null;
         return (Location) customYmlManager.getConfig().get(path);
@@ -218,11 +119,19 @@ public class API {
 
     public String parseMessage(Player player, String message) {
         message = message.replaceAll("%player%", player.getDisplayName());
-        message = message.replaceAll("%prefix%", this.prefix);
+        message = message.replaceAll("%prefix%", this.messagesUtils.getPrefix());
         return Translate.color(message);
     }
 
     public void sendPermissionErrorMessage(Player player) {
         player.sendMessage(Translate.chat("&4You do not have permission to do this command."));
+    }
+
+    public ConfigUtils getConfigUtils() {
+        return configUtils;
+    }
+
+    public MessagesUtils getMessagesUtils() {
+        return messagesUtils;
     }
 }

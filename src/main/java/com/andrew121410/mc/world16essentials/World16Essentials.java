@@ -10,11 +10,11 @@ import com.andrew121410.mc.world16essentials.commands.home.DelhomeCMD;
 import com.andrew121410.mc.world16essentials.commands.home.HomeCMD;
 import com.andrew121410.mc.world16essentials.commands.home.HomeListCMD;
 import com.andrew121410.mc.world16essentials.commands.home.SetHomeCMD;
-import com.andrew121410.mc.world16essentials.commands.spawn.SetSpawnCMD;
-import com.andrew121410.mc.world16essentials.commands.spawn.SpawnCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.FirstJoinedCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.LastJoinCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.TimeOfLoginCMD;
+import com.andrew121410.mc.world16essentials.commands.spawn.SetSpawnCMD;
+import com.andrew121410.mc.world16essentials.commands.spawn.SpawnCMD;
 import com.andrew121410.mc.world16essentials.commands.time.DayCMD;
 import com.andrew121410.mc.world16essentials.commands.time.NightCMD;
 import com.andrew121410.mc.world16essentials.commands.tp.TpAcceptCMD;
@@ -52,7 +52,7 @@ public class World16Essentials extends JavaPlugin {
 
     private PlayerInitializer playerInitializer;
 
-    //Managers
+    // Managers
     private CustomConfigManager customConfigManager;
     private WarpManager warpManager;
     private AfkManager afkManager;
@@ -72,7 +72,6 @@ public class World16Essentials extends JavaPlugin {
         // Load configs first
         registerMainConfig();
         this.customConfigManager = new CustomConfigManager(this);
-        customConfigManager.registerAllCustomConfigs();
 
         this.otherPlugins = new OtherPlugins(this);
         this.api = new API(this);

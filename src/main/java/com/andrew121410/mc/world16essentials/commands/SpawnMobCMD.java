@@ -66,8 +66,8 @@ public class SpawnMobCMD implements CommandExecutor {
                 return true;
             }
 
-            if (amount > api.getSpawnMobCap()) {
-                player.sendMessage(Translate.color("&cYou Cannot Spawn More Than " + api.getSpawnMobCap() + " At Once."));
+            if (amount > api.getConfigUtils().getSpawnMobCap()) {
+                player.sendMessage(Translate.color("&cYou Cannot Spawn More Than " + api.getConfigUtils().getSpawnMobCap() + " At Once."));
                 return true;
             }
 

@@ -47,7 +47,7 @@ public class PlayerInitializer {
         String color = player.isOp() ? "&4" : "&7";
         hiddenPlayersList.forEach((k) -> {
             player.hidePlayer(this.plugin, k);
-            k.sendMessage(Translate.chat(api.getPrefix() + " " + color + player.getDisplayName() + " &cnow cannot see you,"));
+            k.sendMessage(Translate.chat(api.getMessagesUtils().getPrefix() + " " + color + player.getDisplayName() + " &cnow cannot see you,"));
         });
     }
 

@@ -37,15 +37,15 @@ public class ConfigCMD implements CommandExecutor {
                     return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinedMessage", "leaveMessage", "bedMessage"));
                 } else {
                     if (args[1].equalsIgnoreCase("prefix")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getPrefix()));
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getPrefix()));
                     } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getWelcomeBackMessage()));
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getWelcomeBackMessage()));
                     } else if (args[1].equalsIgnoreCase("firstJoinedMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getFirstJoinedMessage()));
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getFirstJoinedMessage()));
                     } else if (args[1].equalsIgnoreCase("leaveMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getLeaveMessage()));
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getLeaveMessage()));
                     } else if (args[1].equalsIgnoreCase("bedMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getBedMessage()));
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getBedMessage()));
                     }
                 }
             }
@@ -68,33 +68,33 @@ public class ConfigCMD implements CommandExecutor {
             player.sendMessage(Translate.color("&cUsage: /config1-6 <config> <value>"));
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("signTranslateColors")) {
-                api.setSignTranslateColors(args[1].equalsIgnoreCase("true"));
+                api.getConfigUtils().setSignTranslateColors(args[1].equalsIgnoreCase("true"));
                 player.sendMessage(Translate.color("&aSign translate colors set to &6" + args[1]));
             } else if (args[0].equalsIgnoreCase("preventCropsTrampling")) {
-                api.setPreventCropsTrampling(args[1].equalsIgnoreCase("true"));
+                api.getConfigUtils().setPreventCropsTrampling(args[1].equalsIgnoreCase("true"));
                 player.sendMessage(Translate.color("&aPrevent crops trampling set to &6" + args[1]));
             } else if (args[0].equalsIgnoreCase("spawnMobCap")) {
                 int spawnMobCap = Utils.asIntegerOrElse(args[1], 1);
-                api.setSpawnMobCap(spawnMobCap);
+                api.getConfigUtils().setSpawnMobCap(spawnMobCap);
                 player.sendMessage(Translate.color("&aSpawn mob cap set to &6" + spawnMobCap));
             }
         } else if (args.length >= 3 && args[0].equalsIgnoreCase("messages")) {
             String[] ourArgs = Arrays.copyOfRange(args, 2, args.length);
             String message = String.join(" ", ourArgs);
             if (args[1].equalsIgnoreCase("prefix")) {
-                api.setPrefix(args[2]);
+                api.getMessagesUtils().setPrefix(args[2]);
                 player.sendMessage(Translate.color("&aPrefix set to &6" + args[2]));
             } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
-                api.setWelcomeBackMessage(message);
+                api.getMessagesUtils().setWelcomeBackMessage(message);
                 player.sendMessage(Translate.color("&aWelcome back message set to &6" + message));
             } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
-                api.setFirstJoinedMessage(message);
+                api.getMessagesUtils().setFirstJoinedMessage(message);
                 player.sendMessage(Translate.color("&aFirst join message set to &6" + message));
             } else if (args[1].equalsIgnoreCase("leaveMessage")) {
-                api.setLeaveMessage(message);
+                api.getMessagesUtils().setLeaveMessage(message);
                 player.sendMessage(Translate.color("&aLeave message set to &6" + message));
             } else if (args[1].equalsIgnoreCase("bedMessage")) {
-                api.setBedMessage(message);
+                api.getMessagesUtils().setBedMessage(message);
                 player.sendMessage(Translate.color("&aBed message set to &6" + message));
             }
         }

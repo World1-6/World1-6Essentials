@@ -1,22 +1,28 @@
 package com.andrew121410.mc.world16essentials.managers;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16essentials.utils.ConfigUtils;
+import com.andrew121410.mc.world16essentials.utils.MessagesUtils;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 
 public class CustomConfigManager {
 
     private final World16Essentials plugin;
+    private final ConfigUtils configUtils;
 
-    private CustomYmlManager shitYml;
-    private CustomYmlManager warpsYml;
-    private CustomYmlManager playersYml;
-    private CustomYmlManager messagesYml;
+    private final CustomYmlManager shitYml;
+
+    private final CustomYmlManager warpsYml;
+
+    private final CustomYmlManager playersYml;
+
+    private final CustomYmlManager messagesYml;
+    private final MessagesUtils messagesUtils;
 
     public CustomConfigManager(World16Essentials plugin) {
         this.plugin = plugin;
-    }
+        this.configUtils = new ConfigUtils(plugin);
 
-    public void registerAllCustomConfigs() {
         //shit.yml
         this.shitYml = new CustomYmlManager(this.plugin, false);
         this.shitYml.setup("shit.yml");
@@ -41,20 +47,8 @@ public class CustomConfigManager {
         //messages.yml
         this.messagesYml = new CustomYmlManager(this.plugin, false);
         this.messagesYml.setup("messages.yml");
-        setupDefaultsForMessages();
-        this.messagesYml.saveConfig();
-        this.messagesYml.reloadConfig();
+        this.messagesUtils = new MessagesUtils(this.plugin, this.messagesYml);
         //...
-    }
-
-    private void setupDefaultsForMessages() {
-        this.messagesYml.getConfig().addDefault("prefix", "[&9World1-6&r]");
-        this.messagesYml.getConfig().addDefault("welcomeBackMessage", "%prefix% &6Welcome back, %player%!");
-        this.messagesYml.getConfig().addDefault("firstJoinedMessage", "%prefix% &6Welcome to the server, %player%!");
-        this.messagesYml.getConfig().addDefault("leaveMessage", "%prefix% &6%player% has left the server.");
-        this.messagesYml.getConfig().addDefault("bedMessage", "%prefix% &6%player% has slept.");
-
-        this.messagesYml.getConfig().options().copyDefaults(true);
     }
 
     public void saveAll() {
@@ -73,6 +67,10 @@ public class CustomConfigManager {
         this.messagesYml.reloadConfig();
     }
 
+    public ConfigUtils getConfigUtils() {
+        return configUtils;
+    }
+
     public CustomYmlManager getShitYml() {
         return shitYml;
     }
@@ -87,5 +85,9 @@ public class CustomConfigManager {
 
     public CustomYmlManager getMessagesYml() {
         return messagesYml;
+    }
+
+    public MessagesUtils getMessagesUtils() {
+        return messagesUtils;
     }
 }

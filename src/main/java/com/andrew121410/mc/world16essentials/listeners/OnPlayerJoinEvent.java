@@ -27,7 +27,7 @@ public class OnPlayerJoinEvent implements Listener {
         Player player = event.getPlayer();
         event.setJoinMessage("");
 
-        String message = player.hasPlayedBefore() ? this.api.getWelcomeBackMessage() : this.api.getFirstJoinedMessage();
+        String message = player.hasPlayedBefore() ? this.api.getMessagesUtils().getWelcomeBackMessage() : this.api.getMessagesUtils().getFirstJoinedMessage();
         Bukkit.broadcastMessage(api.parseMessage(player, message));
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
         if (player.isOp()) {

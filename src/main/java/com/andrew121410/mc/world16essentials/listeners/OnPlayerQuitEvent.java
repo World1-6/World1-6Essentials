@@ -25,6 +25,6 @@ public class OnPlayerQuitEvent implements Listener {
         event.setQuitMessage("");
 
         this.plugin.getPlayerInitializer().unload(player);
-        Bukkit.broadcastMessage(api.parseMessage(player, api.getLeaveMessage()));
+        Bukkit.broadcastMessage(api.parseMessage(player, api.getMessagesUtils().getLeaveMessage()));
     }
 }

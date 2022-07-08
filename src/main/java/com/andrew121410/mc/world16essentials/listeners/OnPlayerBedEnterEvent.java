@@ -28,7 +28,7 @@ public class OnPlayerBedEnterEvent implements Listener {
             this.isSomeoneInBed = true;
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
                 player.getLocation().getWorld().setTime(0);
-                Bukkit.broadcastMessage(api.parseMessage(player, api.getBedMessage()));
+                Bukkit.broadcastMessage(api.parseMessage(player, api.getMessagesUtils().getBedMessage()));
                 isSomeoneInBed = false;
             }, 60L);
         }
