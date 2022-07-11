@@ -36,7 +36,16 @@ public class LastJoinCMD implements CommandExecutor {
             return true;
         }
 
-        player.sendMessage(Translate.color("&cThis feature doesn't support 1.12.2"));
+        if (args.length == 0) {
+            player.sendMessage(Translate.color("&cUsage: /lastjoin <player>"));
+        } else if (args.length == 1) {
+            Player target = this.plugin.getServer().getPlayer(args[0]);
+            if (target == null) {
+                player.sendMessage(Translate.color("&cPlayer not found."));
+                return true;
+            }
+            player.sendMessage(Translate.color("&aLast joined of &6" + target.getName() + "&a is &6" + this.api.getTimeSinceLastLogin(target)));
+        }
         return true;
     }
 }
