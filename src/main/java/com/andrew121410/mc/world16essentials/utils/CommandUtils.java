@@ -1,7 +1,7 @@
 package com.andrew121410.mc.world16essentials.utils;
 
-import com.andrew121410.ccutils.utils.Utils;
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16utils.utils.Utils;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 

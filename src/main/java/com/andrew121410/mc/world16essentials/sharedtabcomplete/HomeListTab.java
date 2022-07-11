@@ -23,7 +23,10 @@ public class HomeListTab implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alies, String[] args) {
-        if (!(sender instanceof Player player)) return null;
+        if (!(sender instanceof Player)) return null;
+
+        Player player = (Player) sender;
+
         if (!player.hasPermission("world16.home")) return null;
 
         if (args.length == 1) {

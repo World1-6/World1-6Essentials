@@ -23,10 +23,12 @@ public class HealCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
+
+        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.heal")) {
             api.sendPermissionErrorMessage(player);

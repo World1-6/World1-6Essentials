@@ -33,7 +33,6 @@ import com.andrew121410.mc.world16essentials.utils.OtherPlugins;
 import com.andrew121410.mc.world16essentials.utils.PlayerInitializer;
 import com.andrew121410.mc.world16essentials.utils.SetListMap;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.updater.UpdateManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -111,8 +110,6 @@ public class World16Essentials extends JavaPlugin {
         pluginLoadMessage();
         registerBStats(); // Register bStats last
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &2World1-6Essentials has been loaded."));
-
-        UpdateManager.registerUpdater(this, new com.andrew121410.mc.world16essentials.Updater(this));
     }
 
     @Override

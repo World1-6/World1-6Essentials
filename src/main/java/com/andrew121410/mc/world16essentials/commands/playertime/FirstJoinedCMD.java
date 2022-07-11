@@ -4,6 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.entity.Player;
 
 public class FirstJoinedCMD implements CommandExecutor {
 
@@ -17,10 +18,12 @@ public class FirstJoinedCMD implements CommandExecutor {
     }
 
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (!(sender instanceof org.bukkit.entity.Player player)) {
+        if (!(sender instanceof org.bukkit.entity.Player)) {
             sender.sendMessage("This command can only be run by a player.");
             return false;
         }
+
+        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.firstjoined")) {
             this.plugin.getApi().sendPermissionErrorMessage(player);

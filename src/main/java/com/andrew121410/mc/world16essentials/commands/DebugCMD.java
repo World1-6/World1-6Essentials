@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DebugCMD implements CommandExecutor {
 
@@ -29,7 +30,10 @@ public class DebugCMD implements CommandExecutor {
 
         this.plugin.getCommand("debug1-6").setExecutor(this);
         this.plugin.getCommand("debug1-6").setTabCompleter((sender, command, s, args) -> {
-            if (!(sender instanceof Player player)) return null;
+            if (!(sender instanceof Player)) return null;
+
+            Player player = (Player) sender;
+
             if (!player.hasPermission("world16.debug")) return null;
 
             if (args.length == 1) {
@@ -38,7 +42,7 @@ public class DebugCMD implements CommandExecutor {
                 if (args.length == 2) {
                     return TabUtils.getContainsString(args[1], Arrays.asList("from", "to"));
                 } else if (args.length == 3) {
-                    List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).toList();
+                    List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).collect(Collectors.toList());
                     return TabUtils.getContainsString(args[2], typesOfSoftwareList);
                 }
             }
@@ -48,10 +52,12 @@ public class DebugCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
+
+        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.debug")) {
             api.sendPermissionErrorMessage(player);

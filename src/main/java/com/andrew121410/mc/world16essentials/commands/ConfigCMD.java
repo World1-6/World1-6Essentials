@@ -22,7 +22,10 @@ public class ConfigCMD implements CommandExecutor {
 
         this.plugin.getCommand("config1-6").setExecutor(this);
         this.plugin.getCommand("config1-6").setTabCompleter((sender, command, s, args) -> {
-            if (!(sender instanceof Player player)) return null;
+            if (!(sender instanceof Player)) return null;
+
+            Player player = (Player) sender;
+
             if (!player.hasPermission("world16.config")) return null;
 
             if (args.length == 1) {
@@ -54,10 +57,12 @@ public class ConfigCMD implements CommandExecutor {
     }
 
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (!(sender instanceof org.bukkit.entity.Player player)) {
+        if (!(sender instanceof org.bukkit.entity.Player)) {
             sender.sendMessage("This command can only be run by a player.");
             return false;
         }
+
+        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.config")) {
             this.plugin.getApi().sendPermissionErrorMessage(player);

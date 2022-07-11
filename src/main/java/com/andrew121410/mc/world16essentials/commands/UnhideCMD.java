@@ -22,10 +22,12 @@ public class UnhideCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (!(sender instanceof org.bukkit.entity.Player player)) {
+        if (!(sender instanceof org.bukkit.entity.Player)) {
             sender.sendMessage("This command can only be run by a player.");
             return false;
         }
+
+        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.hide")) {
             this.plugin.getApi().sendPermissionErrorMessage(player);

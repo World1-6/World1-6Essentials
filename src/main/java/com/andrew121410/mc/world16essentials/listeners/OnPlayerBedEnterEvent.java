@@ -24,13 +24,11 @@ public class OnPlayerBedEnterEvent implements Listener {
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
 
-        if (event.getBedEnterResult() == PlayerBedEnterEvent.BedEnterResult.OK && !this.isSomeoneInBed) {
-            this.isSomeoneInBed = true;
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
-                player.getLocation().getWorld().setTime(0);
-                Bukkit.broadcastMessage(api.parseMessage(player, api.getMessagesUtils().getBedMessage()));
-                isSomeoneInBed = false;
-            }, 60L);
-        }
+        this.isSomeoneInBed = true;
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+            player.getLocation().getWorld().setTime(0);
+            Bukkit.broadcastMessage(api.parseMessage(player, api.getMessagesUtils().getBedMessage()));
+            isSomeoneInBed = false;
+        }, 60L);
     }
 }

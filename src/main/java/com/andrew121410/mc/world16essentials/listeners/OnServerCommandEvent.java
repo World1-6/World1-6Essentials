@@ -28,11 +28,12 @@ public class OnServerCommandEvent implements Listener {
     public void onCommand(ServerCommandEvent event) {
         if (event.getSender() instanceof BlockCommandSender) {
             BlockCommandSender blockCommandSender = (BlockCommandSender) event.getSender();
-            Iterator<String> iterator = spyCommandBlock.iterator();
+
+            Iterator<String> iterator = this.spyCommandBlock.iterator();
             while (iterator.hasNext()) {
-                String s = iterator.next();
-                if (event.getCommand().contains(s)) {
-                    this.plugin.getServer().broadcastMessage(Translate.chat("&c&lSPY FOUND&e->&r Found: " + s + " Location: X:" + blockCommandSender.getBlock().getLocation().getX() + " Y: " + blockCommandSender.getBlock().getLocation().getY() + " Z: " + blockCommandSender.getBlock().getLocation().getZ()));
+                String toSearch = iterator.next();
+                if (event.getCommand().contains(toSearch)) {
+                    this.plugin.getServer().broadcastMessage(Translate.chat("&c&lSPY FOUND&e->&r Found: " + toSearch + " Location: X:" + blockCommandSender.getBlock().getLocation().getX() + " Y: " + blockCommandSender.getBlock().getLocation().getY() + " Z: " + blockCommandSender.getBlock().getLocation().getZ()));
                     ComponentBuilder components = new ComponentBuilder(Translate.chat("[&eCLICK ME TO TP TO IT EASY&r]")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + blockCommandSender.getBlock().getLocation().getBlockX() + " " + blockCommandSender.getBlock().getLocation().getBlockY() + " " + blockCommandSender.getBlock().getLocation().getBlockZ()));
                     this.plugin.getServer().spigot().broadcast(components.create());
                     iterator.remove();

@@ -4,7 +4,6 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
-import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -31,7 +30,10 @@ public class BackCMD implements CommandExecutor {
 
         this.plugin.getCommand("back").setExecutor(this);
         this.plugin.getCommand("back").setTabCompleter((sender, command, s, args) -> {
-            if (!(sender instanceof Player player)) return null;
+            if (!(sender instanceof Player)) return null;
+
+            Player player = (Player) sender;
+
             if (!player.hasPermission("world16.back")) return null;
 
             if (args.length == 1) {
@@ -43,10 +45,13 @@ public class BackCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
+
+        Player player = (Player) sender;
+
         Map<BackEnum, Location> playerBackMap = this.backMap.get(player.getUniqueId());
 
         if (args.length == 0) {
@@ -69,11 +74,11 @@ public class BackCMD implements CommandExecutor {
 
             //Checks if it's Lava Or Water.
             if (deathLocation.getBlock().isLiquid() || deathLocation.getBlock().getRelative(BlockFace.DOWN).isLiquid()) {
-                deathLocation.getBlock().getRelative(BlockFace.DOWN).setType(XMaterial.OAK_LOG.parseMaterial());
-                deathLocation.getBlock().getRelative(BlockFace.EAST).setType(XMaterial.OAK_LOG.parseMaterial());
-                deathLocation.getBlock().getRelative(BlockFace.NORTH).setType(XMaterial.OAK_LOG.parseMaterial());
-                deathLocation.getBlock().getRelative(BlockFace.WEST).setType(XMaterial.OAK_LOG.parseMaterial());
-                deathLocation.getBlock().getRelative(BlockFace.SOUTH).setType(XMaterial.OAK_LOG.parseMaterial());
+                deathLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.LOG);
+                deathLocation.getBlock().getRelative(BlockFace.EAST).setType(Material.LOG);
+                deathLocation.getBlock().getRelative(BlockFace.NORTH).setType(Material.LOG);
+                deathLocation.getBlock().getRelative(BlockFace.WEST).setType(Material.LOG);
+                deathLocation.getBlock().getRelative(BlockFace.SOUTH).setType(Material.LOG);
                 deathLocation.getBlock().setType(Material.AIR);
             }
 

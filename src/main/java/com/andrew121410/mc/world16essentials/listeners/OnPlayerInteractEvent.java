@@ -43,7 +43,7 @@ public class OnPlayerInteractEvent implements Listener {
             powerToolObject.runCommand(player, player.getInventory().getItemInMainHand().getType());
         } else if (action == Action.PHYSICAL) {
             if (block != null) {
-                if (block.getType() == Material.FARMLAND && api.getConfigUtils().isPreventCropsTrampling()) {
+                if (block.getType() == Material.SOIL && api.getConfigUtils().isPreventCropsTrampling()) {
                     event.setCancelled(true);
                 }
             }

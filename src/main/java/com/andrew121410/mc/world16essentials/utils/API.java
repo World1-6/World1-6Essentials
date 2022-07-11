@@ -1,11 +1,11 @@
 package com.andrew121410.mc.world16essentials.utils;
 
+import com.andrew121410.ccutils.utils.StringDataTimeBuilder;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
-import com.andrew121410.mc.world16utils.utils.ccutils.utils.StringDataTimeBuilder;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "7/8/2022";
+    public static final String DATE_OF_VERSION = "7/11/2022";
     public static final String CUSTOM_COMMAND_FORMAT = "`";
 
     private final World16Essentials plugin;
@@ -66,17 +66,17 @@ public class API {
 
     public String getTimeSinceLogin(Player player) {
         long loginTime = timeOfLoginMap.get(player.getUniqueId());
-        return StringDataTimeBuilder.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false);
+        return StringDataTimeBuilder.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false, true);
     }
 
     public String getTimeSinceLastLogin(OfflinePlayer offlinePlayer) {
         long lastPlayed = offlinePlayer.getLastPlayed();
-        return StringDataTimeBuilder.makeIntoEnglishWords(lastPlayed, System.currentTimeMillis(), false);
+        return StringDataTimeBuilder.makeIntoEnglishWords(lastPlayed, System.currentTimeMillis(), false, true);
     }
 
     public String getTimeSinceFirstLogin(OfflinePlayer offlinePlayer) {
         long firstPlayed = offlinePlayer.getFirstPlayed();
-        return StringDataTimeBuilder.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false);
+        return StringDataTimeBuilder.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false, true);
     }
 
     public boolean didPlayerJustJoin(Player player) {

@@ -14,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class SpawnMobCMD implements CommandExecutor {
 
@@ -29,7 +30,7 @@ public class SpawnMobCMD implements CommandExecutor {
             if (!sender.hasPermission("world16.spawnmob")) return null;
 
             if (args.length == 1) {
-                return TabUtils.getContainsString(args[0], Arrays.stream(EntityType.values()).map(EntityType::name).toList());
+                return TabUtils.getContainsString(args[0], Arrays.stream(EntityType.values()).map(EntityType::name).collect(Collectors.toList()));
             }
             return null;
         });
@@ -37,10 +38,12 @@ public class SpawnMobCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
+
+        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.spawnmob")) {
             api.sendPermissionErrorMessage(player);
