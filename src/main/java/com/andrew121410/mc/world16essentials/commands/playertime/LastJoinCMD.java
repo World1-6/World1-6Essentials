@@ -3,6 +3,7 @@ package com.andrew121410.mc.world16essentials.commands.playertime;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -39,8 +40,8 @@ public class LastJoinCMD implements CommandExecutor {
         if (args.length == 0) {
             player.sendMessage(Translate.color("&cUsage: /lastjoin <player>"));
         } else if (args.length == 1) {
-            Player target = this.plugin.getServer().getPlayer(args[0]);
-            if (target == null) {
+            OfflinePlayer target = this.plugin.getServer().getOfflinePlayer(args[0]);
+            if (!target.hasPlayedBefore()) {
                 player.sendMessage(Translate.color("&cPlayer not found."));
                 return true;
             }
