@@ -11,10 +11,10 @@ public class StringDataTimeBuilder {
         long timeElapsed = theEndTime - theStartTime;
 
         long years = timeElapsed / (1000L * 60 * 60 * 24 * 365);
-        long days = timeElapsed / (1000 * 60 * 60 * 24);
-        long hours = (timeElapsed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
-        long minutes = (timeElapsed % (1000 * 60 * 60)) / (1000 * 60);
-        long seconds = (timeElapsed % (1000 * 60)) / 1000;
+        long days = timeElapsed / (1000L * 60 * 60 * 24) % 365;
+        long hours = timeElapsed / (1000L * 60 * 60) % 24;
+        long minutes = timeElapsed / (1000L * 60) % 60;
+        long seconds = timeElapsed / 1000 % 60;
 
         if (years > 0) {
             stringBuilder.append(years);
