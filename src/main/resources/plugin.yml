@@ -2,7 +2,6 @@ name: World1-6Essentials
 version: 1.0
 author: Andrew121410
 main: com.andrew121410.mc.world16essentials.World16Essentials
-
 softdepend:
   - EssentialsX
   - CMI
@@ -99,10 +98,10 @@ permissions:
     default: true
     children:
       world16.afk.other: true
+
   world16.back:
     description: Allows to do back
     default: true
-
   world16.back.all:
     description: Allows to do every back command
     default: true
@@ -181,7 +180,7 @@ permissions:
     default: true
   world16.msg:
     description: Allows to do msg
-    default: op
+    default: true
   world16.waitdo:
     description: Allows to do waitdo
     default: op
@@ -200,21 +199,15 @@ permissions:
   world16.home:
     description: Allows to do home commands
     default: true
-  world16.home.op:
-    description: Allows to do op home commands
-    default: true
-  world16.lastjoin:
-    description: Allows to do lastjoin
-    default: true
   world16.warp:
     description: Allows to do warp
     default: true
   world16.setwarp:
     description: Allows to do setwarp
-    default: true
+    default: op
   world16.delwarp:
     description: Allows to do delwarp
-    default: true
+    default: op
   world16.powertool:
     description: Allows to do powertool
     default: op
@@ -236,12 +229,15 @@ permissions:
   world16.hide:
     description: Allows you to do hide or unhide
     default: op
+  world16.lastjoin:
+    description: Allows to do lastjoin
+    default: true
   world16.timeoflogin:
     description: Allows you to do timeoflogin
-    default: op
+    default: true
   world16.firstjoined:
     description: Allows you to do firstjoined
-    default: op
+    default: true
   world16.config:
     description: Allows you to do config1-6
     default: op
