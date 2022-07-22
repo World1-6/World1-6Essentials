@@ -8,6 +8,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
 public class RamCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
@@ -22,11 +26,10 @@ public class RamCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.ram")) {
             api.sendPermissionErrorMessage(player);
@@ -35,13 +38,26 @@ public class RamCMD implements CommandExecutor {
 
         long maxMemory = (Runtime.getRuntime().maxMemory() / 1024 / 1024);
         long allocatedMemory = (Runtime.getRuntime().totalMemory() / 1024 / 1024);
+        long allocatedPercent = (allocatedMemory * 100) / maxMemory;
         long freeMemory = (Runtime.getRuntime().freeMemory() / 1024 / 1024);
+        long freePercent = (freeMemory * 100) / maxMemory;
         long usedMemory = allocatedMemory - freeMemory;
+        long usedPercent = (usedMemory * 100) / maxMemory;
+
+        try (Stream<String> stream = Files.lines(Paths.get("/proc/cpuinfo"))) {
+            String cpu = stream.filter(line -> line.startsWith("model name"))
+                    .map(line -> line.replaceAll(".*: ", ""))
+                    .findFirst().orElse("");
+
+            player.sendMessage(Translate.color("&6CPU: &7" + cpu));
+            player.sendMessage("");
+        } catch (Exception ignored) {
+        }
 
         player.sendMessage(Translate.chat("&6Maximum memory: &c" + maxMemory + " MB."));
-        player.sendMessage(Translate.chat("&6Allocated memory: &c" + allocatedMemory + " MB."));
-        player.sendMessage(Translate.chat("&6Free memory: &c" + freeMemory + " MB."));
-        player.sendMessage(Translate.chat("&6Used memory: &c" + usedMemory + " MB."));
+        player.sendMessage(Translate.chat("&6Allocated memory: &c" + allocatedMemory + " MB." + " &6(" + allocatedPercent + "%)"));
+        player.sendMessage(Translate.chat("&6Free memory: &c" + freeMemory + " MB." + " &6(" + freePercent + "%)"));
+        player.sendMessage(Translate.chat("&6Used memory: &c" + usedMemory + " MB." + " &6(" + usedPercent + "%)"));
         return true;
     }
 }
