@@ -8,10 +8,18 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
 public class RamCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
     private final API api;
+
+    private String cpuModelCache = null;
+    private String operatingSystemCache = null;
+    private String kernelNumberCache = null;
 
     public RamCMD(World16Essentials plugin) {
         this.plugin = plugin;
@@ -35,13 +43,53 @@ public class RamCMD implements CommandExecutor {
 
         long maxMemory = (Runtime.getRuntime().maxMemory() / 1024 / 1024);
         long allocatedMemory = (Runtime.getRuntime().totalMemory() / 1024 / 1024);
+        long allocatedPercent = (allocatedMemory * 100) / maxMemory;
         long freeMemory = (Runtime.getRuntime().freeMemory() / 1024 / 1024);
+        long freePercent = (freeMemory * 100) / maxMemory;
         long usedMemory = allocatedMemory - freeMemory;
+        long usedPercent = (usedMemory * 100) / maxMemory;
+
+        if (this.cpuModelCache == null) {
+            try (Stream<String> stream = Files.lines(Paths.get("/proc/cpuinfo"))) {
+                this.cpuModelCache = stream.filter(line -> line.startsWith("model name"))
+                        .map(line -> line.replaceAll(".*: ", ""))
+                        .findFirst().orElse("");
+            } catch (Exception ignored) {
+                this.cpuModelCache = null;
+            }
+        }
+        if (this.cpuModelCache != null) {
+            player.sendMessage(Translate.color("&6CPU: &7" + this.cpuModelCache));
+        }
+
+        if (this.operatingSystemCache == null) {
+            try {
+                this.operatingSystemCache = System.getProperty("os.name");
+            } catch (Exception ignored) {
+                this.operatingSystemCache = null;
+            }
+        }
+        if (this.operatingSystemCache != null) {
+            player.sendMessage(Translate.color("&6OS: &7" + this.operatingSystemCache));
+        }
+
+        if (this.kernelNumberCache == null) {
+            try {
+                this.kernelNumberCache = System.getProperty("os.version");
+            } catch (Exception ignored) {
+                this.kernelNumberCache = null;
+            }
+        }
+        if (this.kernelNumberCache != null) {
+            player.sendMessage(Translate.color("&6Kernel: &7" + this.kernelNumberCache));
+        }
+
+        player.sendMessage("");
 
         player.sendMessage(Translate.chat("&6Maximum memory: &c" + maxMemory + " MB."));
-        player.sendMessage(Translate.chat("&6Allocated memory: &c" + allocatedMemory + " MB."));
-        player.sendMessage(Translate.chat("&6Free memory: &c" + freeMemory + " MB."));
-        player.sendMessage(Translate.chat("&6Used memory: &c" + usedMemory + " MB."));
+        player.sendMessage(Translate.chat("&6Allocated memory: &c" + allocatedMemory + " MB." + " &6(" + allocatedPercent + "%)"));
+        player.sendMessage(Translate.chat("&6Used memory: &c" + usedMemory + " MB." + " &6(" + usedPercent + "%)"));
+        player.sendMessage(Translate.chat("&6Free memory: &c" + freeMemory + " MB." + " &6(" + freePercent + "%)"));
         return true;
     }
 }
