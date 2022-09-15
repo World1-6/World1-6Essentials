@@ -87,7 +87,7 @@ public class LastJoinCMD implements CommandExecutor {
                 itemMeta.setLore(Collections.singletonList(api.getTimeSinceLastLogin(offlinePlayer)));
                 itemStack.setItemMeta(itemMeta);
 
-                guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastPlayed(), -1, itemStack, (guiClickEvent) -> {
+                guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastLogin(), -1, itemStack, (guiClickEvent) -> {
                     player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
                 }));
             });

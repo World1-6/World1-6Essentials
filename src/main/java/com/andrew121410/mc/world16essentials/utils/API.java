@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "7/26/2022";
+    public static final String DATE_OF_VERSION = "9/14/2022";
     public static final String CUSTOM_COMMAND_FORMAT = "`";
 
     private final World16Essentials plugin;
@@ -70,8 +70,8 @@ public class API {
     }
 
     public String getTimeSinceLastLogin(OfflinePlayer offlinePlayer) {
-        long lastPlayed = offlinePlayer.getLastPlayed();
-        return StringDataTimeBuilder.makeIntoEnglishWords(lastPlayed, System.currentTimeMillis(), false);
+        long lastLogin = offlinePlayer.getLastLogin();
+        return StringDataTimeBuilder.makeIntoEnglishWords(lastLogin, System.currentTimeMillis(), false);
     }
 
     public String getTimeSinceFirstLogin(OfflinePlayer offlinePlayer) {
