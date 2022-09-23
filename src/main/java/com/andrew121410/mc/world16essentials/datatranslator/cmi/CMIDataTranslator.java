@@ -57,8 +57,8 @@ public class CMIDataTranslator implements IDataTranslator {
 
     private void warpsFrom() {
         this.cmi.getWarpManager().getWarps().forEach((warpName, warp) -> {
-            Location location = warp.getLoc();
-            this.plugin.getWarpManager().add(warpName, location);
+            CMILocation cmiLocation = warp.getLoc();
+            this.plugin.getWarpManager().add(warpName, new Location(cmiLocation.getWorld(), cmiLocation.getX(), cmiLocation.getY(), cmiLocation.getZ(), cmiLocation.getYaw(), cmiLocation.getPitch()));
         });
     }
 
