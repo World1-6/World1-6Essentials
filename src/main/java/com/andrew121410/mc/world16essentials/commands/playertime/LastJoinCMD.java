@@ -50,7 +50,7 @@ public class LastJoinCMD implements CommandExecutor {
 
         if (args.length == 0) {
             if (this.isFirst) {
-                player.sendMessage(Translate.color("&ePlease wait while we get last join data, this will be slow the first time you use this command, because the player head cache isn't loaded."));
+                player.sendMessage(Translate.color("&ePlease wait, this may take a while..."));
                 this.isFirst = false;
             }
             makeGUIButtons(player, guiButtonList -> {

@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "9/14/2022";
+    public static final String DATE_OF_VERSION = "9/22/2022";
     public static final String CUSTOM_COMMAND_FORMAT = "`";
 
     private final World16Essentials plugin;
@@ -66,17 +66,17 @@ public class API {
 
     public String getTimeSinceLogin(Player player) {
         long loginTime = timeOfLoginMap.get(player.getUniqueId());
-        return StringDataTimeBuilder.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false);
+        return StringDataTimeBuilder.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false, false);
     }
 
     public String getTimeSinceLastLogin(OfflinePlayer offlinePlayer) {
         long lastLogin = offlinePlayer.getLastLogin();
-        return StringDataTimeBuilder.makeIntoEnglishWords(lastLogin, System.currentTimeMillis(), false);
+        return StringDataTimeBuilder.makeIntoEnglishWords(lastLogin, System.currentTimeMillis(), false, false);
     }
 
     public String getTimeSinceFirstLogin(OfflinePlayer offlinePlayer) {
         long firstPlayed = offlinePlayer.getFirstPlayed();
-        return StringDataTimeBuilder.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false);
+        return StringDataTimeBuilder.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false, false);
     }
 
     public boolean didPlayerJustJoin(Player player) {

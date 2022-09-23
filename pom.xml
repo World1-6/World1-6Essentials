@@ -73,14 +73,14 @@
         <dependency>
             <groupId>com.github.World1-6.World1-6Utils</groupId>
             <artifactId>World1-6Utils-Plugin</artifactId>
-            <version>e5e2b654</version>
+            <version>b9c643bc</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.github.World1-6.World1-6Utils</groupId>
             <artifactId>World1-6Utils_CMI_API</artifactId>
-            <version>e5e2b654</version>
+            <version>b9c643bc</version>
             <scope>provided</scope>
         </dependency>
 
