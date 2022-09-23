@@ -26,6 +26,9 @@ public class OnServerCommandEvent implements Listener {
 
     @EventHandler
     public void onCommand(ServerCommandEvent event) {
+        // Don't try to iterate if the list is empty.
+        if (spyCommandBlock.isEmpty()) return;
+
         if (event.getSender() instanceof BlockCommandSender) {
             BlockCommandSender blockCommandSender = (BlockCommandSender) event.getSender();
             Iterator<String> iterator = spyCommandBlock.iterator();
