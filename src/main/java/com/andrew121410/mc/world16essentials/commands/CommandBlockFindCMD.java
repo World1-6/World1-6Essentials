@@ -3,6 +3,7 @@ package com.andrew121410.mc.world16essentials.commands;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.utils.TabUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,36 +26,46 @@ public class CommandBlockFindCMD implements CommandExecutor {
         this.spyCommandBlock = this.plugin.getSetListMap().getSpyCommandBlock();
 
         this.plugin.getCommand("commandblockfind").setExecutor(this);
+        this.plugin.getCommand("commandblockfind").setTabCompleter((sender, command, alias, args) -> {
+            if (!(sender instanceof Player player)) return null;
+            if (!player.hasPermission("world16.commandblockfind")) return null;
+
+            if (args.length == 1) {
+                return Arrays.asList("add", "remove");
+            } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
+                return TabUtils.getContainsString(args[1], this.spyCommandBlock);
+            }
+            return null;
+        });
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.commandblockfind")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.commandblockfind")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
         if (args.length >= 2) {
-            String yesOrNo = args[0];
-            String a = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            if (yesOrNo.equalsIgnoreCase("add")) {
-                spyCommandBlock.add(a);
-                p.sendMessage(Translate.chat("It has been added. A: " + a));
-            } else if (yesOrNo.equalsIgnoreCase("remove") || yesOrNo.equalsIgnoreCase("delete")) {
-                spyCommandBlock.remove(a);
-                p.sendMessage(Translate.chat("It has been deleted. A: " + a));
-            } else {
-                p.sendMessage(Translate.chat("ADD OR REMOVE?"));
+            String addOrRemove = args[0];
+            String string = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+
+            if (addOrRemove.equalsIgnoreCase("add")) {
+                spyCommandBlock.add(string);
+                player.sendMessage(Translate.color("&eWill now spy on command blocks with the command &6" + string + "&e."));
+                return true;
+            } else if (addOrRemove.equalsIgnoreCase("remove") || addOrRemove.equalsIgnoreCase("delete")) {
+                spyCommandBlock.remove(string);
+                player.sendMessage(Translate.color("&eWill no longer spy on command blocks with the command &6" + string + "&e."));
+                return true;
             }
-        } else {
-            p.sendMessage(Translate.chat("&cUsage: &6/commandblockfind add/remove <String>"));
         }
+        player.sendMessage(Translate.chat("&cUsage: /commandblockfind <add/remove> <string>"));
         return true;
     }
 }

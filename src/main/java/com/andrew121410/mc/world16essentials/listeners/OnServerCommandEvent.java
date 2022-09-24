@@ -2,8 +2,8 @@ package com.andrew121410.mc.world16essentials.listeners;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,15 +29,14 @@ public class OnServerCommandEvent implements Listener {
         // Don't try to iterate if the list is empty.
         if (spyCommandBlock.isEmpty()) return;
 
-        if (event.getSender() instanceof BlockCommandSender) {
-            BlockCommandSender blockCommandSender = (BlockCommandSender) event.getSender();
+        if (event.getSender() instanceof BlockCommandSender blockCommandSender) {
             Iterator<String> iterator = spyCommandBlock.iterator();
             while (iterator.hasNext()) {
-                String s = iterator.next();
-                if (event.getCommand().contains(s)) {
-                    this.plugin.getServer().broadcastMessage(Translate.chat("&c&lSPY FOUND&e->&r Found: " + s + " Location: X:" + blockCommandSender.getBlock().getLocation().getX() + " Y: " + blockCommandSender.getBlock().getLocation().getY() + " Z: " + blockCommandSender.getBlock().getLocation().getZ()));
-                    ComponentBuilder components = new ComponentBuilder(Translate.chat("[&eCLICK ME TO TP TO IT EASY&r]")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + blockCommandSender.getBlock().getLocation().getBlockX() + " " + blockCommandSender.getBlock().getLocation().getBlockY() + " " + blockCommandSender.getBlock().getLocation().getBlockZ()));
-                    this.plugin.getServer().spigot().broadcast(components.create());
+                String string = iterator.next();
+                if (event.getCommand().contains(string)) {
+                    this.plugin.getServer().broadcast(Translate.miniMessage("<gold>CommandBlockSpy: <gray>X: " + blockCommandSender.getBlock().getX() + " Y: " + blockCommandSender.getBlock().getY() + " Z: " + blockCommandSender.getBlock().getZ() + " <gold>Found: <dark_green>" + event.getCommand()));
+                    TextComponent.Builder text = Component.text().append(Translate.miniMessage("<gold><bold>Click to teleport to command block")).clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/tp " + blockCommandSender.getBlock().getX() + " " + blockCommandSender.getBlock().getY() + " " + blockCommandSender.getBlock().getZ())).hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(Translate.miniMessage("<gold><bold>Click to teleport to command block")));
+                    this.plugin.getServer().broadcast(text.build());
                     iterator.remove();
                 }
             }
