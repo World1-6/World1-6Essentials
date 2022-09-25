@@ -30,6 +30,11 @@ public class KitSettingsManager {
         return (KitSettings) this.kitSettingsYml.getConfig().get("kits." + kitName);
     }
 
+    public void deleteFromConfig(String kitName) {
+        this.kitSettingsYml.getConfig().set("kits." + kitName, null);
+        this.kitSettingsYml.saveConfig();
+    }
+
     public void setLastUsed(Player player, KitObject kitObject) {
         this.plugin.getApi().getPlayersYML(player).set("kits." + kitObject.getKitName() + ".lastUsed", System.currentTimeMillis());
         this.plugin.getCustomConfigManager().getPlayersYml().saveConfig();

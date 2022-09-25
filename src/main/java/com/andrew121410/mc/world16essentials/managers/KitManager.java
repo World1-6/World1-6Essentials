@@ -67,6 +67,9 @@ public class KitManager {
         // Remove from memory
         this.kitsMap.remove(kitName);
 
+        // Remove settings
+        this.plugin.getKitSettingsManager().deleteFromConfig(kitName);
+
         // Remove from database
         Map<String, String> map = new HashMap<>();
         map.put("KitName", kitName);
