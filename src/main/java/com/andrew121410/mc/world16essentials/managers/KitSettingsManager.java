@@ -20,7 +20,7 @@ public class KitSettingsManager {
     }
 
     public KitSettings generateSettings(String kitName) {
-        KitSettings kitSettings = new KitSettings("1h", "world16.kit." + kitName);
+        KitSettings kitSettings = new KitSettings("none", "world16.kit." + kitName);
         this.kitSettingsYml.getConfig().set("kits." + kitName, kitSettings);
         this.kitSettingsYml.saveConfig();
         return kitSettings;
@@ -39,7 +39,7 @@ public class KitSettingsManager {
         return this.plugin.getApi().getPlayersYML(player).getLong("kits." + kitObject.getKitName() + ".lastUsed");
     }
 
-    // m = minutes, h = hours, d = days, none = no cooldown
+    // m = minutes, h = hours, d = days, none = no cooldown, one = one time use.
     public boolean handleCooldown(Player player, KitObject kitObject) {
         String cooldown = kitObject.getKitSettings().getCooldown();
         String numbers = cooldown.replaceAll("[^0-9]", "");
@@ -77,7 +77,7 @@ public class KitSettingsManager {
         Long lastUsed = this.getLastUsed(player, kitObject);
         if (lastUsed == null) return "0";
 
-        // m = minutes, h = hours, d = days, none = no cooldown
+        // m = minutes, h = hours, d = days, none = no cooldown, one = one time use.
         // Get the time when the player can use the kit again in milliseconds.
         long timeWhenCanUseAgain = 0;
         if (letters.equalsIgnoreCase("none")) {
