@@ -65,11 +65,17 @@ public class KitCMD implements CommandExecutor {
                 return true;
             }
 
-            if (!player.hasPermission("world16.kit.use." + name)) {
+            if (!player.hasPermission(kitObject.getKitSettings().getPermission())) {
                 player.sendMessage(Translate.miniMessage("<red>You don't have permission to use this kit!"));
                 return true;
             }
 
+            if (!this.plugin.getKitSettingsManager().handleCooldown(player, kitObject)) {
+                player.sendMessage(Translate.miniMessage("<red>You can't use this kit yet!"));
+                player.sendMessage("You can use this kit in " + this.plugin.getKitSettingsManager().getTimeUntilCanUseAgain(player, kitObject) + " seconds.");
+                return true;
+            }
+            this.plugin.getKitSettingsManager().setLastUsed(player, kitObject);
             BukkitSerialization.giveFromBase64s(player, kitObject.getData());
             player.sendMessage(Translate.miniMessage("<green>You have received the kit: <blue>" + name));
             return true;

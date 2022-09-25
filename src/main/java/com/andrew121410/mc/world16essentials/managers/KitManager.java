@@ -17,6 +17,7 @@ public class KitManager {
     private final Map<String, KitObject> kitsMap;
 
     private final World16Essentials plugin;
+    private final KitSettingsManager kitSettingsManager;
 
     private final ISQL iSQL;
     private final EasySQL easySQL;
@@ -24,6 +25,7 @@ public class KitManager {
     public KitManager(World16Essentials plugin) {
         this.plugin = plugin;
         this.kitsMap = this.plugin.getSetListMap().getKitsMap();
+        this.kitSettingsManager = this.plugin.getKitSettingsManager();
 
         this.iSQL = new SQLite(this.plugin.getDataFolder(), "Kits");
         this.easySQL = new EasySQL(this.iSQL, "Kits");
@@ -40,7 +42,7 @@ public class KitManager {
     }
 
     public void addKit(Player player, String kitName, String[] data) {
-        KitObject kitObject = new KitObject(kitName, player.getUniqueId(), System.currentTimeMillis() + "", data);
+        KitObject kitObject = new KitObject(kitName, this.kitSettingsManager.generateSettings(kitName), player.getUniqueId(), System.currentTimeMillis() + "", data);
         this.kitsMap.put(kitName, kitObject);
         saveKit(kitObject);
     }
@@ -81,7 +83,7 @@ public class KitManager {
                 String regularInventory = value.get("RegularInventory");
                 String armorContent = value.get("ArmorContent");
 
-                KitObject kitObject = new KitObject(kitName, UUID.fromString(whoCreated), timeCreated, new String[]{regularInventory, armorContent});
+                KitObject kitObject = new KitObject(kitName, this.kitSettingsManager.getFromConfig(kitName), UUID.fromString(whoCreated), timeCreated, new String[]{regularInventory, armorContent});
                 this.kitsMap.put(kitName, kitObject);
             });
         } catch (SQLException e) {

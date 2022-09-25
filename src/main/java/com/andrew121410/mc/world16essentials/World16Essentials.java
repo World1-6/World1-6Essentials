@@ -28,6 +28,7 @@ import com.andrew121410.mc.world16essentials.commands.warp.SetWarpCMD;
 import com.andrew121410.mc.world16essentials.commands.warp.WarpCMD;
 import com.andrew121410.mc.world16essentials.listeners.*;
 import com.andrew121410.mc.world16essentials.managers.*;
+import com.andrew121410.mc.world16essentials.objects.KitSettings;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16essentials.utils.OtherPlugins;
 import com.andrew121410.mc.world16essentials.utils.PlayerInitializer;
@@ -38,12 +39,17 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 
 public class World16Essentials extends JavaPlugin {
+
+    static {
+        ConfigurationSerialization.registerClass(KitSettings.class);
+    }
 
     private static World16Essentials plugin;
 
@@ -58,6 +64,7 @@ public class World16Essentials extends JavaPlugin {
     private AfkManager afkManager;
     private HomeManager homeManager;
     private KitManager kitManager;
+    private KitSettingsManager kitSettingsManager;
 
     private API api;
 
@@ -225,6 +232,8 @@ public class World16Essentials extends JavaPlugin {
         this.warpManager = new WarpManager(this, this.customConfigManager);
         this.warpManager.loadAllWarps();
 
+        this.kitSettingsManager = new KitSettingsManager(this);
+
         this.kitManager = new KitManager(this);
         this.kitManager.loadKits();
 
@@ -266,6 +275,10 @@ public class World16Essentials extends JavaPlugin {
 
     public HomeManager getHomeManager() {
         return homeManager;
+    }
+
+    public KitSettingsManager getKitSettingsManager() {
+        return kitSettingsManager;
     }
 
     public KitManager getKitManager() {
