@@ -36,8 +36,7 @@ public class CreateKitCMD implements CommandExecutor {
         if (args.length == 1) {
             String name = args[0];
 
-            String[] data = BukkitSerialization.turnInventoryIntoBase64s(player);
-            this.plugin.getKitManager().addKit(player, name, data[0], data[1]);
+            this.plugin.getKitManager().addKit(player, name, BukkitSerialization.turnInventoryIntoBase64s(player));
             player.sendMessage(Translate.miniMessage("<green>Kit <blue>" + name + " <green>has been created!"));
             return true;
         }

@@ -39,8 +39,8 @@ public class KitManager {
         easySQL.create(columns, true);
     }
 
-    public void addKit(Player player, String kitName, String inventoryBase64, String armorContentBase64) {
-        KitObject kitObject = new KitObject(kitName, player.getUniqueId(), System.currentTimeMillis() + "", inventoryBase64, armorContentBase64);
+    public void addKit(Player player, String kitName, String[] data) {
+        KitObject kitObject = new KitObject(kitName, player.getUniqueId(), System.currentTimeMillis() + "", data);
         this.kitsMap.put(kitName, kitObject);
         saveKit(kitObject);
     }
@@ -51,8 +51,8 @@ public class KitManager {
         map.put("KitName", kitObject.getKitName());
         map.put("WhoCreated", kitObject.getWhoCreatedUUID().toString());
         map.put("TimeCreated", kitObject.getTimeCreated());
-        map.put("RegularInventory", kitObject.getRegularInventoryBase64());
-        map.put("ArmorContent", kitObject.getArmorContentBase64());
+        map.put("RegularInventory", kitObject.getData()[0]);
+        map.put("ArmorContent", kitObject.getData()[1]);
 
         try {
             this.easySQL.save(map);

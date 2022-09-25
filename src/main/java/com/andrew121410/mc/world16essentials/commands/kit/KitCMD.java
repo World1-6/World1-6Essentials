@@ -70,11 +70,7 @@ public class KitCMD implements CommandExecutor {
                 return true;
             }
 
-            String data1 = kitObject.getRegularInventoryBase64();
-            String data2 = kitObject.getArmorContentBase64();
-            String[] data = {data1, data2};
-
-            BukkitSerialization.giveFromBase64s(player, data);
+            BukkitSerialization.giveFromBase64s(player, kitObject.getData());
             player.sendMessage(Translate.miniMessage("<green>You have received the kit: <blue>" + name));
             return true;
         }
