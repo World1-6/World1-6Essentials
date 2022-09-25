@@ -72,7 +72,7 @@ public class KitCMD implements CommandExecutor {
 
             if (!this.plugin.getKitSettingsManager().handleCooldown(player, kitObject)) {
                 player.sendMessage(Translate.miniMessage("<red>You can't use this kit yet!"));
-                player.sendMessage("You can use this kit in " + this.plugin.getKitSettingsManager().getTimeUntilCanUseAgain(player, kitObject) + " seconds.");
+                player.sendMessage(Translate.miniMessage("<gold>You can use this kit in " + this.plugin.getKitSettingsManager().getTimeUntilCanUseAgain(player, kitObject) + " seconds."));
                 return true;
             }
             this.plugin.getKitSettingsManager().setLastUsed(player, kitObject);
