@@ -10,6 +10,9 @@ import com.andrew121410.mc.world16essentials.commands.home.DelhomeCMD;
 import com.andrew121410.mc.world16essentials.commands.home.HomeCMD;
 import com.andrew121410.mc.world16essentials.commands.home.HomeListCMD;
 import com.andrew121410.mc.world16essentials.commands.home.SetHomeCMD;
+import com.andrew121410.mc.world16essentials.commands.kit.CreateKitCMD;
+import com.andrew121410.mc.world16essentials.commands.kit.DelKitCMD;
+import com.andrew121410.mc.world16essentials.commands.kit.KitCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.FirstJoinedCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.LastJoinCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.TimeOfLoginCMD;
@@ -24,10 +27,7 @@ import com.andrew121410.mc.world16essentials.commands.warp.DelwarpCMD;
 import com.andrew121410.mc.world16essentials.commands.warp.SetWarpCMD;
 import com.andrew121410.mc.world16essentials.commands.warp.WarpCMD;
 import com.andrew121410.mc.world16essentials.listeners.*;
-import com.andrew121410.mc.world16essentials.managers.AfkManager;
-import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
-import com.andrew121410.mc.world16essentials.managers.HomeManager;
-import com.andrew121410.mc.world16essentials.managers.WarpManager;
+import com.andrew121410.mc.world16essentials.managers.*;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16essentials.utils.OtherPlugins;
 import com.andrew121410.mc.world16essentials.utils.PlayerInitializer;
@@ -57,6 +57,7 @@ public class World16Essentials extends JavaPlugin {
     private WarpManager warpManager;
     private AfkManager afkManager;
     private HomeManager homeManager;
+    private KitManager kitManager;
 
     private API api;
 
@@ -187,6 +188,11 @@ public class World16Essentials extends JavaPlugin {
         new WarpCMD(this);
         new SetWarpCMD(this);
         new DelwarpCMD(this);
+
+        //Kits
+        new KitCMD(this);
+        new CreateKitCMD(this);
+        new DelKitCMD(this);
     }
 
     private void registerListeners() {
@@ -218,6 +224,9 @@ public class World16Essentials extends JavaPlugin {
 
         this.warpManager = new WarpManager(this, this.customConfigManager);
         this.warpManager.loadAllWarps();
+
+        this.kitManager = new KitManager(this);
+        this.kitManager.loadKits();
 
         this.afkManager = new AfkManager(this);
     }
@@ -257,6 +266,10 @@ public class World16Essentials extends JavaPlugin {
 
     public HomeManager getHomeManager() {
         return homeManager;
+    }
+
+    public KitManager getKitManager() {
+        return kitManager;
     }
 
     public OtherPlugins getOtherPlugins() {

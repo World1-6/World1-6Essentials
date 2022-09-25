@@ -2,6 +2,7 @@ package com.andrew121410.mc.world16essentials.utils;
 
 import com.andrew121410.mc.world16essentials.commands.back.BackEnum;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
+import com.andrew121410.mc.world16essentials.objects.KitObject;
 import com.andrew121410.mc.world16essentials.objects.PowerToolObject;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -21,6 +22,7 @@ public class SetListMap {
     private final Map<UUID, Long> timeOfLoginMap; //0
 
     private final Map<String, Location> warpsMap; //1
+    private final Map<String, KitObject> kitsMap; //1
 
     private final List<String> flyList; //0
     private final List<String> godList; //0
@@ -39,6 +41,7 @@ public class SetListMap {
         this.timeOfLoginMap = new HashMap<>();
 
         this.warpsMap = new HashMap<>();
+        this.kitsMap = new HashMap<>();
 
         //Lists
         this.flyList = new ArrayList<>();
@@ -79,6 +82,7 @@ public class SetListMap {
         timeOfLoginMap.clear();
 
         warpsMap.clear();
+        kitsMap.clear();
     }
 
     public void clearAllLists(Player p) {
@@ -141,5 +145,9 @@ public class SetListMap {
 
     public Map<UUID, Long> getTimeOfLoginMap() {
         return timeOfLoginMap;
+    }
+
+    public Map<String, KitObject> getKitsMap() {
+        return kitsMap;
     }
 }

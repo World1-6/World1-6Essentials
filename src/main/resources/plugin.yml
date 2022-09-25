@@ -73,6 +73,11 @@ commands:
   firstjoined:
   config1-6:
   spawnmob:
+  kit:
+  createkit:
+  delkit:
+    aliases:
+      - deletekit
 
   gmc:
     aliases:
