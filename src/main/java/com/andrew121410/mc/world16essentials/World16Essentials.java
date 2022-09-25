@@ -165,6 +165,7 @@ public class World16Essentials extends JavaPlugin {
         new UnhideCMD(this);
         new ConfigCMD(this);
         new SpawnMobCMD(this);
+        new SaveInventoryCMD(this);
 
         // Time
         new LastJoinCMD(this);
