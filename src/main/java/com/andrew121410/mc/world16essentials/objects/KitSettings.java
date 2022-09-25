@@ -8,26 +8,24 @@ import java.util.Map;
 public class KitSettings implements ConfigurationSerializable {
     private String cooldown;
     private String permission;
+    private boolean giveOnFirstJoin;
 
-    public KitSettings(String cooldown, String permission) {
+    public KitSettings(String cooldown, String permission, boolean giveOnFirstJoin) {
         this.cooldown = cooldown;
         this.permission = permission;
+        this.giveOnFirstJoin = giveOnFirstJoin;
     }
 
     public String getCooldown() {
         return cooldown;
     }
 
-    public void setCooldown(String cooldown) {
-        this.cooldown = cooldown;
-    }
-
     public String getPermission() {
         return permission;
     }
 
-    public void setPermission(String permission) {
-        this.permission = permission;
+    public boolean isGiveOnFirstJoin() {
+        return giveOnFirstJoin;
     }
 
     @Override
@@ -35,10 +33,15 @@ public class KitSettings implements ConfigurationSerializable {
         Map<String, Object> map = new java.util.HashMap<>();
         map.put("cooldown", this.cooldown);
         map.put("permission", this.permission);
+        map.put("giveOnFirstJoin", this.giveOnFirstJoin);
         return map;
     }
 
     public static KitSettings deserialize(Map<String, Object> map) {
-        return new KitSettings((String) map.get("cooldown"), (String) map.get("permission"));
+        String cooldown = (String) map.getOrDefault("cooldown", "none");
+        String permission = (String) map.getOrDefault("permission", "none");
+        boolean giveOnFirstJoin = (Boolean) map.getOrDefault("giveOnFirstJoin", false);
+
+        return new KitSettings(cooldown, permission, giveOnFirstJoin);
     }
 }

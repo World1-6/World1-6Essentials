@@ -65,7 +65,7 @@ public class KitCMD implements CommandExecutor {
                 return true;
             }
 
-            String permission = kitObject.getKitSettings().getPermission();
+            String permission = kitObject.getSettings().getPermission();
             if (!permission.equalsIgnoreCase("none") && !player.hasPermission(permission)) {
                 player.sendMessage(Translate.miniMessage("<red>You don't have permission to use this kit!"));
                 return true;
