@@ -11,6 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -34,7 +35,9 @@ public class SaveInventoryCMD implements CommandExecutor {
 
             Set<String> savedInventories = this.savedInventoryMap.get(player.getUniqueId());
 
-            if (args.length == 2) {
+            if (args.length == 1) {
+                return TabUtils.getContainsString(args[0], Arrays.asList("save", "load", "delete"));
+            } else if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("load") || args[0].equalsIgnoreCase("delete")) {
                     return TabUtils.getContainsString(args[1], savedInventories.stream().toList());
                 }
