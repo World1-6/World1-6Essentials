@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16essentials.utils;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
@@ -99,10 +98,10 @@ public class API {
         customYmlManager.saveConfig();
     }
 
-    public ConfigurationSection getPlayersYML(CustomConfigManager customConfigManager, Player player) {
-        ConfigurationSection configurationSection = customConfigManager.getPlayersYml().getConfig().getConfigurationSection("UUID." + player.getUniqueId());
+    public ConfigurationSection getPlayersYML(Player player) {
+        ConfigurationSection configurationSection = this.plugin.getCustomConfigManager().getPlayersYml().getConfig().getConfigurationSection("UUID." + player.getUniqueId());
         if (configurationSection == null)
-            configurationSection = customConfigManager.getPlayersYml().getConfig().createSection("UUID." + player.getUniqueId());
+            configurationSection = this.plugin.getCustomConfigManager().getPlayersYml().getConfig().createSection("UUID." + player.getUniqueId());
         return configurationSection;
     }
 

@@ -16,6 +16,8 @@ public class CustomConfigManager {
 
     private final CustomYmlManager playersYml;
 
+    private final CustomYmlManager kitSettingsYml;
+
     private final CustomYmlManager messagesYml;
     private final MessagesUtils messagesUtils;
 
@@ -49,6 +51,13 @@ public class CustomConfigManager {
         this.messagesYml.setup("messages.yml");
         this.messagesUtils = new MessagesUtils(this.plugin, this.messagesYml);
         //...
+
+        //kit-settings.yml
+        this.kitSettingsYml = new CustomYmlManager(this.plugin, false);
+        this.kitSettingsYml.setup("kit-settings.yml");
+        this.kitSettingsYml.saveConfig();
+        this.kitSettingsYml.reloadConfig();
+        //...
     }
 
     public void saveAll() {
@@ -57,6 +66,7 @@ public class CustomConfigManager {
         this.warpsYml.saveConfig();
         this.playersYml.saveConfig();
         this.messagesYml.saveConfig();
+        this.kitSettingsYml.saveConfig();
     }
 
     public void reloadAll() {
@@ -65,6 +75,7 @@ public class CustomConfigManager {
         this.warpsYml.reloadConfig();
         this.playersYml.reloadConfig();
         this.messagesYml.reloadConfig();
+        this.kitSettingsYml.reloadConfig();
     }
 
     public ConfigUtils getConfigUtils() {
@@ -89,5 +100,9 @@ public class CustomConfigManager {
 
     public MessagesUtils getMessagesUtils() {
         return messagesUtils;
+    }
+
+    public CustomYmlManager getKitSettingsYml() {
+        return kitSettingsYml;
     }
 }
