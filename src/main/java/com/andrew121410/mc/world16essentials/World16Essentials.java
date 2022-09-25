@@ -28,7 +28,7 @@ import com.andrew121410.mc.world16essentials.commands.warp.SetWarpCMD;
 import com.andrew121410.mc.world16essentials.commands.warp.WarpCMD;
 import com.andrew121410.mc.world16essentials.listeners.*;
 import com.andrew121410.mc.world16essentials.managers.*;
-import com.andrew121410.mc.world16essentials.objects.KitSettings;
+import com.andrew121410.mc.world16essentials.objects.KitSettingsObject;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16essentials.utils.OtherPlugins;
 import com.andrew121410.mc.world16essentials.utils.PlayerInitializer;
@@ -48,7 +48,7 @@ import java.util.Collection;
 public class World16Essentials extends JavaPlugin {
 
     static {
-        ConfigurationSerialization.registerClass(KitSettings.class);
+        ConfigurationSerialization.registerClass(KitSettingsObject.class);
     }
 
     private static World16Essentials plugin;
@@ -65,6 +65,7 @@ public class World16Essentials extends JavaPlugin {
     private HomeManager homeManager;
     private KitManager kitManager;
     private KitSettingsManager kitSettingsManager;
+    private SavedInventoriesManager savedInventoriesManager;
 
     private API api;
 
@@ -237,6 +238,8 @@ public class World16Essentials extends JavaPlugin {
         this.kitManager = new KitManager(this);
         this.kitManager.loadKits();
 
+        this.savedInventoriesManager = new SavedInventoriesManager(this);
+
         this.afkManager = new AfkManager(this);
     }
 
@@ -283,6 +286,10 @@ public class World16Essentials extends JavaPlugin {
 
     public KitManager getKitManager() {
         return kitManager;
+    }
+
+    public SavedInventoriesManager getSavedInventoriesManager() {
+        return savedInventoriesManager;
     }
 
     public OtherPlugins getOtherPlugins() {

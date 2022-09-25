@@ -20,6 +20,7 @@ public class SetListMap {
     private final Map<UUID, Map<String, Location>> homesMap; //0
     private final Map<UUID, PowerToolObject> powerToolMap; //0
     private final Map<UUID, Long> timeOfLoginMap; //0
+    private final Map<UUID, Set<String>> savedInventoryMap; //0
 
     private final Map<String, Location> warpsMap; //1
     private final Map<String, KitObject> kitsMap; //1
@@ -39,6 +40,7 @@ public class SetListMap {
         this.homesMap = new HashMap<>();
         this.powerToolMap = new HashMap<>();
         this.timeOfLoginMap = new HashMap<>();
+        this.savedInventoryMap = new HashMap<>();
 
         this.warpsMap = new HashMap<>();
         this.kitsMap = new HashMap<>();
@@ -71,6 +73,7 @@ public class SetListMap {
         homesMap.remove(p.getUniqueId());
         powerToolMap.remove(p.getUniqueId());
         timeOfLoginMap.remove(p.getUniqueId());
+        savedInventoryMap.remove(p.getUniqueId());
     }
 
     public void clearAllMaps() {
@@ -80,6 +83,7 @@ public class SetListMap {
         homesMap.clear();
         powerToolMap.clear();
         timeOfLoginMap.clear();
+        savedInventoryMap.clear();
 
         warpsMap.clear();
         kitsMap.clear();
@@ -149,5 +153,9 @@ public class SetListMap {
 
     public Map<String, KitObject> getKitsMap() {
         return kitsMap;
+    }
+
+    public Map<UUID, Set<String>> getSavedInventoryMap() {
+        return savedInventoryMap;
     }
 }

@@ -2,7 +2,7 @@ package com.andrew121410.mc.world16essentials.managers;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.KitObject;
-import com.andrew121410.mc.world16essentials.objects.KitSettings;
+import com.andrew121410.mc.world16essentials.objects.KitSettingsObject;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import com.andrew121410.mc.world16utils.utils.ccutils.utils.StringDataTimeBuilder;
 import org.bukkit.entity.Player;
@@ -19,15 +19,15 @@ public class KitSettingsManager {
         this.kitSettingsYml = this.plugin.getCustomConfigManager().getKitSettingsYml();
     }
 
-    public KitSettings generateSettings(String kitName) {
-        KitSettings kitSettings = new KitSettings("none", "world16.kit." + kitName, false);
+    public KitSettingsObject generateSettings(String kitName) {
+        KitSettingsObject kitSettings = new KitSettingsObject("none", "world16.kit." + kitName, false);
         this.kitSettingsYml.getConfig().set("kits." + kitName, kitSettings);
         this.kitSettingsYml.saveConfig();
         return kitSettings;
     }
 
-    public KitSettings getFromConfig(String kitName) {
-        return (KitSettings) this.kitSettingsYml.getConfig().get("kits." + kitName);
+    public KitSettingsObject getFromConfig(String kitName) {
+        return (KitSettingsObject) this.kitSettingsYml.getConfig().get("kits." + kitName);
     }
 
     public void deleteFromConfig(String kitName) {

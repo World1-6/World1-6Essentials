@@ -73,6 +73,8 @@ commands:
   firstjoined:
   config1-6:
   spawnmob:
+  saveinventory:
+
   kit:
   createkit:
   delkit:
@@ -262,3 +264,6 @@ permissions:
   world16.kit.use:
     description: Allows you to use a kit
     default: true
+  world16.saveinventory:
+    description: Allows you to saveinventory
+    default: op

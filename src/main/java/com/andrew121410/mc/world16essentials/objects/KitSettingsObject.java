@@ -5,12 +5,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class KitSettings implements ConfigurationSerializable {
+public class KitSettingsObject implements ConfigurationSerializable {
     private String cooldown;
     private String permission;
     private boolean giveOnFirstJoin;
 
-    public KitSettings(String cooldown, String permission, boolean giveOnFirstJoin) {
+    public KitSettingsObject(String cooldown, String permission, boolean giveOnFirstJoin) {
         this.cooldown = cooldown;
         this.permission = permission;
         this.giveOnFirstJoin = giveOnFirstJoin;
@@ -37,11 +37,11 @@ public class KitSettings implements ConfigurationSerializable {
         return map;
     }
 
-    public static KitSettings deserialize(Map<String, Object> map) {
+    public static KitSettingsObject deserialize(Map<String, Object> map) {
         String cooldown = (String) map.getOrDefault("cooldown", "none");
         String permission = (String) map.getOrDefault("permission", "none");
         boolean giveOnFirstJoin = (Boolean) map.getOrDefault("giveOnFirstJoin", false);
 
-        return new KitSettings(cooldown, permission, giveOnFirstJoin);
+        return new KitSettingsObject(cooldown, permission, giveOnFirstJoin);
     }
 }

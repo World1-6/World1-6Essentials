@@ -5,12 +5,12 @@ import java.util.UUID;
 public class KitObject {
 
     private final String kitName;
-    private final KitSettings settings;
+    private final KitSettingsObject settings;
     private final UUID whoCreatedUUID;
     private final String timeCreated;
     private final String[] data;
 
-    public KitObject(String kitName, KitSettings settings, UUID whoCreatedUUID, String timeCreated, String[] data) {
+    public KitObject(String kitName, KitSettingsObject settings, UUID whoCreatedUUID, String timeCreated, String[] data) {
         this.kitName = kitName;
         this.settings = settings;
         this.whoCreatedUUID = whoCreatedUUID;
@@ -34,7 +34,7 @@ public class KitObject {
         return data;
     }
 
-    public KitSettings getSettings() {
+    public KitSettingsObject getSettings() {
         return settings;
     }
 }

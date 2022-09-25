@@ -43,6 +43,7 @@ public class PlayerInitializer {
 
         this.plugin.getHomeManager().load(player);
         this.afkObjectMap.put(player.getUniqueId(), new AfkObject(player));
+        this.plugin.getSavedInventoriesManager().loadAllSavedInventoriesNames(player.getUniqueId());
 
         String color = player.isOp() ? "&4" : "&7";
         hiddenPlayersList.forEach((k) -> {
