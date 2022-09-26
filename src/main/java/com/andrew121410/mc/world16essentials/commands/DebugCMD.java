@@ -113,9 +113,9 @@ public class DebugCMD implements CommandExecutor {
                 }
 
                 if (args[1].equalsIgnoreCase("from") && software != null) {
-                    dataTranslator.convertFrom(software);
+                    dataTranslator.convertFrom(player, software);
                 } else if (args[1].equalsIgnoreCase("to") && software != null) {
-                    dataTranslator.convertTo(software);
+                    dataTranslator.convertTo(player, software);
                 }
             }
         }

@@ -17,6 +17,7 @@ import net.Zrips.CMILib.Container.CMILocation;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class CMIDataTranslator implements IDataTranslator {
     }
 
     @Override
-    public boolean convertFrom() {
+    public boolean convertFrom(Player player) {
         this.homesFrom();
         this.warpsFrom();
         this.kitsFrom();
@@ -42,7 +43,7 @@ public class CMIDataTranslator implements IDataTranslator {
     }
 
     @Override
-    public boolean convertTo() {
+    public boolean convertTo(Player player) {
         this.homesTo();
         this.warpsTo();
         this.kitsTo();

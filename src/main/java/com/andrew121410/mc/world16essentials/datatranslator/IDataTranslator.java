@@ -1,8 +1,10 @@
 package com.andrew121410.mc.world16essentials.datatranslator;
 
+import org.bukkit.entity.Player;
+
 public interface IDataTranslator {
 
-    boolean convertFrom();
+    boolean convertFrom(Player player);
 
-    boolean convertTo();
+    boolean convertTo(Player player);
 }

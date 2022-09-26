@@ -8,6 +8,7 @@ import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.time.Duration;
@@ -21,24 +22,24 @@ public class DataTranslator {
         this.plugin = plugin;
     }
 
-    public void convertFrom(Software software) {
+    public void convertFrom(Player player, Software software) {
         IDataTranslator iDataTranslator = getDataTranslator(software);
 
         Instant start = Instant.now();
 
-        iDataTranslator.convertFrom();
+        iDataTranslator.convertFrom(player);
 
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toMillis();
         Bukkit.broadcastMessage("World1-6DataTranslator: converted from " + software.name() + " took " + timeElapsed + "Ms");
     }
 
-    public void convertTo(Software software) {
+    public void convertTo(Player player, Software software) {
         IDataTranslator iDataTranslator = getDataTranslator(software);
 
         Instant start = Instant.now();
 
-        iDataTranslator.convertTo();
+        iDataTranslator.convertTo(player);
 
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toMillis();

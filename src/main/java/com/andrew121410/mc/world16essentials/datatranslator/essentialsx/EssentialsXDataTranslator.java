@@ -3,6 +3,8 @@ package com.andrew121410.mc.world16essentials.datatranslator.essentialsx;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.datatranslator.DataTranslator;
 import com.andrew121410.mc.world16essentials.datatranslator.IDataTranslator;
+import com.andrew121410.mc.world16essentials.objects.SavedInventoryObject;
+import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
@@ -39,14 +41,15 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     }
 
     @Override
-    public boolean convertFrom() {
+    public boolean convertFrom(Player player) {
         this.homesFrom();
         this.warpsFrom();
+        this.kitsFrom(player);
         return true;
     }
 
     @Override
-    public boolean convertTo() {
+    public boolean convertTo(Player player) {
         this.homesTo();
         this.warpsTo();
         this.kitsTo();
@@ -127,8 +130,48 @@ public class EssentialsXDataTranslator implements IDataTranslator {
         });
     }
 
-    private void kitsFrom() {
-        // Not possible at the moment
+    private void threadSleep() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private SavedInventoryObject savedInventoryObject;
+
+    // This is actual dumb like why is EssentialsX API so bad.
+    // Like all of this could easily be avoided if they had a method to get the kit ItemStacks by a kit name.
+    private void kitsFrom(Player player) {
+        player.sendMessage(Translate.miniMessage("<gold>Starting kits conversion..."));
+        player.sendMessage(Translate.miniMessage("<red><underline>WARNING: PLEASE DO NOT LOG OUT OR RELOAD THE SERVER WHILE THIS IS RUNNING!"));
+        player.sendMessage(Translate.miniMessage("<red><bold>THIS MIGHT TAKE A WHILE!"));
+
+        // Create a save of the inventory
+        String saveInventoryName = "temp-" + UUID.randomUUID();
+        this.savedInventoryObject = SavedInventoryObject.create(player, saveInventoryName);
+
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
+            for (String kitKey : this.essentials.getKits().getKitKeys()) {
+                threadSleep();
+                player.getInventory().clear();
+                threadSleep();
+                Bukkit.getServer().getScheduler().runTask(this.plugin, () -> Bukkit.getServer().dispatchCommand(player, "essentials:kit " + kitKey));
+                threadSleep();
+
+                Bukkit.getServer().getScheduler().runTask(this.plugin, () -> {
+                    this.plugin.getKitManager().addKit(player.getUniqueId(), kitKey, BukkitSerialization.turnInventoryIntoBase64s(player));
+                    player.sendMessage(Translate.miniMessage("<green>Translated kit: <yellow>" + kitKey));
+                });
+            }
+
+            Bukkit.getServer().getScheduler().runTask(this.plugin, () -> {
+                // Restore the inventory
+                player.getInventory().clear();
+                this.savedInventoryObject.give(player);
+                player.sendMessage(Translate.miniMessage("<green><bold>Finished kits conversion!"));
+            });
+        });
     }
 
     private void kitsTo() {
