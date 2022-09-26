@@ -37,6 +37,10 @@ public class SavedInventoriesManager {
         easySQL.create(columns, false);
     }
 
+    public void save(UUID uuid, SavedInventoryObject savedInventoryObject) {
+        save(uuid, savedInventoryObject.getName(), savedInventoryObject.getData());
+    }
+
     public void save(UUID uuid, String name, String[] data) {
         check(uuid);
         this.savedInventoryMap.get(uuid).add(name);

@@ -4,7 +4,6 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.SavedInventoryObject;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -64,9 +63,9 @@ public class SaveInventoryCMD implements CommandExecutor {
             String name = args[1];
 
             if (action.equalsIgnoreCase("save")) {
-                String[] data = BukkitSerialization.turnInventoryIntoBase64s(player);
+                SavedInventoryObject savedInventoryObject = SavedInventoryObject.create(player, name);
 
-                this.plugin.getSavedInventoriesManager().save(player.getUniqueId(), name.toLowerCase(), data);
+                this.plugin.getSavedInventoriesManager().save(player.getUniqueId(), savedInventoryObject);
                 player.sendMessage(Translate.miniMessage("<green>Inventory saved as <gold>" + name.toLowerCase()));
                 return true;
             } else if (action.equalsIgnoreCase("load")) {
