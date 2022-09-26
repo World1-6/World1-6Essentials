@@ -3,6 +3,7 @@ package com.andrew121410.mc.world16essentials.datatranslator.essentialsx;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.datatranslator.DataTranslator;
 import com.andrew121410.mc.world16essentials.datatranslator.IDataTranslator;
+import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
@@ -10,15 +11,19 @@ import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.config.holders.UserConfigHolder;
 import com.earth2me.essentials.libs.configurate.serialize.SerializationException;
+import com.earth2me.essentials.libs.snakeyaml.external.biz.base64Coder.Base64Coder;
 import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -44,6 +49,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     public boolean convertTo() {
         this.homesTo();
         this.warpsTo();
+        this.kitsTo();
         return true;
     }
 
@@ -118,6 +124,35 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 essentials.getWarps().setWarp(warpName, location);
             } catch (Exception ignored) {
             }
+        });
+    }
+
+    private void kitsFrom() {
+        // Not possible at the moment
+    }
+
+    private void kitsTo() {
+        this.plugin.getSetListMap().getKitsMap().forEach((s, kit) -> {
+            ItemStack[] regularItems;
+            try {
+                regularItems = BukkitSerialization.base64ToItemStackArray(kit.getData()[0]);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            List<String> data = new ArrayList<>();
+
+            // Just took this from EssentialsX
+            ItemStack[] var11 = regularItems;
+            int var12 = regularItems.length;
+            for (int var13 = 0; var13 < var12; ++var13) {
+                ItemStack is = var11[var13];
+                if (is != null && is.getType() != null && is.getType() != Material.AIR) {
+                    String serialized = "@" + Base64Coder.encodeLines(this.essentials.getSerializationProvider().serializeItem(is));
+                    data.add(serialized);
+                }
+            }
+            this.essentials.getKits().addKit(kit.getKitName(), data, 1);
         });
     }
 
