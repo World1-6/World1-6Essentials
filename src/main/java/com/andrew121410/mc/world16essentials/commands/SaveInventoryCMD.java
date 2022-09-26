@@ -88,6 +88,8 @@ public class SaveInventoryCMD implements CommandExecutor {
                 player.sendMessage(Translate.miniMessage("<green>Inventory deleted as <gold>" + name));
                 return true;
             }
+        } else {
+            player.sendMessage(Translate.miniMessage("<red>Usage: <gold>/saveinventory <save/load/delete> <name>"));
         }
         return true;
     }
