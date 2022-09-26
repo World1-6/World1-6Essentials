@@ -7,7 +7,6 @@ import com.andrew121410.mc.world16utils.utils.ccutils.storage.SQLite;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.SQLDataStore;
 import com.google.common.collect.Multimap;
-import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -41,8 +40,8 @@ public class KitManager {
         easySQL.create(columns, true);
     }
 
-    public void addKit(Player player, String kitName, String[] data) {
-        KitObject kitObject = new KitObject(kitName, this.kitSettingsManager.generateSettings(kitName), player.getUniqueId(), System.currentTimeMillis() + "", data);
+    public void addKit(UUID creator, String kitName, String[] data) {
+        KitObject kitObject = new KitObject(kitName, this.kitSettingsManager.generateSettings(kitName), creator, System.currentTimeMillis() + "", data);
         this.kitsMap.put(kitName, kitObject);
         saveKit(kitObject);
     }
@@ -51,7 +50,7 @@ public class KitManager {
         Map<String, String> map = new HashMap<>();
 
         map.put("KitName", kitObject.getKitName());
-        map.put("WhoCreated", kitObject.getWhoCreatedUUID().toString());
+        map.put("WhoCreated", kitObject.getWhoCreatedUUID() != null ? kitObject.getWhoCreatedUUID().toString() : "null");
         map.put("TimeCreated", kitObject.getTimeCreated());
         map.put("RegularInventory", kitObject.getData()[0]);
         map.put("ArmorContent", kitObject.getData()[1]);
@@ -86,7 +85,7 @@ public class KitManager {
                 String regularInventory = value.get("RegularInventory");
                 String armorContent = value.get("ArmorContent");
 
-                KitObject kitObject = new KitObject(kitName, this.kitSettingsManager.getFromConfig(kitName), UUID.fromString(whoCreated), timeCreated, new String[]{regularInventory, armorContent});
+                KitObject kitObject = new KitObject(kitName, this.kitSettingsManager.getFromConfig(kitName), !whoCreated.equals("null") ? UUID.fromString(whoCreated) : null, timeCreated, new String[]{regularInventory, armorContent});
                 this.kitsMap.put(kitName, kitObject);
             });
         } catch (SQLException e) {

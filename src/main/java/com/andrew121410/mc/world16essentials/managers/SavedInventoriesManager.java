@@ -38,6 +38,7 @@ public class SavedInventoriesManager {
     }
 
     public void save(UUID uuid, String name, String[] data) {
+        check(uuid);
         this.savedInventoryMap.get(uuid).add(name);
 
         Map<String, String> map = new HashMap<>();
@@ -69,6 +70,29 @@ public class SavedInventoriesManager {
         return new SavedInventoryObject(inventoryName, data);
     }
 
+    // Used in CMIDataTranslator
+    public Map<String, SavedInventoryObject> load(UUID uuid) {
+        Map<String, SavedInventoryObject> savedInventoryObjectMap = new HashMap<>();
+
+        Map<String, String> map = new HashMap<>();
+
+        map.put("UUID", uuid.toString());
+
+        Multimap<String, SQLDataStore> sqlDataStoreMultimap = this.easySQL.get(map);
+
+        for (SQLDataStore sqlDataStore : sqlDataStoreMultimap.values()) {
+            String inventoryName = sqlDataStore.get("InventoryName");
+            String regularInventory = sqlDataStore.get("RegularInventory");
+            String armorContent = sqlDataStore.get("ArmorContent");
+            String[] data = new String[]{regularInventory, armorContent};
+
+            savedInventoryObjectMap.put(inventoryName, new SavedInventoryObject(inventoryName, data));
+        }
+
+        return savedInventoryObjectMap;
+    }
+
+    // Used in PlayerInitializer
     public void loadAllSavedInventoriesNames(UUID uuid) {
         this.savedInventoryMap.put(uuid, new HashSet<>());
 
@@ -83,6 +107,7 @@ public class SavedInventoriesManager {
     }
 
     public void delete(UUID uuid, String inventoryName) {
+        check(uuid);
         this.savedInventoryMap.get(uuid).remove(inventoryName);
 
         Map<String, String> map = new HashMap<>();
@@ -90,5 +115,9 @@ public class SavedInventoriesManager {
         map.put("InventoryName", inventoryName);
 
         this.easySQL.delete(map);
+    }
+
+    private void check(UUID uuid) {
+        this.plugin.getSetListMap().getSavedInventoryMap().putIfAbsent(uuid, new HashSet<>());
     }
 }
