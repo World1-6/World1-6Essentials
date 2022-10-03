@@ -179,8 +179,8 @@ public class World16Essentials extends JavaPlugin {
         new GmaCMD(this);
 
         //Tpa commands
-        new TpaCMD(this, this.customConfigManager);
-        new TpAcceptCMD(this, this.customConfigManager);
+        new TpaCMD(this);
+        new TpAcceptCMD(this);
         new TpDenyCMD(this);
 
         //Spawn commands

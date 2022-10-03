@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16essentials.commands.tp;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;
@@ -10,19 +9,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class TpAcceptCMD implements CommandExecutor {
 
-    private final Map<Player, Player> tpaMap;
+    private final Map<UUID, UUID> tpaMap;
 
     private final World16Essentials plugin;
     private final API api;
 
-    private final CustomConfigManager customYmlManager;
-
-    public TpAcceptCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
+    public TpAcceptCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.customYmlManager = customConfigManager;
         this.api = this.plugin.getApi();
 
         this.tpaMap = this.plugin.getSetListMap().getTpaMap();
@@ -43,11 +40,12 @@ public class TpAcceptCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            Player tpa = this.tpaMap.get(player);
+            UUID uuid = this.tpaMap.get(player.getUniqueId());
+            Player tpa = this.plugin.getServer().getPlayer(uuid);
             if (tpa != null) {
                 tpa.teleport(player);
                 tpa.sendMessage(Translate.chat("[&eTPA&r] &a" + player.getDisplayName() + " has accepted your tpa request."));
-                this.tpaMap.remove(player);
+                this.tpaMap.remove(player.getUniqueId());
                 return true;
             } else {
                 player.sendMessage(Translate.chat("&e[TPA]&r &cLooks like you don't have any tpa request."));
