@@ -34,8 +34,7 @@ public class GmspCMD implements CommandExecutor {
                 return true;
             }
 
-            player.setGameMode(GameMode.SPECTATOR);
-            player.sendMessage(Translate.chat("&6Set game mode &cspectator&6 for " + ((Player) sender).getDisplayName()));
+            changeGamemode(player, null);
             return true;
         } else if (args.length == 1) {
             if (!sender.hasPermission("world16.gmsp.other")) {
