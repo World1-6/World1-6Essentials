@@ -24,38 +24,31 @@ public class SudoCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            if (args.length >= 2) {
-                if (!sudoCommand(args)) {
-                    sender.sendMessage("Player wasn't found.");
-                } else sender.sendMessage("The command was ran successfully for the user.");
-            }
-            return true;
-        }
-        Player p = (Player) sender;
-
-        if (!p.hasPermission("world16.sudo")) {
-            api.sendPermissionErrorMessage(p);
+        if (!sender.hasPermission("world16.sudo")) {
+            api.sendPermissionErrorMessage(sender);
             return true;
         }
 
-        if (args.length == 0) {
-            p.sendMessage(Translate.color("&6Usage:&r &c/sudo <Player> <Command>"));
+        if (args.length >= 2) {
+            Player target = this.plugin.getServer().getPlayer(args[0]);
+            if (target != null && target.isOnline()) sudoCommand(target, sender, args);
+            else sender.sendMessage(Translate.miniMessage("<dark_red>Player is not online!"));
             return true;
-        } else if (args.length >= 2) {
-            if (!sudoCommand(args)) p.sendMessage(Translate.color("&cPlayer wasn't found."));
-            else p.sendMessage(Translate.color("&6[Sudo]&r &2The command was ran successfully for the user."));
+        } else {
+            sender.sendMessage(Translate.miniMessage("<red>Usage: <gold>/sudo <player> <command>"));
         }
         return true;
     }
 
-    private boolean sudoCommand(String[] args) {
-        Player player = this.plugin.getServer().getPlayer(args[0]);
-        if (player == null) return false;
+    private boolean sudoCommand(Player target, CommandSender sender, String[] args) {
         String[] commandArray = Arrays.copyOfRange(args, 1, args.length);
+
+        // Remove the slash if it's there.
         if (commandArray[0].contains("/")) commandArray[0] = commandArray[0].replace("/", "");
         String command = String.join(" ", commandArray);
-        this.plugin.getServer().dispatchCommand(player, command);
+
+        this.plugin.getServer().dispatchCommand(target, command);
+        sender.sendMessage(Translate.miniMessage("<dark_aqua>Command <gold>" + command + " <dark_aqua>has been executed as <gold>" + target.getName()));
         return true;
     }
 }
