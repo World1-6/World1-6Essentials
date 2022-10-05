@@ -23,37 +23,42 @@ public class GmspCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-        Player p = (Player) sender;
-
-        if (!p.hasPermission("world16.gmsp")) {
-            api.sendPermissionErrorMessage(p);
-            return true;
-        }
-
         if (args.length == 0) {
-            p.setGameMode(GameMode.SPECTATOR);
-            p.sendMessage(Translate.chat("&6Set game mode &cspectator&6 for " + ((Player) sender).getDisplayName()));
-            return true;
-        } else if (args.length == 1) {
-            if (!p.hasPermission("world16.gmsp.other")) {
-                api.sendPermissionErrorMessage(p);
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
                 return true;
             }
-            Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target != null && target.isOnline()) {
-                target.setGameMode(GameMode.SPECTATOR);
-                target.sendMessage(Translate.chat("&6Set game mode &cspectator&6 for " + target.getDisplayName()));
-                p.sendMessage(Translate.chat("&6Set game mode &cspectator&6 for " + target.getDisplayName()));
+
+            if (!player.hasPermission("world16.gmsp")) {
+                api.sendPermissionErrorMessage(player);
+                return true;
             }
+
+            player.setGameMode(GameMode.SPECTATOR);
+            player.sendMessage(Translate.chat("&6Set game mode &cspectator&6 for " + ((Player) sender).getDisplayName()));
+            return true;
+        } else if (args.length == 1) {
+            if (!sender.hasPermission("world16.gmsp.other")) {
+                api.sendPermissionErrorMessage(sender);
+                return true;
+            }
+
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target != null && target.isOnline()) changeGamemode(target, sender);
             return true;
         } else {
-            p.sendMessage(Translate.chat("&aAliases: gmsp && gm3"));
-            p.sendMessage(Translate.chat("&cUsage: for yourself do /gmsp OR /gm3 OR /gmsp <Player> OR /gm3 <Player>"));
+            sender.sendMessage(Translate.miniMessage("<red>Usage: <gold>/gmsp <player?>"));
         }
         return true;
+    }
+
+    private void changeGamemode(Player target, CommandSender sender) {
+        String color = target.isOp() ? "&4" : "&7";
+
+        target.setGameMode(GameMode.SPECTATOR);
+        target.sendMessage(Translate.chat("&6Set game mode &cspectator&6 for " + color + target.getDisplayName()));
+        if (sender != null) {
+            sender.sendMessage(Translate.chat("&6Set game mode &cspectator&6 for " + color + target.getDisplayName()));
+        }
     }
 }

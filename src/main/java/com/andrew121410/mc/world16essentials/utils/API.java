@@ -7,6 +7,7 @@ import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import com.andrew121410.mc.world16utils.utils.ccutils.utils.StringDataTimeBuilder;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "10/3/2022";
+    public static final String DATE_OF_VERSION = "10/5/2022";
     public static final String CUSTOM_COMMAND_FORMAT = "`";
 
     private final World16Essentials plugin;
@@ -116,8 +117,8 @@ public class API {
         }
     }
 
-    public void sendPermissionErrorMessage(Player player) {
-        player.sendMessage(Translate.chat("&4You do not have permission to do this command."));
+    public void sendPermissionErrorMessage(CommandSender sender) {
+        sender.sendMessage(Translate.chat("&4You do not have permission to do this command."));
     }
 
     public String parseMessage(Player player, String message) {

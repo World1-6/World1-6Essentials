@@ -17,42 +17,47 @@ public class GmaCMD implements CommandExecutor {
     public GmaCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
-        plugin.getCommand("gma").setExecutor(this);
+
+        this.plugin.getCommand("gma").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-        Player p = (Player) sender;
-
-        if (!p.hasPermission("world16.gma")) {
-            api.sendPermissionErrorMessage(p);
-            return true;
-        }
-
         if (args.length == 0) {
-            p.setGameMode(GameMode.ADVENTURE);
-            p.sendMessage(Translate.chat("&6Set game mode &cadventure&6 for " + ((Player) sender).getDisplayName()));
-            return true;
-        } else if (args.length == 1) {
-            if (!p.hasPermission("world16.gma.other")) {
-                api.sendPermissionErrorMessage(p);
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
                 return true;
             }
-            Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target != null && target.isOnline()) {
-                target.setGameMode(GameMode.ADVENTURE);
-                target.sendMessage(Translate.chat("&6Set game mode &cadventure&6 for " + target.getDisplayName()));
-                p.sendMessage(Translate.chat("&6Set game mode &cadventure&6 for " + target.getDisplayName()));
+
+            if (!player.hasPermission("world16.gma")) {
+                api.sendPermissionErrorMessage(player);
+                return true;
             }
+
+            changeGamemode(player, null);
+            return true;
+        } else if (args.length == 1) {
+            if (!sender.hasPermission("world16.gma.other")) {
+                api.sendPermissionErrorMessage(sender);
+                return true;
+            }
+
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target != null && target.isOnline()) changeGamemode(target, sender);
             return true;
         } else {
-            p.sendMessage(Translate.chat("&aAliases: gma && gm2"));
-            p.sendMessage(Translate.chat("&cUsage: for yourself do /gma OR /gm2 OR /gma <Player> OR /gm2 <Player>"));
+            sender.sendMessage(Translate.miniMessage("<red>Usage: <gold>/gma <player?>"));
         }
         return true;
+    }
+
+    private void changeGamemode(Player target, CommandSender sender) {
+        String color = target.isOp() ? "&4" : "&7";
+
+        target.setGameMode(GameMode.ADVENTURE);
+        target.sendMessage(Translate.chat("&6Set game mode &cadventure&6 for " + color + target.getDisplayName()));
+        if (sender != null) {
+            sender.sendMessage(Translate.chat("&6Set game mode &cadventure&6 for " + color + target.getDisplayName()));
+        }
     }
 }

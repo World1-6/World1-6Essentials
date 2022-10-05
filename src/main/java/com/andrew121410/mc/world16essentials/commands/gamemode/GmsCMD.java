@@ -23,37 +23,41 @@ public class GmsCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-        Player p = (Player) sender;
-
-        if (!p.hasPermission("world16.gms")) {
-            api.sendPermissionErrorMessage(p);
-            return true;
-        }
-
         if (args.length == 0) {
-            p.setGameMode(GameMode.SURVIVAL);
-            p.sendMessage(Translate.chat("&6Set game mode &csurvival&6 for " + ((Player) sender).getDisplayName()));
-            return true;
-        } else if (args.length == 1) {
-            if (!p.hasPermission("world16.gms.other")) {
-                api.sendPermissionErrorMessage(p);
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
                 return true;
             }
-            Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target != null && target.isOnline()) {
-                target.setGameMode(GameMode.SURVIVAL);
-                target.sendMessage(Translate.chat("&6Set game mode &csurvival&6 for " + target.getDisplayName()));
-                p.sendMessage(Translate.chat("&6Set game mode &csurvival&6 for " + target.getDisplayName()));
+
+            if (!player.hasPermission("world16.gms")) {
+                api.sendPermissionErrorMessage(player);
+                return true;
             }
+
+            changeGamemode(player, null);
+            return true;
+        } else if (args.length == 1) {
+            if (!sender.hasPermission("world16.gms.other")) {
+                api.sendPermissionErrorMessage(sender);
+                return true;
+            }
+
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target != null && target.isOnline()) changeGamemode(target, sender);
             return true;
         } else {
-            p.sendMessage(Translate.chat("&aAliases: gms && gm0"));
-            p.sendMessage(Translate.chat("&cUsage: for yourself do /gms OR /gm0 OR /gms <Player> OR /gm0 <Player>"));
+            sender.sendMessage(Translate.miniMessage("<red>Usage: <gold>/gms <player?>"));
         }
         return true;
+    }
+
+    private void changeGamemode(Player target, CommandSender sender) {
+        String color = target.isOp() ? "&4" : "&7";
+
+        target.setGameMode(GameMode.SURVIVAL);
+        target.sendMessage(Translate.chat("&6Set game mode &csurvival&6 for " + color + target.getDisplayName()));
+        if (sender != null) {
+            sender.sendMessage(Translate.chat("&6Set game mode &csurvival&6 for " + color + target.getDisplayName()));
+        }
     }
 }
