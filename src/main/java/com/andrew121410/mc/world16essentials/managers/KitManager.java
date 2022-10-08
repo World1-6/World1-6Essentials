@@ -2,11 +2,13 @@ package com.andrew121410.mc.world16essentials.managers;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.KitObject;
+import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.ISQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.SQLite;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.SQLDataStore;
 import com.google.common.collect.Multimap;
+import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -91,5 +93,10 @@ public class KitManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void giveKit(Player player, KitObject kitObject) {
+        this.plugin.getKitSettingsManager().setLastUsed(player, kitObject);
+        BukkitSerialization.giveFromBase64s(player, kitObject.getData());
     }
 }

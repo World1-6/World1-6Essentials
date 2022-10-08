@@ -4,7 +4,6 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.KitObject;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -33,8 +32,7 @@ public class OnPlayerJoinEvent implements Listener {
         if (!player.hasPlayedBefore()) {
             for (KitObject value : this.plugin.getSetListMap().getKitsMap().values()) {
                 if (value.getSettings().isGiveOnFirstJoin()) {
-                    this.plugin.getKitSettingsManager().setLastUsed(player, value);
-                    BukkitSerialization.giveFromBase64s(player, value.getData());
+                    this.plugin.getKitManager().giveKit(player, value);
                 }
             }
         }

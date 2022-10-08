@@ -4,7 +4,6 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.KitObject;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -76,8 +75,7 @@ public class KitCMD implements CommandExecutor {
                 player.sendMessage(Translate.miniMessage("<gold>You can use this kit in " + this.plugin.getKitSettingsManager().getTimeUntilCanUseAgain(player, kitObject)));
                 return true;
             }
-            this.plugin.getKitSettingsManager().setLastUsed(player, kitObject);
-            BukkitSerialization.giveFromBase64s(player, kitObject.getData());
+            this.plugin.getKitManager().giveKit(player, kitObject);
             player.sendMessage(Translate.miniMessage("<green>You have received the kit: <blue>" + name));
             return true;
         }
