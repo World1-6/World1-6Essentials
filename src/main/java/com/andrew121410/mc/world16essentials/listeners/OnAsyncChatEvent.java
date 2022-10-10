@@ -11,12 +11,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class OnAsyncPlayerChatEvent implements Listener {
+public class OnAsyncChatEvent implements Listener {
 
     private final World16Essentials plugin;
     private final API api;
 
-    public OnAsyncPlayerChatEvent(World16Essentials plugin) {
+    public OnAsyncChatEvent(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
@@ -34,7 +34,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
             for (Player targetPlayer : plugin.getServer().getOnlinePlayers()) {
                 if (message.contains(targetPlayer.getName())) {
                     if (this.api.isAfk(targetPlayer)) {
-                        this.plugin.getServer().broadcast(Translate.miniMessage("<gold><underline>" + targetPlayer.getName() + " is AFK!"));
+                        this.plugin.getServer().broadcast(Translate.miniMessage("<red>System -> <gold><u>" + targetPlayer.getName() + " is AFK!"));
                     }
                     targetPlayer.playSound(targetPlayer.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
                 }
