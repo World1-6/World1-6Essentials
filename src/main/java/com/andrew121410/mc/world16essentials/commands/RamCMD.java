@@ -20,6 +20,7 @@ public class RamCMD implements CommandExecutor {
     private String cpuModelCache = null;
     private String operatingSystemCache = null;
     private String kernelNumberCache = null;
+    private String javaVersionCache = null;
 
     public RamCMD(World16Essentials plugin) {
         this.plugin = plugin;
@@ -81,6 +82,17 @@ public class RamCMD implements CommandExecutor {
         }
         if (this.kernelNumberCache != null) {
             player.sendMessage(Translate.color("&6Kernel: &7" + this.kernelNumberCache));
+        }
+
+        if (this.javaVersionCache == null) {
+            try {
+                this.javaVersionCache = System.getProperty("java.version");
+            } catch (Exception ignored) {
+                this.javaVersionCache = null;
+            }
+        }
+        if (this.javaVersionCache != null) {
+            player.sendMessage(Translate.color("&6Java: &7" + this.javaVersionCache));
         }
 
         player.sendMessage("");
