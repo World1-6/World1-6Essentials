@@ -18,7 +18,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -77,14 +77,14 @@
         <dependency>
             <groupId>com.github.World1-6.World1-6Utils</groupId>
             <artifactId>World1-6Utils-Plugin</artifactId>
-            <version>fb97d9df</version>
+            <version>d2e09d1d</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.github.World1-6.World1-6Utils</groupId>
             <artifactId>World1-6Utils_CMI_API</artifactId>
-            <version>fb97d9df</version>
+            <version>d2e09d1d</version>
             <scope>provided</scope>
         </dependency>
 
