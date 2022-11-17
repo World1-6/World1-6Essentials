@@ -93,7 +93,7 @@ public class SignCMD implements CommandExecutor {
             }
 
         } else {
-            player.sendMessage(Translate.chat("&cUsage: /sign <give|edit>"));
+            player.sendMessage(Translate.chat("&cUsage: /sign <give|edit|edita>"));
         }
         return true;
     }
