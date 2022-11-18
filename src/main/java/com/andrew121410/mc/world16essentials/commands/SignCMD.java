@@ -118,10 +118,18 @@ public class SignCMD implements CommandExecutor {
                         player.sendMessage(component);
 
                         ChatResponseManager chatResponseManager = plugin.getOtherPlugins().getWorld16Utils().getChatResponseManager();
-                        chatResponseManager.create(player, null, null, (player1, s) -> {
+                        chatResponseManager.create(player, (player1, s) -> {
+                            // Update with new text.
                             sign.line(finalI, isRegular ? LegacyComponentSerializer.legacyAmpersand().deserialize(s) : MiniMessage.miniMessage().deserialize(s));
                             sign.update();
                             player1.sendMessage(Translate.miniMessage("<green>Line " + (finalI + 1) + " has been updated."));
+
+                            // Way to revert changes
+                            player1.sendMessage(Translate.miniMessage("<yellow>Click me to revert change").clickEvent(plugin.getOtherPlugins().getWorld16Utils().getChatClickCallbackManager().create((player2 -> {
+                                sign.line(finalI, signLineComponent);
+                                sign.update();
+                                player2.sendMessage(Translate.miniMessage("<green>Line " + (finalI + 1) + " has been reverted."));
+                            }))));
                         });
                         player.closeInventory();
                     })));
