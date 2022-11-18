@@ -123,6 +123,7 @@ public class SignCMD implements CommandExecutor {
                             sign.update();
                             player1.sendMessage(Translate.miniMessage("<green>Line " + (finalI + 1) + " has been updated."));
                         });
+                        player.closeInventory();
                     })));
                 }
 
