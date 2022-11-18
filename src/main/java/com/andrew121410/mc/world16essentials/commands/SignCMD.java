@@ -10,6 +10,7 @@ import com.andrew121410.mc.world16utils.gui.buttons.AbstractGUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
 import com.andrew121410.mc.world16utils.player.PlayerUtils;
 import com.andrew121410.mc.world16utils.utils.InventoryUtils;
+import com.andrew121410.mc.world16utils.utils.TabUtils;
 import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -43,8 +44,9 @@ public class SignCMD implements CommandExecutor {
         this.api = this.plugin.getApi();
         this.plugin.getCommand("sign").setExecutor(this);
         this.plugin.getCommand("sign").setTabCompleter((commandSender, command, s, args) -> {
-            if (args.length == 1) return Arrays.asList("give", "edit", "edita");
-            if (args.length == 2 && args[0].equalsIgnoreCase("edita")) return Arrays.asList("@regular", "@minimessage");
+            if (args.length == 1) return TabUtils.getContainsString(args[0], Arrays.asList("give", "edit", "edita"));
+            if (args.length == 2 && args[0].equalsIgnoreCase("edita"))
+                return TabUtils.getContainsString(args[1], Arrays.asList("@regular", "@minimessage"));
             return null;
         });
     }
