@@ -8,6 +8,7 @@ import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.gui.GUIWindow;
 import com.andrew121410.mc.world16utils.gui.buttons.AbstractGUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
+import com.andrew121410.mc.world16utils.gui.buttons.defaults.LoreShifterButton;
 import com.andrew121410.mc.world16utils.player.PlayerUtils;
 import com.andrew121410.mc.world16utils.utils.InventoryUtils;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
@@ -134,6 +135,18 @@ public class SignCMD implements CommandExecutor {
                         player.closeInventory();
                     })));
                 }
+
+                guiButtons.add(new LoreShifterButton(8, InventoryUtils.createItem(Material.GLOW_INK_SAC, 1, "Glow"), new String[]{"off", "on"}, (guiClickEvent, number) -> {
+                    if (number == 0) {
+                        sign.setGlowingText(false);
+                        sign.update();
+                        player.sendMessage(Translate.miniMessage("<green>Glowing text has been turned off."));
+                    } else {
+                        sign.setGlowingText(true);
+                        sign.update();
+                        player.sendMessage(Translate.miniMessage("<green>Glowing text has been turned on."));
+                    }
+                }));
 
                 this.update(guiButtons, "Click line to edit!", 9);
             }
