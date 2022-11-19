@@ -14,7 +14,7 @@ public class SetListMap {
     // 1 TO ONLY CLEAR WHEN THE SERVER SHUTS DOWN
 
     private final Map<UUID, Map<BackEnum, Location>> backMap; //0
-    private final Map<Player, Player> tpaMap; //0
+    private final Map<UUID, UUID> tpaMap; //0
     private final Map<UUID, AfkObject> afkMap; //0
     private final Map<UUID, Map<String, Location>> homesMap; //0
     private final Map<UUID, PowerToolObject> powerToolMap; //0
@@ -63,7 +63,7 @@ public class SetListMap {
 
     public void clearAllMaps(Player p) {
         backMap.remove(p.getUniqueId());
-        tpaMap.remove(p);
+        tpaMap.remove(p.getUniqueId());
         afkMap.remove(p.getUniqueId());
         homesMap.remove(p.getUniqueId());
         powerToolMap.remove(p.getUniqueId());
@@ -99,7 +99,7 @@ public class SetListMap {
         return backMap;
     }
 
-    public Map<Player, Player> getTpaMap() {
+    public Map<UUID, UUID> getTpaMap() {
         return tpaMap;
     }
 

@@ -10,10 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class TpAcceptCMD implements CommandExecutor {
 
-    private final Map<Player, Player> tpaMap;
+    private final Map<UUID, UUID> tpaMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -45,11 +46,12 @@ public class TpAcceptCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            Player tpa = this.tpaMap.get(player);
+            UUID uuid = this.tpaMap.get(player.getUniqueId());
+            Player tpa = this.plugin.getServer().getPlayer(uuid);
             if (tpa != null) {
                 tpa.teleport(player);
                 tpa.sendMessage(Translate.chat("[&eTPA&r] &a" + player.getDisplayName() + " has accepted your tpa request."));
-                this.tpaMap.remove(player);
+                this.tpaMap.remove(player.getUniqueId());
                 return true;
             } else {
                 player.sendMessage(Translate.chat("&e[TPA]&r &cLooks like you don't have any tpa request."));

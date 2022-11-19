@@ -9,10 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class TpDenyCMD implements CommandExecutor {
 
-    private final Map<Player, Player> tpaMap;
+    private final Map<UUID, UUID> tpaMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -41,11 +42,12 @@ public class TpDenyCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            Player tpa = this.tpaMap.get(player);
+            UUID uuid = this.tpaMap.get(player.getUniqueId());
+            Player tpa = this.plugin.getServer().getPlayer(uuid);
             if (tpa != null) {
                 player.sendMessage(Translate.chat("&9Ok you denied the tp request."));
                 tpa.sendMessage(Translate.chat("[&eTPA&r] &cYour tpa request got denied by " + player.getDisplayName()));
-                this.tpaMap.remove(player);
+                this.tpaMap.remove(player.getUniqueId());
             } else {
                 player.sendMessage(Translate.chat("&4Something went wrong."));
             }

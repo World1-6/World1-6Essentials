@@ -10,10 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class TpaCMD implements CommandExecutor {
 
-    private final Map<Player, Player> tpaMap;
+    private final Map<UUID, UUID> tpaMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -49,7 +50,7 @@ public class TpaCMD implements CommandExecutor {
         } else if (args.length == 1) {
             Player target = plugin.getServer().getPlayerExact(args[0]); //Get the player
             if (target != null && target.isOnline()) {
-                tpaMap.put(target, player);
+                tpaMap.put(target.getUniqueId(), player.getUniqueId());
                 player.sendMessage(Translate.chat("[&eTPA&r] &9Sent tpa request too " + target.getDisplayName()));
                 sendTpaRequestMessage(player, target);
             } else {
