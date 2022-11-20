@@ -213,8 +213,6 @@ public class World16Essentials extends JavaPlugin {
         new OnPlayerDamageEvent(this);
         new OnPlayerTeleportEvent(this);
         //...
-        new OnPlayerBedEnterEvent(this);
-        //...
         new OnAsyncChatEvent(this);
         new OnPlayerInteractEvent(this);
 

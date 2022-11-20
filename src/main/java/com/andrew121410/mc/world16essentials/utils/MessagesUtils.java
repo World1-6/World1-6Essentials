@@ -3,6 +3,8 @@ package com.andrew121410.mc.world16essentials.utils;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -16,7 +18,6 @@ public class MessagesUtils {
     private String welcomeBackMessage;
     private String firstJoinedMessage;
     private String leaveMessage;
-    private String bedMessage;
 
     public MessagesUtils(World16Essentials plugin, CustomYmlManager messagesYml) {
         this.plugin = plugin;
@@ -30,7 +31,6 @@ public class MessagesUtils {
         this.welcomeBackMessage = this.messagesConfig.getString("welcomeBackMessage");
         this.firstJoinedMessage = this.messagesConfig.getString("firstJoinedMessage");
         this.leaveMessage = this.messagesConfig.getString("leaveMessage");
-        this.bedMessage = this.messagesConfig.getString("bedMessage");
     }
 
     private void addDefaults() {
@@ -38,17 +38,21 @@ public class MessagesUtils {
         this.messagesConfig.addDefault("welcomeBackMessage", "%prefix% &6Welcome back, %player%!");
         this.messagesConfig.addDefault("firstJoinedMessage", "%prefix% &6Welcome to the server, %player%!");
         this.messagesConfig.addDefault("leaveMessage", "%prefix% &6%player% has left the server.");
-        this.messagesConfig.addDefault("bedMessage", "%prefix% &6%player% has slept.");
 
         this.messagesConfig.options().copyDefaults(true);
         this.messagesYml.saveConfig();
         this.messagesYml.reloadConfig();
     }
 
-    public String parseMessage(Player player, String message) {
-        message = message.replaceAll("%player%", player.getDisplayName());
+    public String parseMessageString(Player player, String message) {
+        String output = LegacyComponentSerializer.legacyAmpersand().serialize(parseMessage(player, message));
+        return Translate.color(output);
+    }
+
+    public Component parseMessage(Player player, String message) {
+        message = message.replaceAll("%player%", player.getName());
         message = message.replaceAll("%prefix%", this.prefix);
-        return Translate.color(message);
+        return Translate.colorc(message);
     }
 
     public String getPrefix() {
@@ -88,16 +92,6 @@ public class MessagesUtils {
     public void setLeaveMessage(String leaveMessage) {
         this.leaveMessage = leaveMessage;
         this.messagesConfig.set("leaveMessage", leaveMessage);
-        this.messagesYml.saveConfig();
-    }
-
-    public String getBedMessage() {
-        return bedMessage;
-    }
-
-    public void setBedMessage(String bedMessage) {
-        this.bedMessage = bedMessage;
-        this.messagesConfig.set("bedMessage", bedMessage);
         this.messagesYml.saveConfig();
     }
 }

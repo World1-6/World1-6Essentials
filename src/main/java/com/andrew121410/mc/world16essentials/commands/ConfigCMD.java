@@ -34,7 +34,7 @@ public class ConfigCMD implements CommandExecutor {
                 return TabUtils.getContainsString(args[1], Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
             } else if (args[0].equalsIgnoreCase("messages")) {
                 if (args.length == 2) {
-                    return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinedMessage", "leaveMessage", "bedMessage"));
+                    return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinedMessage", "leaveMessage"));
                 } else {
                     if (args[1].equalsIgnoreCase("prefix")) {
                         return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getPrefix()));
@@ -44,8 +44,6 @@ public class ConfigCMD implements CommandExecutor {
                         return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getFirstJoinedMessage()));
                     } else if (args[1].equalsIgnoreCase("leaveMessage")) {
                         return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getLeaveMessage()));
-                    } else if (args[1].equalsIgnoreCase("bedMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getBedMessage()));
                     }
                 }
             }
@@ -93,9 +91,6 @@ public class ConfigCMD implements CommandExecutor {
             } else if (args[1].equalsIgnoreCase("leaveMessage")) {
                 api.getMessagesUtils().setLeaveMessage(message);
                 player.sendMessage(Translate.color("&aLeave message set to &6" + message));
-            } else if (args[1].equalsIgnoreCase("bedMessage")) {
-                api.getMessagesUtils().setBedMessage(message);
-                player.sendMessage(Translate.color("&aBed message set to &6" + message));
             }
         }
         return true;

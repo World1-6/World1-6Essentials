@@ -5,6 +5,8 @@ import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import com.andrew121410.mc.world16utils.utils.ccutils.utils.StringDataTimeBuilder;
+import net.kyori.adventure.text.Component;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -111,11 +113,37 @@ public class API {
         }
     }
 
+    public void saveFlyingState(Player player) {
+        // Don't save flying state if player is in creative.
+        if (player.getGameMode() == GameMode.CREATIVE) return;
+
+        // Don't save if player isn't flying.
+        if (!player.isFlying()) return;
+
+        ConfigurationSection configurationSection = getPlayersYML(player);
+        configurationSection.set("Flying", true);
+        this.plugin.getCustomConfigManager().getPlayersYml().saveConfig();
+    }
+
+    public void loadFlyingState(Player player) {
+        ConfigurationSection configurationSection = getPlayersYML(player);
+        if (configurationSection.get("Flying") == null) return;
+        boolean fly = configurationSection.getBoolean("Flying");
+        player.setAllowFlight(fly);
+        player.setFlying(fly);
+        configurationSection.set("Flying", null);
+        player.sendMessage(Translate.colorc("&bYour flying state has been restored."));
+    }
+
     public void sendPermissionErrorMessage(CommandSender sender) {
         sender.sendMessage(Translate.chat("&4You do not have permission to do this command."));
     }
 
-    public String parseMessage(Player player, String message) {
+    public String parseMessageString(Player player, String message) {
+        return this.getMessagesUtils().parseMessageString(player, message);
+    }
+
+    public Component parseMessage(Player player, String message) {
         return this.getMessagesUtils().parseMessage(player, message);
     }
 
