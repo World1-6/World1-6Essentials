@@ -131,7 +131,9 @@ public class API {
         boolean fly = configurationSection.getBoolean("Flying");
         player.setAllowFlight(fly);
         player.setFlying(fly);
+
         configurationSection.set("Flying", null);
+        this.plugin.getCustomConfigManager().getPlayersYml().saveConfig();
         player.sendMessage(Translate.colorc("&bYour flying state has been restored."));
     }
 
