@@ -65,15 +65,15 @@ public class GodCMD implements CommandExecutor {
         String color = target.isOp() ? "&4" : "&7";
         if (!godList.contains(target.getUniqueId())) {
             godList.add(target.getUniqueId());
-            target.sendMessage(Translate.colorc("&6Set god mode &cenabled for " + color + target.getName()));
+            target.sendMessage(Translate.colorc("&6Set god mode &cenabled &6for " + color + target.getName()));
             if (sender != null) {
-                sender.sendMessage(Translate.colorc("&6Set god mode &cenabled for " + color + target.getName()));
+                sender.sendMessage(Translate.colorc("&6Set god mode &cenabled &6for " + color + target.getName()));
             }
         } else if (godList.contains(target.getUniqueId())) {
             godList.remove(target.getUniqueId());
-            target.sendMessage(Translate.colorc("&6Set god mode &cdisabled for " + color + target.getName()));
+            target.sendMessage(Translate.colorc("&6Set god mode &cdisabled &6for " + color + target.getName()));
             if (sender != null) {
-                sender.sendMessage(Translate.colorc("&6Set god mode &cdisabled for " + color + target.getName()));
+                sender.sendMessage(Translate.colorc("&6Set god mode &cdisabled &6for " + color + target.getName()));
             }
         }
     }
