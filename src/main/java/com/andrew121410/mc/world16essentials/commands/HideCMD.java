@@ -6,12 +6,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 public class HideCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
 
-    private final List<Player> hiddenPlayers;
+    private final List<UUID> hiddenPlayers;
 
     public HideCMD(World16Essentials plugin) {
         this.plugin = plugin;
@@ -36,7 +37,7 @@ public class HideCMD implements CommandExecutor {
             for (Player onlinePlayer : this.plugin.getServer().getOnlinePlayers()) {
                 onlinePlayer.hidePlayer(this.plugin, player);
             }
-            this.hiddenPlayers.add(player);
+            this.hiddenPlayers.add(player.getUniqueId());
             player.sendMessage(Translate.chat("&6You are now hidden from all players."));
         }
         return true;

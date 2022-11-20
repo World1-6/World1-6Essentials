@@ -27,7 +27,7 @@ public class SetListMap {
 
     private final List<String> flyList; //0
     private final List<String> godList; //0
-    private final List<Player> hiddenPlayers; //0
+    private final List<UUID> hiddenPlayers; //0
 
     private final List<String> soundsList; //1
     private final List<String> spyCommandBlock; //1
@@ -92,7 +92,7 @@ public class SetListMap {
     public void clearAllLists(Player p) {
         flyList.remove(p.getDisplayName());
         godList.remove(p.getDisplayName());
-        hiddenPlayers.remove(p);
+        hiddenPlayers.remove(p.getUniqueId());
     }
 
     public void clearAllLists() {
@@ -127,7 +127,7 @@ public class SetListMap {
         return godList;
     }
 
-    public List<Player> getHiddenPlayers() {
+    public List<UUID> getHiddenPlayers() {
         return hiddenPlayers;
     }
 

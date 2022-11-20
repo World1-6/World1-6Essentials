@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "11/19/2022";
+    public static final String DATE_OF_VERSION = "11/20/2022";
     public static final String CUSTOM_COMMAND_FORMAT = "`";
 
     private final World16Essentials plugin;
@@ -31,7 +31,7 @@ public class API {
 
     private final List<String> flyList;
     private final List<String> godList;
-    private final List<Player> hiddenPlayers;
+    private final List<UUID> hiddenPlayers;
 
     public API(World16Essentials plugin) {
         this.plugin = plugin;
@@ -61,7 +61,7 @@ public class API {
     }
 
     public boolean isHidden(Player player) {
-        return hiddenPlayers.contains(player);
+        return hiddenPlayers.contains(player.getUniqueId());
     }
 
     public String getTimeSinceLogin(Player player) {

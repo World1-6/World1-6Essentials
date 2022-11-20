@@ -20,7 +20,7 @@ public class PlayerInitializer {
     private final Map<UUID, AfkObject> afkObjectMap;
     private final Map<UUID, Long> timeOfLoginMap;
 
-    private final List<Player> hiddenPlayersList;
+    private final List<UUID> hiddenPlayersList;
 
     private final World16Essentials plugin;
     private final API api;
@@ -46,10 +46,12 @@ public class PlayerInitializer {
         this.plugin.getSavedInventoriesManager().loadAllSavedInventoriesNames(player.getUniqueId());
 
         String color = player.isOp() ? "&4" : "&7";
-        hiddenPlayersList.forEach((k) -> {
-            player.hidePlayer(this.plugin, k);
-            k.sendMessage(Translate.chat(api.getMessagesUtils().getPrefix() + " " + color + player.getDisplayName() + " &cnow cannot see you,"));
-        });
+        for (UUID uuid : hiddenPlayersList) {
+            Player target = this.plugin.getServer().getPlayer(uuid);
+            if (target == null) continue;
+            player.hidePlayer(this.plugin, target);
+            target.sendMessage(Translate.chat(api.getMessagesUtils().getPrefix() + " " + color + player.getDisplayName() + " &cnow cannot see you,"));
+        }
     }
 
     public void unload(Player player) {
