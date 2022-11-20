@@ -29,8 +29,7 @@ public class API {
     private final Map<UUID, Long> timeOfLoginMap;
     private final Map<UUID, AfkObject> afkMap;
 
-    private final List<String> flyList;
-    private final List<String> godList;
+    private final List<UUID> godList;
     private final List<UUID> hiddenPlayers;
 
     public API(World16Essentials plugin) {
@@ -43,7 +42,6 @@ public class API {
         this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
         this.afkMap = this.plugin.getSetListMap().getAfkMap();
 
-        this.flyList = this.plugin.getSetListMap().getFlyList();
         this.godList = this.plugin.getSetListMap().getGodList();
         this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
     }
@@ -52,12 +50,8 @@ public class API {
         return afkMap.get(player.getUniqueId()).isAfk();
     }
 
-    public boolean isFlying(Player player) {
-        return flyList.contains(player.getDisplayName()) || player.isFlying();
-    }
-
     public boolean isGod(Player player) {
-        return godList.contains(player.getDisplayName());
+        return godList.contains(player.getUniqueId());
     }
 
     public boolean isHidden(Player player) {

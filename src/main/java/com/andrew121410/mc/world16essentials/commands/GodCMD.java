@@ -9,13 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 public class GodCMD implements CommandExecutor {
 
-    //Lists
-    private final List<String> godm;
-    //...
+    private final List<UUID> godList;
 
     private final World16Essentials plugin;
     private final API api;
@@ -24,52 +22,58 @@ public class GodCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.godm = this.plugin.getSetListMap().getGodList();
+        this.godList = this.plugin.getSetListMap().getGodList();
 
         this.plugin.getCommand("god").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.god")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.god")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
         if (args.length == 0) {
-            doGod(p, Optional.empty());
+            doGod(player, null);
             return true;
         } else if (args.length == 1) {
-            if (!p.hasPermission("world16.god.other")) {
-                api.sendPermissionErrorMessage(p);
+            if (!player.hasPermission("world16.god.other")) {
+                api.sendPermissionErrorMessage(player);
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target != null && target.isOnline()) {
-                doGod(target, Optional.of(p));
+            if (target == null || !target.isOnline()) {
+                player.sendMessage(Translate.colorc("&cThat player is not online."));
+                return true;
             }
+
+            doGod(target, player);
             return true;
         } else {
-            p.sendMessage(Translate.chat("&cUsage:&9 /god &aOR &9/god <Player>"));
+            player.sendMessage(Translate.chat("&cUsage:&9 /god &aOR &9/god <Player>"));
         }
         return true;
     }
 
-    private void doGod(Player player, Optional<Player> optionalPlayer) {
-        if (godm.contains(player.getDisplayName())) {
-            godm.remove(player.getDisplayName());
-            player.sendMessage(Translate.chat("&e{GOD MODE} &cHas been turned off."));
-            optionalPlayer.ifPresent(player1 -> player1.sendMessage(Translate.chat("&e{GOD MODE} &cHas been turned off to &9" + player.getDisplayName() + ".")));
-        } else if (!godm.contains(player.getDisplayName())) {
-            godm.add(player.getDisplayName());
-            player.sendMessage(Translate.chat("&e{GOD MODE} &aHas been turned on."));
-            optionalPlayer.ifPresent(player1 -> player1.sendMessage(Translate.chat("&e{GOD MODE} &aHas been turned on to &9" + player.getDisplayName() + ".")));
+    private void doGod(Player target, Player sender) {
+        if (!godList.contains(target.getUniqueId())) {
+            godList.add(target.getUniqueId());
+            target.sendMessage(Translate.colorc("&2God mode has been &aenabled!"));
+            if (sender != null) {
+                sender.sendMessage(Translate.colorc("&2God mode has been &aenabled &2for &6" + target.getName()));
+            }
+        } else if (godList.contains(target.getUniqueId())) {
+            godList.remove(target.getUniqueId());
+            target.sendMessage(Translate.colorc("&2God mode has been &cdisabled!"));
+            if (sender != null) {
+                sender.sendMessage(Translate.colorc("&2God mode has been &cdisabled &2for &6" + target.getName()));
+            }
         }
     }
 }

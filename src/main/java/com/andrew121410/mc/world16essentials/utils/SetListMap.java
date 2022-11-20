@@ -25,8 +25,7 @@ public class SetListMap {
     private final Map<String, Location> warpsMap; //1
     private final Map<String, KitObject> kitsMap; //1
 
-    private final List<String> flyList; //0
-    private final List<String> godList; //0
+    private final List<UUID> godList; //0
     private final List<UUID> hiddenPlayers; //0
 
     private final List<String> soundsList; //1
@@ -46,7 +45,6 @@ public class SetListMap {
         this.kitsMap = new HashMap<>();
 
         //Lists
-        this.flyList = new ArrayList<>();
         this.godList = new ArrayList<>();
         this.hiddenPlayers = new ArrayList<>();
 
@@ -90,13 +88,11 @@ public class SetListMap {
     }
 
     public void clearAllLists(Player p) {
-        flyList.remove(p.getDisplayName());
-        godList.remove(p.getDisplayName());
+        godList.remove(p.getUniqueId());
         hiddenPlayers.remove(p.getUniqueId());
     }
 
     public void clearAllLists() {
-        flyList.clear();
         godList.clear();
         hiddenPlayers.clear();
         soundsList.clear();
@@ -119,11 +115,7 @@ public class SetListMap {
         return homesMap;
     }
 
-    public List<String> getFlyList() {
-        return flyList;
-    }
-
-    public List<String> getGodList() {
+    public List<UUID> getGodList() {
         return godList;
     }
 

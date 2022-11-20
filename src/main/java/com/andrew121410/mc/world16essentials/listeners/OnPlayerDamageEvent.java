@@ -8,12 +8,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.List;
+import java.util.UUID;
 
 public class OnPlayerDamageEvent implements Listener {
 
-    private final World16Essentials plugin;
+    private final List<UUID> godList;
 
-    private final List<String> godList;
+    private final World16Essentials plugin;
 
     public OnPlayerDamageEvent(World16Essentials getPlugin) {
         this.plugin = getPlugin;
@@ -23,24 +24,22 @@ public class OnPlayerDamageEvent implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
+        if (!(event.getEntity() instanceof Player player)) {
             return;
         }
-        Player p = (Player) event.getEntity();
 
-        if (godList.contains(p.getDisplayName())) {
+        if (godList.contains(player.getUniqueId())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onDamageBy(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
+        if (!(event.getEntity() instanceof Player player)) {
             return;
         }
-        Player p = (Player) event.getEntity();
 
-        if (godList.contains(p.getDisplayName())) {
+        if (godList.contains(player.getUniqueId())) {
             event.setCancelled(true);
         }
     }
