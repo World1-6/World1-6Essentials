@@ -42,25 +42,28 @@ public class HealCMD implements CommandExecutor {
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target != null && target.isOnline()) {
-                doHeal(target, player);
+            if (target == null || !target.isOnline()) {
+                player.sendMessage(Translate.colorc("&cThat player is not online."));
+                return true;
             }
+            doHeal(target, player);
             return true;
         } else {
-            player.sendMessage(Translate.chat("&cUsage: for yourself do /heal OR /heal <Player>"));
+            player.sendMessage(Translate.colorc("&cUsage: for yourself do /heal OR /heal <Player>"));
         }
         return true;
     }
 
-    private void doHeal(Player player, Player healer) {
-        player.setHealth(20.0D);
-        player.setFoodLevel(20);
-        player.setFireTicks(0);
-        for (PotionEffect effect : player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
+    private void doHeal(Player target, Player sender) {
+        target.setHealth(20.0D);
+        target.setFoodLevel(20);
+        target.setFireTicks(0);
+        for (PotionEffect effect : target.getActivePotionEffects()) target.removePotionEffect(effect.getType());
 
-        player.sendMessage(Translate.chat("&6You have been healed."));
-        if (healer != null) {
-            healer.sendMessage(Translate.chat("&6You have healed &7" + player.getName() + "&6."));
+        target.sendMessage(Translate.colorc("&6You have been healed."));
+        if (sender != null) {
+            String color = target.isOp() ? "&4" : "&7";
+            sender.sendMessage(Translate.colorc("&6You have healed " + color + target.getName()));
         }
     }
 }

@@ -62,17 +62,18 @@ public class GodCMD implements CommandExecutor {
     }
 
     private void doGod(Player target, Player sender) {
+        String color = target.isOp() ? "&4" : "&7";
         if (!godList.contains(target.getUniqueId())) {
             godList.add(target.getUniqueId());
-            target.sendMessage(Translate.colorc("&2God mode has been &aenabled!"));
+            target.sendMessage(Translate.colorc("&6Set god mode &cenabled for " + color + target.getName()));
             if (sender != null) {
-                sender.sendMessage(Translate.colorc("&2God mode has been &aenabled &2for &6" + target.getName()));
+                sender.sendMessage(Translate.colorc("&6Set god mode &cenabled for " + color + target.getName()));
             }
         } else if (godList.contains(target.getUniqueId())) {
             godList.remove(target.getUniqueId());
-            target.sendMessage(Translate.colorc("&2God mode has been &cdisabled!"));
+            target.sendMessage(Translate.colorc("&6Set god mode &cdisabled for " + color + target.getName()));
             if (sender != null) {
-                sender.sendMessage(Translate.colorc("&2God mode has been &cdisabled &2for &6" + target.getName()));
+                sender.sendMessage(Translate.colorc("&6Set god mode &cdisabled for " + color + target.getName()));
             }
         }
     }

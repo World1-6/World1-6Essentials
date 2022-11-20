@@ -53,17 +53,18 @@ public class FlyCMD implements CommandExecutor {
     }
 
     private void doFly(Player target, Player sender) {
+        String color = target.isOp() ? "&4" : "&7";
         if (!target.getAllowFlight()) {
             target.setAllowFlight(true);
-            target.sendMessage(Translate.colorc("&6Set fly mode &cenabled&6 for " + target.getName()));
+            target.sendMessage(Translate.colorc("&6Set fly mode &cenabled&6 for " + color + target.getName()));
             if (sender != null) {
-                sender.sendMessage(Translate.colorc("&6Set fly mode &cenabled&6 for " + target.getName()));
+                sender.sendMessage(Translate.colorc("&6Set fly mode &cenabled&6 for " + color + target.getName()));
             }
         } else if (target.getAllowFlight()) {
             target.setAllowFlight(false);
-            target.sendMessage(Translate.colorc("&6Set fly mode &cdisabled&6 for " + target.getName()));
+            target.sendMessage(Translate.colorc("&6Set fly mode &cdisabled&6 for " + color + target.getName()));
             if (sender != null) {
-                sender.sendMessage(Translate.colorc("&6Set fly mode &cdisabled&6 for " + target.getName()));
+                sender.sendMessage(Translate.colorc("&6Set fly mode &cdisabled&6 for " + color + target.getName()));
             }
         }
     }

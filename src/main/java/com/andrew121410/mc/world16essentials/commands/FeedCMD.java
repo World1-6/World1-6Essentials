@@ -33,8 +33,7 @@ public class FeedCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            player.setFoodLevel(20);
-            player.sendMessage(Translate.color("&6You Have Been Feeded."));
+            doFeed(player, null);
             return true;
         } else if (args.length == 1) {
             if (!player.hasPermission("world16.feed.other")) {
@@ -42,15 +41,25 @@ public class FeedCMD implements CommandExecutor {
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target != null && target.isOnline()) {
-                target.setFoodLevel(20);
-                target.sendMessage(Translate.color("&6You Have Been Feeded."));
-                player.sendMessage(Translate.color("&6You Have Feeded &e" + target.getName() + "&6."));
+            if (target == null || !target.isOnline()) {
+                player.sendMessage(Translate.color("&cThat player is not online."));
+                return true;
             }
+
+            doFeed(target, player);
             return true;
         } else {
             player.sendMessage(Translate.color("&cUsage: /feed or /feed <player>"));
         }
         return true;
+    }
+
+    private void doFeed(Player target, Player sender) {
+        target.setFoodLevel(20);
+        target.sendMessage(Translate.color("&6You have been fed."));
+        String color = target.isOp() ? "&4" : "&7";
+        if (sender != null) {
+            sender.sendMessage(Translate.color("&6You have fed " + color + target.getName()));
+        }
     }
 }
