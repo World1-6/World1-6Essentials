@@ -3,6 +3,7 @@ package com.andrew121410.mc.world16essentials.commands;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.blocks.UniversalBlockUtils;
+import com.andrew121410.mc.world16utils.chat.ChatClickCallbackManager;
 import com.andrew121410.mc.world16utils.chat.ChatResponseManager;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.gui.GUIWindow;
@@ -102,6 +103,8 @@ public class SignCMD implements CommandExecutor {
     }
 
     private void editGUI(Player player, Sign sign, boolean isRegular) {
+        ChatResponseManager chatResponseManager = this.plugin.getOtherPlugins().getWorld16Utils().getChatResponseManager();
+        ChatClickCallbackManager chatClickCallbackManager = this.plugin.getOtherPlugins().getWorld16Utils().getChatClickCallbackManager();
         GUIWindow guiWindow = new GUIWindow() {
             @Override
             public void onCreate(Player player) {
@@ -118,7 +121,6 @@ public class SignCMD implements CommandExecutor {
                                 .clickEvent(ClickEvent.suggestCommand(currentLineFormatted));
                         player.sendMessage(component);
 
-                        ChatResponseManager chatResponseManager = plugin.getOtherPlugins().getWorld16Utils().getChatResponseManager();
                         chatResponseManager.create(player, (player1, s) -> {
                             // Update with new text.
                             sign.line(finalI, isRegular ? LegacyComponentSerializer.legacyAmpersand().deserialize(s) : MiniMessage.miniMessage().deserialize(s));
@@ -126,7 +128,7 @@ public class SignCMD implements CommandExecutor {
                             player1.sendMessage(Translate.miniMessage("<green>Line " + (finalI + 1) + " has been updated."));
 
                             // Way to revert changes
-                            player1.sendMessage(Translate.miniMessage("<yellow>Click me to revert change").clickEvent(plugin.getOtherPlugins().getWorld16Utils().getChatClickCallbackManager().create((player2 -> {
+                            player1.sendMessage(Translate.miniMessage("<yellow>Click me to revert change").clickEvent(chatClickCallbackManager.create(player, (player2 -> {
                                 sign.line(finalI, signLineComponent);
                                 sign.update();
                                 player2.sendMessage(Translate.miniMessage("<green>Line " + (finalI + 1) + " has been reverted."));
