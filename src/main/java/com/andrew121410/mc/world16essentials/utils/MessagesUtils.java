@@ -12,7 +12,6 @@ public class MessagesUtils {
 
     private final World16Essentials plugin;
     private final CustomYmlManager messagesYml;
-    private final FileConfiguration messagesConfig;
 
     private String prefix;
     private String welcomeBackMessage;
@@ -22,24 +21,23 @@ public class MessagesUtils {
     public MessagesUtils(World16Essentials plugin, CustomYmlManager messagesYml) {
         this.plugin = plugin;
         this.messagesYml = messagesYml;
-        this.messagesConfig = messagesYml.getConfig();
 
         // Add default messages if they don't exist.
         addDefaults();
 
-        this.prefix = this.messagesConfig.getString("prefix");
-        this.welcomeBackMessage = this.messagesConfig.getString("welcomeBackMessage");
-        this.firstJoinedMessage = this.messagesConfig.getString("firstJoinedMessage");
-        this.leaveMessage = this.messagesConfig.getString("leaveMessage");
+        this.prefix = this.messagesYml.getConfig().getString("prefix");
+        this.welcomeBackMessage = this.messagesYml.getConfig().getString("welcomeBackMessage");
+        this.firstJoinedMessage = this.messagesYml.getConfig().getString("firstJoinedMessage");
+        this.leaveMessage = this.messagesYml.getConfig().getString("leaveMessage");
     }
 
     private void addDefaults() {
-        this.messagesConfig.addDefault("prefix", "[&9World1-6&r]");
-        this.messagesConfig.addDefault("welcomeBackMessage", "%prefix% &6Welcome back, %player%!");
-        this.messagesConfig.addDefault("firstJoinedMessage", "%prefix% &6Welcome to the server, %player%!");
-        this.messagesConfig.addDefault("leaveMessage", "%prefix% &6%player% has left the server.");
+        this.messagesYml.getConfig().addDefault("prefix", "[&9World1-6&r]");
+        this.messagesYml.getConfig().addDefault("welcomeBackMessage", "%prefix% &6Welcome back, %player%!");
+        this.messagesYml.getConfig().addDefault("firstJoinedMessage", "%prefix% &6Welcome to the server, %player%!");
+        this.messagesYml.getConfig().addDefault("leaveMessage", "%prefix% &6%player% has left the server.");
 
-        this.messagesConfig.options().copyDefaults(true);
+        this.messagesYml.getConfig().options().copyDefaults(true);
         this.messagesYml.saveConfig();
         this.messagesYml.reloadConfig();
     }
@@ -61,7 +59,7 @@ public class MessagesUtils {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
-        this.messagesConfig.set("prefix", prefix);
+        this.messagesYml.getConfig().set("prefix", prefix);
         this.messagesYml.saveConfig();
     }
 
@@ -71,7 +69,7 @@ public class MessagesUtils {
 
     public void setWelcomeBackMessage(String welcomeBackMessage) {
         this.welcomeBackMessage = welcomeBackMessage;
-        this.messagesConfig.set("welcomeBackMessage", welcomeBackMessage);
+        this.messagesYml.getConfig().set("welcomeBackMessage", welcomeBackMessage);
         this.messagesYml.saveConfig();
     }
 
@@ -81,7 +79,7 @@ public class MessagesUtils {
 
     public void setFirstJoinedMessage(String firstJoinedMessage) {
         this.firstJoinedMessage = firstJoinedMessage;
-        this.messagesConfig.set("firstJoinedMessage", firstJoinedMessage);
+        this.messagesYml.getConfig().set("firstJoinedMessage", firstJoinedMessage);
         this.messagesYml.saveConfig();
     }
 
@@ -91,7 +89,7 @@ public class MessagesUtils {
 
     public void setLeaveMessage(String leaveMessage) {
         this.leaveMessage = leaveMessage;
-        this.messagesConfig.set("leaveMessage", leaveMessage);
+        this.messagesYml.getConfig().set("leaveMessage", leaveMessage);
         this.messagesYml.saveConfig();
     }
 }

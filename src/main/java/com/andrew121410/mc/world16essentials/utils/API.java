@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "11/20/2022";
+    public static final String DATE_OF_VERSION = "11/21/2022";
     public static final String CUSTOM_COMMAND_FORMAT = "`";
 
     private final World16Essentials plugin;
