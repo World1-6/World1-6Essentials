@@ -77,7 +77,7 @@ public class SpawnMobCMD implements CommandExecutor {
 
             player.sendMessage(Translate.color("&aSpawned &e" + amount + " &a" + entityType.name() + "&a."));
         } else {
-            player.sendMessage(Translate.chat("&cUsage: &6/spawnmob <Entity> <Amount>"));
+            player.sendMessage(Translate.color("&cUsage: &6/spawnmob <Entity> <Amount>"));
         }
         return true;
     }

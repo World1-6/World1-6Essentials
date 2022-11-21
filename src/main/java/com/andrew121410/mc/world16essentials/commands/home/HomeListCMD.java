@@ -47,7 +47,7 @@ public class HomeListCMD implements CommandExecutor {
         String str = String.join(", ", homeString);
         String homeListPrefix = "&6Homes:&r&7";
 
-        player.sendMessage(Translate.chat(homeListPrefix + " " + str));
+        player.sendMessage(Translate.color(homeListPrefix + " " + str));
         return true;
     }
 }

@@ -36,10 +36,10 @@ public class BroadcastCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat("[&cBroadCast&r] &cUsage: /broadcast <Message>"));
+            p.sendMessage(Translate.color("[&cBroadCast&r] &cUsage: /broadcast <Message>"));
             return true;
         } else {
-            this.plugin.getServer().getOnlinePlayers().stream().forEach(player -> player.sendMessage(Translate.chat("[&c&lBroadcast&r]&a {messager}").replace("{messager}", String.join(" ", args))));
+            this.plugin.getServer().getOnlinePlayers().stream().forEach(player -> player.sendMessage(Translate.color("[&c&lBroadcast&r]&a {messager}").replace("{messager}", String.join(" ", args))));
             return true;
         }
     }

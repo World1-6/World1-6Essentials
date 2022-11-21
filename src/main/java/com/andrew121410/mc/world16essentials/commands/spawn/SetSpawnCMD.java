@@ -38,7 +38,7 @@ public class SetSpawnCMD implements CommandExecutor {
         }
 
         this.api.setLocationToFile(this.shitYml, "Spawn.default", player.getLocation());
-        player.sendMessage(Translate.chat("&6Spawn location set for group default."));
+        player.sendMessage(Translate.color("&6Spawn location set for group default."));
         return true;
     }
 }

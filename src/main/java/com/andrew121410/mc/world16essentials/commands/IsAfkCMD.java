@@ -37,17 +37,17 @@ public class IsAfkCMD implements CommandExecutor {
             Player playerFromArg = this.plugin.getServer().getPlayerExact(args[0]);
 
             if (playerFromArg == null) {
-                player.sendMessage(Translate.chat("&4Unable to find the player " + args[0]));
+                player.sendMessage(Translate.color("&4Unable to find the player " + args[0]));
                 return true;
             }
 
             if (api.isAfk(playerFromArg)) {
-                player.sendMessage(Translate.chat("&aThe player " + playerFromArg.getDisplayName() + " is afk!"));
+                player.sendMessage(Translate.color("&aThe player " + playerFromArg.getDisplayName() + " is afk!"));
             } else {
-                player.sendMessage(Translate.chat("&cThe player " + playerFromArg.getDisplayName() + " is not afk!"));
+                player.sendMessage(Translate.color("&cThe player " + playerFromArg.getDisplayName() + " is not afk!"));
             }
         } else {
-            player.sendMessage(Translate.chat("&cUsage: /isafk <PlayerName>"));
+            player.sendMessage(Translate.color("&cUsage: /isafk <PlayerName>"));
         }
         return true;
     }

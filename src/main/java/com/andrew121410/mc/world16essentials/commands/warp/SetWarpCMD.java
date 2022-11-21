@@ -41,19 +41,19 @@ public class SetWarpCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat("&cUsage: &6/setwarp <Name>"));
+            p.sendMessage(Translate.color("&cUsage: &6/setwarp <Name>"));
             return true;
         } else if (args.length == 1) {
             String name = args[0].toLowerCase();
             Location location = p.getLocation();
 
             if (this.warpsMap.containsKey(name)) {
-                p.sendMessage(Translate.chat("Looks like there is already a warp with that name..."));
+                p.sendMessage(Translate.color("Looks like there is already a warp with that name..."));
                 return true;
             }
 
             this.plugin.getWarpManager().add(name, location);
-            p.sendMessage(Translate.chat("&6The warp: " + name + " has been set."));
+            p.sendMessage(Translate.color("&6The warp: " + name + " has been set."));
             return true;
         }
         return true;

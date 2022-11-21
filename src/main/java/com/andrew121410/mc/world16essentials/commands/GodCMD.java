@@ -56,7 +56,7 @@ public class GodCMD implements CommandExecutor {
             doGod(target, player);
             return true;
         } else {
-            player.sendMessage(Translate.chat("&cUsage:&9 /god &aOR &9/god <Player>"));
+            player.sendMessage(Translate.color("&cUsage:&9 /god &aOR &9/god <Player>"));
         }
         return true;
     }

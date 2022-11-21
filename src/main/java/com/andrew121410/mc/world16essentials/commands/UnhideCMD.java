@@ -38,7 +38,7 @@ public class UnhideCMD implements CommandExecutor {
                 onlinePlayer.showPlayer(this.plugin, player);
             }
             this.hiddenPlayers.remove(player.getUniqueId());
-            player.sendMessage(Translate.chat("&6You are now visible to all players."));
+            player.sendMessage(Translate.color("&6You are now visible to all players."));
         }
         return true;
     }

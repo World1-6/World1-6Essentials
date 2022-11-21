@@ -38,7 +38,7 @@ public class HideCMD implements CommandExecutor {
                 onlinePlayer.hidePlayer(this.plugin, player);
             }
             this.hiddenPlayers.add(player.getUniqueId());
-            player.sendMessage(Translate.chat("&6You are now hidden from all players."));
+            player.sendMessage(Translate.color("&6You are now hidden from all players."));
         }
         return true;
     }

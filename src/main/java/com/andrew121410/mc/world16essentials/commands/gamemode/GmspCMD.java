@@ -55,9 +55,9 @@ public class GmspCMD implements CommandExecutor {
         String color = target.isOp() ? "&4" : "&7";
 
         target.setGameMode(GameMode.SPECTATOR);
-        target.sendMessage(Translate.chat("&6Set game mode &cspectator&6 for " + color + target.getDisplayName()));
+        target.sendMessage(Translate.color("&6Set game mode &cspectator&6 for " + color + target.getDisplayName()));
         if (sender != null) {
-            sender.sendMessage(Translate.chat("&6Set game mode &cspectator&6 for " + color + target.getDisplayName()));
+            sender.sendMessage(Translate.color("&6Set game mode &cspectator&6 for " + color + target.getDisplayName()));
         }
     }
 }

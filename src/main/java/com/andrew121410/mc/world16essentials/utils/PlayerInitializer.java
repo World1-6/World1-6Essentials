@@ -50,7 +50,7 @@ public class PlayerInitializer {
             Player target = this.plugin.getServer().getPlayer(uuid);
             if (target == null) continue;
             player.hidePlayer(this.plugin, target);
-            target.sendMessage(Translate.chat(api.getMessagesUtils().getPrefix() + " " + color + player.getDisplayName() + " &cnow cannot see you,"));
+            target.sendMessage(Translate.color(api.getMessagesUtils().getPrefix() + " " + color + player.getDisplayName() + " &cnow cannot see you,"));
         }
     }
 

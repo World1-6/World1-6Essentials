@@ -49,7 +49,7 @@ public class PowerToolCMD implements CommandExecutor {
 
         if (args.length == 0) {
             powerToolObject.deletePowerTool(itemInMainHand.getType());
-            p.sendMessage(Translate.chat("&eCommand has been removed from the tool."));
+            p.sendMessage(Translate.color("&eCommand has been removed from the tool."));
             return true;
         } else {
             String[] command = Arrays.copyOfRange(args, 0, args.length);
@@ -58,7 +58,7 @@ public class PowerToolCMD implements CommandExecutor {
             char check = command[0].charAt(0);
             String s = Character.toString(check);
             if (s.equalsIgnoreCase("/")) {
-                p.sendMessage(Translate.chat("&4It looks like there's a / in the beginning it's supposed to be without a / but if you're doing WorldEdit make sure there's only 1 /"));
+                p.sendMessage(Translate.color("&4It looks like there's a / in the beginning it's supposed to be without a / but if you're doing WorldEdit make sure there's only 1 /"));
             }
 
             powerToolObject.registerPowerTool(itemInMainHand.getType(), realCommand);

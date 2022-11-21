@@ -43,14 +43,14 @@ public class TpDenyCMD implements CommandExecutor {
             UUID uuid = this.tpaMap.get(player.getUniqueId());
             Player tpa = this.plugin.getServer().getPlayer(uuid);
             if (tpa != null) {
-                player.sendMessage(Translate.chat("&9Ok you denied the tp request."));
-                tpa.sendMessage(Translate.chat("[&eTPA&r] &cYour tpa request got denied by " + player.getDisplayName()));
+                player.sendMessage(Translate.color("&9Ok you denied the tp request."));
+                tpa.sendMessage(Translate.color("[&eTPA&r] &cYour tpa request got denied by " + player.getDisplayName()));
                 this.tpaMap.remove(player.getUniqueId());
             } else {
-                player.sendMessage(Translate.chat("&4Something went wrong."));
+                player.sendMessage(Translate.color("&4Something went wrong."));
             }
         } else {
-            player.sendMessage(Translate.chat("&4???"));
+            player.sendMessage(Translate.color("&4???"));
         }
         return true;
     }

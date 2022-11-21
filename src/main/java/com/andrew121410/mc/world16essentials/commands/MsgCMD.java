@@ -37,19 +37,19 @@ public class MsgCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat("&cUsage: /emsg <Player> <Message>"));
+            p.sendMessage(Translate.color("&cUsage: /emsg <Player> <Message>"));
             return true;
         } else if (args.length >= 2) {
             Player target = this.plugin.getServer().getPlayerExact(args[0]);
             if (target != null && target.isOnline()) {
                 String messageFrom = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-                p.sendMessage(Translate.chat("&2[&a{me} &6->&c {target}&2]&9 ->&r {message}").replace("{me}", "me").replace("{target}", target.getDisplayName()).replace("{message}", messageFrom));
-                target.sendMessage(Translate.chat("&2[&a{me} &6->&c {target}&2]&9 ->&r {message}").replace("{me}", p.getDisplayName()).replace("{target}", "me").replace("{message}", messageFrom));
+                p.sendMessage(Translate.color("&2[&a{me} &6->&c {target}&2]&9 ->&r {message}").replace("{me}", "me").replace("{target}", target.getDisplayName()).replace("{message}", messageFrom));
+                target.sendMessage(Translate.color("&2[&a{me} &6->&c {target}&2]&9 ->&r {message}").replace("{me}", p.getDisplayName()).replace("{target}", "me").replace("{message}", messageFrom));
                 return true;
             }
         }
-        p.sendMessage(Translate.chat("&4Something went wrong."));
-        p.sendMessage(Translate.chat("&cUsage: /emsg <Player> <Message>"));
+        p.sendMessage(Translate.color("&4Something went wrong."));
+        p.sendMessage(Translate.color("&cUsage: /emsg <Player> <Message>"));
         return true;
     }
 }

@@ -105,10 +105,10 @@ public class API {
     public void doAfk(Player player, String color) {
         AfkObject afkObject = this.afkMap.get(player.getUniqueId());
         if (afkObject.isAfk()) {
-            this.plugin.getServer().broadcastMessage(Translate.chat("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
+            this.plugin.getServer().broadcastMessage(Translate.color("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
             afkObject.restart(player);
         } else {
-            this.plugin.getServer().broadcastMessage(Translate.chat("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
+            this.plugin.getServer().broadcastMessage(Translate.color("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
             afkObject.setAfk(true, player.getLocation());
         }
     }
@@ -138,7 +138,7 @@ public class API {
     }
 
     public void sendPermissionErrorMessage(CommandSender sender) {
-        sender.sendMessage(Translate.chat("&4You do not have permission to do this command."));
+        sender.sendMessage(Translate.color("&4You do not have permission to do this command."));
     }
 
     public String parseMessageString(Player player, String message) {

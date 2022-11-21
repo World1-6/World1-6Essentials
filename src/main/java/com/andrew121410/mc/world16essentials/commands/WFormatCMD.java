@@ -48,7 +48,7 @@ public class WFormatCMD implements CommandExecutor {
             } else if (args.length >= 1) {
                 if (args[0].equalsIgnoreCase("cmd")) {
                     if (args[1] == null) {
-                        sender.sendMessage(Translate.chat("&cUsage: /wformat cmd <String>"));
+                        sender.sendMessage(Translate.color("&cUsage: /wformat cmd <String>"));
                         return true;
                     }
                     String[] commandRaw = Arrays.copyOfRange(args, 1, args.length);
@@ -88,7 +88,7 @@ public class WFormatCMD implements CommandExecutor {
                     return true;
                 } else if (args[0].equalsIgnoreCase("uncmd")) {
                     if (args.length < 2) {
-                        sender.sendMessage(Translate.chat("&cUsage: /wformat uncmd <String>"));
+                        sender.sendMessage(Translate.color("&cUsage: /wformat uncmd <String>"));
                         return true;
                     }
                     String[] commandRaw = Arrays.copyOfRange(args, 1, args.length);
@@ -126,7 +126,7 @@ public class WFormatCMD implements CommandExecutor {
         } else {
             if (args[0].equalsIgnoreCase("cmd")) {
                 if (args.length < 2) {
-                    p.sendMessage(Translate.chat("&cUsage: /wformat cmd <String>"));
+                    p.sendMessage(Translate.color("&cUsage: /wformat cmd <String>"));
                     return true;
                 }
 
@@ -159,7 +159,7 @@ public class WFormatCMD implements CommandExecutor {
                                 commandRaw[i] = "X~" + commandRaw[i];
                                 break;
                         }
-                        p.sendMessage(Translate.chat("&cDebug -> " + commandRaw[i] + " =Z= " + z));
+                        p.sendMessage(Translate.color("&cDebug -> " + commandRaw[i] + " =Z= " + z));
                     }
                 }
 
@@ -170,7 +170,7 @@ public class WFormatCMD implements CommandExecutor {
                 return true;
             } else if (args[0].equalsIgnoreCase("uncmd")) {
                 if (args.length < 2) {
-                    p.sendMessage(Translate.chat("&cUsage: /wformat uncmd <String>"));
+                    p.sendMessage(Translate.color("&cUsage: /wformat uncmd <String>"));
                     return true;
                 }
                 String[] commandRaw = Arrays.copyOfRange(args, 1, args.length);

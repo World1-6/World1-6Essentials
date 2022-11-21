@@ -27,7 +27,7 @@ public class OnSignChangeEvent implements Listener {
         if (player.hasPermission("world16.sign.color") && api.getConfigUtils().isSignTranslateColors()) {
             for (int i = 0; i < 4; i++) {
                 String line = event.getLine(i);
-                if (line != null && !line.equals("")) event.setLine(i, Translate.chat(line));
+                if (line != null && !line.equals("")) event.setLine(i, Translate.color(line));
             }
         }
     }

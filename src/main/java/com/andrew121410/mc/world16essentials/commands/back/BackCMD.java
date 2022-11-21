@@ -50,9 +50,9 @@ public class BackCMD implements CommandExecutor {
         Map<BackEnum, Location> playerBackMap = this.backMap.get(player.getUniqueId());
 
         if (args.length == 0) {
-            player.sendMessage(Translate.chat("[&cBack&r] &a&oHere's all of the back commands/sub."));
-            player.sendMessage(Translate.chat("&6/back death"));
-            player.sendMessage(Translate.chat("&6/back tp"));
+            player.sendMessage(Translate.color("[&cBack&r] &a&oHere's all of the back commands/sub."));
+            player.sendMessage(Translate.color("&6/back death"));
+            player.sendMessage(Translate.color("&6/back tp"));
             return true;
         }
 
@@ -63,7 +63,7 @@ public class BackCMD implements CommandExecutor {
             }
             Location deathLocation = playerBackMap.get(BackEnum.DEATH);
             if (deathLocation == null) {
-                player.sendMessage(Translate.chat("&4No death back location was found..."));
+                player.sendMessage(Translate.color("&4No death back location was found..."));
                 return true;
             }
 
@@ -78,7 +78,7 @@ public class BackCMD implements CommandExecutor {
             }
 
             player.teleport(deathLocation);
-            player.sendMessage(Translate.chat("&6Teleporting..."));
+            player.sendMessage(Translate.color("&6Teleporting..."));
         } else if (args[0].equalsIgnoreCase("tp")) {
             if (!player.hasPermission("world16.back.tp")) {
                 api.sendPermissionErrorMessage(player);
@@ -86,11 +86,11 @@ public class BackCMD implements CommandExecutor {
             }
             Location tpLocation = playerBackMap.get(BackEnum.TELEPORT);
             if (tpLocation == null) {
-                player.sendMessage(Translate.chat("&4No tp back location was found..."));
+                player.sendMessage(Translate.color("&4No tp back location was found..."));
                 return true;
             }
             player.teleport(tpLocation);
-            player.sendMessage(Translate.chat("&6Teleporting..."));
+            player.sendMessage(Translate.color("&6Teleporting..."));
         }
         return true;
     }

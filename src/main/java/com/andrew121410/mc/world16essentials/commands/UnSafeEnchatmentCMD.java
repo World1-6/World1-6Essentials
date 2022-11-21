@@ -64,7 +64,7 @@ public class UnSafeEnchatmentCMD implements CommandExecutor {
             mainHand.addUnsafeEnchantment(enchantment, level);
             return true;
         } else {
-            player.sendMessage(Translate.chat("&cUsage: &6/unsafenchant <Enchant> <Level>"));
+            player.sendMessage(Translate.color("&cUsage: &6/unsafenchant <Enchant> <Level>"));
         }
         return true;
     }

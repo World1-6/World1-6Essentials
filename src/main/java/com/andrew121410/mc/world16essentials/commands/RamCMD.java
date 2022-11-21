@@ -97,10 +97,10 @@ public class RamCMD implements CommandExecutor {
 
         player.sendMessage("");
 
-        player.sendMessage(Translate.chat("&6Maximum memory: &c" + maxMemory + " MB."));
-        player.sendMessage(Translate.chat("&6Allocated memory: &c" + allocatedMemory + " MB." + " &6(" + allocatedPercent + "%)"));
-        player.sendMessage(Translate.chat("&6Used memory: &c" + usedMemory + " MB." + " &6(" + usedPercent + "%)"));
-        player.sendMessage(Translate.chat("&6Free memory: &c" + freeMemory + " MB." + " &6(" + freePercent + "%)"));
+        player.sendMessage(Translate.color("&6Maximum memory: &c" + maxMemory + " MB."));
+        player.sendMessage(Translate.color("&6Allocated memory: &c" + allocatedMemory + " MB." + " &6(" + allocatedPercent + "%)"));
+        player.sendMessage(Translate.color("&6Used memory: &c" + usedMemory + " MB." + " &6(" + usedPercent + "%)"));
+        player.sendMessage(Translate.color("&6Free memory: &c" + freeMemory + " MB." + " &6(" + freePercent + "%)"));
         return true;
     }
 }

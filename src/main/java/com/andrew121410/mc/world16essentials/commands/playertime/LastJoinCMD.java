@@ -67,11 +67,11 @@ public class LastJoinCMD implements CommandExecutor {
             OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
 
             if (!offlinePlayer.hasPlayedBefore()) {
-                player.sendMessage(Translate.chat("&cThis user has never joined before..."));
+                player.sendMessage(Translate.color("&cThis user has never joined before..."));
                 return true;
             }
 
-            player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
+            player.sendMessage(Translate.color("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
         }
         return true;
     }
@@ -88,7 +88,7 @@ public class LastJoinCMD implements CommandExecutor {
                 itemStack.setItemMeta(itemMeta);
 
                 guiButtons.add(new LastJoinGUIButton(offlinePlayer.getLastLogin(), -1, itemStack, (guiClickEvent) -> {
-                    player.sendMessage(Translate.chat("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
+                    player.sendMessage(Translate.color("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
                 }));
             });
 

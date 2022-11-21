@@ -43,7 +43,7 @@ public class TpaCMD implements CommandExecutor {
             Player target = plugin.getServer().getPlayerExact(args[0]); //Get the player
             if (target != null && target.isOnline()) {
                 tpaMap.put(target.getUniqueId(), player.getUniqueId());
-                player.sendMessage(Translate.chat("[&eTPA&r] &9Sent tpa request too " + target.getDisplayName()));
+                player.sendMessage(Translate.color("[&eTPA&r] &9Sent tpa request too " + target.getDisplayName()));
                 sendTpaRequestMessage(player, target);
             } else {
                 player.sendMessage("&4Looks like that player is offline.");
@@ -57,8 +57,8 @@ public class TpaCMD implements CommandExecutor {
 
     private void sendTpaRequestMessage(Player player, Player target) {
         if (player != null && target != null) {
-            target.sendMessage(Translate.chat("[&eTPA&r] &a" + player.getDisplayName() + " has sent a tpa request too you."));
-            target.sendMessage(Translate.chat("&c/tpaccept &aOR&r &c/tpdeny"));
+            target.sendMessage(Translate.color("[&eTPA&r] &a" + player.getDisplayName() + " has sent a tpa request too you."));
+            target.sendMessage(Translate.color("&c/tpaccept &aOR&r &c/tpdeny"));
         }
     }
 }

@@ -43,19 +43,19 @@ public class WarpCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat("&cUsage: &6/warp <Name>"));
+            p.sendMessage(Translate.color("&cUsage: &6/warp <Name>"));
             return true;
         } else if (args.length == 1) {
             String name = args[0].toLowerCase();
             Location warp = this.warpsMap.get(name);
 
             if (warp == null) {
-                p.sendMessage(Translate.chat("&cThat's not a warp."));
+                p.sendMessage(Translate.color("&cThat's not a warp."));
                 return true;
             }
 
             p.teleport(warp);
-            p.sendMessage(Translate.chat("&6Teleporting..."));
+            p.sendMessage(Translate.color("&6Teleporting..."));
             return true;
         }
         return true;

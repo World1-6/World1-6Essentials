@@ -51,9 +51,9 @@ public class HomeCMD implements CommandExecutor {
 
         if (home != null) {
             player.teleport(home);
-            player.sendMessage(Translate.chat("&6Teleporting..."));
+            player.sendMessage(Translate.color("&6Teleporting..."));
         } else {
-            player.sendMessage(Translate.chat("&cHome Not Found."));
+            player.sendMessage(Translate.color("&cHome Not Found."));
         }
         return true;
     }

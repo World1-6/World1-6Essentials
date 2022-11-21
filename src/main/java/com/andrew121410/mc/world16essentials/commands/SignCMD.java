@@ -75,7 +75,7 @@ public class SignCMD implements CommandExecutor {
             BlockState state = block.getState();
 
             if (!(state instanceof Sign sign)) {
-                player.sendMessage(Translate.chat("&4This isn't a sign."));
+                player.sendMessage(Translate.color("&4This isn't a sign."));
                 return true;
             }
 
@@ -86,7 +86,7 @@ public class SignCMD implements CommandExecutor {
             BlockState state = block.getState();
 
             if (!(state instanceof Sign sign)) {
-                player.sendMessage(Translate.chat("&4This isn't a sign."));
+                player.sendMessage(Translate.color("&4This isn't a sign."));
                 return true;
             }
 
@@ -97,7 +97,7 @@ public class SignCMD implements CommandExecutor {
             }
 
         } else {
-            player.sendMessage(Translate.chat("&cUsage: /sign <give|edit|edita>"));
+            player.sendMessage(Translate.color("&cUsage: /sign <give|edit|edita>"));
         }
         return true;
     }

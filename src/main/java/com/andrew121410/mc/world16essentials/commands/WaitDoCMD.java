@@ -89,8 +89,8 @@ public class WaitDoCMD implements CommandExecutor {
             api.sendPermissionErrorMessage(p);
             return true;
         }
-        p.sendMessage(Translate.chat("&4&lOnly command blocks right now!"));
-        p.sendMessage(Translate.chat("Usage: /waitdo <SEC> <StartCommandINWFormat> <EndCommandINWFORMAT> <DoEverySecINWFORMAT> <DEBUG?>"));
+        p.sendMessage(Translate.color("&4&lOnly command blocks right now!"));
+        p.sendMessage(Translate.color("Usage: /waitdo <SEC> <StartCommandINWFormat> <EndCommandINWFORMAT> <DoEverySecINWFORMAT> <DEBUG?>"));
         return true;
     }
 }

@@ -65,7 +65,7 @@ public class CommandBlockFindCMD implements CommandExecutor {
                 return true;
             }
         }
-        player.sendMessage(Translate.chat("&cUsage: /commandblockfind <add/remove> <string>"));
+        player.sendMessage(Translate.color("&cUsage: /commandblockfind <add/remove> <string>"));
         return true;
     }
 }

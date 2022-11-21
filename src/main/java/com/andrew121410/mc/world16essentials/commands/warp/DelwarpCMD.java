@@ -45,18 +45,18 @@ public class DelwarpCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            player.sendMessage(Translate.chat("&cUsage: &6/delwarp <Name>"));
+            player.sendMessage(Translate.color("&cUsage: &6/delwarp <Name>"));
             return true;
         } else if (args.length == 1) {
             String name = args[0].toLowerCase();
 
             if (!this.warpsMap.containsKey(name)) {
-                player.sendMessage(Translate.chat("&cThat's not a warp."));
+                player.sendMessage(Translate.color("&cThat's not a warp."));
                 return true;
             }
 
             this.warpManager.delete(name);
-            player.sendMessage(Translate.chat("&eThe warp: " + name + " has been deleted."));
+            player.sendMessage(Translate.color("&eThe warp: " + name + " has been deleted."));
             return true;
         }
         return true;
