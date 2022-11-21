@@ -80,17 +80,17 @@ public class ConfigCMD implements CommandExecutor {
             String[] ourArgs = Arrays.copyOfRange(args, 2, args.length);
             String message = String.join(" ", ourArgs);
             if (args[1].equalsIgnoreCase("prefix")) {
-                api.getMessagesUtils().setPrefix(args[2]);
-                player.sendMessage(Translate.color("&aPrefix set to &6" + args[2]));
+                api.getMessagesUtils().setPrefix(message);
+                player.sendMessage(Translate.color("&aPrefix set to &r" + message));
             } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
                 api.getMessagesUtils().setWelcomeBackMessage(message);
-                player.sendMessage(Translate.color("&aWelcome back message set to &6" + message));
+                player.sendMessage(Translate.color("&aWelcome back message set to &r" + message));
             } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
                 api.getMessagesUtils().setFirstJoinedMessage(message);
-                player.sendMessage(Translate.color("&aFirst join message set to &6" + message));
+                player.sendMessage(Translate.color("&aFirst join message set to &r" + message));
             } else if (args[1].equalsIgnoreCase("leaveMessage")) {
                 api.getMessagesUtils().setLeaveMessage(message);
-                player.sendMessage(Translate.color("&aLeave message set to &6" + message));
+                player.sendMessage(Translate.color("&aLeave message set to &r" + message));
             }
         }
         return true;
