@@ -31,33 +31,60 @@ public class WarpCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-        Player p = (Player) sender;
-
-        if (!p.hasPermission("world16.warp")) {
-            api.sendPermissionErrorMessage(p);
-            return true;
-        }
-
-        if (args.length == 0) {
-            p.sendMessage(Translate.color("&cUsage: &6/warp <Name>"));
-            return true;
-        } else if (args.length == 1) {
-            String name = args[0].toLowerCase();
-            Location warp = this.warpsMap.get(name);
-
-            if (warp == null) {
-                p.sendMessage(Translate.color("&cThat's not a warp."));
+        if (args.length == 1) {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
                 return true;
             }
 
-            p.teleport(warp);
-            p.sendMessage(Translate.color("&6Teleporting..."));
+            if (!player.hasPermission("world16.warp")) {
+                api.sendPermissionErrorMessage(player);
+                return true;
+            }
+
+            String name = args[0].toLowerCase();
+
+            toWarp(player, null, name);
             return true;
+        } else if (args.length == 2) { // /warp <player> <name>
+            if (!sender.hasPermission("world16.warp.other")) {
+                api.sendPermissionErrorMessage(sender);
+                return true;
+            }
+
+            Player target = this.plugin.getServer().getPlayer(args[0]);
+            if (target == null) {
+                sender.sendMessage(Translate.color("&cThat player is not online."));
+                return true;
+            }
+
+            String name = args[1].toLowerCase();
+
+            toWarp(target, sender, name);
+            return true;
+        } else {
+            sender.sendMessage(Translate.miniMessage("<red>/warp <name>"));
+            sender.sendMessage(Translate.miniMessage("<red>/warp <player> <name>"));
         }
         return true;
+    }
+
+    private void toWarp(Player target, CommandSender sender, String warp) {
+        Location warpLocation = this.warpsMap.get(warp);
+
+        if (warpLocation == null) {
+            if (sender == null) {
+                target.sendMessage(Translate.color("&cThat's not a warp."));
+            } else {
+                sender.sendMessage(Translate.color("&cThat's not a warp."));
+            }
+            return;
+        }
+
+        target.teleport(warpLocation);
+        target.sendMessage(Translate.color("&6Teleporting..."));
+        if (sender != null) {
+            sender.sendMessage(Translate.color("&6Successfully teleported &e" + target.getName() + " &6to warp &e" + warp));
+        }
     }
 }

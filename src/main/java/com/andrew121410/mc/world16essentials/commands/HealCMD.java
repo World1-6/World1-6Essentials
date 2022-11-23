@@ -23,38 +23,40 @@ public class HealCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-
-        if (!player.hasPermission("world16.heal")) {
-            api.sendPermissionErrorMessage(player);
-            return true;
-        }
-
         if (args.length == 0) {
-            doHeal(player, null);
-            return true;
-        } else if (args.length == 1) {
-            if (!player.hasPermission("world16.heal.other")) {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
+                return true;
+            }
+
+            if (!player.hasPermission("world16.heal")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
             }
-            Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target == null || !target.isOnline()) {
-                player.sendMessage(Translate.colorc("&cThat player is not online."));
+
+            doHeal(player, null);
+            return true;
+        } else if (args.length == 1) {
+            if (!sender.hasPermission("world16.heal.other")) {
+                api.sendPermissionErrorMessage(sender);
                 return true;
             }
-            doHeal(target, player);
+
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target == null || !target.isOnline()) {
+                sender.sendMessage(Translate.colorc("&cThat player is not online."));
+                return true;
+            }
+
+            doHeal(target, sender);
             return true;
         } else {
-            player.sendMessage(Translate.colorc("&cUsage: for yourself do /heal OR /heal <Player>"));
+            sender.sendMessage(Translate.colorc("&cUsage: for yourself do /heal OR /heal <Player>"));
         }
         return true;
     }
 
-    private void doHeal(Player target, Player sender) {
+    private void doHeal(Player target, CommandSender sender) {
         target.setHealth(20.0D);
         target.setFoodLevel(20);
         target.setFireTicks(0);

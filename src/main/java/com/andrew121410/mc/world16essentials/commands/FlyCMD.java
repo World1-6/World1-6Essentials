@@ -22,37 +22,38 @@ public class FlyCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-
-        if (!player.hasPermission("world16.fly")) {
-            api.sendPermissionErrorMessage(player);
-            return true;
-        }
-
         if (args.length == 0) {
-            doFly(player, null);
-            return true;
-        } else if (args.length == 1) {
-            if (!player.hasPermission("world16.fly.other")) {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
+                return true;
+            }
+
+            if (!player.hasPermission("world16.fly")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
             }
-            Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target == null || !target.isOnline()) {
-                player.sendMessage(Translate.colorc("&cThat player is not online."));
+
+            doFly(player, null);
+            return true;
+        } else if (args.length == 1) {
+            if (!sender.hasPermission("world16.fly.other")) {
+                api.sendPermissionErrorMessage(sender);
                 return true;
             }
 
-            doFly(target, player);
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target == null || !target.isOnline()) {
+                sender.sendMessage(Translate.colorc("&cThat player is not online."));
+                return true;
+            }
+
+            doFly(target, sender);
             return true;
         }
         return true;
     }
 
-    private void doFly(Player target, Player sender) {
+    private void doFly(Player target, CommandSender sender) {
         String color = target.isOp() ? "&4" : "&7";
         if (!target.getAllowFlight()) {
             target.setAllowFlight(true);

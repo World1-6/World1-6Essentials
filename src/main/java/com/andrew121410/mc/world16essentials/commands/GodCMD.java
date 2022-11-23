@@ -29,39 +29,40 @@ public class GodCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-
-        if (!player.hasPermission("world16.god")) {
-            api.sendPermissionErrorMessage(player);
-            return true;
-        }
-
         if (args.length == 0) {
-            doGod(player, null);
-            return true;
-        } else if (args.length == 1) {
-            if (!player.hasPermission("world16.god.other")) {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
+                return true;
+            }
+
+            if (!player.hasPermission("world16.god")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
             }
-            Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target == null || !target.isOnline()) {
-                player.sendMessage(Translate.colorc("&cThat player is not online."));
+
+            doGod(player, null);
+            return true;
+        } else if (args.length == 1) {
+            if (!sender.hasPermission("world16.god.other")) {
+                api.sendPermissionErrorMessage(sender);
                 return true;
             }
 
-            doGod(target, player);
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target == null || !target.isOnline()) {
+                sender.sendMessage(Translate.colorc("&cThat player is not online."));
+                return true;
+            }
+
+            doGod(target, sender);
             return true;
         } else {
-            player.sendMessage(Translate.color("&cUsage:&9 /god &aOR &9/god <Player>"));
+            sender.sendMessage(Translate.color("&cUsage:&9 /god &aOR &9/god <Player>"));
         }
         return true;
     }
 
-    private void doGod(Player target, Player sender) {
+    private void doGod(Player target, CommandSender sender) {
         String color = target.isOp() ? "&4" : "&7";
         if (!godList.contains(target.getUniqueId())) {
             godList.add(target.getUniqueId());
