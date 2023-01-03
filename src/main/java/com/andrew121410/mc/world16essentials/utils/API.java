@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
-import com.andrew121410.mc.world16utils.utils.ccutils.utils.StringDataTimeBuilder;
+import com.andrew121410.mc.world16utils.utils.ccutils.utils.TimeUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "11/22/2022";
+    public static final String DATE_OF_VERSION = "1/3/2023";
     public static final String CUSTOM_COMMAND_FORMAT = "`";
 
     private final World16Essentials plugin;
@@ -62,17 +62,17 @@ public class API {
 
     public String getTimeSinceLogin(Player player) {
         long loginTime = timeOfLoginMap.get(player.getUniqueId());
-        return StringDataTimeBuilder.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false, false);
+        return TimeUtils.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false, false);
     }
 
     public String getTimeSinceLastLogin(OfflinePlayer offlinePlayer) {
         long lastLogin = offlinePlayer.getLastLogin();
-        return StringDataTimeBuilder.makeIntoEnglishWords(lastLogin, System.currentTimeMillis(), false, false);
+        return TimeUtils.makeIntoEnglishWords(lastLogin, System.currentTimeMillis(), false, false);
     }
 
     public String getTimeSinceFirstLogin(OfflinePlayer offlinePlayer) {
         long firstPlayed = offlinePlayer.getFirstPlayed();
-        return StringDataTimeBuilder.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false, false);
+        return TimeUtils.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false, false);
     }
 
     public boolean didPlayerJustJoin(Player player) {

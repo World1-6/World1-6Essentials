@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.KitObject;
 import com.andrew121410.mc.world16essentials.objects.KitSettingsObject;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
-import com.andrew121410.mc.world16utils.utils.ccutils.utils.StringDataTimeBuilder;
+import com.andrew121410.mc.world16utils.utils.ccutils.utils.TimeUtils;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.TimeUnit;
@@ -95,7 +95,7 @@ public class KitSettingsManager {
             timeWhenCanUseAgain = lastUsed + TimeUnit.DAYS.toMillis(Integer.parseInt(numbers));
         }
 
-        return StringDataTimeBuilder.makeIntoEnglishWords(System.currentTimeMillis(), timeWhenCanUseAgain, true, true);
+        return TimeUtils.makeIntoEnglishWords(System.currentTimeMillis(), timeWhenCanUseAgain, true, true);
     }
 }
 
