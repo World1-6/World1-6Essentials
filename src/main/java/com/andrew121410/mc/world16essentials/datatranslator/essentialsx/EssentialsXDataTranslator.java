@@ -145,34 +145,25 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     // Like all of this could easily be avoided if they had a method to get the kit ItemStacks by a kit name.
     private void kitsFrom(Player player) {
         player.sendMessage(Translate.miniMessage("<gold>Starting kits conversion..."));
-        player.sendMessage(Translate.miniMessage("<red><underline>WARNING: PLEASE DO NOT LOG OUT OR RELOAD THE SERVER WHILE THIS IS RUNNING!"));
-        player.sendMessage(Translate.miniMessage("<red><bold>THIS MIGHT TAKE A WHILE!"));
+        player.sendMessage(Translate.miniMessage("<red><underline><bold>Please stop what you are doing!!!"));
+        player.sendMessage(Translate.miniMessage("<yellow><underline>It will let you know when it's done!"));
 
         // Create a save of the inventory
         String saveInventoryName = "temp-" + UUID.randomUUID();
         this.savedInventoryObject = SavedInventoryObject.create(player, saveInventoryName);
 
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            for (String kitKey : this.essentials.getKits().getKitKeys()) {
-                threadSleep();
-                player.getInventory().clear();
-                threadSleep();
-                Bukkit.getServer().getScheduler().runTask(this.plugin, () -> Bukkit.getServer().dispatchCommand(player, "essentials:kit " + kitKey));
-                threadSleep();
+        // Convert all kits
+        for (String kitKey : this.essentials.getKits().getKitKeys()) {
+            player.getInventory().clear();
+            Bukkit.getServer().dispatchCommand(player, "essentials:kit " + kitKey);
+            this.plugin.getKitManager().addKit(player.getUniqueId(), kitKey, BukkitSerialization.turnInventoryIntoBase64s(player));
+            player.sendMessage(Translate.miniMessage("<green>Translated kit: <yellow>" + kitKey));
+        }
 
-                Bukkit.getServer().getScheduler().runTask(this.plugin, () -> {
-                    this.plugin.getKitManager().addKit(player.getUniqueId(), kitKey, BukkitSerialization.turnInventoryIntoBase64s(player));
-                    player.sendMessage(Translate.miniMessage("<green>Translated kit: <yellow>" + kitKey));
-                });
-            }
-
-            Bukkit.getServer().getScheduler().runTask(this.plugin, () -> {
-                // Restore the inventory
-                player.getInventory().clear();
-                this.savedInventoryObject.give(player);
-                player.sendMessage(Translate.miniMessage("<green><bold>Finished kits conversion!"));
-            });
-        });
+        // Restore their inventory
+        player.getInventory().clear();
+        this.savedInventoryObject.give(player);
+        player.sendMessage(Translate.miniMessage("<green><bold>Finished kits conversion!"));
     }
 
     private void kitsTo() {
