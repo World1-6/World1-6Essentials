@@ -2,10 +2,6 @@ package com.andrew121410.mc.world16essentials;
 
 import com.andrew121410.mc.world16essentials.commands.*;
 import com.andrew121410.mc.world16essentials.commands.back.BackCMD;
-import com.andrew121410.mc.world16essentials.commands.gamemode.GmaCMD;
-import com.andrew121410.mc.world16essentials.commands.gamemode.GmcCMD;
-import com.andrew121410.mc.world16essentials.commands.gamemode.GmsCMD;
-import com.andrew121410.mc.world16essentials.commands.gamemode.GmspCMD;
 import com.andrew121410.mc.world16essentials.commands.home.DelhomeCMD;
 import com.andrew121410.mc.world16essentials.commands.home.HomeCMD;
 import com.andrew121410.mc.world16essentials.commands.home.HomeListCMD;
@@ -131,6 +127,7 @@ public class World16Essentials extends JavaPlugin {
     }
 
     private void registerCommands() {
+        new GamemodeCMD(this);
         new DayCMD(this);
         new NightCMD(this);
         new FeedCMD(this);
@@ -171,12 +168,6 @@ public class World16Essentials extends JavaPlugin {
         new LastJoinCMD(this);
         new TimeOfLoginCMD(this);
         new FirstJoinedCMD(this);
-
-        //Gamemode commands
-        new GmcCMD(this);
-        new GmsCMD(this);
-        new GmspCMD(this);
-        new GmaCMD(this);
 
         //Tpa commands
         new TpaCMD(this);

@@ -81,19 +81,12 @@ commands:
   delkit:
     aliases:
       - deletekit
-
-  gmc:
+  egamemode:
     aliases:
-      - gm1
-  gms:
-    aliases:
-      - gm0
-  gmsp:
-    aliases:
-      - gm3
-  gma:
-    aliases:
-      - gm2
+      - gma
+      - gmc
+      - gms
+      - gmsp
 
 permissions:
   world16.tpa:
