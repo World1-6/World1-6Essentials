@@ -6,10 +6,7 @@ import com.andrew121410.mc.world16essentials.commands.gamemode.GmaCMD;
 import com.andrew121410.mc.world16essentials.commands.gamemode.GmcCMD;
 import com.andrew121410.mc.world16essentials.commands.gamemode.GmsCMD;
 import com.andrew121410.mc.world16essentials.commands.gamemode.GmspCMD;
-import com.andrew121410.mc.world16essentials.commands.home.DelhomeCMD;
-import com.andrew121410.mc.world16essentials.commands.home.HomeCMD;
-import com.andrew121410.mc.world16essentials.commands.home.HomeListCMD;
-import com.andrew121410.mc.world16essentials.commands.home.SetHomeCMD;
+import com.andrew121410.mc.world16essentials.commands.home.*;
 import com.andrew121410.mc.world16essentials.commands.playertime.FirstJoinedCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.LastJoinCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.TimeOfLoginCMD;
@@ -179,6 +176,7 @@ public class World16Essentials extends JavaPlugin {
         new HomeCMD(this);
         new HomeListCMD(this);
         new SetHomeCMD(this);
+        new CloneHomesCMD(this);
 
         //Warps
         new WarpCMD(this);

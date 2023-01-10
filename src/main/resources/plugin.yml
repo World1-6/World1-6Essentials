@@ -69,6 +69,7 @@ commands:
   firstjoined:
   config1-6:
   spawnmob:
+  clonehomes:
 
   gmc:
     aliases:
@@ -243,4 +244,7 @@ permissions:
     default: op
   world16.spawnmob:
     description: Allows you to do spawnmob
+    default: op
+  world16.clonehomes:
+    description: Allows you to do takehomes
     default: op

@@ -8,7 +8,6 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.google.common.collect.Multimap;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -43,7 +42,7 @@ public class HomeManager {
         easySQL.create(columns, false);
     }
 
-    public void load(Player player) {
+    public void load(OfflinePlayer player) {
         Map<String, String> toGet = new HashMap<>();
         toGet.put("UUID", String.valueOf(player.getUniqueId()));
         Multimap<String, SQLDataStore> convert = easySQL.get(toGet);
