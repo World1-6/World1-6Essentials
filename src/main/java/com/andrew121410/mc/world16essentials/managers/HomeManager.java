@@ -43,7 +43,7 @@ public class HomeManager {
         easySQL.create(columns, false);
     }
 
-    public void load(Player player) {
+    public void load(OfflinePlayer player) {
         Map<String, String> toGet = new HashMap<>();
         toGet.put("UUID", String.valueOf(player.getUniqueId()));
         Multimap<String, SQLDataStore> convert = easySQL.get(toGet);

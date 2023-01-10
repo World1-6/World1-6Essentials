@@ -2,10 +2,7 @@ package com.andrew121410.mc.world16essentials;
 
 import com.andrew121410.mc.world16essentials.commands.*;
 import com.andrew121410.mc.world16essentials.commands.back.BackCMD;
-import com.andrew121410.mc.world16essentials.commands.home.DelhomeCMD;
-import com.andrew121410.mc.world16essentials.commands.home.HomeCMD;
-import com.andrew121410.mc.world16essentials.commands.home.HomeListCMD;
-import com.andrew121410.mc.world16essentials.commands.home.SetHomeCMD;
+import com.andrew121410.mc.world16essentials.commands.home.*;
 import com.andrew121410.mc.world16essentials.commands.kit.CreateKitCMD;
 import com.andrew121410.mc.world16essentials.commands.kit.DelKitCMD;
 import com.andrew121410.mc.world16essentials.commands.kit.KitCMD;
@@ -183,6 +180,7 @@ public class World16Essentials extends JavaPlugin {
         new HomeCMD(this);
         new HomeListCMD(this);
         new SetHomeCMD(this);
+        new CloneHomesCMD(this);
 
         //Warps
         new WarpCMD(this);
