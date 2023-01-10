@@ -131,26 +131,12 @@ public class EssentialsXDataTranslator implements IDataTranslator {
         });
     }
 
-    private void threadSleep() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private SavedInventoryObject savedInventoryObject;
-
-    // This is actual dumb like why is EssentialsX API so bad.
-    // Like all of this could easily be avoided if they had a method to get the kit ItemStacks by a kit name.
     private void kitsFrom(Player player) {
         player.sendMessage(Translate.miniMessage("<gold>Starting kits conversion..."));
-        player.sendMessage(Translate.miniMessage("<red><underline><bold>Please stop what you are doing!!!"));
-        player.sendMessage(Translate.miniMessage("<yellow><underline>It will let you know when it's done!"));
 
         // Create a save of the inventory
         String saveInventoryName = "temp-" + UUID.randomUUID();
-        this.savedInventoryObject = SavedInventoryObject.create(player, saveInventoryName);
+        SavedInventoryObject savedInventoryObject = SavedInventoryObject.create(player, saveInventoryName);
 
         // Convert all kits
         for (String kitKey : this.essentials.getKits().getKitKeys()) {
@@ -162,7 +148,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
 
         // Restore their inventory
         player.getInventory().clear();
-        this.savedInventoryObject.give(player);
+        savedInventoryObject.give(player);
         player.sendMessage(Translate.miniMessage("<green><bold>Finished kits conversion!"));
     }
 

@@ -25,12 +25,12 @@ public class GamemodeCMD implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         GameMode gameMode = getGameModeFromAlias(label);
-        String text = getTextFromGameMode(gameMode);
-        if (gameMode == null || text == null) {
-            sender.sendMessage(Translate.color("&cSomething went wrong!"));
+        if (gameMode == null) {
+            sender.sendMessage(Translate.colorc("&cSomething went wrong!"));
             sender.sendMessage(Translate.colorc("&cDo not use /egamemode use /gma or /gmc or /gms or /gmsp"));
             return true;
         }
+        String text = getTextFromGameMode(gameMode);
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
@@ -64,9 +64,9 @@ public class GamemodeCMD implements CommandExecutor {
         String color = target.isOp() ? "&4" : "&7";
 
         target.setGameMode(gameMode);
-        target.sendMessage(Translate.color("&6Set game mode " + text + " for " + color + target.getDisplayName()));
+        target.sendMessage(Translate.colorc("&6Set game mode " + text + " for " + color + target.getDisplayName()));
         if (sender != null) {
-            sender.sendMessage(Translate.color("&6Set game mode " + text + " for " + color + target.getDisplayName()));
+            sender.sendMessage(Translate.colorc("&6Set game mode " + text + " for " + color + target.getDisplayName()));
         }
     }
 
@@ -81,8 +81,6 @@ public class GamemodeCMD implements CommandExecutor {
     }
 
     private String getTextFromGameMode(GameMode gameMode) {
-        if (gameMode == null) return null;
-
         return switch (gameMode) {
             case ADVENTURE -> "&cadventure&6";
             case CREATIVE -> "&ccreative&6";
