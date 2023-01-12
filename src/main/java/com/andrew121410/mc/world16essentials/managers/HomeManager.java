@@ -48,7 +48,7 @@ public class HomeManager {
     }
 
     public Map<String, Location> loadHomes(UUID uuid) {
-        Map<String, String> toGet = new HashMap<>();
+        SQLDataStore toGet = new SQLDataStore();
         toGet.put("UUID", String.valueOf(uuid));
         Multimap<String, SQLDataStore> convert = easySQL.get(toGet);
 

@@ -49,7 +49,7 @@ public class KitManager {
     }
 
     public void saveKit(KitObject kitObject) {
-        Map<String, String> map = new HashMap<>();
+        SQLDataStore map = new SQLDataStore();
 
         map.put("KitName", kitObject.getKitName());
         map.put("WhoCreated", kitObject.getWhoCreatedUUID() != null ? kitObject.getWhoCreatedUUID().toString() : "null");

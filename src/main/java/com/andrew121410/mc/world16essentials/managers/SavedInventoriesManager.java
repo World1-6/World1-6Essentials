@@ -45,7 +45,7 @@ public class SavedInventoriesManager {
         check(uuid);
         this.savedInventoryMap.get(uuid).add(name);
 
-        Map<String, String> map = new HashMap<>();
+        SQLDataStore map = new SQLDataStore();
 
         map.put("UUID", uuid.toString());
         map.put("InventoryName", name);
@@ -60,7 +60,7 @@ public class SavedInventoriesManager {
     }
 
     public SavedInventoryObject load(UUID uuid, String inventoryName) {
-        Map<String, String> map = new HashMap<>();
+        SQLDataStore map = new SQLDataStore();
 
         map.put("UUID", uuid.toString());
         map.put("InventoryName", inventoryName);
@@ -78,7 +78,7 @@ public class SavedInventoriesManager {
     public Map<String, SavedInventoryObject> load(UUID uuid) {
         Map<String, SavedInventoryObject> savedInventoryObjectMap = new HashMap<>();
 
-        Map<String, String> map = new HashMap<>();
+        SQLDataStore map = new SQLDataStore();
 
         map.put("UUID", uuid.toString());
 
@@ -100,7 +100,7 @@ public class SavedInventoriesManager {
     public void loadAllSavedInventoriesNames(UUID uuid) {
         this.savedInventoryMap.put(uuid, new HashSet<>());
 
-        Map<String, String> map = new HashMap<>();
+        SQLDataStore map = new SQLDataStore();
         map.put("UUID", uuid.toString());
 
         Multimap<String, SQLDataStore> multimap = this.easySQL.get(map);
