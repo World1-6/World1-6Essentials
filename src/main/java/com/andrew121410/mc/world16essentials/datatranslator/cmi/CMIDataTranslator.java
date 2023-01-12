@@ -63,7 +63,7 @@ public class CMIDataTranslator implements IDataTranslator {
     }
 
     private void homesTo() {
-        Map<UUID, Map<String, Location>> allHomes = this.plugin.getHomeManager().loadAllHomesForAllPlayersIncludingOfflinePlayers();
+        Map<UUID, Map<String, Location>> allHomes = this.plugin.getHomeManager().loadAllHomesFromDatabase();
 
         for (Map.Entry<UUID, Map<String, Location>> uuidMapEntry : allHomes.entrySet()) {
             UUID uuid = uuidMapEntry.getKey();
