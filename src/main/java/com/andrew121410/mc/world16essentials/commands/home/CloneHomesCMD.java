@@ -9,9 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -53,33 +51,11 @@ public class CloneHomesCMD implements CommandExecutor {
                 player.sendMessage(Translate.color("&cSeems like that player never existed!"));
                 return true;
             }
-            player.sendMessage(Translate.color("&6Please wait while we take all the homes from that player!"));
-            this.plugin.getHomeManager().load(offlinePlayer); // Load OfflinePlayer into memory
 
-            Map<String, Location> homesOfOther = this.homesMap.get(offlinePlayer.getUniqueId());
-            // Have a delay, so it doesn't crash the server.
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Iterator<Map.Entry<String, Location>> iterator = homesOfOther.entrySet().iterator();
-                    if (homesOfOther.isEmpty()) {
-                        player.sendMessage(Translate.color("&6All of " + offlinePlayer.getName() + "'s homes have been cloned to you!"));
-                        homesMap.remove(offlinePlayer.getUniqueId()); // Remove OfflinePlayer from memory.
-                        this.cancel();
-                        return;
-                    }
+            Map<String, Location> otherHomes = this.plugin.getHomeManager().loadHomes(offlinePlayer.getUniqueId());
+            this.plugin.getHomeManager().add(player, otherHomes);
 
-                    while (iterator.hasNext()) {
-                        Map.Entry<String, Location> pair = iterator.next();
-                        String homeName = pair.getKey();
-                        Location location = pair.getValue().clone();
-                        plugin.getHomeManager().add(player, homeName, location);
-                        player.sendMessage(Translate.color("&6You have cloned the home &e" + homeName));
-                        iterator.remove();
-                        break;
-                    }
-                }
-            }.runTaskTimer(this.plugin, 20L, 10L);
+            player.sendMessage(Translate.color("&6All of " + offlinePlayer.getName() + "'s homes have been cloned to you!"));
         }
         return true;
     }
