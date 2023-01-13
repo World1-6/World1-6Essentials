@@ -4,6 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.ISQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.SQLite;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
+import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.MultiTableEasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.SQLDataStore;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -27,7 +28,7 @@ public class HomeManager {
         this.homesMap = this.plugin.getSetListMap().getHomesMap();
 
         this.isql = new SQLite(this.plugin.getDataFolder(), "Homes");
-        this.easySQL = new EasySQL(isql, "Homes");
+        this.easySQL = new EasySQL("Homes", new MultiTableEasySQL(this.isql));
 
         List<String> columns = new ArrayList<>();
         columns.add("UUID");
@@ -48,12 +49,19 @@ public class HomeManager {
     }
 
     public Map<String, Location> loadHomes(UUID uuid) {
+        Multimap<String, SQLDataStore> multimap = null;
+
         SQLDataStore toGet = new SQLDataStore();
         toGet.put("UUID", String.valueOf(uuid));
-        Multimap<String, SQLDataStore> convert = easySQL.get(toGet);
+        try {
+            multimap = easySQL.get(toGet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (multimap == null) return new HashMap<>();
 
         Map<String, Location> homes = new HashMap<>();
-        convert.forEach((key, value) -> {
+        multimap.forEach((key, value) -> {
             String homeName = value.get("HomeName");
             Location location = getLocation(value);
             homes.put(homeName, location);

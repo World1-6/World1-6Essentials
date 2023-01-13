@@ -5,6 +5,7 @@ import com.andrew121410.mc.world16essentials.objects.SavedInventoryObject;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.ISQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.SQLite;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
+import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.MultiTableEasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.SQLDataStore;
 import com.google.common.collect.Multimap;
 
@@ -25,7 +26,7 @@ public class SavedInventoriesManager {
         this.savedInventoryMap = this.plugin.getSetListMap().getSavedInventoryMap();
 
         this.iSQL = new SQLite(this.plugin.getDataFolder(), "SavedInventories");
-        this.easySQL = new EasySQL(this.iSQL, "SavedInventories");
+        this.easySQL = new EasySQL("SavedInventories", new MultiTableEasySQL(this.iSQL));
 
         List<String> columns = new ArrayList<>();
 
@@ -60,12 +61,20 @@ public class SavedInventoriesManager {
     }
 
     public SavedInventoryObject load(UUID uuid, String inventoryName) {
-        SQLDataStore map = new SQLDataStore();
+        SQLDataStore toGet = new SQLDataStore();
 
-        map.put("UUID", uuid.toString());
-        map.put("InventoryName", inventoryName);
+        toGet.put("UUID", uuid.toString());
+        toGet.put("InventoryName", inventoryName);
 
-        SQLDataStore sqlDataStore = this.easySQL.get(map).values().stream().findFirst().get();
+        Multimap<String, SQLDataStore> multimap = null;
+        try {
+            multimap = this.easySQL.get(toGet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (multimap == null) return null;
+
+        SQLDataStore sqlDataStore = multimap.values().stream().findFirst().get();
 
         String regularInventory = sqlDataStore.get("RegularInventory");
         String armorContent = sqlDataStore.get("ArmorContent");
@@ -78,13 +87,18 @@ public class SavedInventoriesManager {
     public Map<String, SavedInventoryObject> load(UUID uuid) {
         Map<String, SavedInventoryObject> savedInventoryObjectMap = new HashMap<>();
 
-        SQLDataStore map = new SQLDataStore();
+        SQLDataStore toGet = new SQLDataStore();
+        toGet.put("UUID", uuid.toString());
 
-        map.put("UUID", uuid.toString());
+        Multimap<String, SQLDataStore> multimap = null;
+        try {
+            multimap = this.easySQL.get(toGet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (multimap == null) return null;
 
-        Multimap<String, SQLDataStore> sqlDataStoreMultimap = this.easySQL.get(map);
-
-        for (SQLDataStore sqlDataStore : sqlDataStoreMultimap.values()) {
+        for (SQLDataStore sqlDataStore : multimap.values()) {
             String inventoryName = sqlDataStore.get("InventoryName");
             String regularInventory = sqlDataStore.get("RegularInventory");
             String armorContent = sqlDataStore.get("ArmorContent");
@@ -100,10 +114,17 @@ public class SavedInventoriesManager {
     public void loadAllSavedInventoriesNames(UUID uuid) {
         this.savedInventoryMap.put(uuid, new HashSet<>());
 
-        SQLDataStore map = new SQLDataStore();
-        map.put("UUID", uuid.toString());
+        SQLDataStore toGet = new SQLDataStore();
+        toGet.put("UUID", uuid.toString());
 
-        Multimap<String, SQLDataStore> multimap = this.easySQL.get(map);
+        Multimap<String, SQLDataStore> multimap = null;
+        try {
+            multimap = this.easySQL.get(toGet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (multimap == null) return;
+
         multimap.forEach((s, sqlDataStore) -> {
             String inventoryName = sqlDataStore.get("InventoryName");
             this.savedInventoryMap.get(uuid).add(inventoryName);

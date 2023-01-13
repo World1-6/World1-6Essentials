@@ -6,6 +6,7 @@ import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.ISQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.SQLite;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
+import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.MultiTableEasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.SQLDataStore;
 import com.google.common.collect.Multimap;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class KitManager {
         this.kitSettingsManager = this.plugin.getKitSettingsManager();
 
         this.iSQL = new SQLite(this.plugin.getDataFolder(), "Kits");
-        this.easySQL = new EasySQL(this.iSQL, "Kits");
+        this.easySQL = new EasySQL("Kits", new MultiTableEasySQL(this.iSQL));
 
         List<String> columns = new ArrayList<>();
 
