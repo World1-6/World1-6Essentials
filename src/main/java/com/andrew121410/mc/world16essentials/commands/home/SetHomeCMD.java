@@ -31,8 +31,16 @@ public class SetHomeCMD implements CommandExecutor {
             api.sendPermissionErrorMessage(player);
             return true;
         }
-        String homeName = "home";
 
+        int currentHomes = this.plugin.getSetListMap().getHomesMap().get(player.getUniqueId()).size();
+        int maxHomes = this.plugin.getHomeManager().getMaximumHomeCount(player);
+        if (!player.isOp() && currentHomes >= maxHomes && maxHomes != -1) {
+            player.sendMessage(Translate.color("&cYou have reached the maximum amount of homes."));
+            player.sendMessage(Translate.colorc("&6The maximum amount of homes is &c" + maxHomes));
+            return true;
+        }
+
+        String homeName = "home";
         if (args.length == 1) {
             homeName = args[0].toLowerCase();
         }

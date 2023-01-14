@@ -4,10 +4,13 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.sharedtabcomplete.HomeListTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Map;
 
 public class DelhomeCMD implements CommandExecutor {
 
@@ -33,20 +36,25 @@ public class DelhomeCMD implements CommandExecutor {
             api.sendPermissionErrorMessage(player);
             return true;
         }
-        String homeName = "home";
 
+        String homeName = "home";
         if (args.length == 1) {
             homeName = args[0].toLowerCase();
 
             if (homeName.equalsIgnoreCase("@allHomes")) {
                 this.plugin.getHomeManager().deleteALL(player.getUniqueId());
-                player.sendMessage(Translate.color("&6Deleted All Homes."));
+                player.sendMessage(Translate.colorc("&6Deleted All Homes."));
                 return true;
             }
         }
 
-        this.plugin.getHomeManager().delete(player.getUniqueId(), homeName);
-        player.sendMessage(Translate.color("&6Home &c" + homeName + " &6has been deleted."));
+        Map<String, Location> homes = this.plugin.getSetListMap().getHomesMap().get(player.getUniqueId());
+        if (homes.containsKey(homeName)) {
+            this.plugin.getHomeManager().delete(player.getUniqueId(), homeName);
+            player.sendMessage(Translate.color("&6Home &c" + homeName + " &6has been deleted."));
+        } else {
+            player.sendMessage(Translate.colorc("&cThat home doesn't exist."));
+        }
         return true;
     }
 }

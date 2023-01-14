@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16essentials.managers;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16utils.utils.Utils;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.ISQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.SQLite;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
@@ -10,6 +11,8 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -119,7 +122,7 @@ public class HomeManager {
     public SQLDataStore make(UUID uuid, String playerName, String homeName, Location location) {
         SQLDataStore sqlDataStore = new SQLDataStore();
         sqlDataStore.put("UUID", String.valueOf(uuid));
-        sqlDataStore.put("Date", "0");
+        sqlDataStore.put("Date", String.valueOf(System.currentTimeMillis()));
         sqlDataStore.put("PlayerName", playerName);
         sqlDataStore.put("HomeName", homeName.toLowerCase());
         sqlDataStore.put("X", String.valueOf(location.getX()));
@@ -173,5 +176,17 @@ public class HomeManager {
             e.printStackTrace();
         }
         return bigMap;
+    }
+
+    public int getMaximumHomeCount(Player player) {
+        //@TODO should we have some sort of cache for this?
+
+        for (PermissionAttachmentInfo permissionAttachmentInfo : player.getEffectivePermissions()) {
+            String permission = permissionAttachmentInfo.getPermission();
+            if (permission.startsWith("world16.home.") || permission.startsWith("world16.homes.")) {
+                return Utils.asIntegerOrElse(permission.substring(permission.lastIndexOf(".") + 1), -1);
+            }
+        }
+        return -1;
     }
 }
