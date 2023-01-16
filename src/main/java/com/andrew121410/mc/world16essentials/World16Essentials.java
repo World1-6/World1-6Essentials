@@ -145,7 +145,6 @@ public class World16Essentials extends JavaPlugin {
         new GodCMD(this);
         new MsgCMD(this, this.customConfigManager);
         new WaitDoCMD(this, this.customConfigManager);
-        new RunCommandsCMD(this, this.customConfigManager);
         new WFormatCMD(this, this.customConfigManager);
         new XyzdxdydzCMD(this);
         new WorkBenchCMD(this, this.customConfigManager);

@@ -44,7 +44,6 @@ commands:
   god:
   emsg:
   waitdo:
-  runcommands:
   wformat:
   xyzdxdydz:
   workbench:
@@ -190,9 +189,6 @@ permissions:
     default: true
   world16.waitdo:
     description: Allows to do waitdo
-    default: op
-  world16.runcommands:
-    description: Allows to do runcommands
     default: op
   world16.wformat:
     description: Allows to do wformat
