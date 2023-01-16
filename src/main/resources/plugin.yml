@@ -43,7 +43,6 @@ commands:
   broadcast:
   god:
   emsg:
-  waitdo:
   wformat:
   xyzdxdydz:
   workbench:
@@ -187,9 +186,6 @@ permissions:
   world16.msg:
     description: Allows to do msg
     default: true
-  world16.waitdo:
-    description: Allows to do waitdo
-    default: op
   world16.wformat:
     description: Allows to do wformat
     default: op
