@@ -76,6 +76,7 @@ commands:
   spawnmob:
   saveinventory:
   clonehomes:
+  homeother:
 
   kit:
   createkit:
@@ -264,4 +265,7 @@ permissions:
     default: op
   world16.clonehomes:
     description: Allows you to clonehomes
+    default: op
+  world16.homeother:
+    description: Allows you to homeother
     default: op

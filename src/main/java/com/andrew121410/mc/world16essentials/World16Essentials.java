@@ -181,6 +181,7 @@ public class World16Essentials extends JavaPlugin {
         new HomeListCMD(this);
         new SetHomeCMD(this);
         new CloneHomesCMD(this);
+        new HomeOtherCMD(this);
 
         //Warps
         new WarpCMD(this);
