@@ -43,7 +43,6 @@ commands:
   broadcast:
   god:
   emsg:
-  wformat:
   xyzdxdydz:
   workbench:
   delhome:
@@ -186,9 +185,6 @@ permissions:
   world16.msg:
     description: Allows to do msg
     default: true
-  world16.wformat:
-    description: Allows to do wformat
-    default: op
   world16.xyzdxdydz:
     description: Allows to do xyzdxdydz
     default: op
