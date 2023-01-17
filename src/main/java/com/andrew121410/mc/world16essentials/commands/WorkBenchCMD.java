@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.utils.API;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,11 +12,8 @@ public class WorkBenchCMD implements CommandExecutor {
     private final World16Essentials plugin;
     private final API api;
 
-    private final CustomConfigManager customConfigManager;
-
-    public WorkBenchCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
+    public WorkBenchCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.customConfigManager = customConfigManager;
         this.api = this.plugin.getApi();
 
         this.plugin.getCommand("workbench").setExecutor(this);
@@ -25,18 +21,17 @@ public class WorkBenchCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.workbench")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.workbench")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
-        p.openWorkbench(null, true);
+        player.openWorkbench(null, true);
         return true;
     }
 }

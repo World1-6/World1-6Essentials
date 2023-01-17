@@ -145,7 +145,7 @@ public class World16Essentials extends JavaPlugin {
         new GodCMD(this);
         new MsgCMD(this, this.customConfigManager);
         new XyzdxdydzCMD(this);
-        new WorkBenchCMD(this, this.customConfigManager);
+        new WorkBenchCMD(this);
         new PowerToolCMD(this, this.customConfigManager);
         new UnSafeEnchatmentCMD(this);
         new CommandBlockFindCMD(this);
