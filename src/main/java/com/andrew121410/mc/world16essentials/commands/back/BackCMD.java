@@ -4,10 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
-import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -47,14 +44,12 @@ public class BackCMD implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Map<BackEnum, Location> playerBackMap = this.backMap.get(player.getUniqueId());
 
-        if (args.length == 0) {
-            player.sendMessage(Translate.color("[&cBack&r] &a&oHere's all of the back commands/sub."));
-            player.sendMessage(Translate.color("&6/back death"));
-            player.sendMessage(Translate.color("&6/back tp"));
+        if (!player.hasPermission("world16.back")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
+        Map<BackEnum, Location> playerBackMap = this.backMap.get(player.getUniqueId());
 
         if (args[0].equalsIgnoreCase("death")) {
             if (!player.hasPermission("world16.back.death")) {
@@ -65,16 +60,6 @@ public class BackCMD implements CommandExecutor {
             if (deathLocation == null) {
                 player.sendMessage(Translate.color("&4No death back location was found..."));
                 return true;
-            }
-
-            //Checks if it's Lava Or Water.
-            if (deathLocation.getBlock().isLiquid() || deathLocation.getBlock().getRelative(BlockFace.DOWN).isLiquid()) {
-                deathLocation.getBlock().getRelative(BlockFace.DOWN).setType(XMaterial.OAK_LOG.parseMaterial());
-                deathLocation.getBlock().getRelative(BlockFace.EAST).setType(XMaterial.OAK_LOG.parseMaterial());
-                deathLocation.getBlock().getRelative(BlockFace.NORTH).setType(XMaterial.OAK_LOG.parseMaterial());
-                deathLocation.getBlock().getRelative(BlockFace.WEST).setType(XMaterial.OAK_LOG.parseMaterial());
-                deathLocation.getBlock().getRelative(BlockFace.SOUTH).setType(XMaterial.OAK_LOG.parseMaterial());
-                deathLocation.getBlock().setType(Material.AIR);
             }
 
             player.teleport(deathLocation);
@@ -91,6 +76,9 @@ public class BackCMD implements CommandExecutor {
             }
             player.teleport(tpLocation);
             player.sendMessage(Translate.color("&6Teleporting..."));
+        } else {
+            player.sendMessage(Translate.color("&6/back death"));
+            player.sendMessage(Translate.color("&6/back tp"));
         }
         return true;
     }
