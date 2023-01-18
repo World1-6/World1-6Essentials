@@ -43,7 +43,7 @@ public class LastJoinCMD implements CommandExecutor {
             return true;
         }
 
-        if (!player.hasPermission("world16.lastjoin") || !player.hasPermission("world16.lastonline")) {
+        if (!player.hasPermission("world16.lastjoin") && !player.hasPermission("world16.lastonline")) {
             this.plugin.getApi().sendPermissionErrorMessage(player);
             return true;
         }
