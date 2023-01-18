@@ -61,17 +61,17 @@ public class API {
 
     public String getTimeSinceLogin(Player player) {
         long loginTime = timeOfLoginMap.get(player.getUniqueId());
-        return TimeUtils.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false, false);
+        return TimeUtils.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false, true);
     }
 
     public String getTimeSinceLastLogin(OfflinePlayer offlinePlayer) {
         long lastLogin = offlinePlayer.getLastLogin();
-        return TimeUtils.makeIntoEnglishWords(lastLogin, System.currentTimeMillis(), false, false);
+        return TimeUtils.makeIntoEnglishWords(lastLogin, System.currentTimeMillis(), false, true);
     }
 
     public String getTimeSinceFirstLogin(OfflinePlayer offlinePlayer) {
         long firstPlayed = offlinePlayer.getFirstPlayed();
-        return TimeUtils.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false, false);
+        return TimeUtils.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false, true);
     }
 
     public boolean didPlayerJustJoin(Player player) {
