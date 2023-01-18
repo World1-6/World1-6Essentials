@@ -30,7 +30,7 @@ public class ReplyCMD implements CommandExecutor {
             return true;
         }
 
-        if (!player.hasPermission("world16.msg") || !player.hasPermission("world16.emsg")) {
+        if (!player.hasPermission("world16.msg") && !player.hasPermission("world16.emsg")) {
             api.sendPermissionErrorMessage(player);
             return true;
         }
