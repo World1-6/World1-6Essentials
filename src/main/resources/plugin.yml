@@ -129,6 +129,9 @@ permissions:
   world16.firstjoined:
     description: Allows you to use firstjoined cmd
     default: op
+  world16.firstjoined.other:
+    description: Allows you to use firstjoined cmd on other players
+    default: op
   world16.lastjoin:
     description: Allows you to use lastjoin cmd
     default: op
