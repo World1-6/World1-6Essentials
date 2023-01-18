@@ -124,71 +124,75 @@ public class World16Essentials extends JavaPlugin {
     }
 
     private void registerCommands() {
-        new GamemodeCMD(this);
-        new DayCMD(this);
-        new NightCMD(this);
-        new FeedCMD(this);
-        new HealCMD(this);
-        new FlyCMD(this);
-        new DebugCMD(this, this.customConfigManager);
-        new CommandBlockCMD(this);
-        new BedCMD(this);
-        new RamCMD(this);
-        new EChestCMD(this);
-        new SignCMD(this);
-        new ColorsCMD(this);
-        new AfkCMD(this);
-        new FlySpeedCMD(this);
-        new IsAfkCMD(this);
         new BackCMD(this);
-        new BroadcastCMD(this, this.customConfigManager);
-        new GodCMD(this);
-        new MsgCMD(this, this.customConfigManager);
-        new XyzdxdydzCMD(this);
-        new WorkBenchCMD(this);
-        new PowerToolCMD(this, this.customConfigManager);
-        new UnSafeEnchatmentCMD(this);
-        new CommandBlockFindCMD(this);
-        new SudoCMD(this);
-        new ShouldKeepSpawnChunksLoadedCMD(this);
-        new CountAllEntitiesCMD(this);
-        new HideCMD(this);
-        new UnhideCMD(this);
-        new ConfigCMD(this);
-        new SpawnMobCMD(this);
-        new SaveInventoryCMD(this);
 
-        // Time
-        new LastJoinCMD(this);
-        new TimeOfLoginCMD(this);
-        new FirstJoinedCMD(this);
-
-        //Tpa commands
-        new TpaCMD(this);
-        new TpAcceptCMD(this);
-        new TpDenyCMD(this);
-
-        //Spawn commands
-        new SpawnCMD(this, this.customConfigManager);
-        new SetSpawnCMD(this, this.customConfigManager);
-
-        //Homes
+        // Homes
+        new CloneHomesCMD(this);
         new DelhomeCMD(this);
         new HomeCMD(this);
         new HomeListCMD(this);
-        new SetHomeCMD(this);
-        new CloneHomesCMD(this);
         new HomeOtherCMD(this);
+        new SetHomeCMD(this);
 
-        //Warps
-        new WarpCMD(this);
-        new SetWarpCMD(this);
-        new DelwarpCMD(this);
-
-        //Kits
-        new KitCMD(this);
+        // Kits
         new CreateKitCMD(this);
         new DelKitCMD(this);
+        new KitCMD(this);
+
+        // Player Time
+        new FirstJoinedCMD(this);
+        new LastJoinCMD(this);
+        new TimeOfLoginCMD(this);
+
+        // Spawn
+        new SetSpawnCMD(this, this.customConfigManager);
+        new SpawnCMD(this, this.customConfigManager);
+
+        // Time
+        new DayCMD(this);
+        new NightCMD(this);
+
+        // Tp
+        new TpAcceptCMD(this);
+        new TpaCMD(this);
+        new TpDenyCMD(this);
+
+        // Warp
+        new DelwarpCMD(this);
+        new SetWarpCMD(this);
+        new WarpCMD(this);
+
+        // Other
+        new AfkCMD(this);
+        new BedCMD(this);
+        new BroadcastCMD(this);
+        new ColorsCMD(this);
+        new CommandBlockCMD(this);
+        new CommandBlockFindCMD(this);
+        new ConfigCMD(this);
+        new CountAllEntitiesCMD(this);
+        new DebugCMD(this, this.customConfigManager);
+        new EChestCMD(this);
+        new FeedCMD(this);
+        new FlyCMD(this);
+        new FlySpeedCMD(this);
+        new GamemodeCMD(this);
+        new GodCMD(this);
+        new HealCMD(this);
+        new HideCMD(this);
+        new IsAfkCMD(this);
+        new MsgCMD(this);
+        new PowerToolCMD(this);
+        new RamCMD(this);
+        new SaveInventoryCMD(this);
+        new ShouldKeepSpawnChunksLoadedCMD(this);
+        new SignCMD(this);
+        new SpawnMobCMD(this);
+        new SudoCMD(this);
+        new UnhideCMD(this);
+        new UnSafeEnchatmentCMD(this);
+        new WorkBenchCMD(this);
+        new XyzdxdydzCMD(this);
     }
 
     private void registerListeners() {

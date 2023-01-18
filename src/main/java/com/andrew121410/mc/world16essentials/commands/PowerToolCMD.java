@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.objects.PowerToolObject;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -22,7 +21,7 @@ public class PowerToolCMD implements CommandExecutor {
     private final World16Essentials plugin;
     private final API api;
 
-    public PowerToolCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
+    public PowerToolCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
@@ -33,23 +32,22 @@ public class PowerToolCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.powertool")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.powertool")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
-        PowerToolObject powerToolObject = this.powerToolMap.get(p.getUniqueId());
-        ItemStack itemInMainHand = p.getInventory().getItemInMainHand();
+        PowerToolObject powerToolObject = this.powerToolMap.get(player.getUniqueId());
+        ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
 
         if (args.length == 0) {
             powerToolObject.deletePowerTool(itemInMainHand.getType());
-            p.sendMessage(Translate.color("&eCommand has been removed from the tool."));
+            player.sendMessage(Translate.color("&eCommand has been removed from the tool."));
             return true;
         } else {
             String[] command = Arrays.copyOfRange(args, 0, args.length);
@@ -58,7 +56,7 @@ public class PowerToolCMD implements CommandExecutor {
             char check = command[0].charAt(0);
             String s = Character.toString(check);
             if (s.equalsIgnoreCase("/")) {
-                p.sendMessage(Translate.color("&4It looks like there's a / in the beginning it's supposed to be without a / but if you're doing WorldEdit make sure there's only 1 /"));
+                player.sendMessage(Translate.color("&4It looks like there's a / in the beginning it's supposed to be without a / but if you're doing WorldEdit make sure there's only 1 /"));
             }
 
             powerToolObject.registerPowerTool(itemInMainHand.getType(), realCommand);
