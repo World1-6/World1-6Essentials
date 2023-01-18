@@ -138,6 +138,9 @@ permissions:
   world16.timeoflogin:
     description: Allows you to use timeoflogin cmd
     default: op
+  world16.timeoflogin.other:
+    description: Allows you to use timeoflogin cmd on other players
+    default: op
 
   world16.setspawn:
     description: Allows you to use setspawn cmd
