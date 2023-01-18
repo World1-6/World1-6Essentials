@@ -6,6 +6,7 @@ import com.andrew121410.mc.world16essentials.commands.home.*;
 import com.andrew121410.mc.world16essentials.commands.kit.CreateKitCMD;
 import com.andrew121410.mc.world16essentials.commands.kit.DelKitCMD;
 import com.andrew121410.mc.world16essentials.commands.kit.KitCMD;
+import com.andrew121410.mc.world16essentials.commands.msg.MsgCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.FirstJoinedCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.LastJoinCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.TimeOfLoginCMD;
@@ -139,6 +140,9 @@ public class World16Essentials extends JavaPlugin {
         new DelKitCMD(this);
         new KitCMD(this);
 
+        // Msg
+        new MsgCMD(this);
+
         // Player Time
         new FirstJoinedCMD(this);
         new LastJoinCMD(this);
@@ -181,7 +185,6 @@ public class World16Essentials extends JavaPlugin {
         new HealCMD(this);
         new HideCMD(this);
         new IsAfkCMD(this);
-        new MsgCMD(this);
         new PowerToolCMD(this);
         new RamCMD(this);
         new SaveInventoryCMD(this);

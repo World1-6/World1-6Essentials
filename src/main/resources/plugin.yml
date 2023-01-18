@@ -29,6 +29,8 @@ commands:
       - deletekit
   kit:
 
+  emsg:
+
   firstjoined:
   lastjoin:
     aliases:
@@ -77,7 +79,6 @@ commands:
   heal:
   hide:
   isafk:
-  emsg:
   powertool:
   ram:
     aliases:
@@ -124,6 +125,10 @@ permissions:
     default: op
   world16.kit.admin:
     description: Allows you to give kits to other players
+    default: op
+
+  world16.emsg:
+    description: Allows you to use emsg cmd
     default: op
 
   world16.firstjoined:
@@ -243,9 +248,6 @@ permissions:
     default: op
   world16.isafk:
     description: Allows you to use isafk cmd
-    default: op
-  world16.emsg:
-    description: Allows you to use emsg cmd
     default: op
   world16.powertool:
     description: Allows you to use powertool cmd
