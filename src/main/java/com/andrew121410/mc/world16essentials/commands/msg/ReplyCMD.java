@@ -9,17 +9,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.UUID;
 
-public class MsgCMD implements CommandExecutor {
+public class ReplyCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
     private final API api;
 
-    public MsgCMD(World16Essentials plugin) {
+    public ReplyCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.plugin.getCommand("emsg").setExecutor(this);
+        this.plugin.getCommand("reply").setExecutor(this);
     }
 
     @Override
@@ -34,8 +35,14 @@ public class MsgCMD implements CommandExecutor {
             return true;
         }
 
-        if (args.length >= 2) {
-            Player target = this.plugin.getServer().getPlayer(args[0]);
+        if (args.length >= 1) {
+            UUID targetUUID = this.plugin.getSetListMap().getLastPlayerToMessageMap().get(player.getUniqueId());
+            if (targetUUID == null) {
+                player.sendMessage(Translate.colorc("&cYou have no one to reply to."));
+                return true;
+            }
+
+            Player target = this.plugin.getServer().getPlayer(targetUUID);
             if (target == null && !target.isOnline()) {
                 player.sendMessage(Translate.colorc("&cThat player is not online."));
                 return true;
@@ -43,20 +50,17 @@ public class MsgCMD implements CommandExecutor {
             // Add to last player to message map, so we can use /reply command.
             addToLastPlayerToMessage(player, target);
 
-            String messageFrom = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+            String messageFrom = String.join(" ", Arrays.copyOfRange(args, 0, args.length));
             player.sendMessage(Translate.color("&2[&a{me} &6->&c {target}&2]&9 ->&r {message}").replace("{me}", "me").replace("{target}", target.getName()).replace("{message}", messageFrom));
             target.sendMessage(Translate.color("&2[&a{me} &6->&c {target}&2]&9 ->&r {message}").replace("{me}", player.getName()).replace("{target}", "me").replace("{message}", messageFrom));
         } else {
-            player.sendMessage(Translate.colorc("&cUsage: /emsg <Player> <Message>"));
+            player.sendMessage(Translate.colorc("&cUsage: /reply <Message>"));
         }
         return true;
     }
 
     private void addToLastPlayerToMessage(Player player, Player target) {
-        this.plugin.getSetListMap().getLastPlayerToMessageMap().remove(player.getUniqueId());
         this.plugin.getSetListMap().getLastPlayerToMessageMap().remove(target.getUniqueId());
-
-        this.plugin.getSetListMap().getLastPlayerToMessageMap().put(player.getUniqueId(), target.getUniqueId());
         this.plugin.getSetListMap().getLastPlayerToMessageMap().put(target.getUniqueId(), player.getUniqueId());
     }
 }

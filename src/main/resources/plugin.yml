@@ -30,6 +30,10 @@ commands:
   kit:
 
   emsg:
+  reply:
+    aliases:
+      - r
+      - ereply
 
   firstjoined:
   lastjoin:

@@ -21,6 +21,7 @@ public class SetListMap {
     private final Map<UUID, PowerToolObject> powerToolMap; //0
     private final Map<UUID, Long> timeOfLoginMap; //0
     private final Map<UUID, Set<String>> savedInventoryMap; //0
+    private final Map<UUID, UUID> lastPlayerToMessageMap; //0
 
     private final Map<String, Location> warpsMap; //1
     private final Map<String, KitObject> kitsMap; //1
@@ -40,6 +41,7 @@ public class SetListMap {
         this.powerToolMap = new HashMap<>();
         this.timeOfLoginMap = new HashMap<>();
         this.savedInventoryMap = new HashMap<>();
+        this.lastPlayerToMessageMap = new HashMap<>();
 
         this.warpsMap = new HashMap<>();
         this.kitsMap = new HashMap<>();
@@ -53,7 +55,6 @@ public class SetListMap {
 
     }
 
-    //METHODS
     public void clearSetListMap(Player p) {
         clearAllMaps(p);
         clearAllLists(p);
@@ -72,6 +73,7 @@ public class SetListMap {
         powerToolMap.remove(p.getUniqueId());
         timeOfLoginMap.remove(p.getUniqueId());
         savedInventoryMap.remove(p.getUniqueId());
+        lastPlayerToMessageMap.remove(p.getUniqueId());
     }
 
     public void clearAllMaps() {
@@ -82,6 +84,7 @@ public class SetListMap {
         powerToolMap.clear();
         timeOfLoginMap.clear();
         savedInventoryMap.clear();
+        lastPlayerToMessageMap.clear();
 
         warpsMap.clear();
         kitsMap.clear();
@@ -149,5 +152,9 @@ public class SetListMap {
 
     public Map<UUID, Set<String>> getSavedInventoryMap() {
         return savedInventoryMap;
+    }
+
+    public Map<UUID, UUID> getLastPlayerToMessageMap() {
+        return lastPlayerToMessageMap;
     }
 }
