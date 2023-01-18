@@ -51,7 +51,7 @@ public class BackCMD implements CommandExecutor {
         }
         Map<BackEnum, Location> playerBackMap = this.backMap.get(player.getUniqueId());
 
-        if (args[0].equalsIgnoreCase("death")) {
+        if (args.length == 1 && args[0].equalsIgnoreCase("death")) {
             if (!player.hasPermission("world16.back.death")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
@@ -64,7 +64,7 @@ public class BackCMD implements CommandExecutor {
 
             player.teleport(deathLocation);
             player.sendMessage(Translate.color("&6Teleporting..."));
-        } else if (args[0].equalsIgnoreCase("tp")) {
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("tp")) {
             if (!player.hasPermission("world16.back.tp")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
