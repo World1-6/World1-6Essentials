@@ -84,17 +84,25 @@ public class HomeManager {
 
     public void delete(UUID uuid, String homeName) {
         this.homesMap.get(uuid).remove(homeName.toLowerCase());
-        Map<String, String> toDelete = new HashMap<>();
+        SQLDataStore toDelete = new SQLDataStore();
         toDelete.put("UUID", String.valueOf(uuid));
         toDelete.put("HomeName", homeName.toLowerCase());
-        easySQL.delete(toDelete);
+        try {
+            easySQL.delete(toDelete);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteALL(UUID uuid) {
         this.homesMap.get(uuid).clear();
-        Map<String, String> toDelete = new HashMap<>();
+        SQLDataStore toDelete = new SQLDataStore();
         toDelete.put("UUID", String.valueOf(uuid));
-        easySQL.delete(toDelete);
+        try {
+            easySQL.delete(toDelete);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Location getLocation(SQLDataStore sqlDataStore) {

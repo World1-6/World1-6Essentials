@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 public class EasySQL {
 
@@ -184,21 +183,29 @@ public class EasySQL {
         return map;
     }
 
-    public void delete(Map<String, String> map) {
+    public void delete(SQLDataStore sqlDataStore) throws SQLException {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("DELETE FROM ").append(this.tableName).append(" WHERE ");
+        stringBuilder.append("DELETE FROM ").append(tableName).append(" WHERE ");
         int a = 0;
-        for (Map.Entry<String, String> maper : map.entrySet()) {
-            String key = maper.getKey();
-            String value = maper.getValue();
+        for (String key : sqlDataStore.keySet()) {
             if (a == 0) {
-                stringBuilder.append(key).append("='").append(value).append("'");
-            } else stringBuilder.append(" AND ").append(key).append("='").append(value).append("'");
+                stringBuilder.append(key).append("=?");
+            } else stringBuilder.append(" AND ").append(key).append("=?");
             a++;
         }
-        isql.connect();
-        isql.executeCommand(stringBuilder.toString());
-        isql.disconnect();
+
+        this.isql.connect();
+        PreparedStatement preparedStatement = this.isql.executeCommandPreparedStatement(stringBuilder.toString());
+
+        // Set the values
+        int b = 1;
+        for (String value : sqlDataStore.values()) {
+            preparedStatement.setString(b, value);
+            b++;
+        }
+
+        preparedStatement.executeUpdate();
+        this.isql.disconnect();
     }
 
     public void addColumn(String columnName, String after) {
