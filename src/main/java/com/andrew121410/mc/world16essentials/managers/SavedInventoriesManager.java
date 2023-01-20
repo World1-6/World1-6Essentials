@@ -135,11 +135,15 @@ public class SavedInventoriesManager {
         check(uuid);
         this.savedInventoryMap.get(uuid).remove(inventoryName);
 
-        Map<String, String> map = new HashMap<>();
+        SQLDataStore map = new SQLDataStore();
         map.put("UUID", uuid.toString());
         map.put("InventoryName", inventoryName);
 
-        this.easySQL.delete(map);
+        try {
+            this.easySQL.delete(map);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void check(UUID uuid) {

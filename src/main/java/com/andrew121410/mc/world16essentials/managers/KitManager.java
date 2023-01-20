@@ -12,7 +12,10 @@ import com.google.common.collect.Multimap;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class KitManager {
 
@@ -73,9 +76,13 @@ public class KitManager {
         this.plugin.getKitSettingsManager().deleteFromConfig(kitName);
 
         // Remove from database
-        Map<String, String> map = new HashMap<>();
+        SQLDataStore map = new SQLDataStore();
         map.put("KitName", kitName);
-        this.easySQL.delete(map);
+        try {
+            this.easySQL.delete(map);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadKits() {
