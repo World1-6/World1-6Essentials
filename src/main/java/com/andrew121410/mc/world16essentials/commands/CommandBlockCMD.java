@@ -3,7 +3,7 @@ package com.andrew121410.mc.world16essentials.commands;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.utils.InventoryUtils;
-import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -36,7 +36,7 @@ public class CommandBlockCMD implements CommandExecutor {
             return true;
         }
 
-        ItemStack item = InventoryUtils.createItem(XMaterial.COMMAND_BLOCK.parseMaterial(), 1, "&cCommand Block&r", "New Fresh Command Block");
+        ItemStack item = InventoryUtils.createItem(Material.COMMAND_BLOCK, 1, "&cCommand Block&r", "New Fresh Command Block");
         item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
         p.getInventory().addItem(item);
         return true;

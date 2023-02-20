@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.InventoryUtils;
-import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -35,7 +35,7 @@ public class BedCMD implements CommandExecutor {
             return true;
         }
 
-        ItemStack item = InventoryUtils.createItem(XMaterial.RED_BED.parseMaterial(), 1, "Bed", "Bed");
+        ItemStack item = InventoryUtils.createItem(Material.RED_BED, 1, "Bed", "Bed");
         player.getInventory().addItem(item);
         player.sendMessage(Translate.color("&6You have been given a Bed."));
         return true;

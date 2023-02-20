@@ -13,7 +13,6 @@ import com.andrew121410.mc.world16utils.gui.buttons.defaults.LoreShifterButton;
 import com.andrew121410.mc.world16utils.player.PlayerUtils;
 import com.andrew121410.mc.world16utils.utils.InventoryUtils;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
-import com.andrew121410.mc.world16utils.utils.xutils.XMaterial;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -66,9 +65,9 @@ public class SignCMD implements CommandExecutor {
         }
 
         if (args.length == 1 && args[0].equalsIgnoreCase("give")) {
-            ItemStack item1 = new ItemStack(Objects.requireNonNull(XMaterial.OAK_SIGN.parseMaterial()), 1);
-            item1.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
-            player.getInventory().addItem(item1);
+            ItemStack itemStack = new ItemStack(Material.OAK_SIGN, 1);
+            itemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+            player.getInventory().addItem(itemStack);
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("edit")) {
             Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
