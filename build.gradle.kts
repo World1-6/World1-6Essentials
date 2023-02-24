@@ -13,6 +13,11 @@ tasks.withType<Jar> {
     archiveFileName.set("World1-6Essentials.jar")
 }
 
+// Set encoding
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
 repositories {
     mavenLocal()
     maven {
