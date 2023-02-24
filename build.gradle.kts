@@ -8,6 +8,11 @@ version = "1.0"
 description = "World1-6Essentials"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
+// Set jar name
+tasks.withType<Jar> {
+    archiveFileName.set("World1-6Essentials.jar")
+}
+
 repositories {
     mavenLocal()
     maven {
