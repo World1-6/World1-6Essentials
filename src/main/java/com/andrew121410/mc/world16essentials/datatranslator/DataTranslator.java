@@ -3,7 +3,6 @@ package com.andrew121410.mc.world16essentials.datatranslator;
 import com.Zrips.CMI.CMI;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.datatranslator.cmi.CMIDataTranslator;
-import com.andrew121410.mc.world16essentials.datatranslator.essentialsx.EssentialsXDataTranslator;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -54,7 +53,8 @@ public class DataTranslator {
                 throw new IllegalStateException("DataTranslator: Essentials plugin must be loaded to convert to/from EssentialsX");
             }
 
-            return new EssentialsXDataTranslator(this.plugin, essentials);
+//            return new EssentialsXDataTranslator(this.plugin, essentials);
+            return null;
         } else if (software == Software.CMI) {
             CMI cmi = this.plugin.getOtherPlugins().getCmi();
 
