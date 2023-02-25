@@ -5,6 +5,8 @@ import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import com.andrew121410.mc.world16utils.utils.ccutils.utils.TimeUtils;
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -12,14 +14,18 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "2/19/2023";
+    public String dateOfVersion;
 
     private final World16Essentials plugin;
 
@@ -35,6 +41,17 @@ public class API {
 
     public API(World16Essentials plugin) {
         this.plugin = plugin;
+
+        // Get the date of the version.
+        @Nullable InputStream inputStream = this.plugin.getResource("version.txt");
+        if (inputStream != null) {
+            try {
+                // @TODO: Were using google guava here, not sure where google guava is included paper or spigot? lol
+                this.dateOfVersion = CharStreams.toString(new InputStreamReader(inputStream, Charsets.UTF_8));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         // Configuration Utils
         this.configUtils = this.plugin.getCustomConfigManager().getConfigUtils();

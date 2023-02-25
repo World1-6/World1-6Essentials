@@ -7,14 +7,7 @@ import com.andrew121410.mc.world16essentials.objects.SavedInventoryObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.config.EssentialsUserConfiguration;
-import com.earth2me.essentials.config.entities.LazyLocation;
-import com.earth2me.essentials.config.holders.UserConfigHolder;
-import com.earth2me.essentials.libs.configurate.serialize.SerializationException;
-import com.earth2me.essentials.libs.snakeyaml.external.biz.base64Coder.Base64Coder;
-import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,11 +16,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 // As of 1/3/2023 this still works. Tested on EssentialsX 2.20.0-dev+37-b7a4bea
@@ -94,16 +87,17 @@ public class EssentialsXDataTranslator implements IDataTranslator {
         for (Map.Entry<UUID, Map<String, Location>> uuidMapEntry : allHomes.entrySet()) {
             UUID uuid = uuidMapEntry.getKey();
             Map<String, Location> homes = uuidMapEntry.getValue();
-            Player player = Bukkit.getPlayer(uuid);
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
-            if (player != null && player.isOnline()) {
-                User user = essentials.getUser(player);
-                homes.forEach(user::setHome);
-            } else {
-                MyEssentialsUser myEssentialsUser = new MyEssentialsUser(essentials, offlinePlayer);
-                homes.forEach(myEssentialsUser::setHome);
+            User user = offlinePlayer.isOnline() ? this.essentials.getUser(uuid) : this.essentials.getOfflineUser(offlinePlayer.getName());
+            if (user == null) {
+                // https://discord.com/channels/390942438061113344/395339753375137820/1078920593543528569
+                ImporterOfflinePlayer importerOfflinePlayer = new ImporterOfflinePlayer(offlinePlayer.getName(), uuid, Bukkit.getServer());
+                user = new User(importerOfflinePlayer, this.essentials);
+                user.save();
             }
+
+            homes.forEach(user::setHome);
         }
     }
 
@@ -186,61 +180,5 @@ public class EssentialsXDataTranslator implements IDataTranslator {
         if (hasEssentialsConfigFolder() == null) return null;
         File userDataFolder = new File(hasEssentialsConfigFolder(), "userdata/");
         return Arrays.stream(Objects.requireNonNull(userDataFolder.listFiles())).filter(file -> file.getName().endsWith(".yml")).collect(Collectors.toList());
-    }
-}
-
-class MyEssentialsUser {
-
-    private final IEssentials iEssentials;
-    private final EssentialsUserConfiguration config;
-    private UserConfigHolder holder;
-
-    public MyEssentialsUser(IEssentials iEssentials, OfflinePlayer offlinePlayer) {
-        this.iEssentials = iEssentials;
-
-        File folder = new File(iEssentials.getDataFolder(), "userdata");
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        String filename;
-        try {
-            filename = offlinePlayer.getUniqueId().toString();
-        } catch (Throwable var6) {
-            iEssentials.getLogger().warning("Falling back to old username system for " + offlinePlayer.getName());
-            filename = offlinePlayer.getName();
-        }
-
-        this.config = new EssentialsUserConfiguration(offlinePlayer.getName(), offlinePlayer.getUniqueId(), new File(folder, filename + ".yml"));
-        this.reloadConfig();
-        if (this.config.getUsername() == null) {
-            this.config.setUsername(offlinePlayer.getName());
-        }
-    }
-
-    public void reloadConfig() {
-        this.config.load();
-
-        try {
-            this.holder = (UserConfigHolder) this.config.getRootNode().get(UserConfigHolder.class);
-        } catch (SerializationException var2) {
-            this.iEssentials.getLogger().log(Level.SEVERE, "Error while reading user config: " + var2.getMessage(), var2);
-            throw new RuntimeException(var2);
-        }
-
-        this.config.setSaveHook(() -> {
-            try {
-                this.config.getRootNode().set(UserConfigHolder.class, this.holder);
-            } catch (SerializationException var2) {
-                this.iEssentials.getLogger().log(Level.SEVERE, "Error while saving user config: " + var2.getMessage(), var2);
-                throw new RuntimeException(var2);
-            }
-        });
-    }
-
-    public void setHome(String name, final Location loc) {
-        name = StringUtil.safeString(name);
-        this.holder.homes().put(name, LazyLocation.fromLocation(loc));
-        this.config.save();
     }
 }
