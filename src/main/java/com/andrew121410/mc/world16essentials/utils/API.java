@@ -5,7 +5,6 @@ import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import com.andrew121410.mc.world16utils.utils.ccutils.utils.TimeUtils;
-import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
@@ -14,7 +13,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +23,7 @@ import java.util.UUID;
 
 public class API {
 
-    public String dateOfVersion;
+    public String dateOfBuild;
 
     private final World16Essentials plugin;
 
@@ -42,16 +40,7 @@ public class API {
     public API(World16Essentials plugin) {
         this.plugin = plugin;
 
-        // Get the date of the version.
-        @Nullable InputStream inputStream = this.plugin.getResource("version.txt");
-        if (inputStream != null) {
-            try {
-                // @TODO: Were using google guava here, not sure where google guava is included paper or spigot? lol
-                this.dateOfVersion = CharStreams.toString(new InputStreamReader(inputStream, Charsets.UTF_8));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        this.dateOfBuild = getDateOfBuildFromTxtFile();
 
         // Configuration Utils
         this.configUtils = this.plugin.getCustomConfigManager().getConfigUtils();
@@ -171,5 +160,20 @@ public class API {
 
     public MessagesUtils getMessagesUtils() {
         return messagesUtils;
+    }
+
+    private String getDateOfBuildFromTxtFile() {
+        if (this.dateOfBuild == null) {
+            try (InputStream inputStream = this.plugin.getResource("date-of-build.txt")) {
+                if (inputStream == null) {
+                    this.dateOfBuild = "Unknown";
+                    return this.dateOfBuild;
+                }
+                this.dateOfBuild = CharStreams.toString(new InputStreamReader(inputStream));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return this.dateOfBuild;
     }
 }

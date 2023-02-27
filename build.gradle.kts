@@ -82,13 +82,13 @@ publishing {
 var date = Date()
 var formattedDate: String = SimpleDateFormat("MM/dd/yyyy").format(date)
 
-var fileName = "version.txt"
+var fileName = "date-of-build.txt"
 
 val genOutputDir = file("$buildDir/generated-resources")
 val genOutputFile = file("$genOutputDir/$fileName")
 
-// Generate the properties file
-tasks.register("generateProperties") {
+// Generate date of build file
+tasks.register("generateDateOfBuildFile") {
     outputs.dir(genOutputDir)
     outputs.file(genOutputFile)
 
@@ -98,9 +98,9 @@ tasks.register("generateProperties") {
     }
 }
 
-// Copy the generated properties file to the resources folder
-tasks.register("copyProperties") {
-    dependsOn("generateProperties")
+// Copy date of build file
+tasks.register("copyDateOfBuildFile") {
+    dependsOn("generateDateOfBuildFile")
     inputs.file(genOutputFile)
     outputs.file("$buildDir/resources/main/$fileName")
 
@@ -110,5 +110,5 @@ tasks.register("copyProperties") {
 }
 
 tasks.named("processResources") {
-    dependsOn("copyProperties")
+    dependsOn("copyDateOfBuildFile")
 }
