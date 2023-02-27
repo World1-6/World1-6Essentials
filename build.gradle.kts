@@ -25,6 +25,14 @@ tasks {
     compileJava {
         options.encoding = "UTF-8"
     }
+
+    shadowJar {
+        archiveBaseName.set("World1-6Essentials")
+        archiveClassifier.set("")
+        archiveVersion.set("")
+
+        relocate("org.bstats", "com.andrew121410.mc.world16essentials.bstats")
+    }
 }
 
 repositories {
@@ -62,18 +70,9 @@ dependencies {
     compileOnly("net.essentialsx:EssentialsX:2.20.0-SNAPSHOT")
 }
 
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    archiveBaseName.set("World1-6Essentials")
-    archiveClassifier.set("")
-    archiveVersion.set("")
-
-    relocate("org.bstats", "com.andrew121410.mc.world16essentials.bstats")
-}
-
 publishing {
     publications {
         create<MavenPublication>("shadow") {
-            from(components["java"])
             artifact(tasks.named("shadowJar"))
         }
     }
