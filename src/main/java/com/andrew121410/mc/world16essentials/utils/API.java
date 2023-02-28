@@ -146,10 +146,6 @@ public class API {
         sender.sendMessage(Translate.color("&4You do not have permission to do this command."));
     }
 
-    public String parseMessageString(Player player, String message) {
-        return this.getMessagesUtils().parseMessageString(player, message);
-    }
-
     public Component parseMessage(Player player, String message) {
         return this.getMessagesUtils().parseMessage(player, message);
     }

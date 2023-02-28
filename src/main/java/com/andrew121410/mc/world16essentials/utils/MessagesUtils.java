@@ -4,8 +4,6 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class MessagesUtils {
@@ -32,25 +30,20 @@ public class MessagesUtils {
     }
 
     private void addDefaults() {
-        this.messagesYml.getConfig().addDefault("prefix", "[&9World1-6&r]");
-        this.messagesYml.getConfig().addDefault("welcomeBackMessage", "%prefix% &6Welcome back, %player%!");
-        this.messagesYml.getConfig().addDefault("firstJoinedMessage", "%prefix% &6Welcome to the server, %player%!");
-        this.messagesYml.getConfig().addDefault("leaveMessage", "%prefix% &6%player% has left the server.");
+        this.messagesYml.getConfig().addDefault("prefix", "[<blue>World1-6<r>]");
+        this.messagesYml.getConfig().addDefault("welcomeBackMessage", "%prefix% <gold>Welcome back, %player%!");
+        this.messagesYml.getConfig().addDefault("firstJoinedMessage", "%prefix% <gold>Welcome to the server, %player%!");
+        this.messagesYml.getConfig().addDefault("leaveMessage", "%prefix% <gold>%player% has left the server.");
 
         this.messagesYml.getConfig().options().copyDefaults(true);
         this.messagesYml.saveConfig();
         this.messagesYml.reloadConfig();
     }
 
-    public String parseMessageString(Player player, String message) {
-        String output = LegacyComponentSerializer.legacyAmpersand().serialize(parseMessage(player, message));
-        return Translate.color(output);
-    }
-
     public Component parseMessage(Player player, String message) {
         message = message.replaceAll("%player%", player.getName());
         message = message.replaceAll("%prefix%", this.prefix);
-        return Translate.colorc(message);
+        return Translate.miniMessage(message);
     }
 
     public String getPrefix() {
