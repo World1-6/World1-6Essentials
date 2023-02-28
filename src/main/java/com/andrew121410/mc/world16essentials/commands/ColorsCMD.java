@@ -3,10 +3,13 @@ package com.andrew121410.mc.world16essentials.commands;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class ColorsCMD implements CommandExecutor {
 
@@ -16,39 +19,41 @@ public class ColorsCMD implements CommandExecutor {
     public ColorsCMD(World16Essentials getPlugin) {
         this.plugin = getPlugin;
         this.api = this.plugin.getApi();
+
         this.plugin.getCommand("colors").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
+        if (!sender.hasPermission("world16.colors")) {
+            api.sendPermissionErrorMessage(sender);
             return true;
         }
 
-        Player p = (Player) sender;
-
-        if (!p.hasPermission("world16.colors")) {
-            api.sendPermissionErrorMessage(p);
-            return true;
-        }
-
-        p.sendMessage("Dark Red &4 " + Translate.color("&4EXAMPLE"));
-        p.sendMessage("Red &c " + Translate.color("&cEXAMPLE"));
-        p.sendMessage("Gold &6 " + Translate.color("&6EXAMPLE"));
-        p.sendMessage("Yellow &e " + Translate.color("&eEXAMPLE"));
-        p.sendMessage("Dark Green &2" + Translate.color("&2EXAMPLE"));
-        p.sendMessage("Green &a " + Translate.color("&aEXAMPLE"));
-        p.sendMessage("Aqua &b " + Translate.color("&bEXAMPLE"));
-        p.sendMessage("Dark Aqua &3 " + Translate.color("&3EXAMPLE"));
-        p.sendMessage("Dark Blue &1 " + Translate.color("&1EXAMPLE"));
-        p.sendMessage("Blue &9 " + Translate.color("&9EXAMPLE"));
-        p.sendMessage("Light Purple &d " + Translate.color("&dEXAMPLE"));
-        p.sendMessage("Dark Purple &5 " + Translate.color("&5EXAMPLE"));
-        p.sendMessage("White &f " + Translate.color("&fEXAMPLE"));
-        p.sendMessage("Gray &7 " + Translate.color("&7EXAMPLE"));
-        p.sendMessage("Dark Gray &8 " + Translate.color("&8EXAMPLE"));
-        p.sendMessage("Black &0 " + Translate.color("&0EXAMPLE"));
+        sender.sendMessage(Translate.miniMessage("<#00973B>World1-6Essentials now uses <red>MiniMessage<#00973B> for colors!"));
+        sender.sendMessage(Translate.miniMessage("<blue>https://docs.advntr.dev/minimessage/format.html").clickEvent(ClickEvent.openUrl("https://docs.advntr.dev/minimessage/format.html")));
+        sender.sendMessage(Translate.miniMessage("<#00973B>Here are some examples:"));
+        sender.sendMessage("");
+        sender.sendMessage(Translate.miniMessage("<rainbow>Colors:"));
+        sender.sendMessage(Component.text("<black> -> ").color(NamedTextColor.BLACK).append(Translate.miniMessage("<black>Black")));
+        sender.sendMessage(Component.text("<dark_blue> -> ").color(NamedTextColor.DARK_BLUE).append(Translate.miniMessage("<dark_blue>Dark Blue")));
+        sender.sendMessage(Component.text("<dark_green> -> ").color(NamedTextColor.DARK_GREEN).append(Translate.miniMessage("<dark_green>Dark Green")));
+        sender.sendMessage(Component.text("<dark_aqua> -> ").color(NamedTextColor.DARK_AQUA).append(Translate.miniMessage("<dark_aqua>Dark Aqua")));
+        sender.sendMessage(Component.text("<dark_red> -> ").color(NamedTextColor.DARK_RED).append(Translate.miniMessage("<dark_red>Dark Red")));
+        sender.sendMessage(Component.text("<dark_purple> -> ").color(NamedTextColor.DARK_PURPLE).append(Translate.miniMessage("<dark_purple>Dark Purple")));
+        sender.sendMessage(Component.text("<gold> -> ").color(NamedTextColor.GOLD).append(Translate.miniMessage("<gold>Gold")));
+        sender.sendMessage(Component.text("<gray> -> ").color(NamedTextColor.GRAY).append(Translate.miniMessage("<gray>Gray")));
+        sender.sendMessage(Component.text("<dark_gray> -> ").color(NamedTextColor.DARK_GRAY).append(Translate.miniMessage("<dark_gray>Dark Gray")));
+        sender.sendMessage(Component.text("<blue> -> ").color(NamedTextColor.BLUE).append(Translate.miniMessage("<blue>Blue")));
+        sender.sendMessage(Component.text("<green> -> ").color(NamedTextColor.GREEN).append(Translate.miniMessage("<green>Green")));
+        sender.sendMessage(Component.text("<aqua> -> ").color(NamedTextColor.AQUA).append(Translate.miniMessage("<aqua>Aqua")));
+        sender.sendMessage(Component.text("<red> -> ").color(NamedTextColor.RED).append(Translate.miniMessage("<red>Red")));
+        sender.sendMessage(Component.text("<light_purple> -> ").color(NamedTextColor.LIGHT_PURPLE).append(Translate.miniMessage("<light_purple>Light Purple")));
+        sender.sendMessage(Component.text("<yellow> -> ").color(NamedTextColor.YELLOW).append(Translate.miniMessage("<yellow>Yellow")));
+        sender.sendMessage(Component.text("<white> -> ").color(NamedTextColor.WHITE).append(Translate.miniMessage("<white>White")));
+        sender.sendMessage("");
+        sender.sendMessage(Translate.miniMessage("<#EA12E1>You can also use hex colors! <blue>(Example below)"));
+        sender.sendMessage(Component.text("<#00973b> -> ").color(TextColor.color(0, 151, 59)).append(Translate.miniMessage("<#00973b>Hex Color")));
         return true;
     }
 }
