@@ -10,6 +10,8 @@ softdepend:
   - EssentialsX
   - Essentials
   - CMI
+  - Multiverse-Core
+  - UltraRegions
 
 commands:
   back:
