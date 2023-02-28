@@ -34,14 +34,14 @@ public class ConfigCMD implements CommandExecutor {
                 return TabUtils.getContainsString(args[1], Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
             } else if (args[0].equalsIgnoreCase("messages")) {
                 if (args.length == 2) {
-                    return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinedMessage", "leaveMessage"));
+                    return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinMessage", "leaveMessage"));
                 } else {
                     if (args[1].equalsIgnoreCase("prefix")) {
                         return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getPrefix()));
                     } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
                         return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getWelcomeBackMessage()));
-                    } else if (args[1].equalsIgnoreCase("firstJoinedMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getFirstJoinedMessage()));
+                    } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
+                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getFirstJoinMessage()));
                     } else if (args[1].equalsIgnoreCase("leaveMessage")) {
                         return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getLeaveMessage()));
                     }
@@ -86,7 +86,7 @@ public class ConfigCMD implements CommandExecutor {
                 api.getMessagesUtils().setWelcomeBackMessage(message);
                 player.sendMessage(Translate.color("&aWelcome back message set to &r" + message));
             } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
-                api.getMessagesUtils().setFirstJoinedMessage(message);
+                api.getMessagesUtils().setFirstJoinMessage(message);
                 player.sendMessage(Translate.color("&aFirst join message set to &r" + message));
             } else if (args[1].equalsIgnoreCase("leaveMessage")) {
                 api.getMessagesUtils().setLeaveMessage(message);

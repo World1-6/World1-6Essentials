@@ -13,7 +13,7 @@ public class MessagesUtils {
 
     private String prefix;
     private String welcomeBackMessage;
-    private String firstJoinedMessage;
+    private String firstJoinMessage;
     private String leaveMessage;
 
     public MessagesUtils(World16Essentials plugin, CustomYmlManager messagesYml) {
@@ -25,14 +25,14 @@ public class MessagesUtils {
 
         this.prefix = this.messagesYml.getConfig().getString("prefix");
         this.welcomeBackMessage = this.messagesYml.getConfig().getString("welcomeBackMessage");
-        this.firstJoinedMessage = this.messagesYml.getConfig().getString("firstJoinedMessage");
+        this.firstJoinMessage = this.messagesYml.getConfig().getString("firstJoinMessage");
         this.leaveMessage = this.messagesYml.getConfig().getString("leaveMessage");
     }
 
     private void addDefaults() {
         this.messagesYml.getConfig().addDefault("prefix", "[<blue>World1-6<r>]");
         this.messagesYml.getConfig().addDefault("welcomeBackMessage", "%prefix% <gold>Welcome back, %player%!");
-        this.messagesYml.getConfig().addDefault("firstJoinedMessage", "%prefix% <gold>Welcome to the server, %player%!");
+        this.messagesYml.getConfig().addDefault("firstJoinMessage", "%prefix% <gold>Welcome to the server, %player%!");
         this.messagesYml.getConfig().addDefault("leaveMessage", "%prefix% <gold>%player% has left the server.");
 
         this.messagesYml.getConfig().options().copyDefaults(true);
@@ -66,13 +66,13 @@ public class MessagesUtils {
         this.messagesYml.saveConfig();
     }
 
-    public String getFirstJoinedMessage() {
-        return firstJoinedMessage;
+    public String getFirstJoinMessage() {
+        return firstJoinMessage;
     }
 
-    public void setFirstJoinedMessage(String firstJoinedMessage) {
-        this.firstJoinedMessage = firstJoinedMessage;
-        this.messagesYml.getConfig().set("firstJoinedMessage", firstJoinedMessage);
+    public void setFirstJoinMessage(String firstJoinMessage) {
+        this.firstJoinMessage = firstJoinMessage;
+        this.messagesYml.getConfig().set("firstJoinMessage", firstJoinMessage);
         this.messagesYml.saveConfig();
     }
 

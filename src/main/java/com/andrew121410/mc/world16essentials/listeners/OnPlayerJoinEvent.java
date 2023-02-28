@@ -38,7 +38,7 @@ public class OnPlayerJoinEvent implements Listener {
         // Load flying state (this prevents them from falling to their death when they join)
         this.api.loadFlyingState(player);
 
-        String message = player.hasPlayedBefore() ? this.api.getMessagesUtils().getWelcomeBackMessage() : this.api.getMessagesUtils().getFirstJoinedMessage();
+        String message = player.hasPlayedBefore() ? this.api.getMessagesUtils().getWelcomeBackMessage() : this.api.getMessagesUtils().getFirstJoinMessage();
         event.joinMessage(api.parseMessage(player, message));
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
 
