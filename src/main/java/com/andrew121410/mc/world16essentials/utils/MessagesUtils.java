@@ -40,9 +40,14 @@ public class MessagesUtils {
         this.messagesYml.reloadConfig();
     }
 
-    public Component parseMessage(Player player, String message) {
+    public String parseMessageString(Player player, String message) {
         message = message.replaceAll("%player%", player.getName());
         message = message.replaceAll("%prefix%", this.prefix);
+        return message;
+    }
+
+    public Component parseMessage(Player player, String message) {
+        message = parseMessageString(player, message);
         return Translate.miniMessage(message);
     }
 

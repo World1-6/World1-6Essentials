@@ -5,13 +5,19 @@ import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
 import com.andrew121410.mc.world16utils.utils.Utils;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
-public class ConfigCMD implements CommandExecutor {
+public class ConfigCMD implements CommandExecutor, TabExecutor {
 
     private final World16Essentials plugin;
     private final API api;
@@ -21,34 +27,37 @@ public class ConfigCMD implements CommandExecutor {
         this.api = this.plugin.getApi();
 
         this.plugin.getCommand("config1-6").setExecutor(this);
-        this.plugin.getCommand("config1-6").setTabCompleter((sender, command, s, args) -> {
-            if (!(sender instanceof Player player)) return null;
-            if (!player.hasPermission("world16.config")) return null;
+        this.plugin.getCommand("config1-6").setTabCompleter(this);
+    }
 
-            if (args.length == 1) {
-                return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "spawnMobCap", "messages"));
-            } else if (args[0].equalsIgnoreCase("signTranslateColors")
-                    || args[0].equalsIgnoreCase("preventCropsTrampling")) {
-                return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
-            } else if (args[0].equalsIgnoreCase("spawnMobCap")) {
-                return TabUtils.getContainsString(args[1], Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
-            } else if (args[0].equalsIgnoreCase("messages")) {
-                if (args.length == 2) {
-                    return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinMessage", "leaveMessage"));
-                } else {
-                    if (args[1].equalsIgnoreCase("prefix")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getPrefix()));
-                    } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getWelcomeBackMessage()));
-                    } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getFirstJoinMessage()));
-                    } else if (args[1].equalsIgnoreCase("leaveMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getLeaveMessage()));
-                    }
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) return null;
+        if (!player.hasPermission("world16.config")) return null;
+
+        if (args.length == 1) {
+            return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "spawnMobCap", "messages"));
+        } else if (args[0].equalsIgnoreCase("signTranslateColors")
+                || args[0].equalsIgnoreCase("preventCropsTrampling")) {
+            return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
+        } else if (args[0].equalsIgnoreCase("spawnMobCap")) {
+            return TabUtils.getContainsString(args[1], Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
+        } else if (args[0].equalsIgnoreCase("messages")) {
+            if (args.length == 2) {
+                return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinMessage", "leaveMessage"));
+            } else {
+                if (args[1].equalsIgnoreCase("prefix")) {
+                    return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getPrefix()));
+                } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
+                    return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getWelcomeBackMessage()));
+                } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
+                    return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getFirstJoinMessage()));
+                } else if (args[1].equalsIgnoreCase("leaveMessage")) {
+                    return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getLeaveMessage()));
                 }
             }
-            return null;
-        });
+        }
+        return null;
     }
 
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
@@ -81,18 +90,27 @@ public class ConfigCMD implements CommandExecutor {
             String message = String.join(" ", ourArgs);
             if (args[1].equalsIgnoreCase("prefix")) {
                 api.getMessagesUtils().setPrefix(message);
-                player.sendMessage(Translate.color("&aPrefix set to &r" + message));
+                player.sendMessage(Translate.miniMessage("<green>Prefix has been set"));
+                sendConfigPreview(player, message);
             } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
                 api.getMessagesUtils().setWelcomeBackMessage(message);
-                player.sendMessage(Translate.color("&aWelcome back message set to &r" + message));
+                player.sendMessage(Translate.miniMessage("<green>WelcomeBackMessage has been set"));
+                sendConfigPreview(player, message);
             } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
                 api.getMessagesUtils().setFirstJoinMessage(message);
-                player.sendMessage(Translate.color("&aFirst join message set to &r" + message));
+                player.sendMessage(Translate.miniMessage("<green>FirstJoinMessage has been set"));
+                sendConfigPreview(player, message);
             } else if (args[1].equalsIgnoreCase("leaveMessage")) {
                 api.getMessagesUtils().setLeaveMessage(message);
-                player.sendMessage(Translate.color("&aLeave message set to &r" + message));
+                player.sendMessage(Translate.miniMessage("<green>LeaveMessage has been set"));
+                sendConfigPreview(player, message);
             }
         }
         return true;
+    }
+
+    private void sendConfigPreview(Player player, String message) {
+        String preview = api.parseMessageString(player, message);
+        player.sendMessage(Translate.miniMessage("<gold>Here's a preview <reset>\"" + preview + "<reset>\""));
     }
 }
