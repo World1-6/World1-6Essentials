@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.sharedtabcomplete.WarpTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.Location;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class WarpCMD implements CommandExecutor {
 
-    private final Map<String, Location> warpsMap;
+    private final Map<String, UnlinkedWorldLocation> warpsMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -70,18 +70,28 @@ public class WarpCMD implements CommandExecutor {
     }
 
     private void toWarp(Player target, CommandSender sender, String warp) {
-        Location warpLocation = this.warpsMap.get(warp);
+        UnlinkedWorldLocation warpLocation = this.warpsMap.get(warp);
 
         if (warpLocation == null) {
             if (sender == null) {
-                target.sendMessage(Translate.color("&cThat's not a warp."));
+                target.sendMessage(Translate.colorc("&cThat's not a warp."));
             } else {
-                sender.sendMessage(Translate.color("&cThat's not a warp."));
+                sender.sendMessage(Translate.colorc("&cThat's not a warp."));
             }
             return;
         }
 
-        target.teleport(warpLocation);
+        // World may not be loaded, so we need to check.
+        if (this.plugin.getServer().getWorld(warpLocation.getWorld()) == null) {
+            if (sender == null) {
+                target.sendMessage(Translate.colorc("&cWorld is not loaded."));
+            } else {
+                sender.sendMessage(Translate.colorc("&cWorld is not loaded."));
+            }
+            return;
+        }
+
+        target.teleport(warpLocation.toLocation());
         target.sendMessage(Translate.color("&6Teleporting..."));
         if (sender != null) {
             sender.sendMessage(Translate.color("&6Successfully teleported &e" + target.getName() + " &6to warp &e" + warp));

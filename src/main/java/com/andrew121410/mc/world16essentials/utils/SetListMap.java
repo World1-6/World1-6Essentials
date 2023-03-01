@@ -4,6 +4,7 @@ import com.andrew121410.mc.world16essentials.commands.back.BackEnum;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16essentials.objects.KitObject;
 import com.andrew121410.mc.world16essentials.objects.PowerToolObject;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -23,7 +24,7 @@ public class SetListMap {
     private final Map<UUID, Set<String>> savedInventoryMap; //0
     private final Map<UUID, UUID> lastPlayerToMessageMap; //0
 
-    private final Map<String, Location> warpsMap; //1
+    private final Map<String, UnlinkedWorldLocation> warpsMap; //1
     private final Map<String, KitObject> kitsMap; //1
 
     private final List<UUID> godList; //0
@@ -126,7 +127,7 @@ public class SetListMap {
         return hiddenPlayers;
     }
 
-    public Map<String, Location> getWarpsMap() {
+    public Map<String, UnlinkedWorldLocation> getWarpsMap() {
         return warpsMap;
     }
 
