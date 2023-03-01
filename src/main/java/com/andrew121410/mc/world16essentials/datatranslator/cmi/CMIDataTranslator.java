@@ -124,7 +124,7 @@ public class CMIDataTranslator implements IDataTranslator {
 
     private void warpsTo() {
         this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
-            CmiWarp cmiWarp = new CmiWarp(warpName, new CMILocation(location.toLocation()));
+            CmiWarp cmiWarp = new CmiWarp(warpName, new CMILocation(location));
 
             // Must set the creator on the warp, or else when /cmi warp is used, it will produce NullPointerException.
             cmiWarp.setCreator(UUID.fromString("069a79f4-44e9-4726-a5be-fca90e38aaf5")); // Notches UUID

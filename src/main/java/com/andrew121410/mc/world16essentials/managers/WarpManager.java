@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class WarpManager {
 
-    private final Map<String, UnlinkedWorldLocation> warpsMap;
+    private final Map<String, Location> warpsMap;
 
     private final World16Essentials plugin;
     private final CustomYmlManager warpsYml;
@@ -33,21 +33,18 @@ public class WarpManager {
             }
 
             UnlinkedWorldLocation location = (UnlinkedWorldLocation) warpCs.get("Location");
-            this.warpsMap.putIfAbsent(key, location);
+            this.warpsMap.putIfAbsent(key, location.toLocation());
         }
     }
 
-    public void add(String name, UnlinkedWorldLocation location) {
+    public void add(String name, Location location) {
         String newWarpName = name.toLowerCase();
+
         this.warpsMap.put(newWarpName, location);
         ConfigurationSection cs = getConfigurationSection();
         ConfigurationSection warpCs = cs.createSection(newWarpName);
-        warpCs.set("Location", location);
+        warpCs.set("Location", new UnlinkedWorldLocation(location));
         this.warpsYml.saveConfig();
-    }
-
-    public void add(String name, Location location) {
-        add(name, new UnlinkedWorldLocation(location));
     }
 
     public void delete(String name) {

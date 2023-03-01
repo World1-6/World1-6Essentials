@@ -3,7 +3,6 @@ package com.andrew121410.mc.world16essentials.commands.warp;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 public class SetWarpCMD implements CommandExecutor {
 
-    private final Map<String, UnlinkedWorldLocation> warpsMap;
+    private final Map<String, Location> warpsMap;
 
     private final World16Essentials plugin;
     private final API api;

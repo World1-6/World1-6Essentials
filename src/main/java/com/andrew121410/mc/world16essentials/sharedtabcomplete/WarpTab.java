@@ -1,8 +1,8 @@
 package com.andrew121410.mc.world16essentials.sharedtabcomplete;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class WarpTab implements TabCompleter {
 
-    private final Map<String, UnlinkedWorldLocation> warpsMap;
+    private final Map<String, Location> warpsMap;
 
     private final World16Essentials plugin;
 

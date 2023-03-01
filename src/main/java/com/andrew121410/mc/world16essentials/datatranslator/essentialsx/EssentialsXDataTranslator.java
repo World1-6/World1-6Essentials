@@ -119,7 +119,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     private void warpsTo() {
         this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
             try {
-                essentials.getWarps().setWarp(warpName, location.toLocation());
+                essentials.getWarps().setWarp(warpName, location);
             } catch (Exception ignored) {
             }
         });

@@ -5,7 +5,7 @@ import com.andrew121410.mc.world16essentials.managers.WarpManager;
 import com.andrew121410.mc.world16essentials.sharedtabcomplete.WarpTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class DelwarpCMD implements CommandExecutor {
 
-    private final Map<String, UnlinkedWorldLocation> warpsMap;
+    private final Map<String, Location> warpsMap;
 
     private final World16Essentials plugin;
     private final API api;
