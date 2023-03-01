@@ -42,7 +42,7 @@ public class DelhomeCMD implements CommandExecutor {
             homeName = args[0].toLowerCase();
 
             if (homeName.equalsIgnoreCase("@allHomes")) {
-                this.plugin.getHomeManager().deleteALL(player.getUniqueId());
+                this.plugin.getHomeManager().deleteAllHomes(player.getUniqueId());
                 player.sendMessage(Translate.colorc("&6Deleted All Homes."));
                 return true;
             }

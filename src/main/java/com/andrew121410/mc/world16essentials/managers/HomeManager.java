@@ -80,7 +80,7 @@ public class HomeManager {
             this.homesMap.get(offlinePlayer.getUniqueId()).put(homeName, location);
         }
 
-        save(make(offlinePlayer.getUniqueId(), offlinePlayer.getName(), homeName, location));
+        save(makeSQLDataStore(offlinePlayer.getUniqueId(), offlinePlayer.getName(), homeName, location));
     }
 
     public void add(OfflinePlayer offlinePlayer, Map<String, Location> map) {
@@ -105,7 +105,7 @@ public class HomeManager {
         }
     }
 
-    public void deleteALL(UUID uuid) {
+    public void deleteAllHomes(UUID uuid) {
         this.homesMap.get(uuid).clear();
         SQLDataStore toDelete = new SQLDataStore();
         toDelete.put("UUID", String.valueOf(uuid));
@@ -113,6 +113,30 @@ public class HomeManager {
             easySQL.delete(toDelete);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void save(SQLDataStore sqlDataStore) {
+        try {
+            easySQL.save(sqlDataStore);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveBulk(UUID uuid, Map<String, Location> map) {
+        Multimap<String, SQLDataStore> multimap = ArrayListMultimap.create();
+
+        for (Map.Entry<String, Location> entry : map.entrySet()) {
+            String homeName = entry.getKey();
+            Location location = entry.getValue();
+            multimap.put(String.valueOf(uuid), makeSQLDataStore(uuid, "na", homeName, location));
+        }
+
+        try {
+            this.easySQL.save(multimap);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -127,7 +151,7 @@ public class HomeManager {
         return new Location(this.plugin.getServer().getWorld(World), Double.parseDouble(X), Double.parseDouble(Y), Double.parseDouble(Z), Float.parseFloat(YAW), Float.parseFloat(PITCH));
     }
 
-    public SQLDataStore make(UUID uuid, String playerName, String homeName, Location location) {
+    public SQLDataStore makeSQLDataStore(UUID uuid, String playerName, String homeName, Location location) {
         SQLDataStore sqlDataStore = new SQLDataStore();
         sqlDataStore.put("UUID", String.valueOf(uuid));
         sqlDataStore.put("Date", String.valueOf(System.currentTimeMillis()));
@@ -142,30 +166,7 @@ public class HomeManager {
         return sqlDataStore;
     }
 
-    public void saveBulk(UUID uuid, Map<String, Location> map) {
-        Multimap<String, SQLDataStore> multimap = ArrayListMultimap.create();
-
-        for (Map.Entry<String, Location> entry : map.entrySet()) {
-            String homeName = entry.getKey();
-            Location location = entry.getValue();
-            multimap.put(String.valueOf(uuid), make(uuid, "na", homeName, location));
-        }
-
-        try {
-            this.easySQL.save(multimap);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void save(SQLDataStore sqlDataStore) {
-        try {
-            easySQL.save(sqlDataStore);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    // Used for data translator (EssentialsX, CMI, etc.)
     public Map<UUID, Map<String, Location>> loadAllHomesFromDatabase() {
         Map<UUID, Map<String, Location>> bigMap = new HashMap<>();
 
