@@ -29,32 +29,30 @@ public class SetWarpCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.setwarp")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.setwarp")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
-        if (args.length == 0) {
-            p.sendMessage(Translate.color("&cUsage: &6/setwarp <Name>"));
-            return true;
-        } else if (args.length == 1) {
+        if (args.length == 1) {
             String name = args[0].toLowerCase();
-            Location location = p.getLocation();
+            Location location = player.getLocation();
 
             if (this.warpsMap.containsKey(name)) {
-                p.sendMessage(Translate.color("Looks like there is already a warp with that name..."));
+                player.sendMessage(Translate.miniMessage("<red>The warp <blue>" + name + " <red>already exists."));
                 return true;
             }
 
             this.plugin.getWarpManager().add(name, location);
-            p.sendMessage(Translate.color("&6The warp: " + name + " has been set."));
+            player.sendMessage(Translate.miniMessage("<dark_green>Warp <blue>" + name + " <dark_green>has been set."));
             return true;
+        } else {
+            player.sendMessage(Translate.miniMessage("<red>Usage: <gold>/setwarp <blue><Name>"));
         }
         return true;
     }
