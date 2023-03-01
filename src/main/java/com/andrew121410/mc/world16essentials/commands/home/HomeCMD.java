@@ -55,12 +55,19 @@ public class HomeCMD implements CommandExecutor {
         }
 
         Location home = homes.get(homeName);
-        if (home != null) {
-            player.teleport(home);
-            player.sendMessage(Translate.color("&6Teleporting..."));
-        } else {
-            player.sendMessage(Translate.color("&cHome Not Found."));
+
+        if (home == null) {
+            player.sendMessage(Translate.colorc("&cHome Not Found."));
+            return true;
         }
+
+        if (!home.isWorldLoaded()) {
+            player.sendMessage(Translate.colorc("&cWorld is not loaded."));
+            return true;
+        }
+
+        player.teleport(home);
+        player.sendMessage(Translate.color("&6Teleporting..."));
         return true;
     }
 }

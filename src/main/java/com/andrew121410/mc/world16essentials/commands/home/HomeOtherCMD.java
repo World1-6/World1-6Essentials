@@ -73,6 +73,11 @@ public class HomeOtherCMD implements CommandExecutor, TabExecutor {
                 return true;
             }
 
+            if (!location.isWorldLoaded()) {
+                player.sendMessage(Translate.colorc("&cThat home's world is not loaded!"));
+                return true;
+            }
+
             player.teleport(location);
             player.sendMessage(Translate.colorc("&6You have been teleported to " + offlinePlayer.getName() + "'s home named &c" + home));
             return true;
