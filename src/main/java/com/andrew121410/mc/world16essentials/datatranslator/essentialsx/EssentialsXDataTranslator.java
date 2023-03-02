@@ -5,6 +5,7 @@ import com.andrew121410.mc.world16essentials.datatranslator.DataTranslator;
 import com.andrew121410.mc.world16essentials.datatranslator.IDataTranslator;
 import com.andrew121410.mc.world16essentials.objects.SavedInventoryObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
@@ -75,18 +76,18 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 Location location = new Location(Bukkit.getWorld(worldUUID), x, y, z, yaw, pitch);
 
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-                this.plugin.getHomeManager().add(offlinePlayer, homeName, location);
+                this.plugin.getHomeManager().add(offlinePlayer, homeName, new UnlinkedWorldLocation(location));
             }
         }
     }
 
     private void homesTo() {
         // Load all homes including offline players
-        Map<UUID, Map<String, Location>> allHomes = this.plugin.getHomeManager().loadAllHomesFromDatabase();
+        Map<UUID, Map<String, UnlinkedWorldLocation>> allHomes = this.plugin.getHomeManager().loadAllHomesFromDatabase();
 
-        for (Map.Entry<UUID, Map<String, Location>> uuidMapEntry : allHomes.entrySet()) {
+        for (Map.Entry<UUID, Map<String, UnlinkedWorldLocation>> uuidMapEntry : allHomes.entrySet()) {
             UUID uuid = uuidMapEntry.getKey();
-            Map<String, Location> homes = uuidMapEntry.getValue();
+            Map<String, UnlinkedWorldLocation> homes = uuidMapEntry.getValue();
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
             User user = offlinePlayer.isOnline() ? this.essentials.getUser(uuid) : this.essentials.getOfflineUser(offlinePlayer.getName());
@@ -97,7 +98,13 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 user.save();
             }
 
-            homes.forEach(user::setHome);
+            for (Map.Entry<String, UnlinkedWorldLocation> stringUnlinkedWorldLocationEntry : homes.entrySet()) {
+                String homeName = stringUnlinkedWorldLocationEntry.getKey();
+                UnlinkedWorldLocation unlinkedWorldLocation = stringUnlinkedWorldLocationEntry.getValue();
+                Location location = unlinkedWorldLocation.toLocation();
+
+                user.setHome(homeName, location);
+            }
         }
     }
 
@@ -119,7 +126,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     private void warpsTo() {
         this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
             try {
-                essentials.getWarps().setWarp(warpName, location);
+                essentials.getWarps().setWarp(warpName, location.toLocation());
             } catch (Exception ignored) {
             }
         });

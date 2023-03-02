@@ -3,7 +3,7 @@ package com.andrew121410.mc.world16essentials.commands.home;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.Location;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class CloneHomesCMD implements CommandExecutor {
 
-    private final Map<UUID, Map<String, Location>> homesMap;
+    private final Map<UUID, Map<String, UnlinkedWorldLocation>> homesMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -52,7 +52,7 @@ public class CloneHomesCMD implements CommandExecutor {
                 return true;
             }
 
-            Map<String, Location> otherHomes = this.plugin.getHomeManager().loadHomes(offlinePlayer.getUniqueId());
+            Map<String, UnlinkedWorldLocation> otherHomes = this.plugin.getHomeManager().loadHomes(offlinePlayer.getUniqueId());
             this.plugin.getHomeManager().add(player, otherHomes);
 
             player.sendMessage(Translate.color("&6All of " + offlinePlayer.getName() + "'s homes have been cloned to you!"));

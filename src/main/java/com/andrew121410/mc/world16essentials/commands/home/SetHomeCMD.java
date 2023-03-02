@@ -3,6 +3,7 @@ package com.andrew121410.mc.world16essentials.commands.home;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -45,7 +46,7 @@ public class SetHomeCMD implements CommandExecutor {
             homeName = args[0].toLowerCase();
         }
 
-        this.plugin.getHomeManager().add(player, homeName, player.getLocation());
+        this.plugin.getHomeManager().add(player, homeName, new UnlinkedWorldLocation(player.getLocation()));
 
         player.sendMessage(Translate.color("&6New Home: &c" + homeName + "&6 set to your current location."));
         return true;

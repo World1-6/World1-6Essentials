@@ -11,6 +11,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.datatranslator.IDataTranslator;
 import com.andrew121410.mc.world16essentials.objects.KitObject;
 import com.andrew121410.mc.world16essentials.objects.SavedInventoryObject;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
 import com.andrew121410.mc.world16utils.utils.InventoryUtils;
 import net.Zrips.CMILib.Container.CMILocation;
@@ -63,7 +64,7 @@ public class CMIDataTranslator implements IDataTranslator {
                 CmiHome cmiHome = entry.getValue();
                 Location location = cmiHome.getLoc();
 
-                this.plugin.getHomeManager().add(offlinePlayer, homeName, location);
+                this.plugin.getHomeManager().add(offlinePlayer, homeName, new UnlinkedWorldLocation(location));
             }
         }
     }
@@ -110,21 +111,21 @@ public class CMIDataTranslator implements IDataTranslator {
     }
 
     private void homesTo() {
-        Map<UUID, Map<String, Location>> allHomes = this.plugin.getHomeManager().loadAllHomesFromDatabase();
+        Map<UUID, Map<String, UnlinkedWorldLocation>> allHomes = this.plugin.getHomeManager().loadAllHomesFromDatabase();
 
-        for (Map.Entry<UUID, Map<String, Location>> uuidMapEntry : allHomes.entrySet()) {
+        for (Map.Entry<UUID, Map<String, UnlinkedWorldLocation>> uuidMapEntry : allHomes.entrySet()) {
             UUID uuid = uuidMapEntry.getKey();
-            Map<String, Location> homes = uuidMapEntry.getValue();
+            Map<String, UnlinkedWorldLocation> homes = uuidMapEntry.getValue();
 
             CMIUser cmiUser = this.cmi.getPlayerManager().getUser(uuid);
 
-            homes.forEach((homeName, location) -> cmiUser.addHome(new CmiHome(homeName, new CMILocation(location)), true));
+            homes.forEach((homeName, location) -> cmiUser.addHome(new CmiHome(homeName, new CMILocation(location.toLocation())), true));
         }
     }
 
     private void warpsTo() {
         this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
-            CmiWarp cmiWarp = new CmiWarp(warpName, new CMILocation(location));
+            CmiWarp cmiWarp = new CmiWarp(warpName, new CMILocation(location.toLocation()));
 
             // Must set the creator on the warp, or else when /cmi warp is used, it will produce NullPointerException.
             cmiWarp.setCreator(UUID.fromString("069a79f4-44e9-4726-a5be-fca90e38aaf5")); // Notches UUID

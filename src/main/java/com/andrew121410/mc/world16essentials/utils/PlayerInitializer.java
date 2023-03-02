@@ -5,7 +5,7 @@ import com.andrew121410.mc.world16essentials.commands.back.BackEnum;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16essentials.objects.PowerToolObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.Location;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class PlayerInitializer {
 
-    private final Map<UUID, Map<BackEnum, Location>> backMap;
+    private final Map<UUID, Map<BackEnum, UnlinkedWorldLocation>> backMap;
     private final Map<UUID, PowerToolObject> powerToolMap;
     private final Map<UUID, AfkObject> afkObjectMap;
     private final Map<UUID, Long> timeOfLoginMap;

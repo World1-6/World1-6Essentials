@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.sharedtabcomplete.HomeListTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.Location;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -48,7 +48,7 @@ public class DelhomeCMD implements CommandExecutor {
             }
         }
 
-        Map<String, Location> homes = this.plugin.getSetListMap().getHomesMap().get(player.getUniqueId());
+        Map<String, UnlinkedWorldLocation> homes = this.plugin.getSetListMap().getHomesMap().get(player.getUniqueId());
         if (homes.containsKey(homeName)) {
             this.plugin.getHomeManager().delete(player.getUniqueId(), homeName);
             player.sendMessage(Translate.color("&6Home &c" + homeName + " &6has been deleted."));

@@ -3,8 +3,8 @@ package com.andrew121410.mc.world16essentials.commands.home;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -64,9 +64,9 @@ public class HomeOtherCMD implements CommandExecutor, TabExecutor {
                 player.sendMessage(Translate.colorc("&cSeems like that player never existed!"));
                 return true;
             }
-            Map<String, Location> homes = getHomes(offlinePlayer);
+            Map<String, UnlinkedWorldLocation> homes = getHomes(offlinePlayer);
             String home = args[1];
-            Location location = homes.getOrDefault(home, null);
+            UnlinkedWorldLocation location = homes.getOrDefault(home, null);
 
             if (location == null) {
                 player.sendMessage(Translate.colorc("&cThat home doesn't exist!"));
@@ -78,7 +78,7 @@ public class HomeOtherCMD implements CommandExecutor, TabExecutor {
                 return true;
             }
 
-            player.teleport(location);
+            player.teleport(location.toLocation());
             player.sendMessage(Translate.colorc("&6You have been teleported to " + offlinePlayer.getName() + "'s home named &c" + home));
             return true;
         } else {
@@ -95,8 +95,8 @@ public class HomeOtherCMD implements CommandExecutor, TabExecutor {
         return offlinePlayer;
     }
 
-    private Map<String, Location> getHomes(OfflinePlayer offlinePlayer) {
-        Map<String, Location> homes;
+    private Map<String, UnlinkedWorldLocation> getHomes(OfflinePlayer offlinePlayer) {
+        Map<String, UnlinkedWorldLocation> homes;
         if (this.plugin.getSetListMap().getHomesMap().containsKey(offlinePlayer.getUniqueId())) {
             homes = this.plugin.getSetListMap().getHomesMap().get(offlinePlayer.getUniqueId());
         } else {

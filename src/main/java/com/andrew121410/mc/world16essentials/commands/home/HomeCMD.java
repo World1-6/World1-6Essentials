@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.sharedtabcomplete.HomeListTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.Location;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class HomeCMD implements CommandExecutor {
 
-    private final Map<UUID, Map<String, Location>> homesMap;
+    private final Map<UUID, Map<String, UnlinkedWorldLocation>> homesMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -43,7 +43,7 @@ public class HomeCMD implements CommandExecutor {
             return true;
         }
 
-        Map<String, Location> homes = this.homesMap.get(player.getUniqueId());
+        Map<String, UnlinkedWorldLocation> homes = this.homesMap.get(player.getUniqueId());
         if (homes.isEmpty()) {
             player.sendMessage(Translate.colorc("&cYou don't have any homes."));
             return true;
@@ -54,7 +54,7 @@ public class HomeCMD implements CommandExecutor {
             homeName = args[0].toLowerCase();
         }
 
-        Location home = homes.get(homeName);
+        UnlinkedWorldLocation home = homes.get(homeName);
 
         if (home == null) {
             player.sendMessage(Translate.colorc("&cHome Not Found."));
@@ -66,7 +66,7 @@ public class HomeCMD implements CommandExecutor {
             return true;
         }
 
-        player.teleport(home);
+        player.teleport(home.toLocation());
         player.sendMessage(Translate.color("&6Teleporting..."));
         return true;
     }

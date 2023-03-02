@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16essentials.commands.back.BackEnum;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16essentials.objects.KitObject;
 import com.andrew121410.mc.world16essentials.objects.PowerToolObject;
-import org.bukkit.Location;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -14,16 +14,16 @@ public class SetListMap {
     // 0 TO CLEAR AFTER THE PLAYER LEAVES
     // 1 TO ONLY CLEAR WHEN THE SERVER SHUTS DOWN
 
-    private final Map<UUID, Map<BackEnum, Location>> backMap; //0
+    private final Map<UUID, Map<BackEnum, UnlinkedWorldLocation>> backMap; //0
     private final Map<UUID, UUID> tpaMap; //0
     private final Map<UUID, AfkObject> afkMap; //0
-    private final Map<UUID, Map<String, Location>> homesMap; //0
+    private final Map<UUID, Map<String, UnlinkedWorldLocation>> homesMap; //0
     private final Map<UUID, PowerToolObject> powerToolMap; //0
     private final Map<UUID, Long> timeOfLoginMap; //0
     private final Map<UUID, Set<String>> savedInventoryMap; //0
     private final Map<UUID, UUID> lastPlayerToMessageMap; //0
 
-    private final Map<String, Location> warpsMap; //1
+    private final Map<String, UnlinkedWorldLocation> warpsMap; //1
     private final Map<String, KitObject> kitsMap; //1
 
     private final List<UUID> godList; //0
@@ -102,7 +102,7 @@ public class SetListMap {
         spyCommandBlock.clear();
     }
 
-    public Map<UUID, Map<BackEnum, Location>> getBackMap() {
+    public Map<UUID, Map<BackEnum, UnlinkedWorldLocation>> getBackMap() {
         return backMap;
     }
 
@@ -114,7 +114,7 @@ public class SetListMap {
         return afkMap;
     }
 
-    public Map<UUID, Map<String, Location>> getHomesMap() {
+    public Map<UUID, Map<String, UnlinkedWorldLocation>> getHomesMap() {
         return homesMap;
     }
 
@@ -126,7 +126,7 @@ public class SetListMap {
         return hiddenPlayers;
     }
 
-    public Map<String, Location> getWarpsMap() {
+    public Map<String, UnlinkedWorldLocation> getWarpsMap() {
         return warpsMap;
     }
 

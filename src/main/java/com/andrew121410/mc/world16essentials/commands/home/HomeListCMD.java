@@ -3,7 +3,7 @@ package com.andrew121410.mc.world16essentials.commands.home;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.Location;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class HomeListCMD implements CommandExecutor {
 
-    private final Map<UUID, Map<String, Location>> homesMap;
+    private final Map<UUID, Map<String, UnlinkedWorldLocation>> homesMap;
 
     private final World16Essentials plugin;
     private final API api;

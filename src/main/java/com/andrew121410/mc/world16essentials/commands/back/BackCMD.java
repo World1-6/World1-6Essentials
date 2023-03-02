@@ -3,8 +3,8 @@ package com.andrew121410.mc.world16essentials.commands.back;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class BackCMD implements CommandExecutor {
 
-    private final Map<UUID, Map<BackEnum, Location>> backMap;
+    private final Map<UUID, Map<BackEnum, UnlinkedWorldLocation>> backMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -49,32 +49,41 @@ public class BackCMD implements CommandExecutor {
             api.sendPermissionErrorMessage(player);
             return true;
         }
-        Map<BackEnum, Location> playerBackMap = this.backMap.get(player.getUniqueId());
+        Map<BackEnum, UnlinkedWorldLocation> playerBackMap = this.backMap.get(player.getUniqueId());
 
         if (args.length == 1 && args[0].equalsIgnoreCase("death")) {
             if (!player.hasPermission("world16.back.death")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
             }
-            Location deathLocation = playerBackMap.get(BackEnum.DEATH);
+
+            UnlinkedWorldLocation deathLocation = playerBackMap.get(BackEnum.DEATH);
             if (deathLocation == null) {
                 player.sendMessage(Translate.color("&4No death back location was found..."));
                 return true;
             }
+            if (!deathLocation.isWorldLoaded()) {
+                player.sendMessage(Translate.miniMessage("<red>World is not loaded..."));
+                return true;
+            }
 
-            player.teleport(deathLocation);
+            player.teleport(deathLocation.toLocation());
             player.sendMessage(Translate.color("&6Teleporting..."));
         } else if (args.length == 1 && args[0].equalsIgnoreCase("tp")) {
             if (!player.hasPermission("world16.back.tp")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
             }
-            Location tpLocation = playerBackMap.get(BackEnum.TELEPORT);
+            UnlinkedWorldLocation tpLocation = playerBackMap.get(BackEnum.TELEPORT);
             if (tpLocation == null) {
                 player.sendMessage(Translate.color("&4No tp back location was found..."));
                 return true;
             }
-            player.teleport(tpLocation);
+            if (!tpLocation.isWorldLoaded()) {
+                player.sendMessage(Translate.miniMessage("<red>World is not loaded..."));
+                return true;
+            }
+            player.teleport(tpLocation.toLocation());
             player.sendMessage(Translate.color("&6Teleporting..."));
         } else {
             player.sendMessage(Translate.color("&6/back death"));
