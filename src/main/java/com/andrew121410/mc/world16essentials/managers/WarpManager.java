@@ -27,9 +27,31 @@ public class WarpManager {
             ConfigurationSection warpCs = cs.getConfigurationSection(key);
 
             Object object = warpCs.get("Location");
-            if (object instanceof Location location) { // Need to convert it to UnlinkedWorldLocation
-                warpCs.set("Location", new UnlinkedWorldLocation(location));
-                this.warpsYml.saveConfig();
+
+            // Convert old location to UnlinkedWorldLocation
+            if (!(object instanceof UnlinkedWorldLocation)) {
+                ConfigurationSection locationCs = warpCs.getConfigurationSection("Location");
+                if (locationCs != null) {
+                    String world = locationCs.getString("world", null);
+                    String x = locationCs.getString("x", null);
+                    String y = locationCs.getString("y", null);
+                    String z = locationCs.getString("z", null);
+                    String yaw = locationCs.getString("yaw", null);
+                    String pitch = locationCs.getString("pitch", null);
+
+                    if (world != null && x != null && y != null && z != null && yaw != null && pitch != null) {
+                        UnlinkedWorldLocation unlinkedWorldLocation = new UnlinkedWorldLocation(
+                                world,
+                                Double.parseDouble(x),
+                                Double.parseDouble(y),
+                                Double.parseDouble(z),
+                                Float.parseFloat(yaw),
+                                Float.parseFloat(pitch));
+
+                        warpCs.set("Location", unlinkedWorldLocation);
+                        this.warpsYml.saveConfig();
+                    }
+                }
             }
 
             UnlinkedWorldLocation location = (UnlinkedWorldLocation) warpCs.get("Location");
