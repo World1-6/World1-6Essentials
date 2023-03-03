@@ -16,6 +16,10 @@ List of plugins that can be converted:
 - EssentialsX *(homes, warps, kits)*
 - CMI *(homes, warps, kits, and saved inventories)*
 
+### ⚠️ Read before converting data ⚠️
+1. Before converting data "from" or "to" you must have that plugin installed at the same time as this plugin.
+2. Make sure all of your worlds are loaded before converting data.
+
 ## To Install:
 *You must have World1-6Utils plugin installed you can get that [here](https://github.com/World1-6/World1-6Utils/releases)*
 
@@ -23,3 +27,8 @@ List of plugins that can be converted:
 
 ## Commands & Permissions:
 https://github.com/World1-6/World1-6Essentials/blob/master/src/main/resources/plugin.yml
+
+## Building:
+`./gradlew build`
+
+The built jar will be in `build/libs/`
