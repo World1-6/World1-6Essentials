@@ -67,7 +67,7 @@ public class BackCMD implements CommandExecutor {
                 return true;
             }
 
-            player.teleport(deathLocation.toLocation());
+            player.teleport(deathLocation);
             player.sendMessage(Translate.color("&6Teleporting..."));
         } else if (args.length == 1 && args[0].equalsIgnoreCase("tp")) {
             if (!player.hasPermission("world16.back.tp")) {
@@ -83,7 +83,7 @@ public class BackCMD implements CommandExecutor {
                 player.sendMessage(Translate.miniMessage("<red>World is not loaded..."));
                 return true;
             }
-            player.teleport(tpLocation.toLocation());
+            player.teleport(tpLocation);
             player.sendMessage(Translate.color("&6Teleporting..."));
         } else {
             player.sendMessage(Translate.color("&6/back death"));

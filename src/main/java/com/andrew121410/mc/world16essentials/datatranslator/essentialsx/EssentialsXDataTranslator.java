@@ -98,10 +98,9 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 user.save();
             }
 
-            for (Map.Entry<String, UnlinkedWorldLocation> stringUnlinkedWorldLocationEntry : homes.entrySet()) {
-                String homeName = stringUnlinkedWorldLocationEntry.getKey();
-                UnlinkedWorldLocation unlinkedWorldLocation = stringUnlinkedWorldLocationEntry.getValue();
-                Location location = unlinkedWorldLocation.toLocation();
+            for (Map.Entry<String, UnlinkedWorldLocation> entry : homes.entrySet()) {
+                String homeName = entry.getKey();
+                UnlinkedWorldLocation location = entry.getValue();
 
                 user.setHome(homeName, location);
             }
@@ -126,7 +125,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     private void warpsTo() {
         this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
             try {
-                essentials.getWarps().setWarp(warpName, location.toLocation());
+                essentials.getWarps().setWarp(warpName, location);
             } catch (Exception ignored) {
             }
         });

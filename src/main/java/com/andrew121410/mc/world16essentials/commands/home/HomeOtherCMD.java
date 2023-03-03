@@ -78,7 +78,7 @@ public class HomeOtherCMD implements CommandExecutor, TabExecutor {
                 return true;
             }
 
-            player.teleport(location.toLocation());
+            player.teleport(location);
             player.sendMessage(Translate.colorc("&6You have been teleported to " + offlinePlayer.getName() + "'s home named &c" + home));
             return true;
         } else {

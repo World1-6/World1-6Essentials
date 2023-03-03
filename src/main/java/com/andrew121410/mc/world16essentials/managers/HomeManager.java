@@ -162,7 +162,7 @@ public class HomeManager {
         sqlDataStore.put("Z", String.valueOf(location.getZ()));
         sqlDataStore.put("YAW", String.valueOf(location.getYaw()));
         sqlDataStore.put("PITCH", String.valueOf(location.getPitch()));
-        sqlDataStore.put("World", location.getWorld());
+        sqlDataStore.put("World", location.getWorldName());
         return sqlDataStore;
     }
 

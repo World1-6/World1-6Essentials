@@ -91,7 +91,7 @@ public class WarpCMD implements CommandExecutor {
             return;
         }
 
-        target.teleport(warpLocation.toLocation());
+        target.teleport(warpLocation);
         target.sendMessage(Translate.color("&6Teleporting..."));
         if (sender != null) {
             sender.sendMessage(Translate.color("&6Successfully teleported &e" + target.getName() + " &6to warp &e" + warp));

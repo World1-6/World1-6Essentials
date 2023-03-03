@@ -66,7 +66,7 @@ public class HomeCMD implements CommandExecutor {
             return true;
         }
 
-        player.teleport(home.toLocation());
+        player.teleport(home);
         player.sendMessage(Translate.color("&6Teleporting..."));
         return true;
     }
