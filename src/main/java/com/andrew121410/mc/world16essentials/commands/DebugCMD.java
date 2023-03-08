@@ -104,17 +104,20 @@ public class DebugCMD implements CommandExecutor {
             }
         } else if (args[0].equalsIgnoreCase("convert")) {
             if (args.length == 3) {
-                DataTranslator dataTranslator = new DataTranslator(this.plugin);
-                Software software = null;
+                Software software;
 
                 try {
                     software = Software.valueOf(args[2]);
                 } catch (Exception ignored) {
+                    List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).toList();
+                    player.sendMessage(Translate.miniMessage("<red>Invalid software type. Valid types are: " + typesOfSoftwareList));
+                    return true;
                 }
 
-                if (args[1].equalsIgnoreCase("from") && software != null) {
+                DataTranslator dataTranslator = new DataTranslator(this.plugin);
+                if (args[1].equalsIgnoreCase("from")) {
                     dataTranslator.convertFrom(player, software);
-                } else if (args[1].equalsIgnoreCase("to") && software != null) {
+                } else if (args[1].equalsIgnoreCase("to")) {
                     dataTranslator.convertTo(player, software);
                 }
             }
