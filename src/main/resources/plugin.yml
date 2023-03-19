@@ -50,6 +50,8 @@ commands:
   tpaccept:
   tpa:
   tpdeny:
+    aliases:
+      - tpadeny
 
   delwarp:
   setwarp:
@@ -165,14 +167,8 @@ permissions:
     description: Allows you to use night cmd
     default: op
 
-  world16.tpaccept:
-    description: Allows you to use tpaccept cmd
-    default: op
   world16.tpa:
     description: Allows you to use tpa cmd
-    default: op
-  world16.tpdeny:
-    description: Allows you to use tpdeny cmd
     default: op
 
   world16.delwarp:

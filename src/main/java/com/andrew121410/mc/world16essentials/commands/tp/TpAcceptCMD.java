@@ -34,7 +34,7 @@ public class TpAcceptCMD implements CommandExecutor {
             return true;
         }
 
-        if (!player.hasPermission("world16.tpaccept")) {
+        if (!player.hasPermission("world16.tpa")) {
             api.sendPermissionErrorMessage(player);
             return true;
         }
@@ -44,11 +44,11 @@ public class TpAcceptCMD implements CommandExecutor {
             Player tpa = this.plugin.getServer().getPlayer(uuid);
             if (tpa != null) {
                 tpa.teleport(player);
-                tpa.sendMessage(Translate.color("[&eTPA&r] &a" + player.getDisplayName() + " has accepted your tpa request."));
+                tpa.sendMessage(Translate.miniMessage("<gold>" + player.getName() + " <green>has accepted your tpa request."));
                 this.tpaMap.remove(player.getUniqueId());
                 return true;
             } else {
-                player.sendMessage(Translate.color("&e[TPA]&r &cLooks like you don't have any tpa request."));
+                player.sendMessage(Translate.miniMessage("<yellow>You don't have any tpa request."));
             }
             return true;
         }

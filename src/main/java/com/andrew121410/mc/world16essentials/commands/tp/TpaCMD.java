@@ -41,13 +41,15 @@ public class TpaCMD implements CommandExecutor {
 
         if (args.length == 1) {
             Player target = plugin.getServer().getPlayerExact(args[0]); //Get the player
+
             if (target != null && target.isOnline()) {
                 tpaMap.put(target.getUniqueId(), player.getUniqueId());
-                player.sendMessage(Translate.color("[&eTPA&r] &9Sent tpa request too " + target.getDisplayName()));
+                player.sendMessage(Translate.miniMessage("<green>Sent a tpa request to <gold>" + target.getName() + "<green>."));
                 sendTpaRequestMessage(player, target);
             } else {
-                player.sendMessage("&4Looks like that player is offline.");
+                player.sendMessage(Translate.miniMessage("<red>That player is not online."));
             }
+
             return true;
         } else {
             player.sendMessage(Translate.miniMessage("<red>Usage: <gold>/tpa <player>"));

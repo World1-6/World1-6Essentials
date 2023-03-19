@@ -34,23 +34,20 @@ public class TpDenyCMD implements CommandExecutor {
             return true;
         }
 
-        if (!player.hasPermission("world16.tpdeny")) {
+        if (!player.hasPermission("world16.tpa")) {
             api.sendPermissionErrorMessage(player);
             return true;
         }
 
-        if (args.length == 0) {
-            UUID uuid = this.tpaMap.get(player.getUniqueId());
-            Player tpa = this.plugin.getServer().getPlayer(uuid);
-            if (tpa != null) {
-                player.sendMessage(Translate.color("&9Ok you denied the tp request."));
-                tpa.sendMessage(Translate.color("[&eTPA&r] &cYour tpa request got denied by " + player.getDisplayName()));
-                this.tpaMap.remove(player.getUniqueId());
-            } else {
-                player.sendMessage(Translate.color("&4Something went wrong."));
-            }
+        UUID uuid = this.tpaMap.get(player.getUniqueId());
+        Player tpa = this.plugin.getServer().getPlayer(uuid); // This is the player that sent the tpa request.
+
+        if (tpa != null) {
+            this.tpaMap.remove(player.getUniqueId());
+            tpa.sendMessage(Translate.miniMessage("<red>Your tpa request got denied by " + player.getName() + "."));
+            player.sendMessage(Translate.miniMessage("<red>You have denied the tpa request from " + tpa.getName() + "."));
         } else {
-            player.sendMessage(Translate.color("&4???"));
+            player.sendMessage(Translate.miniMessage("<yellow>You don't have any tpa request."));
         }
         return true;
     }
