@@ -112,7 +112,7 @@ public class SavedInventoriesManager {
 
     // Used in PlayerInitializer
     public void loadAllSavedInventoriesNames(UUID uuid) {
-        this.savedInventoryMap.put(uuid, new HashSet<>());
+        addToMapIfNotPresent(uuid);
 
         SQLDataStore toGet = new SQLDataStore();
         toGet.put("UUID", uuid.toString());
@@ -147,6 +147,6 @@ public class SavedInventoriesManager {
     }
 
     private void addToMapIfNotPresent(UUID uuid) {
-        this.plugin.getMemoryHolder().getSavedInventoryMap().putIfAbsent(uuid, new HashSet<>());
+        this.savedInventoryMap.putIfAbsent(uuid, new HashSet<>());
     }
 }
