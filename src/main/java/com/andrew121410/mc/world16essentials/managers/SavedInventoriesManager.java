@@ -43,7 +43,7 @@ public class SavedInventoriesManager {
     }
 
     public void save(UUID uuid, String name, String[] data) {
-        check(uuid);
+        addToMapIfNotPresent(uuid);
         this.savedInventoryMap.get(uuid).add(name);
 
         SQLDataStore map = new SQLDataStore();
@@ -132,7 +132,7 @@ public class SavedInventoriesManager {
     }
 
     public void delete(UUID uuid, String inventoryName) {
-        check(uuid);
+        addToMapIfNotPresent(uuid);
         this.savedInventoryMap.get(uuid).remove(inventoryName);
 
         SQLDataStore map = new SQLDataStore();
@@ -146,7 +146,7 @@ public class SavedInventoriesManager {
         }
     }
 
-    private void check(UUID uuid) {
+    private void addToMapIfNotPresent(UUID uuid) {
         this.plugin.getMemoryHolder().getSavedInventoryMap().putIfAbsent(uuid, new HashSet<>());
     }
 }

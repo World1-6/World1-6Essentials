@@ -36,9 +36,10 @@ public class ConfigCMD implements CommandExecutor, TabExecutor {
         if (!player.hasPermission("world16.config")) return null;
 
         if (args.length == 1) {
-            return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "spawnMobCap", "messages"));
+            return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "spawnMobCap", "saveInventoryOnDeath", "messages"));
         } else if (args[0].equalsIgnoreCase("signTranslateColors")
-                || args[0].equalsIgnoreCase("preventCropsTrampling")) {
+                || args[0].equalsIgnoreCase("preventCropsTrampling")
+                || args[0].equalsIgnoreCase("saveInventoryOnDeath")) {
             return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
         } else if (args[0].equalsIgnoreCase("spawnMobCap")) {
             return TabUtils.getContainsString(args[1], Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
@@ -84,6 +85,9 @@ public class ConfigCMD implements CommandExecutor, TabExecutor {
                 int spawnMobCap = Utils.asIntegerOrElse(args[1], 1);
                 api.getConfigUtils().setSpawnMobCap(spawnMobCap);
                 player.sendMessage(Translate.color("&aSpawn mob cap set to &6" + spawnMobCap));
+            } else if (args[0].equalsIgnoreCase("saveInventoryOnDeath")) {
+                api.getConfigUtils().setSaveInventoryOnDeath(args[1].equalsIgnoreCase("true"));
+                player.sendMessage(Translate.color("&aSave inventory on death set to &6" + args[1]));
             }
         } else if (args.length >= 3 && args[0].equalsIgnoreCase("messages")) {
             String[] ourArgs = Arrays.copyOfRange(args, 2, args.length);
