@@ -16,7 +16,7 @@ public class UnhideCMD implements CommandExecutor {
 
     public UnhideCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
+        this.hiddenPlayers = this.plugin.getMemoryHolder().getHiddenPlayers();
 
         this.plugin.getCommand("unhide").setExecutor(this);
     }

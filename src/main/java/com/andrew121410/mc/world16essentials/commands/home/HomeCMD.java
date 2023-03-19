@@ -24,7 +24,7 @@ public class HomeCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.homesMap = this.plugin.getSetListMap().getHomesMap();
+        this.homesMap = this.plugin.getMemoryHolder().getHomesMap();
 
         this.plugin.getCommand("home").setExecutor(this);
         this.plugin.getCommand("home").setTabCompleter(new HomeListTab(this.plugin));

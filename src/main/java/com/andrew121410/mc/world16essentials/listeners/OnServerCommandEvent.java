@@ -19,7 +19,7 @@ public class OnServerCommandEvent implements Listener {
 
     public OnServerCommandEvent(World16Essentials plugin) {
         this.plugin = plugin;
-        this.spyCommandBlock = this.plugin.getSetListMap().getSpyCommandBlock();
+        this.spyCommandBlock = this.plugin.getMemoryHolder().getSpyCommandBlock();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }

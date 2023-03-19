@@ -97,8 +97,8 @@ public class HomeOtherCMD implements CommandExecutor, TabExecutor {
 
     private Map<String, UnlinkedWorldLocation> getHomes(OfflinePlayer offlinePlayer) {
         Map<String, UnlinkedWorldLocation> homes;
-        if (this.plugin.getSetListMap().getHomesMap().containsKey(offlinePlayer.getUniqueId())) {
-            homes = this.plugin.getSetListMap().getHomesMap().get(offlinePlayer.getUniqueId());
+        if (this.plugin.getMemoryHolder().getHomesMap().containsKey(offlinePlayer.getUniqueId())) {
+            homes = this.plugin.getMemoryHolder().getHomesMap().get(offlinePlayer.getUniqueId());
         } else {
             homes = this.plugin.getHomeManager().loadHomes(offlinePlayer.getUniqueId());
         }

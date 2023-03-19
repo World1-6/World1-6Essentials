@@ -25,9 +25,9 @@ import com.andrew121410.mc.world16essentials.listeners.*;
 import com.andrew121410.mc.world16essentials.managers.*;
 import com.andrew121410.mc.world16essentials.objects.KitSettingsObject;
 import com.andrew121410.mc.world16essentials.utils.API;
+import com.andrew121410.mc.world16essentials.utils.MemoryHolder;
 import com.andrew121410.mc.world16essentials.utils.OtherPlugins;
 import com.andrew121410.mc.world16essentials.utils.PlayerInitializer;
-import com.andrew121410.mc.world16essentials.utils.SetListMap;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.updater.UpdateManager;
 import org.bstats.bukkit.Metrics;
@@ -48,7 +48,7 @@ public class World16Essentials extends JavaPlugin {
 
     private static World16Essentials plugin;
 
-    private SetListMap setListMap;
+    private MemoryHolder memoryHolder;
     private OtherPlugins otherPlugins;
 
     private PlayerInitializer playerInitializer;
@@ -71,7 +71,7 @@ public class World16Essentials extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-        this.setListMap = new SetListMap();
+        this.memoryHolder = new MemoryHolder();
 
         // Load configs first
         registerMainConfig();
@@ -121,7 +121,7 @@ public class World16Essentials extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.setListMap.clearSetListMap();
+        this.memoryHolder.clear();
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &eWorld1-6Essentials has been unloaded."));
     }
 
@@ -247,8 +247,8 @@ public class World16Essentials extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(Translate.color(stringBuilder));
     }
 
-    public SetListMap getSetListMap() {
-        return setListMap;
+    public MemoryHolder getMemoryHolder() {
+        return memoryHolder;
     }
 
     public CustomConfigManager getCustomConfigManager() {

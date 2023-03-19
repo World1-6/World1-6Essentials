@@ -123,7 +123,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     }
 
     private void warpsTo() {
-        this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
+        this.plugin.getMemoryHolder().getWarpsMap().forEach((warpName, location) -> {
             try {
                 essentials.getWarps().setWarp(warpName, location);
             } catch (Exception ignored) {
@@ -153,7 +153,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     }
 
     private void kitsTo() {
-        this.plugin.getSetListMap().getKitsMap().forEach((s, kit) -> {
+        this.plugin.getMemoryHolder().getKitsMap().forEach((s, kit) -> {
             ItemStack[] regularItems;
             try {
                 regularItems = BukkitSerialization.base64ToItemStackArray(kit.getData()[0]);

@@ -46,11 +46,11 @@ public class API {
         this.configUtils = this.plugin.getCustomConfigManager().getConfigUtils();
         this.messagesUtils = this.plugin.getCustomConfigManager().getMessagesUtils();
 
-        this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
-        this.afkMap = this.plugin.getSetListMap().getAfkMap();
+        this.timeOfLoginMap = this.plugin.getMemoryHolder().getTimeOfLoginMap();
+        this.afkMap = this.plugin.getMemoryHolder().getAfkMap();
 
-        this.godList = this.plugin.getSetListMap().getGodList();
-        this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
+        this.godList = this.plugin.getMemoryHolder().getGodList();
+        this.hiddenPlayers = this.plugin.getMemoryHolder().getHiddenPlayers();
     }
 
     public boolean isAfk(Player player) {

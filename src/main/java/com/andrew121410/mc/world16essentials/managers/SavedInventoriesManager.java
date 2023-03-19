@@ -23,7 +23,7 @@ public class SavedInventoriesManager {
 
     public SavedInventoriesManager(World16Essentials plugin) {
         this.plugin = plugin;
-        this.savedInventoryMap = this.plugin.getSetListMap().getSavedInventoryMap();
+        this.savedInventoryMap = this.plugin.getMemoryHolder().getSavedInventoryMap();
 
         this.iSQL = new SQLite(this.plugin.getDataFolder(), "SavedInventories");
         this.easySQL = new EasySQL("SavedInventories", new MultiTableEasySQL(this.iSQL));
@@ -147,6 +147,6 @@ public class SavedInventoriesManager {
     }
 
     private void check(UUID uuid) {
-        this.plugin.getSetListMap().getSavedInventoryMap().putIfAbsent(uuid, new HashSet<>());
+        this.plugin.getMemoryHolder().getSavedInventoryMap().putIfAbsent(uuid, new HashSet<>());
     }
 }

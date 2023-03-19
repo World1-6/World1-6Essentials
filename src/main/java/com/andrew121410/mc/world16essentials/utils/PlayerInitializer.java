@@ -29,11 +29,11 @@ public class PlayerInitializer {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.backMap = this.plugin.getSetListMap().getBackMap();
-        this.hiddenPlayersList = this.plugin.getSetListMap().getHiddenPlayers();
-        this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
-        this.afkObjectMap = this.plugin.getSetListMap().getAfkMap();
-        this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
+        this.backMap = this.plugin.getMemoryHolder().getBackMap();
+        this.hiddenPlayersList = this.plugin.getMemoryHolder().getHiddenPlayers();
+        this.powerToolMap = this.plugin.getMemoryHolder().getPowerToolMap();
+        this.afkObjectMap = this.plugin.getMemoryHolder().getAfkMap();
+        this.timeOfLoginMap = this.plugin.getMemoryHolder().getTimeOfLoginMap();
     }
 
     public void load(Player player) {
@@ -55,6 +55,6 @@ public class PlayerInitializer {
     }
 
     public void unload(Player player) {
-        this.plugin.getSetListMap().clearSetListMap(player);
+        this.plugin.getMemoryHolder().remove(player);
     }
 }

@@ -23,7 +23,7 @@ public class WarpCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
+        this.warpsMap = this.plugin.getMemoryHolder().getWarpsMap();
 
         this.plugin.getCommand("warp").setExecutor(this);
         this.plugin.getCommand("warp").setTabCompleter(new WarpTab(this.plugin));

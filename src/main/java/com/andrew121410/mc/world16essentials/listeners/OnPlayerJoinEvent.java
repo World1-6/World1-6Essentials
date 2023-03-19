@@ -28,7 +28,7 @@ public class OnPlayerJoinEvent implements Listener {
 
         // Kit
         if (!player.hasPlayedBefore()) {
-            for (KitObject value : this.plugin.getSetListMap().getKitsMap().values()) {
+            for (KitObject value : this.plugin.getMemoryHolder().getKitsMap().values()) {
                 if (value.getSettings().isGiveOnFirstJoin()) {
                     this.plugin.getKitManager().giveKit(player, value);
                 }

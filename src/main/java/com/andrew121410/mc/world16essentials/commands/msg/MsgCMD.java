@@ -53,10 +53,10 @@ public class MsgCMD implements CommandExecutor {
     }
 
     private void addToLastPlayerToMessage(Player player, Player target) {
-        this.plugin.getSetListMap().getLastPlayerToMessageMap().remove(player.getUniqueId());
-        this.plugin.getSetListMap().getLastPlayerToMessageMap().remove(target.getUniqueId());
+        this.plugin.getMemoryHolder().getLastPlayerToMessageMap().remove(player.getUniqueId());
+        this.plugin.getMemoryHolder().getLastPlayerToMessageMap().remove(target.getUniqueId());
 
-        this.plugin.getSetListMap().getLastPlayerToMessageMap().put(player.getUniqueId(), target.getUniqueId());
-        this.plugin.getSetListMap().getLastPlayerToMessageMap().put(target.getUniqueId(), player.getUniqueId());
+        this.plugin.getMemoryHolder().getLastPlayerToMessageMap().put(player.getUniqueId(), target.getUniqueId());
+        this.plugin.getMemoryHolder().getLastPlayerToMessageMap().put(target.getUniqueId(), player.getUniqueId());
     }
 }

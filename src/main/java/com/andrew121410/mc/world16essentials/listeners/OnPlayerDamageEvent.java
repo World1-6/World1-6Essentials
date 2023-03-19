@@ -18,7 +18,7 @@ public class OnPlayerDamageEvent implements Listener {
 
     public OnPlayerDamageEvent(World16Essentials getPlugin) {
         this.plugin = getPlugin;
-        this.godList = this.plugin.getSetListMap().getGodList();
+        this.godList = this.plugin.getMemoryHolder().getGodList();
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 

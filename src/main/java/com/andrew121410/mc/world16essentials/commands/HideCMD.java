@@ -16,7 +16,7 @@ public class HideCMD implements CommandExecutor {
 
     public HideCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
+        this.hiddenPlayers = this.plugin.getMemoryHolder().getHiddenPlayers();
 
         this.plugin.getCommand("hide").setExecutor(this);
     }

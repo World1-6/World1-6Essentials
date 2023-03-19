@@ -23,7 +23,7 @@ public class CommandBlockFindCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.spyCommandBlock = this.plugin.getSetListMap().getSpyCommandBlock();
+        this.spyCommandBlock = this.plugin.getMemoryHolder().getSpyCommandBlock();
 
         this.plugin.getCommand("commandblockfind").setExecutor(this);
         this.plugin.getCommand("commandblockfind").setTabCompleter((sender, command, alias, args) -> {

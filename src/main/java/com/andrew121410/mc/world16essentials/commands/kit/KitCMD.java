@@ -24,14 +24,14 @@ public class KitCMD implements CommandExecutor {
     public KitCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
-        this.kitsMap = this.plugin.getSetListMap().getKitsMap();
+        this.kitsMap = this.plugin.getMemoryHolder().getKitsMap();
 
         this.plugin.getCommand("kit").setExecutor(this);
         this.plugin.getCommand("kit").setTabCompleter((sender, command, alias, args) -> {
             if (!(sender instanceof Player player)) return null;
             if (!player.hasPermission("world16.kit.use")) return null;
 
-            List<String> kits = new java.util.ArrayList<>(this.plugin.getSetListMap().getKitsMap().keySet().stream().toList());
+            List<String> kits = new java.util.ArrayList<>(this.plugin.getMemoryHolder().getKitsMap().keySet().stream().toList());
 
             // If the player doesn't have the permission to use such kit, don't suggest it.
             kits.removeIf(kit -> !player.hasPermission("world16.kit.use." + kit));

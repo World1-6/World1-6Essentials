@@ -124,7 +124,7 @@ public class CMIDataTranslator implements IDataTranslator {
     }
 
     private void warpsTo() {
-        this.plugin.getSetListMap().getWarpsMap().forEach((warpName, location) -> {
+        this.plugin.getMemoryHolder().getWarpsMap().forEach((warpName, location) -> {
             CmiWarp cmiWarp = new CmiWarp(warpName, new CMILocation(location));
 
             // Must set the creator on the warp, or else when /cmi warp is used, it will produce NullPointerException.
@@ -135,7 +135,7 @@ public class CMIDataTranslator implements IDataTranslator {
     }
 
     private void kitsTo() {
-        for (KitObject value : this.plugin.getSetListMap().getKitsMap().values()) {
+        for (KitObject value : this.plugin.getMemoryHolder().getKitsMap().values()) {
             Kit kit = new Kit(value.getKitName());
 
             ItemStack[] itemStacks;

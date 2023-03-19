@@ -18,7 +18,7 @@ public class WarpManager {
     public WarpManager(World16Essentials plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.warpsYml = customConfigManager.getWarpsYml();
-        this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
+        this.warpsMap = this.plugin.getMemoryHolder().getWarpsMap();
     }
 
     public void loadAllWarps() {

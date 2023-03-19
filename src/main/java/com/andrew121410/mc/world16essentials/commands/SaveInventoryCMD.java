@@ -25,7 +25,7 @@ public class SaveInventoryCMD implements CommandExecutor {
     public SaveInventoryCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
-        this.savedInventoryMap = this.plugin.getSetListMap().getSavedInventoryMap();
+        this.savedInventoryMap = this.plugin.getMemoryHolder().getSavedInventoryMap();
 
         this.plugin.getCommand("saveinventory").setExecutor(this);
         this.plugin.getCommand("saveinventory").setTabCompleter((sender, command, alias, args) -> {

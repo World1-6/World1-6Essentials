@@ -20,7 +20,7 @@ public class WarpTab implements TabCompleter {
 
     public WarpTab(World16Essentials plugin) {
         this.plugin = plugin;
-        this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
+        this.warpsMap = this.plugin.getMemoryHolder().getWarpsMap();
     }
 
     @Override

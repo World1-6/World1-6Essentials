@@ -33,7 +33,7 @@ public class SetHomeCMD implements CommandExecutor {
             return true;
         }
 
-        int currentHomes = this.plugin.getSetListMap().getHomesMap().get(player.getUniqueId()).size();
+        int currentHomes = this.plugin.getMemoryHolder().getHomesMap().get(player.getUniqueId()).size();
         int maxHomes = this.plugin.getHomeManager().getMaximumHomeCount(player);
         if (!player.isOp() && currentHomes >= maxHomes && maxHomes != -1) {
             player.sendMessage(Translate.color("&cYou have reached the maximum amount of homes."));

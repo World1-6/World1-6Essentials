@@ -25,7 +25,7 @@ public class PowerToolCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
+        this.powerToolMap = this.plugin.getMemoryHolder().getPowerToolMap();
 
         this.plugin.getCommand("powertool").setExecutor(this);
     }

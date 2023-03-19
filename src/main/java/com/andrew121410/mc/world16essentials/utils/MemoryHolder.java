@@ -9,31 +9,31 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class SetListMap {
+public class MemoryHolder {
 
-    // 0 TO CLEAR AFTER THE PLAYER LEAVES
-    // 1 TO ONLY CLEAR WHEN THE SERVER SHUTS DOWN
+    // Clear on player leave (maps)
+    private final Map<UUID, Map<BackEnum, UnlinkedWorldLocation>> backMap;
+    private final Map<UUID, UUID> tpaMap;
+    private final Map<UUID, AfkObject> afkMap;
+    private final Map<UUID, Map<String, UnlinkedWorldLocation>> homesMap;
+    private final Map<UUID, PowerToolObject> powerToolMap;
+    private final Map<UUID, Long> timeOfLoginMap;
+    private final Map<UUID, Set<String>> savedInventoryMap;
+    private final Map<UUID, UUID> lastPlayerToMessageMap;
 
-    private final Map<UUID, Map<BackEnum, UnlinkedWorldLocation>> backMap; //0
-    private final Map<UUID, UUID> tpaMap; //0
-    private final Map<UUID, AfkObject> afkMap; //0
-    private final Map<UUID, Map<String, UnlinkedWorldLocation>> homesMap; //0
-    private final Map<UUID, PowerToolObject> powerToolMap; //0
-    private final Map<UUID, Long> timeOfLoginMap; //0
-    private final Map<UUID, Set<String>> savedInventoryMap; //0
-    private final Map<UUID, UUID> lastPlayerToMessageMap; //0
+    // Clear when server stops (maps)
+    private final Map<String, UnlinkedWorldLocation> warpsMap;
+    private final Map<String, KitObject> kitsMap;
 
-    private final Map<String, UnlinkedWorldLocation> warpsMap; //1
-    private final Map<String, KitObject> kitsMap; //1
+    // Clear on player leave (lists)
+    private final List<UUID> godList;
+    private final List<UUID> hiddenPlayers;
 
-    private final List<UUID> godList; //0
-    private final List<UUID> hiddenPlayers; //0
+    // Clear when server stops (lists)
+    private final List<String> soundsList;
+    private final List<String> spyCommandBlock;
 
-    private final List<String> soundsList; //1
-    private final List<String> spyCommandBlock; //1
-
-    //Constructor
-    public SetListMap() {
+    public MemoryHolder() {
         this.backMap = new HashMap<>();
         this.tpaMap = new LinkedHashMap<>();
         this.afkMap = new HashMap<>();
@@ -55,28 +55,34 @@ public class SetListMap {
 
     }
 
-    public void clearSetListMap(Player p) {
-        clearAllMaps(p);
-        clearAllLists(p);
+    /*
+     * Clear all memory for a player
+     */
+    public void remove(Player player) {
+        clearAllMaps(player);
+        clearAllLists(player);
     }
 
-    public void clearSetListMap() {
+    /*
+     * Clear all memory
+     */
+    public void clear() {
         clearAllMaps();
         clearAllLists();
     }
 
-    public void clearAllMaps(Player p) {
-        backMap.remove(p.getUniqueId());
-        tpaMap.remove(p.getUniqueId());
-        afkMap.remove(p.getUniqueId());
-        homesMap.remove(p.getUniqueId());
-        powerToolMap.remove(p.getUniqueId());
-        timeOfLoginMap.remove(p.getUniqueId());
-        savedInventoryMap.remove(p.getUniqueId());
-        lastPlayerToMessageMap.remove(p.getUniqueId());
+    private void clearAllMaps(Player player) {
+        backMap.remove(player.getUniqueId());
+        tpaMap.remove(player.getUniqueId());
+        afkMap.remove(player.getUniqueId());
+        homesMap.remove(player.getUniqueId());
+        powerToolMap.remove(player.getUniqueId());
+        timeOfLoginMap.remove(player.getUniqueId());
+        savedInventoryMap.remove(player.getUniqueId());
+        lastPlayerToMessageMap.remove(player.getUniqueId());
     }
 
-    public void clearAllMaps() {
+    private void clearAllMaps() {
         backMap.clear();
         tpaMap.clear();
         afkMap.clear();
@@ -90,12 +96,12 @@ public class SetListMap {
         kitsMap.clear();
     }
 
-    public void clearAllLists(Player p) {
-        godList.remove(p.getUniqueId());
-        hiddenPlayers.remove(p.getUniqueId());
+    private void clearAllLists(Player player) {
+        godList.remove(player.getUniqueId());
+        hiddenPlayers.remove(player.getUniqueId());
     }
 
-    public void clearAllLists() {
+    private void clearAllLists() {
         godList.clear();
         hiddenPlayers.clear();
         soundsList.clear();

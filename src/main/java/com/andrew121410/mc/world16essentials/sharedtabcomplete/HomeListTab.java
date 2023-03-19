@@ -18,7 +18,7 @@ public class HomeListTab implements TabCompleter {
 
     public HomeListTab(World16Essentials plugin) {
         this.plugin = plugin;
-        this.rawHomesMap = this.plugin.getSetListMap().getHomesMap();
+        this.rawHomesMap = this.plugin.getMemoryHolder().getHomesMap();
     }
 
     @Override

@@ -28,7 +28,7 @@ public class HomeManager {
 
     public HomeManager(World16Essentials plugin) {
         this.plugin = plugin;
-        this.homesMap = this.plugin.getSetListMap().getHomesMap();
+        this.homesMap = this.plugin.getMemoryHolder().getHomesMap();
 
         this.isql = new SQLite(this.plugin.getDataFolder(), "Homes");
         this.easySQL = new EasySQL("Homes", new MultiTableEasySQL(this.isql));

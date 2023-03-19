@@ -24,7 +24,7 @@ public class BackCMD implements CommandExecutor {
     public BackCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
-        this.backMap = this.plugin.getSetListMap().getBackMap();
+        this.backMap = this.plugin.getMemoryHolder().getBackMap();
 
         this.plugin.getCommand("back").setExecutor(this);
         this.plugin.getCommand("back").setTabCompleter((sender, command, s, args) -> {

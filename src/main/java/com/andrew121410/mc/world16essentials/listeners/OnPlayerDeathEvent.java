@@ -19,7 +19,7 @@ public class OnPlayerDeathEvent implements Listener {
 
     public OnPlayerDeathEvent(World16Essentials plugin) {
         this.plugin = plugin;
-        this.backMap = this.plugin.getSetListMap().getBackMap();
+        this.backMap = this.plugin.getMemoryHolder().getBackMap();
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 

@@ -29,7 +29,7 @@ public class KitManager {
 
     public KitManager(World16Essentials plugin) {
         this.plugin = plugin;
-        this.kitsMap = this.plugin.getSetListMap().getKitsMap();
+        this.kitsMap = this.plugin.getMemoryHolder().getKitsMap();
         this.kitSettingsManager = this.plugin.getKitSettingsManager();
 
         this.iSQL = new SQLite(this.plugin.getDataFolder(), "Kits");

@@ -22,7 +22,7 @@ public class GodCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.godList = this.plugin.getSetListMap().getGodList();
+        this.godList = this.plugin.getMemoryHolder().getGodList();
 
         this.plugin.getCommand("god").setExecutor(this);
     }

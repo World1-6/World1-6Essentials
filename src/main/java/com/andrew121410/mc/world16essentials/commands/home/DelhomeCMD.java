@@ -48,7 +48,7 @@ public class DelhomeCMD implements CommandExecutor {
             }
         }
 
-        Map<String, UnlinkedWorldLocation> homes = this.plugin.getSetListMap().getHomesMap().get(player.getUniqueId());
+        Map<String, UnlinkedWorldLocation> homes = this.plugin.getMemoryHolder().getHomesMap().get(player.getUniqueId());
         if (homes.containsKey(homeName)) {
             this.plugin.getHomeManager().delete(player.getUniqueId(), homeName);
             player.sendMessage(Translate.color("&6Home &c" + homeName + " &6has been deleted."));

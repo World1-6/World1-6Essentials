@@ -24,14 +24,14 @@ public class DelKitCMD implements CommandExecutor {
     public DelKitCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
-        this.kitsMap = this.plugin.getSetListMap().getKitsMap();
+        this.kitsMap = this.plugin.getMemoryHolder().getKitsMap();
 
         this.plugin.getCommand("delkit").setExecutor(this);
         this.plugin.getCommand("delkit").setTabCompleter((sender, command, alias, args) -> {
             if (!(sender instanceof Player player)) return null;
             if (!player.hasPermission("world16.kit.delete")) return null;
 
-            List<String> kits = this.plugin.getSetListMap().getKitsMap().keySet().stream().toList();
+            List<String> kits = this.plugin.getMemoryHolder().getKitsMap().keySet().stream().toList();
 
             if (args.length == 1) {
                 return TabUtils.getContainsString(args[0], kits);

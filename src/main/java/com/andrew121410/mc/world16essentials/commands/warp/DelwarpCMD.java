@@ -6,7 +6,6 @@ import com.andrew121410.mc.world16essentials.sharedtabcomplete.WarpTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,7 +26,7 @@ public class DelwarpCMD implements CommandExecutor {
         this.api = this.plugin.getApi();
         this.warpManager = this.plugin.getWarpManager();
 
-        this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
+        this.warpsMap = this.plugin.getMemoryHolder().getWarpsMap();
 
         this.plugin.getCommand("delwarp").setExecutor(this);
         this.plugin.getCommand("delwarp").setTabCompleter(new WarpTab(this.plugin));

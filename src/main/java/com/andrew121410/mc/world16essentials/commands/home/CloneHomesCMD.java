@@ -24,7 +24,7 @@ public class CloneHomesCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.homesMap = this.plugin.getSetListMap().getHomesMap();
+        this.homesMap = this.plugin.getMemoryHolder().getHomesMap();
 
         this.plugin.getCommand("clonehomes").setExecutor(this);
     }

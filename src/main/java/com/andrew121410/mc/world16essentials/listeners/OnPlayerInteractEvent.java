@@ -25,7 +25,7 @@ public class OnPlayerInteractEvent implements Listener {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.powerToolMap = this.plugin.getSetListMap().getPowerToolMap();
+        this.powerToolMap = this.plugin.getMemoryHolder().getPowerToolMap();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }

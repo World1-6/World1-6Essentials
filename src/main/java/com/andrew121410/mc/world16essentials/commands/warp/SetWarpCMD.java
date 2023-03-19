@@ -23,7 +23,7 @@ public class SetWarpCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
+        this.warpsMap = this.plugin.getMemoryHolder().getWarpsMap();
 
         this.plugin.getCommand("setwarp").setExecutor(this);
     }

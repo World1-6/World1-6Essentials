@@ -22,7 +22,7 @@ public class TpAcceptCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.tpaMap = this.plugin.getSetListMap().getTpaMap();
+        this.tpaMap = this.plugin.getMemoryHolder().getTpaMap();
 
         this.plugin.getCommand("tpaccept").setExecutor(this);
     }
