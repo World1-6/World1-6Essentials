@@ -196,6 +196,7 @@ public class World16Essentials extends JavaPlugin {
         new SudoCMD(this);
         new UnhideCMD(this);
         new UnSafeEnchatmentCMD(this);
+        new UUIDCMD(this);
         new WorkBenchCMD(this);
         new XyzdxdydzCMD(this);
     }

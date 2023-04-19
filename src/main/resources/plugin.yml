@@ -96,6 +96,7 @@ commands:
   sudo:
   unhide:
   unsafenchant:
+  uuid:
   workbench:
   xyzdxdydz:
 
@@ -272,6 +273,9 @@ permissions:
     default: op
   world16.unsafenchant:
     description: Allows you to use unsafenchant cmd
+    default: op
+  world16.uuid:
+    description: Allows you to use uuid cmd
     default: op
   world16.workbench:
     description: Allows you to use workbench cmd
