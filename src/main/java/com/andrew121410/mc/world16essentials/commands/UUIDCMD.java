@@ -5,6 +5,7 @@ import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -44,14 +45,15 @@ public class UUIDCMD implements CommandExecutor {
                 return true;
             }
 
-            Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target == null || !target.isOnline()) {
-                sender.sendMessage(Translate.colorc("&cThat player is not online."));
-                return true;
-            }
+            OfflinePlayer target = plugin.getServer().getOfflinePlayer(args[0]);
 
             Component component = Translate.miniMessage("<green>" + target.getName() + "'s uuid is <reset>" + target.getUniqueId()).clickEvent(ClickEvent.copyToClipboard(String.valueOf(target.getUniqueId())));
             sender.sendMessage(component);
+
+            // Send a message if that player has never joined the server.
+            if (!target.hasPlayedBefore()) {
+                sender.sendMessage(Translate.miniMessage("<red>The player <yellow>" + args[0] + " <red>has never joined the server."));
+            }
             return true;
         } else {
             sender.sendMessage(Translate.colorc("&cUsage: /uuid or /uuid <player>"));
