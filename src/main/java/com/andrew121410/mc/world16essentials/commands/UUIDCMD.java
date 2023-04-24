@@ -5,6 +5,7 @@ import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,7 +37,9 @@ public class UUIDCMD implements CommandExecutor {
                 return true;
             }
 
-            Component component = Translate.miniMessage("<green>Your uuid is <reset>" + player.getUniqueId()).clickEvent(ClickEvent.copyToClipboard(String.valueOf(player.getUniqueId())));
+            Component component = Translate.miniMessage("<green>Your uuid is <reset>" + player.getUniqueId())
+                    .clickEvent(ClickEvent.copyToClipboard(String.valueOf(player.getUniqueId())))
+                    .hoverEvent(HoverEvent.showText(Translate.miniMessage("<green>Click to copy!")));
             player.sendMessage(component);
             return true;
         } else if (args.length == 1) {
@@ -47,7 +50,9 @@ public class UUIDCMD implements CommandExecutor {
 
             OfflinePlayer target = plugin.getServer().getOfflinePlayer(args[0]);
 
-            Component component = Translate.miniMessage("<green>" + target.getName() + "'s uuid is <reset>" + target.getUniqueId()).clickEvent(ClickEvent.copyToClipboard(String.valueOf(target.getUniqueId())));
+            Component component = Translate.miniMessage("<green>" + target.getName() + "'s uuid is <reset>" + target.getUniqueId())
+                    .clickEvent(ClickEvent.copyToClipboard(String.valueOf(target.getUniqueId())))
+                    .hoverEvent(HoverEvent.showText(Translate.miniMessage("<green>Click to copy!")));
             sender.sendMessage(component);
 
             // Send a message if that player has never joined the server.
