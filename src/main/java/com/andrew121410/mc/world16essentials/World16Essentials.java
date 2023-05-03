@@ -189,6 +189,7 @@ public class World16Essentials extends JavaPlugin {
         new IsAfkCMD(this);
         new PowerToolCMD(this);
         new RamCMD(this);
+        new RepairCMD(this);
         new SaveInventoryCMD(this);
         new ShouldKeepSpawnChunksLoadedCMD(this);
         new SignCMD(this);

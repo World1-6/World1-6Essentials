@@ -89,6 +89,7 @@ commands:
   ram:
     aliases:
       - gc
+  repair:
   saveinventory:
   shouldkeepspawnchunksloaded:
   sign:
@@ -255,6 +256,9 @@ permissions:
     default: op
   world16.ram:
     description: Allows you to use ram cmd
+    default: op
+  world16.repair:
+    description: Allows you to use repair cmd
     default: op
   world16.saveinventory:
     description: Allows you to use saveinventory cmd
