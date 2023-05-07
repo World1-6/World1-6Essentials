@@ -32,7 +32,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class SignCMD implements CommandExecutor {
 
@@ -149,7 +148,7 @@ public class SignCMD implements CommandExecutor {
                     }
                 }));
 
-                this.update(guiButtons, "Click line to edit!", 9);
+                this.update(guiButtons, Component.text("Click line to edit!"), 9);
             }
 
             @Override

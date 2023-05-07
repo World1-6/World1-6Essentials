@@ -54,7 +54,7 @@ public class LastJoinCMD implements CommandExecutor {
                 this.isFirst = false;
             }
             makeGUIButtons(player, guiButtonList -> {
-                GUIMultipageListWindow gui = new GUIMultipageListWindow("Last Join", guiButtonList);
+                GUIMultipageListWindow gui = new GUIMultipageListWindow(Translate.miniMessage("<gold>Last Join's"), guiButtonList);
                 gui.setPageEvent(guiNextPageEvent -> {
                     if (guiNextPageEvent.isAfterPageCreation()) return;
                     player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f);
