@@ -79,7 +79,7 @@ publishing {
 }
 
 var date = Date()
-var formattedDate: String = SimpleDateFormat("MM/dd/yyyy").format(date)
+var formattedDate: String = SimpleDateFormat("M/d/yyyy").format(date)
 
 var fileName = "date-of-build.txt"
 

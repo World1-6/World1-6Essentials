@@ -170,11 +170,6 @@ public class API {
                     return this.dateOfBuild;
                 }
                 this.dateOfBuild = CharStreams.toString(new InputStreamReader(inputStream));
-
-                // If first character is 0, remove it.
-                if (this.dateOfBuild.charAt(0) == '0') {
-                    this.dateOfBuild = this.dateOfBuild.substring(1);
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
