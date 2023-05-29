@@ -6,6 +6,7 @@ public class ConfigUtils {
 
     private final World16Essentials plugin;
 
+    private boolean showLastUpdatedMessageToOPs;
     private boolean signTranslateColors;
     private boolean preventCropsTrampling;
     private int spawnMobCap;
@@ -14,10 +15,21 @@ public class ConfigUtils {
     public ConfigUtils(World16Essentials plugin) {
         this.plugin = plugin;
 
+        this.showLastUpdatedMessageToOPs = this.plugin.getConfig().getBoolean("showLastUpdatedMessageToOPs");
         this.signTranslateColors = this.plugin.getConfig().getBoolean("signTranslateColors");
         this.preventCropsTrampling = this.plugin.getConfig().getBoolean("preventCropsTrampling");
         this.spawnMobCap = this.plugin.getConfig().getInt("spawnMobCap");
         this.saveInventoryOnDeath = this.plugin.getConfig().getBoolean("saveInventoryOnDeath");
+    }
+
+    public boolean isShowLastUpdatedMessageToOPs() {
+        return showLastUpdatedMessageToOPs;
+    }
+
+    public void setShowLastUpdatedMessageToOPs(boolean showLastUpdatedMessageToOPs) {
+        this.showLastUpdatedMessageToOPs = showLastUpdatedMessageToOPs;
+        this.plugin.getConfig().set("showLastUpdatedMessageToOPs", showLastUpdatedMessageToOPs);
+        this.plugin.saveConfig();
     }
 
     public boolean isSignTranslateColors() {

@@ -42,7 +42,7 @@ public class OnPlayerJoinEvent implements Listener {
         event.joinMessage(api.parseMessage(player, message));
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10.0f, 1.0f);
 
-        if (player.isOp()) {
+        if (player.isOp() && this.api.getConfigUtils().isShowLastUpdatedMessageToOPs()) {
             player.sendMessage(Translate.miniMessage("<dark_green>World1-6Essentials was last updated on <rainbow>" + this.api.dateOfBuild));
         }
 

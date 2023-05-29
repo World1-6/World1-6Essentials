@@ -36,8 +36,9 @@ public class ConfigCMD implements CommandExecutor, TabExecutor {
         if (!player.hasPermission("world16.config")) return null;
 
         if (args.length == 1) {
-            return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "spawnMobCap", "saveInventoryOnDeath", "messages"));
-        } else if (args[0].equalsIgnoreCase("signTranslateColors")
+            return TabUtils.getContainsString(args[0], Arrays.asList("showLastUpdatedMessageToOPs", "signTranslateColors", "preventCropsTrampling", "spawnMobCap", "saveInventoryOnDeath", "messages"));
+        } else if (args[0].equalsIgnoreCase("showLastUpdatedMessageToOPs")
+                || args[0].equalsIgnoreCase("signTranslateColors")
                 || args[0].equalsIgnoreCase("preventCropsTrampling")
                 || args[0].equalsIgnoreCase("saveInventoryOnDeath")) {
             return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
@@ -75,7 +76,10 @@ public class ConfigCMD implements CommandExecutor, TabExecutor {
         if (args.length == 0) {
             player.sendMessage(Translate.color("&cUsage: /config1-6 <config> <value>"));
         } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("signTranslateColors")) {
+            if (args[0].equalsIgnoreCase("showLastUpdatedMessageToOPs")) {
+                api.getConfigUtils().setShowLastUpdatedMessageToOPs(args[1].equalsIgnoreCase("true"));
+                player.sendMessage(Translate.color("&aShow last updated message to OPs set to &6" + args[1]));
+            } else if (args[0].equalsIgnoreCase("signTranslateColors")) {
                 api.getConfigUtils().setSignTranslateColors(args[1].equalsIgnoreCase("true"));
                 player.sendMessage(Translate.color("&aSign translate colors set to &6" + args[1]));
             } else if (args[0].equalsIgnoreCase("preventCropsTrampling")) {
