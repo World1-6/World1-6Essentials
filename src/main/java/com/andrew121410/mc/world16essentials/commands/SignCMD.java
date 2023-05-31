@@ -15,6 +15,7 @@ import com.andrew121410.mc.world16utils.utils.InventoryUtils;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
@@ -44,8 +45,9 @@ public class SignCMD implements CommandExecutor {
         this.api = this.plugin.getApi();
         this.plugin.getCommand("sign").setExecutor(this);
         this.plugin.getCommand("sign").setTabCompleter((commandSender, command, s, args) -> {
-            if (args.length == 1) return TabUtils.getContainsString(args[0], Arrays.asList("give", "edit", "edita"));
-            if (args.length == 2 && args[0].equalsIgnoreCase("edita"))
+            if (args.length == 1)
+                return TabUtils.getContainsString(args[0], Arrays.asList("give", "edit", "edit-legacy"));
+            if (args.length == 2 && args[0].equalsIgnoreCase("edit"))
                 return TabUtils.getContainsString(args[1], Arrays.asList("@regular", "@minimessage"));
             return null;
         });
@@ -68,23 +70,12 @@ public class SignCMD implements CommandExecutor {
             itemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
             player.getInventory().addItem(itemStack);
             return true;
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("edit")) {
+        } else if (args.length >= 1 && args[0].equalsIgnoreCase("edit")) {
             Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
             BlockState state = block.getState();
 
             if (!(state instanceof Sign sign)) {
-                player.sendMessage(Translate.color("&4This isn't a sign."));
-                return true;
-            }
-
-            UniversalBlockUtils.editSign(player, sign);
-            return true;
-        } else if (args.length >= 1 && args[0].equalsIgnoreCase("edita")) {
-            Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
-            BlockState state = block.getState();
-
-            if (!(state instanceof Sign sign)) {
-                player.sendMessage(Translate.color("&4This isn't a sign."));
+                player.sendMessage(Translate.colorc("&4Please look at a sign."));
                 return true;
             }
 
@@ -93,14 +84,25 @@ public class SignCMD implements CommandExecutor {
             } else {
                 editGUI(player, sign, true);
             }
+            return true;
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("edit-legacy")) {
+            Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
+            BlockState state = block.getState();
 
+            if (!(state instanceof Sign sign)) {
+                player.sendMessage(Translate.colorc("&4Please look at a sign."));
+                return true;
+            }
+
+            UniversalBlockUtils.editSign(player, sign);
+            return true;
         } else {
-            player.sendMessage(Translate.color("&cUsage: /sign <give|edit|edita>"));
+            player.sendMessage(Translate.colorc("&cUsage: /sign <give|edit|edit-legacy>"));
         }
         return true;
     }
 
-    private void editGUI(Player player, Sign sign, boolean isRegular) {
+    private void editGUI(Player player, Sign sign, boolean isRegular) { // isRegular = true = regular old &, false = minimessage
         ChatResponseManager chatResponseManager = this.plugin.getOtherPlugins().getWorld16Utils().getChatResponseManager();
         ChatClickCallbackManager chatClickCallbackManager = this.plugin.getOtherPlugins().getWorld16Utils().getChatClickCallbackManager();
         GUIWindow guiWindow = new GUIWindow() {
@@ -113,7 +115,7 @@ public class SignCMD implements CommandExecutor {
                     Component signLineComponent = sign.line(finalI);
                     String currentLineFormatted = isRegular ? LegacyComponentSerializer.legacyAmpersand().serialize(signLineComponent) : MiniMessage.miniMessage().serialize(signLineComponent);
 
-                    guiButtons.add(new ClickEventButton(finalI, InventoryUtils.createItem(Material.PAPER, 1, "Edit line " + (finalI + 1)), (guiClickEvent -> {
+                    guiButtons.add(new ClickEventButton(finalI, InventoryUtils.createItem(Material.PAPER, 1, Translate.miniMessage("<dark_green>Edit line <yellow>" + (finalI + 1))), (guiClickEvent -> {
                         Component component = Component.empty()
                                 .append(Translate.miniMessage("<red><bold>[CLICK ME TO GET THE CURRENT TEXT!]"))
                                 .clickEvent(ClickEvent.suggestCommand(currentLineFormatted));
@@ -136,7 +138,8 @@ public class SignCMD implements CommandExecutor {
                     })));
                 }
 
-                guiButtons.add(new LoreShifterButton(8, InventoryUtils.createItem(Material.GLOW_INK_SAC, 1, "Glow"), new String[]{"off", "on"}, (guiClickEvent, number) -> {
+                List<Component> options = Arrays.asList(Translate.miniMessage("<red>off"), Translate.miniMessage("<green>on"));
+                guiButtons.add(new LoreShifterButton(8, InventoryUtils.createItem(Material.GLOW_INK_SAC, 1, Translate.miniMessage("<dark_green><bold>Set Glow").decoration(TextDecoration.ITALIC, false)), options, false, (guiClickEvent, number) -> {
                     if (number == 0) {
                         sign.setGlowingText(false);
                         sign.update();
