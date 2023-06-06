@@ -9,7 +9,7 @@ Even though I could've easily forked EssentialsX and fixed that. I didn't though
 
 [List of servers using this plugin](https://bstats.org/plugin/bukkit/World1-6Essentials)
 ## Data Converting:
-*Before we start: it converts only, IT does NOT delete any data (due to the fact that the converting could fail)*
+*Before we start: it clones the data only, IT does NOT delete any data (due to the fact that the converting could fail)*
 
 This plugin has a simple data converting system that converts data from other plugins to this plugin.
 `/debug1-6 convert from <platform>`
