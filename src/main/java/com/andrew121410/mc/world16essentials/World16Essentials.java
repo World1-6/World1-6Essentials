@@ -11,6 +11,8 @@ import com.andrew121410.mc.world16essentials.commands.msg.ReplyCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.FirstJoinedCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.LastJoinCMD;
 import com.andrew121410.mc.world16essentials.commands.playertime.TimeOfLoginCMD;
+import com.andrew121410.mc.world16essentials.commands.repair.RepairAllCMD;
+import com.andrew121410.mc.world16essentials.commands.repair.RepairCMD;
 import com.andrew121410.mc.world16essentials.commands.spawn.SetSpawnCMD;
 import com.andrew121410.mc.world16essentials.commands.spawn.SpawnCMD;
 import com.andrew121410.mc.world16essentials.commands.time.DayCMD;
@@ -150,6 +152,10 @@ public class World16Essentials extends JavaPlugin {
         new LastJoinCMD(this);
         new TimeOfLoginCMD(this);
 
+        // Repair
+        new RepairAllCMD(this);
+        new RepairCMD(this);
+
         // Spawn
         new SetSpawnCMD(this, this.customConfigManager);
         new SpawnCMD(this, this.customConfigManager);
@@ -189,7 +195,6 @@ public class World16Essentials extends JavaPlugin {
         new IsAfkCMD(this);
         new PowerToolCMD(this);
         new RamCMD(this);
-        new RepairCMD(this);
         new SaveInventoryCMD(this);
         new ShouldKeepSpawnChunksLoadedCMD(this);
         new SignCMD(this);

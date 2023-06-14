@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16essentials.commands;
+package com.andrew121410.mc.world16essentials.commands.repair;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
@@ -10,16 +10,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class RepairCMD implements CommandExecutor {
+public class RepairAllCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
     private final API api;
 
-    public RepairCMD(World16Essentials getPlugin) {
+    public RepairAllCMD(World16Essentials getPlugin) {
         this.plugin = getPlugin;
         this.api = this.plugin.getApi();
 
-        this.plugin.getCommand("repair").setExecutor(this);
+        this.plugin.getCommand("repairall").setExecutor(this);
     }
 
     @Override
@@ -30,15 +30,15 @@ public class RepairCMD implements CommandExecutor {
                 return true;
             }
 
-            if (!player.hasPermission("world16.repair")) {
+            if (!player.hasPermission("world16.repair.all")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
             }
 
-            repairItem(player, null);
+            repairAllItems(player, null);
             return true;
         } else if (args.length == 1) {
-            if (!sender.hasPermission("world16.repair.other")) {
+            if (!sender.hasPermission("world16.repair.all.other")) {
                 api.sendPermissionErrorMessage(sender);
                 return true;
             }
@@ -49,28 +49,23 @@ public class RepairCMD implements CommandExecutor {
                 return true;
             }
 
-            repairItem(target, sender);
+            repairAllItems(target, sender);
             return true;
         } else {
-            sender.sendMessage(Translate.colorc("&cUsage: for yourself do /repair OR /repair <Player>"));
+            sender.sendMessage(Translate.colorc("&cUsage: for yourself do /repairall OR /repairall <Player>"));
         }
         return true;
     }
 
-    private void repairItem(Player target, CommandSender sender) {
-        if (target.getInventory().getItemInMainHand().getType().isAir()) {
-            target.sendMessage(Translate.colorc("&cYou must be holding an item to repair it."));
-            if (sender != null) sender.sendMessage(Translate.colorc("&cThat player isn't holding an item."));
-            return;
+    private void repairAllItems(Player target, CommandSender commandSender) {
+        for (ItemStack itemStack : target.getInventory()) {
+            if (itemStack == null || itemStack.getType().isAir()) continue;
+            InventoryUtils.repairItem(itemStack);
         }
 
-        ItemStack itemStack = target.getInventory().getItemInMainHand();
-        if (InventoryUtils.repairItem(itemStack)) {
-            target.sendMessage(Translate.colorc("&6Your item has been repaired."));
-            if (sender != null) sender.sendMessage(Translate.colorc("&6That player's item has been repaired."));
-        } else {
-            target.sendMessage(Translate.colorc("&cYour item couldn't be repaired."));
-            if (sender != null) sender.sendMessage(Translate.colorc("&cThat player's item couldn't be repaired."));
+        target.sendMessage(Translate.miniMessage("<gold>All of your items have been repaired."));
+        if (commandSender != null) {
+            commandSender.sendMessage(Translate.miniMessage("<gold>You have repaired all of <reset><green>" + target.getName() + "<reset><gold>'s items."));
         }
     }
 }
