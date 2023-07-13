@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// As of 1/3/2023 this still works. Tested on EssentialsX 2.20.0-dev+37-b7a4bea
+// As of 7/13/2023 this still works. Tested on EssentialsX 2.20.1-dev+29-6012959
 public class EssentialsXDataTranslator implements IDataTranslator {
 
     private final World16Essentials plugin;
