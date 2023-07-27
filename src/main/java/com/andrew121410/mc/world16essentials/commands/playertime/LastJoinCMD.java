@@ -108,6 +108,9 @@ public class LastJoinCMD implements CommandExecutor {
                 }
             }
 
+            // Sort by greatest to the least time
+            recentPlayers.sort((o1, o2) -> Long.compare(o2.getLastLogin(), o1.getLastLogin()));
+
             // If no players have joined in the last x days
             if (recentPlayers.isEmpty()) {
                 player.sendMessage(Translate.miniMessage("<red>No players have joined in the last <yellow>" + days + " <red>days."));
