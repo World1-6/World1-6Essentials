@@ -8,6 +8,10 @@ import com.andrew121410.mc.world16utils.gui.buttons.CloneableGUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
 import com.andrew121410.mc.world16utils.gui.buttons.events.GUIClickEvent;
 import com.andrew121410.mc.world16utils.player.PlayerUtils;
+import com.andrew121410.mc.world16utils.utils.TabUtils;
+import com.andrew121410.mc.world16utils.utils.Utils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -34,6 +38,17 @@ public class LastJoinCMD implements CommandExecutor {
         this.api = this.plugin.getApi();
 
         this.plugin.getCommand("lastjoin").setExecutor(this);
+        this.plugin.getCommand("lastjoin").setTabCompleter((sender, command, alias, args) -> {
+                    if (!(sender instanceof Player player)) return null;
+                    if (!player.hasPermission("world16.lastjoin") && !player.hasPermission("world16.lastonline")) return null;
+
+                    if (args.length == 1) {
+                        return TabUtils.getContainsString(args[0], Collections.singletonList("get"));
+                    }
+
+                    return null;
+                }
+        );
     }
 
     @Override
@@ -72,6 +87,46 @@ public class LastJoinCMD implements CommandExecutor {
             }
 
             player.sendMessage(Translate.color("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("get")) {
+            Integer days = Utils.asIntegerOrElse(args[1], null);
+
+            if (days == null) {
+                player.sendMessage(Translate.miniMessage("<red>Invalid number."));
+                return true;
+            }
+
+            long currentTime = System.currentTimeMillis();
+            long thresholdTime = currentTime - ((long) days * 24 * 60 * 60 * 1000); // Convert days to milliseconds
+
+            OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
+            List<OfflinePlayer> recentPlayers = new ArrayList<>();
+
+            // Get all players who have joined in the last x days
+            for (OfflinePlayer offlinePlayer : offlinePlayers) {
+                if (offlinePlayer.getLastLogin() >= thresholdTime) {
+                    recentPlayers.add(offlinePlayer);
+                }
+            }
+
+            // If no players have joined in the last x days
+            if (recentPlayers.isEmpty()) {
+                player.sendMessage(Translate.miniMessage("<red>No players have joined in the last <yellow>" + days + " <red>days."));
+                return true;
+            }
+
+            player.sendMessage(Translate.color("&aPlayers who joined in the last " + days + " days:"));
+            for (OfflinePlayer recentPlayer : recentPlayers) {
+                player.sendMessage(Translate.color("&6" + recentPlayer.getName() + "&a - " + this.api.getTimeSinceLastLogin(recentPlayer) + " ago."));
+            }
+
+            // Click to copy
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Players who joined in the last ").append(days).append(" days:\n");
+            for (OfflinePlayer recentPlayer : recentPlayers) {
+                stringBuilder.append(recentPlayer.getName()).append(" -> ").append(this.api.getTimeSinceLastLogin(recentPlayer)).append(" ago.").append("\n");
+            }
+            Component component = Translate.miniMessage("<green><bold>[Click to copy!]").clickEvent(ClickEvent.copyToClipboard(stringBuilder.toString()));
+            player.sendMessage(component);
         }
         return true;
     }
