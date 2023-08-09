@@ -29,6 +29,7 @@ import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16essentials.utils.OtherPlugins;
 import com.andrew121410.mc.world16essentials.utils.PlayerInitializer;
 import com.andrew121410.mc.world16essentials.utils.SetListMap;
+import com.andrew121410.mc.world16utils.World16Utils;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -64,6 +65,10 @@ public class World16Essentials extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         this.setListMap = new SetListMap();
+
+        // Load World16Utils
+        World16Utils world16Utils = new World16Utils();
+        world16Utils.onEnable(this);
 
         // Load configs first
         registerMainConfig();
