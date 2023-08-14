@@ -3,6 +3,7 @@ import java.util.*
 
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("net.kyori.blossom") version "1.3.1"
     `java-library`
     `maven-publish`
 }
@@ -86,33 +87,7 @@ publishing {
 var date = Date()
 var formattedDate: String = SimpleDateFormat("M/d/yyyy").format(date)
 
-var fileName = "date-of-build.txt"
-
-val genOutputDir = file("$buildDir/generated-resources")
-val genOutputFile = file("$genOutputDir/$fileName")
-
-// Generate date of build file
-tasks.register("generateDateOfBuildFile") {
-    outputs.dir(genOutputDir)
-    outputs.file(genOutputFile)
-
-    doLast {
-        genOutputFile.parentFile.mkdirs()
-        genOutputFile.writeText(formattedDate)
-    }
-}
-
-// Copy date of build file
-tasks.register("copyDateOfBuildFile") {
-    dependsOn("generateDateOfBuildFile")
-    inputs.file(genOutputFile)
-    outputs.file("$buildDir/resources/main/$fileName")
-
-    doLast {
-        genOutputFile.copyTo(file("$buildDir/resources/main/$fileName"), overwrite = true)
-    }
-}
-
-tasks.named("processResources") {
-    dependsOn("copyDateOfBuildFile")
+blossom {
+    val constants = "src/main/java/com/andrew121410/mc/world16essentials/utils/API.java"
+    replaceToken("DATE_OF_BUILD", date, constants)
 }

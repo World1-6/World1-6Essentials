@@ -250,7 +250,7 @@ public class World16Essentials extends JavaPlugin {
     }
 
     private void pluginLoadMessage() {
-        String stringBuilder = " \r\n&2" + "__        __         _     _ _        __\n" + "\\ \\      / /__  _ __| | __| / |      / /_\n" + " \\ \\ /\\ / / _ \\| '__| |/ _` | |_____| '_ \\\n" + "  \\ V  V / (_) | |  | | (_| | |_____| (_) |\n" + "   \\_/\\_/ \\___/|_|  |_|\\__,_|_|      \\___/\n" + "\n" + "&6Developer: &dAndrew121410\r\n" + "&3Date of version: &e" + this.api.dateOfBuild + "" + " \r\n";
+        String stringBuilder = " \r\n&2" + "__        __         _     _ _        __\n" + "\\ \\      / /__  _ __| | __| / |      / /_\n" + " \\ \\ /\\ / / _ \\| '__| |/ _` | |_____| '_ \\\n" + "  \\ V  V / (_) | |  | | (_| | |_____| (_) |\n" + "   \\_/\\_/ \\___/|_|  |_|\\__,_|_|      \\___/\n" + "\n" + "&6Developer: &dAndrew121410\r\n" + "&3Date of version: &e" + this.api.getDateOfBuild() + "" + " \r\n";
         getServer().getConsoleSender().sendMessage(Translate.color(stringBuilder));
     }
 
