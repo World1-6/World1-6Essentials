@@ -3,6 +3,7 @@ package com.andrew121410.mc.world16utils.utils;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -27,5 +28,51 @@ public class InventoryUtils {
         itemMeta.setDisplayName(Translate.color(displayName));
         item.setItemMeta(itemMeta);
         return item;
+    }
+
+    public static List<List<ItemStack>> splitInventoryIntoBaseAndExtraContents(List<ItemStack> inventoryContents) {
+        List<List<ItemStack>> listList = new ArrayList<>();
+        List<ItemStack> baseContents = new ArrayList<>();
+        List<ItemStack> extraContents = new ArrayList<>();
+        for (int i = 0; i < inventoryContents.size(); i++) {
+            ItemStack itemStack = inventoryContents.get(i);
+            if (i < 36) {
+                baseContents.add(itemStack);
+            } else {
+                extraContents.add(itemStack);
+            }
+        }
+        listList.add(baseContents);
+        listList.add(extraContents);
+        return listList;
+    }
+
+    public static ItemStack[] listToArray(List<ItemStack> itemStackList) {
+        ItemStack[] itemStacks = new ItemStack[itemStackList.size()];
+        for (int i = 0; i < itemStackList.size(); i++) {
+            itemStacks[i] = itemStackList.get(i);
+        }
+        return itemStacks;
+    }
+
+    public static ItemStack getItemInItemStackArrayIfExist(ItemStack[] itemStacks, int index) {
+        if (index >= 0 && index < itemStacks.length) {
+            return itemStacks[index];
+        }
+        return null;
+    }
+
+    public static boolean repairItem(ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        if (itemMeta instanceof Damageable) {
+            Damageable damageable = (Damageable) itemMeta;
+            if (!damageable.hasDamage() || damageable.getDamage() == 0) return false;
+
+            damageable.setDamage(0);
+            itemStack.setItemMeta(damageable);
+            return true;
+        }
+        return false;
     }
 }

@@ -1,18 +1,16 @@
 package com.andrew121410.mc.world16utils.player;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.mojang.authlib.GameProfile;
+import com.destroystokyo.paper.profile.PlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +24,7 @@ import java.util.function.Consumer;
 @SuppressWarnings("deprecation")
 public class PlayerUtils {
 
-    public static final ConcurrentHashMap<UUID, GameProfile> PLAYER_PROFILES_CONCURRENT_HASH_MAP = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<UUID, PlayerProfile> PLAYER_PROFILES_CONCURRENT_HASH_MAP = new ConcurrentHashMap<>();
     public static final ExecutorService PROFILE_EXECUTOR_SERVICE = Executors.newFixedThreadPool(2);
 
     public static boolean smoothTeleport(Player player, Location location) {
@@ -50,22 +48,26 @@ public class PlayerUtils {
             skullMeta.setDisplayName(player.getName());
         }
 
-        CraftPlayer craftPlayer = (CraftPlayer) player;
-        GameProfile gameProfile = craftPlayer.getProfile();
-        if (gameProfile != null) {
-            setSkullProfile(skullMeta, gameProfile);
+        PlayerProfile playerProfile = Bukkit.createProfile(player.getUniqueId(), player.getName());
+        // If the player profile is complete, we can set the skull profile and return the item stack
+        if (playerProfile.isComplete()) {
+            skullMeta.setPlayerProfile(playerProfile);
             itemStack.setItemMeta(skullMeta);
             return CompletableFuture.completedFuture(itemStack);
         }
 
+        // If the player is already in cache then return the head from that
+        ItemStack fromPlayerCache = getPlayerHeadFromCache(player);
+        if (fromPlayerCache != null) {
+            return CompletableFuture.completedFuture(fromPlayerCache);
+        }
+
         return CompletableFuture.supplyAsync(() -> {
             try {
-                Field profileField = CraftPlayer.class.getDeclaredField("playerProfile");
-                profileField.setAccessible(true);
-                GameProfile newProfile = (GameProfile) profileField.get(craftPlayer);
+                playerProfile.complete();
 
-                PLAYER_PROFILES_CONCURRENT_HASH_MAP.putIfAbsent(player.getUniqueId(), newProfile);
-                setSkullProfile(skullMeta, newProfile);
+                PLAYER_PROFILES_CONCURRENT_HASH_MAP.putIfAbsent(player.getUniqueId(), playerProfile);
+                skullMeta.setPlayerProfile(playerProfile);
                 itemStack.setItemMeta(skullMeta);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -74,14 +76,20 @@ public class PlayerUtils {
         }, PROFILE_EXECUTOR_SERVICE);
     }
 
-    private static void setSkullProfile(SkullMeta skullMeta, GameProfile gameProfile) {
-        try {
-            Field profileField = skullMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(skullMeta, gameProfile);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static ItemStack getPlayerHeadFromCache(OfflinePlayer offlinePlayer) {
+        PlayerProfile playerProfile = PLAYER_PROFILES_CONCURRENT_HASH_MAP.getOrDefault(offlinePlayer.getUniqueId(), null);
+        if (playerProfile == null) return null;
+
+        ItemStack itemStack = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+
+        if (offlinePlayer.getName() != null) {
+            skullMeta.setDisplayName(offlinePlayer.getName());
         }
+
+        skullMeta.setPlayerProfile(playerProfile);
+        itemStack.setItemMeta(skullMeta);
+        return itemStack;
     }
 
     public static void getPlayerHead(OfflinePlayer player, Consumer<ItemStack> consumer) {

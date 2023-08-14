@@ -66,7 +66,7 @@ public class World16Essentials extends JavaPlugin {
         plugin = this;
         this.setListMap = new SetListMap();
 
-        // Load World16Utils
+        // Load World16Utils first
         World16Utils world16Utils = new World16Utils();
         world16Utils.onEnable(this);
 
