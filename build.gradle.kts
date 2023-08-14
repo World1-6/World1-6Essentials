@@ -84,10 +84,8 @@ publishing {
     }
 }
 
-var date = Date()
-var formattedDate: String = SimpleDateFormat("M/d/yyyy").format(date)
-
+var formattedDate: String = SimpleDateFormat("M/d/yyyy").format(Date())
 blossom {
     val constants = "src/main/java/com/andrew121410/mc/world16essentials/utils/API.java"
-    replaceToken("DATE_OF_BUILD", date, constants)
+    replaceToken("DATE_OF_BUILD", formattedDate, constants)
 }
