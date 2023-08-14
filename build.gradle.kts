@@ -2,7 +2,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     `java-library`
     `maven-publish`
 }
@@ -60,6 +60,10 @@ repositories {
     maven {
         url = uri("https://repo.maven.apache.org/maven2/")
     }
+
+    maven {
+        url = uri("https://repo.opencollab.dev/main/")
+    }
 }
 
 dependencies {
@@ -68,6 +72,7 @@ dependencies {
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:0b9d0dc6ba")
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:0b9d0dc6ba")
     compileOnly("net.essentialsx:EssentialsX:2.20.0-SNAPSHOT")
+    compileOnly("org.geysermc.floodgate:api:2.2.2-SNAPSHOT")
 }
 
 publishing {

@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.geysermc.cumulus.form.SimpleForm;
+import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.util.Map;
 import java.util.UUID;
@@ -49,25 +51,49 @@ public class HomeCMD implements CommandExecutor {
             return true;
         }
 
+        // Easy Bedrock Support - if the player is a bedrock player, and they don't specify a home name, just show them all of their homes
+        if (args.length == 0 && this.plugin.getOtherPlugins().hasFloodgate() && FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+            handleBedrockPlayer(player);
+            return true;
+        }
+
         String homeName = "home";
         if (args.length == 1) {
             homeName = args[0].toLowerCase();
         }
 
-        UnlinkedWorldLocation home = homes.get(homeName);
+        toHome(player, homeName);
+        return true;
+    }
 
+    private void toHome(Player player, String homeName) {
+        UnlinkedWorldLocation home = this.homesMap.get(player.getUniqueId()).get(homeName);
         if (home == null) {
             player.sendMessage(Translate.colorc("&cHome Not Found."));
-            return true;
+            return;
         }
 
         if (!home.isWorldLoaded()) {
             player.sendMessage(Translate.colorc("&cWorld is not loaded."));
-            return true;
+            return;
         }
 
         player.teleport(home);
         player.sendMessage(Translate.color("&6Teleporting..."));
-        return true;
+    }
+
+    private void handleBedrockPlayer(Player player) {
+        SimpleForm.Builder simpleFormBuilder = SimpleForm.builder().title("Homes").content("List of your homes");
+
+        for (String homeName : this.homesMap.get(player.getUniqueId()).keySet()) {
+            simpleFormBuilder.button(homeName);
+        }
+
+        simpleFormBuilder.validResultHandler((simpleForm, simpleFormResponse) -> {
+            String homeName = simpleFormResponse.clickedButton().text();
+            toHome(player, homeName);
+        });
+
+        FloodgateApi.getInstance().sendForm(player.getUniqueId(), simpleFormBuilder.build());
     }
 }

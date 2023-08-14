@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.geysermc.cumulus.form.SimpleForm;
+import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.util.Map;
 
@@ -63,8 +65,16 @@ public class WarpCMD implements CommandExecutor {
             toWarp(target, sender, name);
             return true;
         } else {
-            sender.sendMessage(Translate.miniMessage("<red>/warp <name>"));
-            sender.sendMessage(Translate.miniMessage("<red>/warp <player> <name>"));
+            // Easy Bedrock Support - if the player is a bedrock player, and they don't specify a warp name, just show them all the warps
+            if (sender instanceof Player player) {
+                if (args.length == 0 && this.plugin.getOtherPlugins().hasFloodgate() && FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+                    handleBedrockPlayer(player);
+                    return true;
+                }
+            }
+
+            sender.sendMessage(Translate.color("&c/warp <name>"));
+            sender.sendMessage(Translate.color("&c/warp <player> <name>"));
         }
         return true;
     }
@@ -96,5 +106,20 @@ public class WarpCMD implements CommandExecutor {
         if (sender != null) {
             sender.sendMessage(Translate.color("&6Successfully teleported &e" + target.getName() + " &6to warp &e" + warp));
         }
+    }
+
+    private void handleBedrockPlayer(Player player) {
+        SimpleForm.Builder simpleFormBuilder = SimpleForm.builder().title("Warps").content("List of all warps");
+
+        for (String warpName : this.warpsMap.keySet()) {
+            simpleFormBuilder.button(warpName);
+        }
+
+        simpleFormBuilder.validResultHandler((simpleForm, simpleFormResponse) -> {
+            String warpName = simpleFormResponse.clickedButton().text();
+            toWarp(player, null, warpName);
+        });
+
+        FloodgateApi.getInstance().sendForm(player.getUniqueId(), simpleFormBuilder.build());
     }
 }

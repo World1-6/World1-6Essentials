@@ -16,6 +16,7 @@ public class OtherPlugins {
     // Soft Depend
     private Essentials essentials;
     private CMI cmi;
+    private boolean hasFloodgate = false;
 
     public OtherPlugins(World16Essentials plugin) {
         this.plugin = plugin;
@@ -26,6 +27,7 @@ public class OtherPlugins {
         // Soft Depend
         setupEssentials();
         setupCMI();
+        setupFloodgate();
     }
 
     private void setupWorld16Utils() {
@@ -62,6 +64,14 @@ public class OtherPlugins {
         }
     }
 
+    private void setupFloodgate() {
+        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("floodgate");
+
+        if (plugin != null) {
+            hasFloodgate = true;
+        }
+    }
+
     public World16Utils getWorld16Utils() {
         return world16Utils;
     }
@@ -72,5 +82,9 @@ public class OtherPlugins {
 
     public CMI getCmi() {
         return cmi;
+    }
+
+    public boolean hasFloodgate() {
+        return hasFloodgate;
     }
 }

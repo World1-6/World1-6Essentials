@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.geysermc.cumulus.form.SimpleForm;
+import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -76,6 +78,14 @@ public class KitCMD implements CommandExecutor {
             giveKit(target, sender, name);
             return true;
         } else {
+            // Easy Bedrock Support - if the player is a bedrock player, show them all the kits.
+            if (sender instanceof Player player) {
+                if (args.length == 0 && this.plugin.getOtherPlugins().hasFloodgate() && FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+                    handleBedrockPlayer(player);
+                    return true;
+                }
+            }
+
             sender.sendMessage(Translate.miniMessage("<red>/kit <name>"));
             sender.sendMessage(Translate.miniMessage("<red>/kit <player> <name>"));
         }
@@ -107,5 +117,24 @@ public class KitCMD implements CommandExecutor {
 
         this.plugin.getKitManager().giveKit(target, kitObject);
         target.sendMessage(Translate.miniMessage("<green>You have received the kit: <blue>" + kitName));
+    }
+
+    private void handleBedrockPlayer(Player player) {
+        SimpleForm.Builder simpleFormBuilder = SimpleForm.builder().title("Kits").content("Select a kit to receive.");
+
+        for (String kitName : this.kitsMap.keySet()) {
+            KitObject kitObject = this.kitsMap.get(kitName);
+            String permission = kitObject.getSettings().getPermission();
+            if (!permission.equalsIgnoreCase("none") && !player.hasPermission(permission)) continue;
+
+            simpleFormBuilder.button(kitName);
+        }
+
+        simpleFormBuilder.validResultHandler((simpleForm, simpleFormResponse) -> {
+            String kitName = simpleFormResponse.clickedButton().text();
+            giveKit(player, null, kitName);
+        });
+
+        FloodgateApi.getInstance().sendForm(player.getUniqueId(), simpleFormBuilder.build());
     }
 }
