@@ -35,8 +35,13 @@ public class KitCMD implements CommandExecutor {
 
             List<String> kits = new java.util.ArrayList<>(this.plugin.getMemoryHolder().getKitsMap().keySet().stream().toList());
 
-            // If the player doesn't have the permission to use such kit, don't suggest it.
-            kits.removeIf(kit -> !player.hasPermission("world16.kit.use." + kit));
+            // Remove kits that the player doesn't have permission for.
+            this.kitsMap.forEach((name, kitObject) -> {
+                String permission = kitObject.getSettings().getPermission();
+                if (!permission.equalsIgnoreCase("none") && !player.hasPermission(permission)) {
+                    kits.remove(name);
+                }
+            });
 
             if (args.length == 1) {
                 return TabUtils.getContainsString(args[0], kits);
