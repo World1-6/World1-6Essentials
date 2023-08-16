@@ -3,7 +3,8 @@ package com.andrew121410.mc.world16essentials.commands.playertime;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.gui.GUIMultipageListWindow;
+import com.andrew121410.mc.world16utils.gui.PaginatedGUIMultipageListWindow;
+import com.andrew121410.mc.world16utils.gui.PaginatedReturn;
 import com.andrew121410.mc.world16utils.gui.buttons.CloneableGUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
 import com.andrew121410.mc.world16utils.gui.buttons.events.GUIClickEvent;
@@ -13,7 +14,6 @@ import com.andrew121410.mc.world16utils.utils.Utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,8 +30,6 @@ public class LastJoinCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
     private final API api;
-
-    private boolean isFirst = true;
 
     public LastJoinCMD(World16Essentials plugin) {
         this.plugin = plugin;
@@ -64,19 +62,8 @@ public class LastJoinCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            if (this.isFirst) {
-                player.sendMessage(Translate.color("&ePlease wait, this may take a while..."));
-                this.isFirst = false;
-            }
-            makeGUIButtons(player, guiButtonList -> {
-                GUIMultipageListWindow gui = new GUIMultipageListWindow(Translate.miniMessage("<gold>Last Join's"), guiButtonList);
-                gui.setPageEvent(guiNextPageEvent -> {
-                    if (guiNextPageEvent.isAfterPageCreation()) return;
-                    player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f);
-                });
-                gui.open(player);
-                player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1f, 1f);
-            });
+            // Open GUI
+            openGUI(player);
             return true;
         } else if (args.length == 1) {
             OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
@@ -134,10 +121,40 @@ public class LastJoinCMD implements CommandExecutor {
         return true;
     }
 
-    private void makeGUIButtons(Player player, Consumer<List<CloneableGUIButton>> callback) {
-        OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
+    private void openGUI(Player player) {
+        PaginatedGUIMultipageListWindow gui = new PaginatedGUIMultipageListWindow(Translate.miniMessage("<green>Last Join"), 0, true, true);
 
-        PlayerUtils.getPlayerHeads(List.of(offlinePlayers), (map) -> {
+        // Button provider is async
+        gui.setButtonProvider(pageNumber -> {
+            makeGUIButtons(player, pageNumber, (paginatedReturn -> {
+                gui.setPageDone(pageNumber, paginatedReturn);
+            }));
+            return null; // We can return null as we will setPageDone when it is done making the heads and buttons
+        });
+
+        gui.open(player);
+    }
+
+    private void makeGUIButtons(Player player, int pageNumber, Consumer<PaginatedReturn> consumer) {
+        OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
+        List<OfflinePlayer> offlinePlayerList = new ArrayList<>(List.of(offlinePlayers));
+
+        // Sort
+        offlinePlayerList.sort((o1, o2) -> Long.compare(o2.getLastLogin(), o1.getLastLogin()));
+
+        // Make into chunks keep order
+        List<List<OfflinePlayer>> chunks = new ArrayList<>();
+        int chunkSize = 45;
+        for (int i = 0; i < offlinePlayerList.size(); i += chunkSize) {
+            chunks.add(offlinePlayerList.subList(i, Math.min(i + chunkSize, offlinePlayerList.size())));
+        }
+
+        // See if page exists
+        if (chunks.size() < pageNumber) {
+            return;
+        }
+
+        PlayerUtils.getPlayerHeads(chunks.get(pageNumber), (map) -> {
             List<LastJoinGUIButton> guiButtons = new ArrayList<>();
 
             map.forEach((offlinePlayer, itemStack) -> {
@@ -152,7 +169,11 @@ public class LastJoinCMD implements CommandExecutor {
 
             sortByLeastToGreatestTime(guiButtons);
 
-            callback.accept(new ArrayList<>(guiButtons));
+            List<CloneableGUIButton> cloneableGUIButtons = new ArrayList<>(guiButtons);
+            boolean hasNextPage = chunks.size() > pageNumber + 1;
+            boolean hasPreviousPage = pageNumber > 0;
+
+            consumer.accept(new PaginatedReturn(hasNextPage, hasPreviousPage, cloneableGUIButtons));
         });
     }
 

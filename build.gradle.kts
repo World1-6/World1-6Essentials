@@ -70,8 +70,8 @@ repositories {
 dependencies {
     api("org.bstats:bstats-bukkit:3.0.0")
     compileOnly("io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:0b9d0dc6ba")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:0b9d0dc6ba")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:153ec2db67")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:153ec2db67")
     compileOnly("net.essentialsx:EssentialsX:2.20.0-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.2.2-SNAPSHOT")
 }
