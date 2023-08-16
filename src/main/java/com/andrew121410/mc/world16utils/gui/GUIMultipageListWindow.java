@@ -135,19 +135,19 @@ public class GUIMultipageListWindow extends GUIWindow {
 
         // Set the correct slot numbers for the buttons.
         for (List<CloneableGUIButton> page : thePages) {
-            determineSlotNumbers(page);
+            determineSlotNumbers(page, this.itemsPerPage);
         }
 
         return thePages;
     }
 
-    private void determineSlotNumbers(List<CloneableGUIButton> guiButtonList) {
+    public static void determineSlotNumbers(List<CloneableGUIButton> guiButtonList, int itemsPerPage) {
         int i = 0;
 
         for (CloneableGUIButton guiButton : guiButtonList) {
             guiButton.setSlot(i);
 
-            if (i < this.itemsPerPage) {
+            if (i < itemsPerPage) {
                 i++;
             } else {
                 i = 0;

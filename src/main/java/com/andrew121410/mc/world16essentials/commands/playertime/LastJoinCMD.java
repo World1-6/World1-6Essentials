@@ -3,7 +3,8 @@ package com.andrew121410.mc.world16essentials.commands.playertime;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import com.andrew121410.mc.world16utils.gui.GUIMultipageListWindow;
+import com.andrew121410.mc.world16utils.gui.PaginatedGUIMultipageListWindow;
+import com.andrew121410.mc.world16utils.gui.PaginatedReturn;
 import com.andrew121410.mc.world16utils.gui.buttons.CloneableGUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
 import com.andrew121410.mc.world16utils.gui.buttons.events.GUIClickEvent;
@@ -11,7 +12,6 @@ import com.andrew121410.mc.world16utils.player.PlayerUtils;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
 import com.andrew121410.mc.world16utils.utils.Utils;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,8 +29,6 @@ public class LastJoinCMD implements CommandExecutor {
     private final World16Essentials plugin;
     private final API api;
 
-    private boolean isFirst = true;
-
     public LastJoinCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
@@ -40,6 +37,7 @@ public class LastJoinCMD implements CommandExecutor {
         this.plugin.getCommand("lastjoin").setTabCompleter((sender, command, alias, args) -> {
                     if (!(sender instanceof Player)) return null;
                     Player player = (Player) sender;
+
                     if (!player.hasPermission("world16.lastjoin") && !player.hasPermission("world16.lastonline")) return null;
 
                     if (args.length == 1) {
@@ -65,19 +63,8 @@ public class LastJoinCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            if (this.isFirst) {
-                player.sendMessage(Translate.color("&ePlease wait, this may take a while..."));
-                this.isFirst = false;
-            }
-            makeGUIButtons(player, guiButtonList -> {
-                GUIMultipageListWindow gui = new GUIMultipageListWindow(Translate.color("&6Last Join's!"), guiButtonList);
-                gui.setPageEvent(guiNextPageEvent -> {
-                    if (guiNextPageEvent.isAfterPageCreation()) return;
-//                    player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f);
-                });
-                gui.open(player);
-                player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1f, 1f);
-            });
+            // Open GUI
+            openGUI(player);
             return true;
         } else if (args.length == 1) {
             OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
@@ -92,7 +79,7 @@ public class LastJoinCMD implements CommandExecutor {
             Integer days = Utils.asIntegerOrElse(args[1], null);
 
             if (days == null) {
-                player.sendMessage(Translate.color("&cPlease enter a valid number."));
+                player.sendMessage(Translate.color("&cInvalid number."));
                 return true;
             }
 
@@ -114,7 +101,7 @@ public class LastJoinCMD implements CommandExecutor {
 
             // If no players have joined in the last x days
             if (recentPlayers.isEmpty()) {
-                player.sendMessage(Translate.color("&cNo players have joined in the last " + days + " days."));
+                player.sendMessage(Translate.color("&cNo players have joined in the last &e" + days + " &cdays."));
                 return true;
             }
 
@@ -123,7 +110,7 @@ public class LastJoinCMD implements CommandExecutor {
                 player.sendMessage(Translate.color("&6" + recentPlayer.getName() + "&a - " + this.api.getTimeSinceLastLogin(recentPlayer) + " ago."));
             }
 
-//            // Click to copy
+//             Click to copy
 //            StringBuilder stringBuilder = new StringBuilder();
 //            stringBuilder.append("Players who joined in the last ").append(days).append(" days:\n");
 //            for (OfflinePlayer recentPlayer : recentPlayers) {
@@ -135,11 +122,41 @@ public class LastJoinCMD implements CommandExecutor {
         return true;
     }
 
-    private void makeGUIButtons(Player player, Consumer<List<CloneableGUIButton>> callback) {
-        OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
-        List<OfflinePlayer> offlinePlayerList = new ArrayList<>(Arrays.asList(offlinePlayers));
+    private void openGUI(Player player) {
+        PaginatedGUIMultipageListWindow gui = new PaginatedGUIMultipageListWindow(Translate.color("Last Join"), 0, true, true);
 
-        PlayerUtils.getPlayerHeads(offlinePlayerList, (map) -> {
+        // Button provider is async
+        gui.setButtonProvider(pageNumber -> {
+            makeGUIButtons(player, pageNumber, (paginatedReturn -> {
+                gui.setPageDone(pageNumber, paginatedReturn);
+            }));
+            return null; // We can return null as we will setPageDone when it is done making the heads and buttons
+        });
+
+        gui.open(player);
+    }
+
+    private void makeGUIButtons(Player player, int pageNumber, Consumer<PaginatedReturn> consumer) {
+        OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
+        List<OfflinePlayer> offlinePlayerList = new ArrayList<>();
+        Collections.addAll(offlinePlayerList, offlinePlayers);
+
+        // Sort
+        offlinePlayerList.sort((o1, o2) -> Long.compare(o2.getLastPlayed(), o1.getLastPlayed()));
+
+        // Make into chunks keep order
+        List<List<OfflinePlayer>> chunks = new ArrayList<>();
+        int chunkSize = 45;
+        for (int i = 0; i < offlinePlayerList.size(); i += chunkSize) {
+            chunks.add(offlinePlayerList.subList(i, Math.min(i + chunkSize, offlinePlayerList.size())));
+        }
+
+        // See if page exists
+        if (chunks.size() < pageNumber) {
+            return;
+        }
+
+        PlayerUtils.getPlayerHeads(chunks.get(pageNumber), (map) -> {
             List<LastJoinGUIButton> guiButtons = new ArrayList<>();
 
             map.forEach((offlinePlayer, itemStack) -> {
@@ -154,7 +171,11 @@ public class LastJoinCMD implements CommandExecutor {
 
             sortByLeastToGreatestTime(guiButtons);
 
-            callback.accept(new ArrayList<>(guiButtons));
+            List<CloneableGUIButton> cloneableGUIButtons = new ArrayList<>(guiButtons);
+            boolean hasNextPage = chunks.size() > pageNumber + 1;
+            boolean hasPreviousPage = pageNumber > 0;
+
+            consumer.accept(new PaginatedReturn(hasNextPage, hasPreviousPage, cloneableGUIButtons));
         });
     }
 
