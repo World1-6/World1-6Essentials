@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class API {
 
-    private final String dateOfBuild = "{{ date_of_build }}";
+    private final String dateOfBuild = com.andrew121410.mc.world16essentials.utils.BlossomOutput.DATE_OF_BUILD;
 
     private final World16Essentials plugin;
 
