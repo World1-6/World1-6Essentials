@@ -2,8 +2,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("net.kyori.blossom") version "2.0.1"
+    id("com.github.johnrengelman.shadow") version "8.1.1" // https://github.com/johnrengelman/shadow
+    id("net.kyori.blossom") version "2.1.0" // https://github.com/KyoriPowered/blossom
     `java-library`
     `maven-publish`
 }
