@@ -30,7 +30,7 @@ public class MessagesUtils {
     }
 
     private void addDefaults() {
-        this.messagesYml.getConfig().addDefault("prefix", "[<blue>World1-6<r>]");
+        this.messagesYml.getConfig().addDefault("prefix", "[<blue>World1-6<reset>]");
         this.messagesYml.getConfig().addDefault("welcomeBackMessage", "%prefix% <gold>Welcome back, %player%!");
         this.messagesYml.getConfig().addDefault("firstJoinMessage", "%prefix% <gold>Welcome to the server, %player%!");
         this.messagesYml.getConfig().addDefault("leaveMessage", "%prefix% <gold>%player% has left the server.");
