@@ -94,7 +94,7 @@ commands:
     aliases:
       - gc
   saveinventory:
-  shouldkeepspawnchunksloaded:
+  keepspawnloaded:
   sign:
   spawnmob:
   sudo:
@@ -270,8 +270,8 @@ permissions:
   world16.saveinventory:
     description: Allows you to use saveinventory cmd
     default: op
-  world16.shouldkeepspawnchunksloaded:
-    description: Allows you to use shouldkeepspawnchunksloaded cmd
+  world16.keepspawnloaded:
+    description: Allows you to use keepspawnloaded cmd
     default: op
   world16.sign:
     description: Allows you to use sign cmd
