@@ -6,8 +6,8 @@ import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
@@ -31,24 +31,19 @@ public class RamCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
+        if (!sender.hasPermission("world16.ram")) {
+            api.sendPermissionErrorMessage(sender);
             return true;
         }
 
-        if (!player.hasPermission("world16.ram")) {
-            api.sendPermissionErrorMessage(player);
-            return true;
+        if (args.length == 0) {
+            sendInfo(sender);
         }
 
-        long maxMemory = (Runtime.getRuntime().maxMemory() / 1024 / 1024);
-        long allocatedMemory = (Runtime.getRuntime().totalMemory() / 1024 / 1024);
-        long allocatedPercent = (allocatedMemory * 100) / maxMemory;
-        long freeMemory = (Runtime.getRuntime().freeMemory() / 1024 / 1024);
-        long freePercent = (freeMemory * 100) / maxMemory;
-        long usedMemory = allocatedMemory - freeMemory;
-        long usedPercent = (usedMemory * 100) / maxMemory;
+        return true;
+    }
 
+    private void sendInfo(CommandSender sender) {
         if (this.cpuModelCache == null) {
             try (Stream<String> stream = Files.lines(Paths.get("/proc/cpuinfo"))) {
                 this.cpuModelCache = stream.filter(line -> line.startsWith("model name"))
@@ -59,7 +54,7 @@ public class RamCMD implements CommandExecutor {
             }
         }
         if (this.cpuModelCache != null) {
-            player.sendMessage(Translate.color("&6CPU: &7" + this.cpuModelCache));
+            sender.sendMessage(Translate.color("&6CPU: &7" + this.cpuModelCache));
         }
 
         if (this.operatingSystemCache == null) {
@@ -70,7 +65,7 @@ public class RamCMD implements CommandExecutor {
             }
         }
         if (this.operatingSystemCache != null) {
-            player.sendMessage(Translate.color("&6OS: &7" + this.operatingSystemCache));
+            sender.sendMessage(Translate.color("&6OS: &7" + this.operatingSystemCache));
         }
 
         if (this.kernelNumberCache == null) {
@@ -81,7 +76,7 @@ public class RamCMD implements CommandExecutor {
             }
         }
         if (this.kernelNumberCache != null) {
-            player.sendMessage(Translate.color("&6Kernel: &7" + this.kernelNumberCache));
+            sender.sendMessage(Translate.color("&6Kernel: &7" + this.kernelNumberCache));
         }
 
         if (this.javaVersionCache == null) {
@@ -92,15 +87,42 @@ public class RamCMD implements CommandExecutor {
             }
         }
         if (this.javaVersionCache != null) {
-            player.sendMessage(Translate.color("&6Java: &7" + this.javaVersionCache));
+            sender.sendMessage(Translate.color("&6Java: &7" + this.javaVersionCache));
         }
 
-        player.sendMessage("");
+        // Disk space. Example Disk usage 100% (500GB/500GB)
+        File file = new File("./");
+        long totalSpace = file.getTotalSpace();
+        long freeSpace = file.getFreeSpace();
+        long usedSpace = totalSpace - freeSpace;
+        long usedPercentSpace = (usedSpace * 100) / totalSpace;
+        String usedSpaceInGB = String.valueOf(usedSpace / 1024 / 1024 / 1024);
+        String totalSpaceInGB = String.valueOf(totalSpace / 1024 / 1024 / 1024);
 
-        player.sendMessage(Translate.color("&6Maximum memory: &c" + maxMemory + " MB."));
-        player.sendMessage(Translate.color("&6Allocated memory: &c" + allocatedMemory + " MB." + " &6(" + allocatedPercent + "%)"));
-        player.sendMessage(Translate.color("&6Used memory: &c" + usedMemory + " MB." + " &6(" + usedPercent + "%)"));
-        player.sendMessage(Translate.color("&6Free memory: &c" + freeMemory + " MB." + " &6(" + freePercent + "%)"));
-        return true;
+        // Used percent color.
+        String usedPercentColor = "";
+        if (usedPercentSpace >= 90) {
+            usedPercentColor = "<red>";
+        } else if (usedPercentSpace >= 80) {
+            usedPercentColor = "<yellow>";
+        } else {
+            usedPercentColor = "<green>";
+        }
+
+        sender.sendMessage(Translate.miniMessage("<gold>Disk usage: " + usedPercentColor + usedPercentSpace + "% <yellow>(<gold>" + usedSpaceInGB + "<yellow>/<gold>" + totalSpaceInGB + " GB<yellow>)"));
+
+        // RAM Usage
+        long maxMemory = (Runtime.getRuntime().maxMemory() / 1024 / 1024);
+        long allocatedMemory = (Runtime.getRuntime().totalMemory() / 1024 / 1024);
+        long allocatedPercent = (allocatedMemory * 100) / maxMemory;
+        long freeMemory = (Runtime.getRuntime().freeMemory() / 1024 / 1024);
+        long freePercent = (freeMemory * 100) / maxMemory;
+        long usedMemory = allocatedMemory - freeMemory;
+        long usedPercent = (usedMemory * 100) / maxMemory;
+
+        sender.sendMessage(Translate.color("&6Maximum memory: &c" + maxMemory + " MB."));
+        sender.sendMessage(Translate.color("&6Allocated memory: &c" + allocatedMemory + " MB." + " &6(" + allocatedPercent + "%)"));
+        sender.sendMessage(Translate.color("&6Used memory: &c" + usedMemory + " MB." + " &6(" + usedPercent + "%)"));
+        sender.sendMessage(Translate.color("&6Free memory: &c" + freeMemory + " MB." + " &6(" + freePercent + "%)"));
     }
 }
