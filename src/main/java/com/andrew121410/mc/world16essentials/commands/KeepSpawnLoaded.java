@@ -21,6 +21,9 @@ public class KeepSpawnLoaded implements CommandExecutor {
 
         this.plugin.getCommand("keepspawnloaded").setExecutor(this);
         this.plugin.getCommand("keepspawnloaded").setTabCompleter((commandSender, command, s, strings) -> {
+            if (!(commandSender instanceof Player player)) return null;
+            if (!player.hasPermission("world16.keepspawnloaded")) return null;
+
             if (strings.length == 1) {
                 return Arrays.asList("true", "false");
             }
