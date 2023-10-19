@@ -3,3 +3,6 @@ signTranslateColors: true
 preventCropsTrampling: false
 spawnMobCap: 10
 saveInventoryOnDeath: false
+
+# This will use the "df -h" command to get disk usage info for /ram command
+moreAccurateDiskInfo: false

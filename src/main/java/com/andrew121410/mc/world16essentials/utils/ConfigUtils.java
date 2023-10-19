@@ -11,6 +11,7 @@ public class ConfigUtils {
     private boolean preventCropsTrampling;
     private int spawnMobCap;
     private boolean saveInventoryOnDeath;
+    private boolean moreAccurateDiskInfo;
 
     public ConfigUtils(World16Essentials plugin) {
         this.plugin = plugin;
@@ -20,6 +21,7 @@ public class ConfigUtils {
         this.preventCropsTrampling = this.plugin.getConfig().getBoolean("preventCropsTrampling");
         this.spawnMobCap = this.plugin.getConfig().getInt("spawnMobCap");
         this.saveInventoryOnDeath = this.plugin.getConfig().getBoolean("saveInventoryOnDeath");
+        this.moreAccurateDiskInfo = this.plugin.getConfig().getBoolean("moreAccurateDiskInfo");
     }
 
     public boolean isShowLastUpdatedMessageToOPs() {
@@ -69,6 +71,16 @@ public class ConfigUtils {
     public void setSaveInventoryOnDeath(boolean saveInventoryOnDeath) {
         this.saveInventoryOnDeath = saveInventoryOnDeath;
         this.plugin.getConfig().set("saveInventoryOnDeath", saveInventoryOnDeath);
+        this.plugin.saveConfig();
+    }
+
+    public boolean isMoreAccurateDiskInfo() {
+        return moreAccurateDiskInfo;
+    }
+
+    public void setMoreAccurateDiskInfo(boolean moreAccurateDiskInfo) {
+        this.moreAccurateDiskInfo = moreAccurateDiskInfo;
+        this.plugin.getConfig().set("moreAccurateDiskInfo", moreAccurateDiskInfo);
         this.plugin.saveConfig();
     }
 }

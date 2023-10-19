@@ -2,12 +2,15 @@ package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
+import com.andrew121410.mc.world16essentials.utils.ConfigUtils;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
@@ -16,6 +19,7 @@ public class RamCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
     private final API api;
+    private final ConfigUtils configUtils;
 
     private String cpuModelCache = null;
     private String operatingSystemCache = null;
@@ -25,6 +29,7 @@ public class RamCMD implements CommandExecutor {
     public RamCMD(World16Essentials plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
+        this.configUtils = this.plugin.getApi().getConfigUtils();
 
         this.plugin.getCommand("ram").setExecutor(this);
     }
@@ -90,26 +95,8 @@ public class RamCMD implements CommandExecutor {
             sender.sendMessage(Translate.color("&6Java: &7" + this.javaVersionCache));
         }
 
-        // Disk space. Example Disk usage 100% (500GB/500GB)
-        File file = new File("./");
-        long totalSpace = file.getTotalSpace();
-        long freeSpace = file.getFreeSpace();
-        long usedSpace = totalSpace - freeSpace;
-        long usedPercentSpace = (usedSpace * 100) / totalSpace;
-        String usedSpaceInGB = String.valueOf(usedSpace / 1024 / 1024 / 1024);
-        String totalSpaceInGB = String.valueOf(totalSpace / 1024 / 1024 / 1024);
-
-        // Used percent color.
-        String usedPercentColor = "";
-        if (usedPercentSpace >= 90) {
-            usedPercentColor = "<red>";
-        } else if (usedPercentSpace >= 80) {
-            usedPercentColor = "<yellow>";
-        } else {
-            usedPercentColor = "<green>";
-        }
-
-        sender.sendMessage(Translate.miniMessage("<gold>Disk usage: " + usedPercentColor + usedPercentSpace + "% <yellow>(<gold>" + usedSpaceInGB + "<yellow>/<gold>" + totalSpaceInGB + " GB<yellow>)"));
+        // Disk Usage
+        sendDiskUsage(sender);
 
         // RAM Usage
         long maxMemory = (Runtime.getRuntime().maxMemory() / 1024 / 1024);
@@ -124,5 +111,74 @@ public class RamCMD implements CommandExecutor {
         sender.sendMessage(Translate.color("&6Allocated memory: &c" + allocatedMemory + " MB." + " &6(" + allocatedPercent + "%)"));
         sender.sendMessage(Translate.color("&6Used memory: &c" + usedMemory + " MB." + " &6(" + usedPercent + "%)"));
         sender.sendMessage(Translate.color("&6Free memory: &c" + freeMemory + " MB." + " &6(" + freePercent + "%)"));
+    }
+
+    private void sendDiskUsage(CommandSender sender) {
+        if (doesDfCommandExist() & configUtils.isMoreAccurateDiskInfo()) {
+            diskInfoFromDfCommand(sender);
+        } else {
+            File file = new File("./");
+            long totalSpace = file.getTotalSpace();
+            long freeSpace = file.getFreeSpace();
+            long usedSpace = totalSpace - freeSpace;
+            long usedPercentSpace = (usedSpace * 100) / totalSpace;
+            String usedSpaceInGB = String.valueOf(usedSpace / 1024 / 1024 / 1024);
+            String totalSpaceInGB = String.valueOf(totalSpace / 1024 / 1024 / 1024);
+
+            // Used percent color.
+            String usedPercentColor = "";
+            if (usedPercentSpace >= 90) {
+                usedPercentColor = "<red>";
+            } else if (usedPercentSpace >= 80) {
+                usedPercentColor = "<yellow>";
+            } else {
+                usedPercentColor = "<green>";
+            }
+
+            sender.sendMessage(Translate.miniMessage("<gold>Disk usage: " + usedPercentColor + usedPercentSpace + "% <yellow>(<gold>" + usedSpaceInGB + "<yellow>/<gold>" + totalSpaceInGB + " GB<yellow>)"));
+        }
+    }
+
+    private void diskInfoFromDfCommand(CommandSender sender) {
+        try {
+            // Execute the df -h command
+            Process process = Runtime.getRuntime().exec(new String[]{"df", "-h", "/"});
+
+            // Get the output of the command
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+
+            reader.readLine(); // Skip the first line
+
+            // Process the output
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\s+");
+                String totalSpace = parts[1];
+                String usedSpace = parts[2];
+                String availableSpace = parts[3];
+                String usedPercent = parts[4];
+
+                // Used percent color.
+                String usedPercentColor = "";
+                if (usedPercent.contains("%")) {
+                    usedPercent = usedPercent.replace("%", "");
+                }
+                if (Integer.parseInt(usedPercent) >= 90) {
+                    usedPercentColor = "<red>";
+                } else if (Integer.parseInt(usedPercent) >= 80) {
+                    usedPercentColor = "<yellow>";
+                } else {
+                    usedPercentColor = "<green>";
+                }
+
+                sender.sendMessage(Translate.miniMessage("<gold>Disk usage: " + usedPercentColor + usedPercent + "% <yellow>(<gold>" + usedSpace + "<yellow>/<gold>" + totalSpace + "<yellow>) (<gold>" + availableSpace + " available to use<yellow>)"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean doesDfCommandExist() {
+        return new File("/bin/df").exists();
     }
 }
