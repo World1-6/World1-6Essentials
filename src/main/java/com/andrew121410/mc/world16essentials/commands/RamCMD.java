@@ -62,17 +62,6 @@ public class RamCMD implements CommandExecutor {
             sender.sendMessage(Translate.color("&6CPU: &7" + this.cpuModelCache));
         }
 
-        if (this.operatingSystemCache == null) {
-            try {
-                this.operatingSystemCache = System.getProperty("os.name");
-            } catch (Exception ignored) {
-                this.operatingSystemCache = null;
-            }
-        }
-        if (this.operatingSystemCache != null) {
-            sender.sendMessage(Translate.color("&6OS: &7" + this.operatingSystemCache));
-        }
-
         if (this.kernelNumberCache == null) {
             try {
                 this.kernelNumberCache = System.getProperty("os.version");
@@ -80,7 +69,19 @@ public class RamCMD implements CommandExecutor {
                 this.kernelNumberCache = null;
             }
         }
-        if (this.kernelNumberCache != null) {
+
+        if (this.operatingSystemCache == null) {
+            try {
+                this.operatingSystemCache = System.getProperty("os.name");
+            } catch (Exception ignored) {
+                this.operatingSystemCache = null;
+            }
+        }
+        if (this.operatingSystemCache != null && this.kernelNumberCache != null) {
+            sender.sendMessage(Translate.color("&6OS: &7" + this.operatingSystemCache + " Kernel: " + this.kernelNumberCache));
+        } else if (this.operatingSystemCache != null) {
+            sender.sendMessage(Translate.color("&6OS: &7" + this.operatingSystemCache));
+        } else if (this.kernelNumberCache != null) {
             sender.sendMessage(Translate.color("&6Kernel: &7" + this.kernelNumberCache));
         }
 
@@ -114,29 +115,36 @@ public class RamCMD implements CommandExecutor {
     }
 
     private void sendDiskUsage(CommandSender sender) {
-        if (doesDfCommandExist() & configUtils.isMoreAccurateDiskInfo()) {
-            diskInfoFromDfCommand(sender);
-        } else {
-            File file = new File("./");
-            long totalSpace = file.getTotalSpace();
-            long freeSpace = file.getFreeSpace();
-            long usedSpace = totalSpace - freeSpace;
-            long usedPercentSpace = (usedSpace * 100) / totalSpace;
-            String usedSpaceInGB = String.valueOf(usedSpace / 1024 / 1024 / 1024);
-            String totalSpaceInGB = String.valueOf(totalSpace / 1024 / 1024 / 1024);
-
-            // Used percent color.
-            String usedPercentColor = "";
-            if (usedPercentSpace >= 90) {
-                usedPercentColor = "<red>";
-            } else if (usedPercentSpace >= 80) {
-                usedPercentColor = "<yellow>";
-            } else {
-                usedPercentColor = "<green>";
+        // If isMoreAccurateDiskInfo is true then we will use the df and du command to get the disk info.
+        if (configUtils.isMoreAccurateDiskInfo()) {
+            if (doesDfCommandExist()) {
+                diskInfoFromDfCommand(sender);
             }
-
-            sender.sendMessage(Translate.miniMessage("<gold>Disk usage: " + usedPercentColor + usedPercentSpace + "% <yellow>(<gold>" + usedSpaceInGB + "<yellow>/<gold>" + totalSpaceInGB + " GB<yellow>)"));
+            if (doesDuCommandExist()) {
+                mcServerDiskInfoFromDuCommand(sender);
+            }
+            return;
         }
+
+        File file = new File("./");
+        long totalSpace = file.getTotalSpace();
+        long freeSpace = file.getFreeSpace();
+        long usedSpace = totalSpace - freeSpace;
+        long usedPercentSpace = (usedSpace * 100) / totalSpace;
+        String usedSpaceInGB = String.valueOf(usedSpace / 1024 / 1024 / 1024);
+        String totalSpaceInGB = String.valueOf(totalSpace / 1024 / 1024 / 1024);
+
+        // Used percent color.
+        String usedPercentColor = "";
+        if (usedPercentSpace >= 90) {
+            usedPercentColor = "<red>";
+        } else if (usedPercentSpace >= 80) {
+            usedPercentColor = "<yellow>";
+        } else {
+            usedPercentColor = "<green>";
+        }
+
+        sender.sendMessage(Translate.miniMessage("<gold>Disk usage: " + usedPercentColor + usedPercentSpace + "% <yellow>(<gold>" + usedSpaceInGB + "<yellow>/<gold>" + totalSpaceInGB + " GB<yellow>)"));
     }
 
     private void diskInfoFromDfCommand(CommandSender sender) {
@@ -144,7 +152,6 @@ public class RamCMD implements CommandExecutor {
             // Execute the df -h command
             Process process = Runtime.getRuntime().exec(new String[]{"df", "-h", "/"});
 
-            // Get the output of the command
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
 
@@ -178,7 +185,34 @@ public class RamCMD implements CommandExecutor {
         }
     }
 
+    private void mcServerDiskInfoFromDuCommand(CommandSender sender) {
+        try {
+            // Execute the du -sh command
+            ProcessBuilder processBuilder = new ProcessBuilder("du", "-sh", "./");
+
+            // Get the output of the command
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+
+            // Process the output
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\s+");
+                String usedSpace = parts[0];
+
+                sender.sendMessage(Translate.miniMessage("<gold>MC Server disk usage: <yellow>(<gold>" + usedSpace + " used<yellow>)"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private boolean doesDfCommandExist() {
         return new File("/bin/df").exists();
+    }
+
+    private boolean doesDuCommandExist() {
+        return new File("/bin/du").exists();
     }
 }
