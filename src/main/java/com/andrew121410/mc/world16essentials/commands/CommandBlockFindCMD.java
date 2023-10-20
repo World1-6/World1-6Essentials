@@ -41,13 +41,8 @@ public class CommandBlockFindCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-
-        if (!player.hasPermission("world16.commandblockfind")) {
-            api.sendPermissionErrorMessage(player);
+        if (!sender.hasPermission("world16.commandblockfind")) {
+            api.sendPermissionErrorMessage(sender);
             return true;
         }
 
@@ -57,15 +52,15 @@ public class CommandBlockFindCMD implements CommandExecutor {
 
             if (addOrRemove.equalsIgnoreCase("add")) {
                 spyCommandBlock.add(string);
-                player.sendMessage(Translate.color("&eWill now spy on command blocks with the command &6" + string + "&e."));
+                sender.sendMessage(Translate.color("&eWill now spy on command blocks with the command &6" + string + "&e."));
                 return true;
             } else if (addOrRemove.equalsIgnoreCase("remove") || addOrRemove.equalsIgnoreCase("delete")) {
                 spyCommandBlock.remove(string);
-                player.sendMessage(Translate.color("&eWill no longer spy on command blocks with the command &6" + string + "&e."));
+                sender.sendMessage(Translate.color("&eWill no longer spy on command blocks with the command &6" + string + "&e."));
                 return true;
             }
         }
-        player.sendMessage(Translate.color("&cUsage: /commandblockfind <add/remove> <string>"));
+        sender.sendMessage(Translate.color("&cUsage: /commandblockfind <add/remove> <string>"));
         return true;
     }
 }
