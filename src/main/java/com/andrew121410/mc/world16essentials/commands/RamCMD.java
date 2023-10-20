@@ -78,7 +78,7 @@ public class RamCMD implements CommandExecutor {
             }
         }
         if (this.operatingSystemCache != null && this.kernelNumberCache != null) {
-            sender.sendMessage(Translate.color("&6OS: &7" + this.operatingSystemCache + " Kernel: " + this.kernelNumberCache));
+            sender.sendMessage(Translate.color("&6OS: &7" + this.operatingSystemCache + " &6Kernel: &7" + this.kernelNumberCache));
         } else if (this.operatingSystemCache != null) {
             sender.sendMessage(Translate.color("&6OS: &7" + this.operatingSystemCache));
         } else if (this.kernelNumberCache != null) {
