@@ -140,6 +140,13 @@ public class KitCMD implements CommandExecutor {
             giveKit(player, null, kitName);
         });
 
-        FloodgateApi.getInstance().sendForm(player.getUniqueId(), simpleFormBuilder.build());
+        SimpleForm simpleForm = simpleFormBuilder.build();
+
+        if (simpleForm.buttons().isEmpty()) {
+            player.sendMessage(Translate.miniMessage("<red>There are no kits available for you to receive."));
+            return;
+        }
+
+        FloodgateApi.getInstance().sendForm(player.getUniqueId(), simpleForm);
     }
 }
