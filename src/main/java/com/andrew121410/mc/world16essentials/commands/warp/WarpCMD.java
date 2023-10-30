@@ -120,6 +120,14 @@ public class WarpCMD implements CommandExecutor {
             toWarp(player, null, warpName);
         });
 
-        FloodgateApi.getInstance().sendForm(player.getUniqueId(), simpleFormBuilder.build());
+        SimpleForm simpleForm = simpleFormBuilder.build();
+
+        // Did it this way because might want to add permissions to warps in the future.
+        if (simpleForm.buttons().isEmpty()) {
+            player.sendMessage(Translate.miniMessage("<red>There are no warps."));
+            return;
+        }
+
+        FloodgateApi.getInstance().sendForm(player.getUniqueId(), simpleForm);
     }
 }
