@@ -83,9 +83,16 @@ public class HomeCMD implements CommandExecutor {
     }
 
     private void handleBedrockPlayer(Player player) {
+        Map<String, UnlinkedWorldLocation> homes = this.homesMap.get(player.getUniqueId());
+
+        if (homes.isEmpty()) {
+            player.sendMessage(Translate.miniMessage("<red>You don't have any homes."));
+            return;
+        }
+
         SimpleForm.Builder simpleFormBuilder = SimpleForm.builder().title("Homes").content("List of your homes");
 
-        for (String homeName : this.homesMap.get(player.getUniqueId()).keySet()) {
+        for (String homeName : homes.keySet()) {
             simpleFormBuilder.button(homeName);
         }
 
