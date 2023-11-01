@@ -147,6 +147,9 @@ public class KitCMD implements CommandExecutor {
             return;
         }
 
-        FloodgateApi.getInstance().sendForm(player.getUniqueId(), simpleForm);
+        // Have to call simpleFormBuilder.build() again because if not a NoClassDefFoundError would be thrown?
+        // Caused by java.lang.ClassNotFoundException: org.geysermc.cumulus.form.Form
+        // Broken classpath?
+        FloodgateApi.getInstance().sendForm(player.getUniqueId(), simpleFormBuilder.build());
     }
 }
