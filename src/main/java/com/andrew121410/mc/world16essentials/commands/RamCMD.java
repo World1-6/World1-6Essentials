@@ -137,11 +137,11 @@ public class RamCMD implements CommandExecutor {
         // Used percent color.
         String usedPercentColor = "";
         if (usedPercentSpace >= 90) {
-            usedPercentColor = "<red>";
+            usedPercentColor = "&c";
         } else if (usedPercentSpace >= 80) {
-            usedPercentColor = "<yellow>";
+            usedPercentColor = "&e";
         } else {
-            usedPercentColor = "<green>";
+            usedPercentColor = "&a";
         }
 
         sender.sendMessage(Translate.color("&6Disk usage: " + usedPercentColor + usedPercentSpace + "% &e(&6" + usedSpaceInGB + "&e/&6" + totalSpaceInGB + " GB&e)"));
@@ -171,11 +171,11 @@ public class RamCMD implements CommandExecutor {
                     usedPercent = usedPercent.replace("%", "");
                 }
                 if (Integer.parseInt(usedPercent) >= 90) {
-                    usedPercentColor = "<red>";
+                    usedPercentColor = "&c";
                 } else if (Integer.parseInt(usedPercent) >= 80) {
-                    usedPercentColor = "<yellow>";
+                    usedPercentColor = "&e";
                 } else {
-                    usedPercentColor = "<green>";
+                    usedPercentColor = "&a";
                 }
 
                 sender.sendMessage(Translate.color("&6Disk usage: " + usedPercentColor + usedPercent + "% &e(&6" + usedSpace + "&e/&6" + totalSpace + "&e) (&6" + availableSpace + " available to use&e)"));

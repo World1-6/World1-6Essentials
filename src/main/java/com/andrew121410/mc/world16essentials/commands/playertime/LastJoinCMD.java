@@ -98,7 +98,7 @@ public class LastJoinCMD implements CommandExecutor {
 
             // If no players have joined in the last x days
             if (recentPlayers.isEmpty()) {
-                player.sendMessage(Translate.color("&cNo players have joined in the last &e" + days + " <red>days."));
+                player.sendMessage(Translate.color("&cNo players have joined in the last &e" + days + " &cdays."));
                 return true;
             }
 

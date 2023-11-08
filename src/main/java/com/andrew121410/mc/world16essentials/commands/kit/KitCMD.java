@@ -118,7 +118,7 @@ public class KitCMD implements CommandExecutor {
         }
 
         this.plugin.getKitManager().giveKit(target, kitObject);
-        target.sendMessage(Translate.color("&aYou have received the kit: <blue>" + kitName));
+        target.sendMessage(Translate.color("&aYou have received the kit: &9" + kitName));
     }
 
 //    private void handleBedrockPlayer(Player player) {
