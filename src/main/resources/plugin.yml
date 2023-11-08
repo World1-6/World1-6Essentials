@@ -2,249 +2,295 @@ name: World1-6Essentials
 version: 1.0
 author: Andrew121410
 main: com.andrew121410.mc.world16essentials.World16Essentials
+api-version: "1.20"
+
+depend:
+  - World1-6Utils
 softdepend:
   - EssentialsX
+  - Essentials
   - CMI
+  - floodgate
 
 commands:
-  World1-6Essentials:
-  bed:
-  commandblock:
-  day:
-  debug1-6:
-  feed:
-  fly:
-  heal:
-  night:
-  ram:
-    aliases:
-      - gc
-  spawn:
-  echest:
-  setspawn:
-  sign:
-  colors:
-  afk:
-  fs:
-    aliases:
-      - flyspeed
-      - fspeed
-  isafk:
-  food:
   back:
-  tpa:
-  tpaccept:
-  tpdeny:
-  broadcast:
-  god:
-  emsg:
-  waitdo:
-  runcommands:
-  wformat:
-  xyzdxdydz:
-  workbench:
+
+  clonehomes:
   delhome:
   home:
   homelist:
     aliases:
       - homes
+  homeother:
   sethome:
-  warp:
+
+  createkit:
+  delkit:
     aliases:
-      - to
-  setwarp:
-  delwarp:
-  powertool:
-  unsafenchant:
-  commandblockfind:
-  sudo:
-  shouldkeepspawnchunksloaded:
-  countallentities:
-  hide:
-  unhide:
+      - deletekit
+  kit:
+
+  emsg:
+  reply:
+    aliases:
+      - r
+      - ereply
+
+  firstjoined:
   lastjoin:
     aliases:
       - lastonline
   timeoflogin:
-  firstjoined:
-  config1-6:
-  spawnmob:
-  clonehomes:
 
-  gmc:
+  repairall:
+  repair:
+
+  setspawn:
+  spawn:
+
+  day:
+  night:
+
+  tpaccept:
+  tpa:
+  tpdeny:
     aliases:
-      - gm1
-  gms:
+      - tpadeny
+
+  delwarp:
+  setwarp:
+  warp:
     aliases:
-      - gm0
-  gmsp:
+      - to
+
+  afk:
+  bed:
+  broadcast:
+  colors:
+  commandblock:
+  commandblockfind:
+  config1-6:
+  countallentities:
+  debug1-6:
+  echest:
+  feed:
+  fly:
+  fs:
     aliases:
-      - gm3
-  gma:
+      - flyspeed
+      - fspeed
+  egamemode:
     aliases:
-      - gm2
+      - gma
+      - gmc
+      - gms
+      - gmsp
+  god:
+  heal:
+  hide:
+  isafk:
+  powertool:
+  ram:
+    aliases:
+      - gc
+  saveinventory:
+  keepspawnloaded:
+  sign:
+  spawnmob:
+  sudo:
+  unhide:
+  unsafenchant:
+  uuid:
+  workbench:
+  xyzdxdydz:
 
 permissions:
-  world16.tpa:
-    description: Allows to do tpa
-    default: true
-  world16.tpaccept:
-    description: Allows to do tpaccept
-    default: true
-  world16.tpdeny:
-    description: Allows to do tp deny
-    default: true
-  world16.afk:
-    description: Allows to do afk
-    default: true
-    children:
-      world16.afk.other: true
-
   world16.back:
-    description: Allows to do back
-    default: true
-  world16.back.all:
-    description: Allows to do every back command
-    default: true
-    children:
-      world16.back: true
-      world16.back.death: true
-      world16.back.tp: true
+    description: Allows you to use back cmd
+    default: op
+  world16.back.death:
+    description: Allows you to use back cmd after death
+    default: op
+  world16.back.tp:
+    description: Allows you to use back cmd after tp
+    default: op
 
-  world16.bed:
-    description: Allows to do bed
+  world16.clonehomes:
+    description: Allows you to use clonehomes cmd
     default: op
-  world16.broadcast:
-    description: Allows to do broadcast
-    default: op
-  world16.colors:
-    description: Allows to do colors
-    default: true
-  world16.commandblock:
-    description: Allows to do commandblock
-    default: op
-  world16.day:
-    description: Allows to do day
-    default: op
-  world16.debug:
-    description: Allows to do debug
-    default: op
-  world16.echest:
-    description: Allows to do echest
-    default: op
-  world16.feed:
-    description: Allows to do feed
-    default: op
-  world16.fly:
-    description: Allows to do tpa
-    default: op
-  world16.fs:
-    description: Allows to do flight speed
-    default: op
-  world16.gma:
-    description: Allows to do gma
-    default: op
-  world16.gmc:
-    description: Allows to do gmc
-    default: op
-  world16.gms:
-    description: Allows to do gms
-    default: op
-  world16.gmsp:
-    description: Allows to do gmsp
-    default: op
-  world16.god:
-    description: Allows to do god
-    default: op
-  world16.heal:
-    description: Allows to do heal
-    default: op
-  world16.isafk:
-    description: Allows to do isafk
-    default: true
-  world16.night:
-    description: Allows to do night
-    default: op
-  world16.ram:
-    description: Allows to do ram
-    default: op
-  world16.setspawn:
-    description: Allows to do setspawn
-    default: op
-  world16.sign:
-    description: Allows to do sign
-    default: op
-    children:
-      world16.sign.color: true
-  world16.spawn:
-    description: Allows to do spawn
-    default: true
-  world16.msg:
-    description: Allows to do msg
-    default: true
-  world16.waitdo:
-    description: Allows to do waitdo
-    default: op
-  world16.runcommands:
-    description: Allows to do runcommands
-    default: op
-  world16.wformat:
-    description: Allows to do wformat
-    default: op
-  world16.xyzdxdydz:
-    description: Allows to do xyzdxdydz
-    default: op
-  world16.workbench:
-    description: Allows to do workbench
-    default: true
   world16.home:
-    description: Allows to do home commands
-    default: true
-  world16.warp:
-    description: Allows to do warp
-    default: true
-  world16.setwarp:
-    description: Allows to do setwarp
+    description: Allows you to use home cmd
     default: op
-  world16.delwarp:
-    description: Allows to do delwarp
+  world16.homeother:
+    description: Allows you to use homeother cmd
     default: op
-  world16.powertool:
-    description: Allows to do powertool
+
+  world16.kit.create:
+    description: Allows you to use createkit cmd
     default: op
-  world16.unsafenchant:
-    description: Allows to do unsafenchant
+  world16.kit.delete:
+    description: Allows you to use delkit cmd
     default: op
-  world16.commandblockfind:
-    description: Allows to do commandblockfind
+  world16.kit.use:
+    description: Allows you to use kit cmd
     default: op
-  world16.sudo:
-    description: Allows you to do sudo
+  world16.kit.admin:
+    description: Allows you to give kits to other players
     default: op
-  world16.shouldkeepspawnchunksloaded:
-    description: Allows you to do shouldkeepspawnchunksloaded
+
+  world16.emsg:
+    description: Allows you to use emsg cmd
     default: op
-  world16.countallentities:
-    description: Allows you to do countallentities
+
+  world16.firstjoined:
+    description: Allows you to use firstjoined cmd
     default: op
-  world16.hide:
-    description: Allows you to do hide or unhide
+  world16.firstjoined.other:
+    description: Allows you to use firstjoined cmd on other players
     default: op
   world16.lastjoin:
-    description: Allows to do lastjoin
-    default: true
+    description: Allows you to use lastjoin cmd
+    default: op
   world16.timeoflogin:
-    description: Allows you to do timeoflogin
-    default: true
-  world16.firstjoined:
-    description: Allows you to do firstjoined
-    default: true
+    description: Allows you to use timeoflogin cmd
+    default: op
+  world16.timeoflogin.other:
+    description: Allows you to use timeoflogin cmd on other players
+    default: op
+
+  world16.repair.all:
+    description: Allows you to use repairall cmd
+    default: op
+  world16.repair:
+    description: Allows you to use repair cmd
+    default: op
+
+  world16.setspawn:
+    description: Allows you to use setspawn cmd
+    default: op
+  world16.spawn:
+    description: Allows you to use spawn cmd
+    default: op
+
+  world16.day:
+    description: Allows you to use day cmd
+    default: op
+  world16.night:
+    description: Allows you to use night cmd
+    default: op
+
+  world16.tpa:
+    description: Allows you to use tpa cmd
+    default: op
+
+  world16.delwarp:
+    description: Allows you to use delwarp cmd
+    default: op
+  world16.setwarp:
+    description: Allows you to use setwarp cmd
+    default: op
+  world16.warp:
+    description: Allows you to use warp cmd
+    default: op
+  world16.warp.other:
+    description: Allows you to use warp cmd on other players
+    default: op
+
+  world16.afk:
+    description: Allows you to use afk cmd
+    default: op
+  world16.bed:
+    description: Allows you to use bed cmd
+    default: op
+  world16.broadcast:
+    description: Allows you to use broadcast cmd
+    default: op
+  world16.colors:
+    description: Allows you to use colors cmd
+    default: op
+  world16.commandblock:
+    description: Allows you to use commandblock cmd
+    default: op
+  world16.commandblockfind:
+    description: Allows you to use commandblockfind cmd
+    default: op
   world16.config:
-    description: Allows you to do config1-6
+    description: Allows you to use config1-6 cmd
+    default: op
+  world16.countallentities:
+    description: Allows you to use countallentities cmd
+    default: op
+  world16.debug:
+    description: Allows you to use debug1-6 cmd
+    default: op
+  world16.echest:
+    description: Allows you to use echest cmd
+    default: op
+  world16.feed:
+    description: Allows you to use feed cmd
+    default: op
+  world16.fly:
+    description: Allows you to use fly cmd
+    default: op
+  world16.fs:
+    description: Allows you to use fs cmd
+    default: op
+
+  world16.gma:
+    description: Allows you to use gma cmd
+    default: op
+  world16.gmc:
+    description: Allows you to use gmc cmd
+    default: op
+  world16.gms:
+    description: Allows you to use gms cmd
+    default: op
+  world16.gmsp:
+    description: Allows you to use gmsp cmd
+    default: op
+
+  world16.god:
+    description: Allows you to use god cmd
+    default: op
+  world16.heal:
+    description: Allows you to use heal cmd
+    default: op
+  world16.hide:
+    description: Allows you to use hide cmd
+    default: op
+  world16.isafk:
+    description: Allows you to use isafk cmd
+    default: op
+  world16.powertool:
+    description: Allows you to use powertool cmd
+    default: op
+  world16.ram:
+    description: Allows you to use ram cmd
+    default: op
+  world16.saveinventory:
+    description: Allows you to use saveinventory cmd
+    default: op
+  world16.keepspawnloaded:
+    description: Allows you to use keepspawnloaded cmd
+    default: op
+  world16.sign:
+    description: Allows you to use sign cmd
     default: op
   world16.spawnmob:
-    description: Allows you to do spawnmob
+    description: Allows you to use spawnmob cmd
     default: op
-  world16.clonehomes:
-    description: Allows you to do takehomes
+  world16.sudo:
+    description: Allows you to use sudo cmd
+    default: op
+  world16.unsafenchant:
+    description: Allows you to use unsafenchant cmd
+    default: op
+  world16.uuid:
+    description: Allows you to use uuid cmd
+    default: op
+  world16.workbench:
+    description: Allows you to use workbench cmd
+    default: op
+  world16.xyzdxdydz:
+    description: Allows you to use xyzdxdydz cmd
     default: op
