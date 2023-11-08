@@ -28,12 +28,10 @@ public class SpawnCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
-        Player player = (Player) sender;
 
         Location spawn = this.api.getLocationFromFile(this.shitYml, "Spawn.default");
         if (spawn == null) {
@@ -49,7 +47,7 @@ public class SpawnCMD implements CommandExecutor {
 
         if (args.length == 0) {
             player.teleport(spawn);
-            player.sendMessage(Translate.chat("&6Teleporting..."));
+            player.sendMessage(Translate.color("&6Teleporting..."));
             return true;
         } else if (args.length == 1) {
             if (!player.hasPermission("world16.spawn.other")) {
@@ -59,11 +57,11 @@ public class SpawnCMD implements CommandExecutor {
             Player target = plugin.getServer().getPlayerExact(args[0]);
             if (target != null && target.isOnline()) {
                 target.teleport(spawn);
-                target.sendMessage(Translate.chat("&6Teleporting..."));
+                target.sendMessage(Translate.color("&6Teleporting..."));
             }
             return true;
         } else {
-            player.sendMessage(Translate.chat("&cUsage: for yourself do /spawn OR /spawn <Player>"));
+            player.sendMessage(Translate.color("&cUsage: for yourself do /spawn OR /spawn <Player>"));
         }
         return true;
     }

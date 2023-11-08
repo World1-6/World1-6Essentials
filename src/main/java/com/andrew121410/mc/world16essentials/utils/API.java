@@ -1,13 +1,14 @@
 package com.andrew121410.mc.world16essentials.utils;
 
-import com.andrew121410.ccutils.utils.StringDataTimeBuilder;
+import com.andrew121410.ccutils.utils.TimeUtils;
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -17,8 +18,7 @@ import java.util.UUID;
 
 public class API {
 
-    public static final String DATE_OF_VERSION = "8/14/2023";
-    public static final String CUSTOM_COMMAND_FORMAT = "`";
+    private final String dateOfBuild = com.andrew121410.mc.world16essentials.utils.BlossomOutput.DATE_OF_BUILD;
 
     private final World16Essentials plugin;
 
@@ -29,9 +29,8 @@ public class API {
     private final Map<UUID, Long> timeOfLoginMap;
     private final Map<UUID, AfkObject> afkMap;
 
-    private final List<String> flyList;
-    private final List<String> godList;
-    private final List<Player> hiddenPlayers;
+    private final List<UUID> godList;
+    private final List<UUID> hiddenPlayers;
 
     public API(World16Essentials plugin) {
         this.plugin = plugin;
@@ -40,43 +39,38 @@ public class API {
         this.configUtils = this.plugin.getCustomConfigManager().getConfigUtils();
         this.messagesUtils = this.plugin.getCustomConfigManager().getMessagesUtils();
 
-        this.timeOfLoginMap = this.plugin.getSetListMap().getTimeOfLoginMap();
-        this.afkMap = this.plugin.getSetListMap().getAfkMap();
+        this.timeOfLoginMap = this.plugin.getMemoryHolder().getTimeOfLoginMap();
+        this.afkMap = this.plugin.getMemoryHolder().getAfkMap();
 
-        this.flyList = this.plugin.getSetListMap().getFlyList();
-        this.godList = this.plugin.getSetListMap().getGodList();
-        this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
+        this.godList = this.plugin.getMemoryHolder().getGodList();
+        this.hiddenPlayers = this.plugin.getMemoryHolder().getHiddenPlayers();
     }
 
     public boolean isAfk(Player player) {
         return afkMap.get(player.getUniqueId()).isAfk();
     }
 
-    public boolean isFlying(Player player) {
-        return flyList.contains(player.getDisplayName()) || player.isFlying();
-    }
-
     public boolean isGod(Player player) {
-        return godList.contains(player.getDisplayName());
+        return godList.contains(player.getUniqueId());
     }
 
     public boolean isHidden(Player player) {
-        return hiddenPlayers.contains(player);
+        return hiddenPlayers.contains(player.getUniqueId());
     }
 
     public String getTimeSinceLogin(Player player) {
         long loginTime = timeOfLoginMap.get(player.getUniqueId());
-        return StringDataTimeBuilder.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false, true);
+        return TimeUtils.makeIntoEnglishWords(loginTime, System.currentTimeMillis(), false, true);
     }
 
     public String getTimeSinceLastLogin(OfflinePlayer offlinePlayer) {
-        long lastPlayed = offlinePlayer.getLastPlayed();
-        return StringDataTimeBuilder.makeIntoEnglishWords(lastPlayed, System.currentTimeMillis(), false, true);
+        long lastLogin = offlinePlayer.getLastPlayed();
+        return TimeUtils.makeIntoEnglishWords(lastLogin, System.currentTimeMillis(), false, true);
     }
 
     public String getTimeSinceFirstLogin(OfflinePlayer offlinePlayer) {
         long firstPlayed = offlinePlayer.getFirstPlayed();
-        return StringDataTimeBuilder.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false, true);
+        return TimeUtils.makeIntoEnglishWords(firstPlayed, System.currentTimeMillis(), false, true);
     }
 
     public boolean didPlayerJustJoin(Player player) {
@@ -99,26 +93,54 @@ public class API {
         customYmlManager.saveConfig();
     }
 
-    public ConfigurationSection getPlayersYML(CustomConfigManager customConfigManager, Player player) {
-        ConfigurationSection configurationSection = customConfigManager.getPlayersYml().getConfig().getConfigurationSection("UUID." + player.getUniqueId());
+    public ConfigurationSection getPlayersYML(Player player) {
+        ConfigurationSection configurationSection = this.plugin.getCustomConfigManager().getPlayersYml().getConfig().getConfigurationSection("UUID." + player.getUniqueId());
         if (configurationSection == null)
-            configurationSection = customConfigManager.getPlayersYml().getConfig().createSection("UUID." + player.getUniqueId());
+            configurationSection = this.plugin.getCustomConfigManager().getPlayersYml().getConfig().createSection("UUID." + player.getUniqueId());
         return configurationSection;
     }
 
     public void doAfk(Player player, String color) {
         AfkObject afkObject = this.afkMap.get(player.getUniqueId());
         if (afkObject.isAfk()) {
-            this.plugin.getServer().broadcastMessage(Translate.chat("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
+            this.plugin.getServer().broadcastMessage(Translate.color("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
             afkObject.restart(player);
         } else {
-            this.plugin.getServer().broadcastMessage(Translate.chat("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
+            this.plugin.getServer().broadcastMessage(Translate.color("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
             afkObject.setAfk(true, player.getLocation());
         }
     }
 
-    public void sendPermissionErrorMessage(Player player) {
-        player.sendMessage(Translate.chat("&4You do not have permission to do this command."));
+    public void saveFlyingState(Player player) {
+        // Don't save flying state if player is in creative.
+        if (player.getGameMode() == GameMode.CREATIVE) return;
+
+        // Don't save if player isn't flying.
+        if (!player.isFlying()) return;
+
+        ConfigurationSection configurationSection = getPlayersYML(player);
+        configurationSection.set("Flying", true);
+        this.plugin.getCustomConfigManager().getPlayersYml().saveConfig();
+    }
+
+    public void loadFlyingState(Player player) {
+        ConfigurationSection configurationSection = getPlayersYML(player);
+        if (configurationSection.get("Flying") == null) return;
+        boolean fly = configurationSection.getBoolean("Flying");
+        player.setAllowFlight(fly);
+        player.setFlying(fly);
+
+        configurationSection.set("Flying", null);
+        this.plugin.getCustomConfigManager().getPlayersYml().saveConfig();
+        player.sendMessage(Translate.color("&bYour flying state has been restored."));
+    }
+
+    public void sendPermissionErrorMessage(CommandSender sender) {
+        sender.sendMessage(Translate.color("&4You do not have permission to do this command."));
+    }
+
+    public String parseMessageString(Player player, String message) {
+        return this.getMessagesUtils().parseMessageString(player, message);
     }
 
     public String parseMessage(Player player, String message) {
@@ -131,5 +153,9 @@ public class API {
 
     public MessagesUtils getMessagesUtils() {
         return messagesUtils;
+    }
+
+    public String getDateOfBuild() {
+        return dateOfBuild;
     }
 }

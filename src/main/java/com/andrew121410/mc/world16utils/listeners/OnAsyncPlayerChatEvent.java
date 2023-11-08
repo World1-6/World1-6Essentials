@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16utils.listeners;
 
-import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16utils.World16Utils;
 import com.andrew121410.mc.world16utils.chat.ChatResponseManager;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Bukkit;
@@ -12,13 +12,13 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class OnAsyncPlayerChatEvent implements Listener {
 
-    private World16Essentials plugin;
+    private World16Utils plugin;
     private ChatResponseManager chatResponseManager;
 
-    public OnAsyncPlayerChatEvent(World16Essentials plugin, ChatResponseManager chatResponseManager) {
+    public OnAsyncPlayerChatEvent(World16Utils plugin, ChatResponseManager chatResponseManager) {
         this.plugin = plugin;
         this.chatResponseManager = chatResponseManager;
-        World16Essentials.getPlugin().getServer().getPluginManager().registerEvents(this, World16Essentials.getPlugin());
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -33,7 +33,7 @@ public class OnAsyncPlayerChatEvent implements Listener {
                 player.sendMessage(Translate.color("&eSuccessfully canceled."));
                 return;
             }
-            Bukkit.getScheduler().runTask(World16Essentials.getPlugin(), () -> {
+            Bukkit.getScheduler().runTask(plugin, () -> {
                 chatResponseManager.get(player).accept(player, messageString);
                 chatResponseManager.remove(player.getUniqueId());
             });

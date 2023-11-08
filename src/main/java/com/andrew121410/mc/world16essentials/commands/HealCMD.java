@@ -23,46 +23,49 @@ public class HealCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-
-        Player player = (Player) sender;
-
-        if (!player.hasPermission("world16.heal")) {
-            api.sendPermissionErrorMessage(player);
-            return true;
-        }
-
         if (args.length == 0) {
-            doHeal(player, null);
-            return true;
-        } else if (args.length == 1) {
-            if (!player.hasPermission("world16.heal.other")) {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
+                return true;
+            }
+
+            if (!player.hasPermission("world16.heal")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
             }
-            Player target = plugin.getServer().getPlayerExact(args[0]);
-            if (target != null && target.isOnline()) {
-                doHeal(target, player);
+
+            doHeal(player, null);
+            return true;
+        } else if (args.length == 1) {
+            if (!sender.hasPermission("world16.heal.other")) {
+                api.sendPermissionErrorMessage(sender);
+                return true;
             }
+
+            Player target = plugin.getServer().getPlayerExact(args[0]);
+            if (target == null || !target.isOnline()) {
+                sender.sendMessage(Translate.color("&cThat player is not online."));
+                return true;
+            }
+
+            doHeal(target, sender);
             return true;
         } else {
-            player.sendMessage(Translate.chat("&cUsage: for yourself do /heal OR /heal <Player>"));
+            sender.sendMessage(Translate.color("&cUsage: for yourself do /heal OR /heal <Player>"));
         }
         return true;
     }
 
-    private void doHeal(Player player, Player healer) {
-        player.setHealth(20.0D);
-        player.setFoodLevel(20);
-        player.setFireTicks(0);
-        for (PotionEffect effect : player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
+    private void doHeal(Player target, CommandSender sender) {
+        target.setHealth(20.0D);
+        target.setFoodLevel(20);
+        target.setFireTicks(0);
+        for (PotionEffect effect : target.getActivePotionEffects()) target.removePotionEffect(effect.getType());
 
-        player.sendMessage(Translate.chat("&6You have been healed."));
-        if (healer != null) {
-            healer.sendMessage(Translate.chat("&6You have healed &7" + player.getName() + "&6."));
+        target.sendMessage(Translate.color("&6You have been healed."));
+        if (sender != null) {
+            String color = target.isOp() ? "&4" : "&7";
+            sender.sendMessage(Translate.color("&6You have healed " + color + target.getName()));
         }
     }
 }

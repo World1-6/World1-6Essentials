@@ -6,16 +6,32 @@ public class ConfigUtils {
 
     private final World16Essentials plugin;
 
+    private boolean showLastUpdatedMessageToOPs;
     private boolean signTranslateColors;
     private boolean preventCropsTrampling;
     private int spawnMobCap;
+    private boolean saveInventoryOnDeath;
+    private boolean moreAccurateDiskInfo;
 
     public ConfigUtils(World16Essentials plugin) {
         this.plugin = plugin;
 
+        this.showLastUpdatedMessageToOPs = this.plugin.getConfig().getBoolean("showLastUpdatedMessageToOPs");
         this.signTranslateColors = this.plugin.getConfig().getBoolean("signTranslateColors");
         this.preventCropsTrampling = this.plugin.getConfig().getBoolean("preventCropsTrampling");
         this.spawnMobCap = this.plugin.getConfig().getInt("spawnMobCap");
+        this.saveInventoryOnDeath = this.plugin.getConfig().getBoolean("saveInventoryOnDeath");
+        this.moreAccurateDiskInfo = this.plugin.getConfig().getBoolean("moreAccurateDiskInfo");
+    }
+
+    public boolean isShowLastUpdatedMessageToOPs() {
+        return showLastUpdatedMessageToOPs;
+    }
+
+    public void setShowLastUpdatedMessageToOPs(boolean showLastUpdatedMessageToOPs) {
+        this.showLastUpdatedMessageToOPs = showLastUpdatedMessageToOPs;
+        this.plugin.getConfig().set("showLastUpdatedMessageToOPs", showLastUpdatedMessageToOPs);
+        this.plugin.saveConfig();
     }
 
     public boolean isSignTranslateColors() {
@@ -45,6 +61,26 @@ public class ConfigUtils {
     public void setSpawnMobCap(int spawnMobCap) {
         this.spawnMobCap = spawnMobCap;
         this.plugin.getConfig().set("spawnMobCap", spawnMobCap);
+        this.plugin.saveConfig();
+    }
+
+    public boolean isSaveInventoryOnDeath() {
+        return saveInventoryOnDeath;
+    }
+
+    public void setSaveInventoryOnDeath(boolean saveInventoryOnDeath) {
+        this.saveInventoryOnDeath = saveInventoryOnDeath;
+        this.plugin.getConfig().set("saveInventoryOnDeath", saveInventoryOnDeath);
+        this.plugin.saveConfig();
+    }
+
+    public boolean isMoreAccurateDiskInfo() {
+        return moreAccurateDiskInfo;
+    }
+
+    public void setMoreAccurateDiskInfo(boolean moreAccurateDiskInfo) {
+        this.moreAccurateDiskInfo = moreAccurateDiskInfo;
+        this.plugin.getConfig().set("moreAccurateDiskInfo", moreAccurateDiskInfo);
         this.plugin.saveConfig();
     }
 }

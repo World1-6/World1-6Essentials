@@ -3,7 +3,7 @@ package com.andrew121410.mc.world16essentials.commands.home;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.Location;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class HomeListCMD implements CommandExecutor {
 
-    private final Map<UUID, Map<String, Location>> homesMap;
+    private final Map<UUID, Map<String, UnlinkedWorldLocation>> homesMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -25,19 +25,17 @@ public class HomeListCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.homesMap = this.plugin.getSetListMap().getHomesMap();
+        this.homesMap = this.plugin.getMemoryHolder().getHomesMap();
 
         this.plugin.getCommand("homelist").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.home")) {
             api.sendPermissionErrorMessage(player);
@@ -49,7 +47,7 @@ public class HomeListCMD implements CommandExecutor {
         String str = String.join(", ", homeString);
         String homeListPrefix = "&6Homes:&r&7";
 
-        player.sendMessage(Translate.chat(homeListPrefix + " " + str));
+        player.sendMessage(Translate.color(homeListPrefix + " " + str));
         return true;
     }
 }

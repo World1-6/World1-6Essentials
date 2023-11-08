@@ -22,37 +22,32 @@ public class TpDenyCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.tpaMap = this.plugin.getSetListMap().getTpaMap();
+        this.tpaMap = this.plugin.getMemoryHolder().getTpaMap();
 
         this.plugin.getCommand("tpdeny").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
 
-        Player player = (Player) sender;
-
-        if (!player.hasPermission("world16.tpdeny")) {
+        if (!player.hasPermission("world16.tpa")) {
             api.sendPermissionErrorMessage(player);
             return true;
         }
 
-        if (args.length == 0) {
-            UUID uuid = this.tpaMap.get(player.getUniqueId());
-            Player tpa = this.plugin.getServer().getPlayer(uuid);
-            if (tpa != null) {
-                player.sendMessage(Translate.chat("&9Ok you denied the tp request."));
-                tpa.sendMessage(Translate.chat("[&eTPA&r] &cYour tpa request got denied by " + player.getDisplayName()));
-                this.tpaMap.remove(player.getUniqueId());
-            } else {
-                player.sendMessage(Translate.chat("&4Something went wrong."));
-            }
+        UUID uuid = this.tpaMap.get(player.getUniqueId());
+        Player tpa = this.plugin.getServer().getPlayer(uuid); // This is the player that sent the tpa request.
+
+        if (tpa != null) {
+            this.tpaMap.remove(player.getUniqueId());
+            tpa.sendMessage(Translate.color("&cYour tpa request got denied by " + player.getName() + "."));
+            player.sendMessage(Translate.color("&cYou have denied the tpa request from " + tpa.getName() + "."));
         } else {
-            player.sendMessage(Translate.chat("&4???"));
+            player.sendMessage(Translate.color("&eYou don't have any tpa request."));
         }
         return true;
     }

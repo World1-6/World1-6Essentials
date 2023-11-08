@@ -3,14 +3,12 @@ package com.andrew121410.mc.world16utils.utils;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryUtils {
-
     public static ItemStack createItem(Material material, int amount, String displayName, String... loreString) {
         List<String> lore = new ArrayList<>();
         ItemStack item = new ItemStack(material, amount);
@@ -63,16 +61,12 @@ public class InventoryUtils {
     }
 
     public static boolean repairItem(ItemStack itemStack) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        if (itemMeta instanceof Damageable) {
-            Damageable damageable = (Damageable) itemMeta;
-            if (!damageable.hasDamage() || damageable.getDamage() == 0) return false;
-
-            damageable.setDamage(0);
-            itemStack.setItemMeta(damageable);
-            return true;
+        if (itemStack.getDurability() == 0) {
+            // Item is not damaged, no need to repair
+            return false;
         }
-        return false;
+
+        itemStack.setDurability((short) 0);
+        return true;
     }
 }

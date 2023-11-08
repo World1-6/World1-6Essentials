@@ -21,7 +21,7 @@ public class AfkManager {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.afkMap = this.plugin.getSetListMap().getAfkMap();
+        this.afkMap = this.plugin.getMemoryHolder().getAfkMap();
 
         afkChecker();
     }

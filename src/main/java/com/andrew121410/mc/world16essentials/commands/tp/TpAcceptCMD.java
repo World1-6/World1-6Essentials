@@ -1,7 +1,6 @@
 package com.andrew121410.mc.world16essentials.commands.tp;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;
@@ -19,28 +18,23 @@ public class TpAcceptCMD implements CommandExecutor {
     private final World16Essentials plugin;
     private final API api;
 
-    private final CustomConfigManager customYmlManager;
-
-    public TpAcceptCMD(World16Essentials plugin, CustomConfigManager customConfigManager) {
+    public TpAcceptCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.customYmlManager = customConfigManager;
         this.api = this.plugin.getApi();
 
-        this.tpaMap = this.plugin.getSetListMap().getTpaMap();
+        this.tpaMap = this.plugin.getMemoryHolder().getTpaMap();
 
         this.plugin.getCommand("tpaccept").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
 
-        Player player = (Player) sender;
-
-        if (!player.hasPermission("world16.tpaccept")) {
+        if (!player.hasPermission("world16.tpa")) {
             api.sendPermissionErrorMessage(player);
             return true;
         }
@@ -50,11 +44,11 @@ public class TpAcceptCMD implements CommandExecutor {
             Player tpa = this.plugin.getServer().getPlayer(uuid);
             if (tpa != null) {
                 tpa.teleport(player);
-                tpa.sendMessage(Translate.chat("[&eTPA&r] &a" + player.getDisplayName() + " has accepted your tpa request."));
+                tpa.sendMessage(Translate.color("&6" + player.getName() + " <green>has accepted your tpa request."));
                 this.tpaMap.remove(player.getUniqueId());
                 return true;
             } else {
-                player.sendMessage(Translate.chat("&e[TPA]&r &cLooks like you don't have any tpa request."));
+                player.sendMessage(Translate.color("&eYou don't have any tpa request."));
             }
             return true;
         }

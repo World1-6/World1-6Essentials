@@ -1,9 +1,8 @@
 package com.andrew121410.mc.world16utils.player;
 
-import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16utils.World16Utils;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -21,15 +20,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
 public class PlayerUtils {
 
     public static final ConcurrentHashMap<UUID, PlayerProfile> PLAYER_PROFILES_CONCURRENT_HASH_MAP = new ConcurrentHashMap<>();
     public static final ExecutorService PROFILE_EXECUTOR_SERVICE = Executors.newFixedThreadPool(2);
-
-    public static boolean smoothTeleport(Player player, Location location) {
-        return player.teleport(location);
-    }
 
     public static Block getBlockPlayerIsLookingAt(Player player) {
         return player.getTargetBlock(null, 5);
@@ -48,15 +42,15 @@ public class PlayerUtils {
             skullMeta.setDisplayName(player.getName());
         }
 
-        PlayerProfile playerProfile = Bukkit.createProfile(player.getUniqueId(), player.getName());
-        // If the player profile is complete, we can set the skull profile and return the item stack
-        if (playerProfile.isComplete()) {
+        PlayerProfile playerProfile = player.getPlayer().getPlayerProfile();
+        // PlayerProfile is already completed, meaning the profile has skin data, so let's use that.
+        if (playerProfile.hasTextures()) {
             skullMeta.setPlayerProfile(playerProfile);
             itemStack.setItemMeta(skullMeta);
             return CompletableFuture.completedFuture(itemStack);
         }
 
-        // If the player is already in cache then return the head from that
+        // If the player is already in cache, then return the head from that
         ItemStack fromPlayerCache = getPlayerHeadFromCache(player);
         if (fromPlayerCache != null) {
             return CompletableFuture.completedFuture(fromPlayerCache);
@@ -64,7 +58,12 @@ public class PlayerUtils {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                playerProfile.complete();
+                playerProfile.complete(true);
+
+                if (!playerProfile.isComplete()) {
+                    itemStack.setItemMeta(skullMeta);
+                    return itemStack;
+                }
 
                 PLAYER_PROFILES_CONCURRENT_HASH_MAP.putIfAbsent(player.getUniqueId(), playerProfile);
                 skullMeta.setPlayerProfile(playerProfile);
@@ -93,10 +92,11 @@ public class PlayerUtils {
     }
 
     public static void getPlayerHead(OfflinePlayer player, Consumer<ItemStack> consumer) {
-        getPlayerHead(player).thenAcceptAsync(consumer, runnable -> Bukkit.getScheduler().runTask(World16Essentials.getPlugin(), runnable));
+        getPlayerHead(player).thenAcceptAsync(consumer, runnable -> Bukkit.getScheduler().runTask(World16Utils.getInstance(), runnable));
     }
 
     public static void getPlayerHeads(List<OfflinePlayer> players, Consumer<Map<OfflinePlayer, ItemStack>> consumer) {
+        // Get all CompletableFutures
         Map<OfflinePlayer, CompletableFuture<ItemStack>> completableFutures = new HashMap<>();
         for (OfflinePlayer player : players) {
             completableFutures.put(player, getPlayerHead(player));
@@ -104,6 +104,7 @@ public class PlayerUtils {
 
         Map<OfflinePlayer, ItemStack> itemStacks = new HashMap<>();
         CompletableFuture.allOf(completableFutures.values().toArray(new CompletableFuture[0])).thenAcceptAsync((v) -> {
+            // Get all the ItemStacks then put them in the map
             for (Map.Entry<OfflinePlayer, CompletableFuture<ItemStack>> entry : completableFutures.entrySet()) {
                 OfflinePlayer player = entry.getKey();
                 CompletableFuture<ItemStack> completableFuture = entry.getValue();
@@ -114,7 +115,8 @@ public class PlayerUtils {
                     e.printStackTrace();
                 }
             }
+            // Call the consumer with the itemStacks map
             consumer.accept(itemStacks);
-        }, runnable -> Bukkit.getScheduler().runTask(World16Essentials.getPlugin(), runnable));
+        }, runnable -> Bukkit.getScheduler().runTask(World16Utils.getInstance(), runnable));
     }
 }

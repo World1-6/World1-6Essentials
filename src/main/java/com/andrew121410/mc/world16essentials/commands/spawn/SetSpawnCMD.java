@@ -27,12 +27,10 @@ public class SetSpawnCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.setspawn")) {
             api.sendPermissionErrorMessage(player);
@@ -40,7 +38,7 @@ public class SetSpawnCMD implements CommandExecutor {
         }
 
         this.api.setLocationToFile(this.shitYml, "Spawn.default", player.getLocation());
-        player.sendMessage(Translate.chat("&6Spawn location set for group default."));
+        player.sendMessage(Translate.color("&6Spawn location set for group default."));
         return true;
     }
 }

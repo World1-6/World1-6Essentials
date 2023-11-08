@@ -25,12 +25,11 @@ public class XyzdxdydzCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
 
-        Player player = (Player) sender;
         if (!player.hasPermission("world16.xyzdxdydz")) {
             api.sendPermissionErrorMessage(player);
             return true;
@@ -49,11 +48,17 @@ public class XyzdxdydzCMD implements CommandExecutor {
             if (dz.contains("~")) dz = dz.replace("~", "");
 
             String done = "[x=" + x + ",y=" + y + ",z=" + z + ",dx=" + dx + ",dy=" + dy + ",dz=" + dz + "]";
-            player.sendMessage(Translate.chat(done));
-            BaseComponent[] components = new ComponentBuilder("[CMD] Click me to copy more easier!").event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, done)).create();
+            player.sendMessage(Translate.color(done));
+
+            BaseComponent[] components = new ComponentBuilder("Click here to copy the command").color(net.md_5.bungee.api.ChatColor.GREEN)
+                    .append(done).color(net.md_5.bungee.api.ChatColor.RESET)
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, done))
+                    .create();
+
             player.spigot().sendMessage(components);
+
         } else {
-            player.sendMessage(Translate.chat("&cUsage: /xyzdxdydz x y z dx dy dz"));
+            player.sendMessage(Translate.color("&cUsage: /xyzdxdydz x y z dx dy dz"));
         }
         return true;
     }

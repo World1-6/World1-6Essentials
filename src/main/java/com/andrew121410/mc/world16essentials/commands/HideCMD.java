@@ -6,28 +6,27 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 public class HideCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
 
-    private final List<Player> hiddenPlayers;
+    private final List<UUID> hiddenPlayers;
 
     public HideCMD(World16Essentials plugin) {
         this.plugin = plugin;
-        this.hiddenPlayers = this.plugin.getSetListMap().getHiddenPlayers();
+        this.hiddenPlayers = this.plugin.getMemoryHolder().getHiddenPlayers();
 
         this.plugin.getCommand("hide").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (!(sender instanceof org.bukkit.entity.Player)) {
+        if (!(sender instanceof org.bukkit.entity.Player player)) {
             sender.sendMessage("This command can only be run by a player.");
             return false;
         }
-
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.hide")) {
             this.plugin.getApi().sendPermissionErrorMessage(player);
@@ -38,8 +37,8 @@ public class HideCMD implements CommandExecutor {
             for (Player onlinePlayer : this.plugin.getServer().getOnlinePlayers()) {
                 onlinePlayer.hidePlayer(this.plugin, player);
             }
-            this.hiddenPlayers.add(player);
-            player.sendMessage(Translate.chat("&6You are now hidden from all players."));
+            this.hiddenPlayers.add(player.getUniqueId());
+            player.sendMessage(Translate.color("&6You are now hidden from all players."));
         }
         return true;
     }

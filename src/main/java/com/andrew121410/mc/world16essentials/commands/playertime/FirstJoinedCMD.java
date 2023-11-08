@@ -19,27 +19,31 @@ public class FirstJoinedCMD implements CommandExecutor {
     }
 
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (!(sender instanceof org.bukkit.entity.Player)) {
-            sender.sendMessage("This command can only be run by a player.");
-            return false;
-        }
-
-        Player player = (Player) sender;
-
-        if (!player.hasPermission("world16.firstjoined")) {
-            this.plugin.getApi().sendPermissionErrorMessage(player);
-            return true;
-        }
-
         if (args.length == 0) {
-            player.sendMessage(Translate.color("&cUsage: /firstjoined <player>"));
-        } else if (args.length == 1) {
-            OfflinePlayer target = this.plugin.getServer().getOfflinePlayer(args[0]);
-            if (!target.hasPlayedBefore()) {
-                player.sendMessage(Translate.color("&cPlayer not found."));
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
                 return true;
             }
-            player.sendMessage(Translate.color("&aFirst joined of &6" + target.getName() + "&a is &6" + this.api.getTimeSinceFirstLogin(target)));
+
+            if (!sender.hasPermission("world16.firstjoined")) {
+                this.plugin.getApi().sendPermissionErrorMessage(sender);
+                return true;
+            }
+
+            player.sendMessage(Translate.color("&aFirst joined of &6" + player.getName() + "&a is &6" + this.api.getTimeSinceFirstLogin(player)));
+            return true;
+        } else if (args.length == 1) {
+            if (!sender.hasPermission("world16.firstjoined.other")) {
+                this.plugin.getApi().sendPermissionErrorMessage(sender);
+                return true;
+            }
+
+            OfflinePlayer target = this.plugin.getServer().getOfflinePlayer(args[0]);
+            if (!target.hasPlayedBefore()) {
+                sender.sendMessage(Translate.color("&cPlayer not found."));
+                return true;
+            }
+            sender.sendMessage(Translate.color("&aFirst joined of &6" + target.getName() + "&a is &6" + this.api.getTimeSinceFirstLogin(target)));
         }
         return true;
     }

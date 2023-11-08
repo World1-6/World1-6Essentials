@@ -35,9 +35,7 @@ public class LastJoinCMD implements CommandExecutor {
 
         this.plugin.getCommand("lastjoin").setExecutor(this);
         this.plugin.getCommand("lastjoin").setTabCompleter((sender, command, alias, args) -> {
-                    if (!(sender instanceof Player)) return null;
-                    Player player = (Player) sender;
-
+                    if (!(sender instanceof Player player)) return null;
                     if (!player.hasPermission("world16.lastjoin") && !player.hasPermission("world16.lastonline")) return null;
 
                     if (args.length == 1) {
@@ -51,11 +49,10 @@ public class LastJoinCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.lastjoin") && !player.hasPermission("world16.lastonline")) {
             this.plugin.getApi().sendPermissionErrorMessage(player);
@@ -101,7 +98,7 @@ public class LastJoinCMD implements CommandExecutor {
 
             // If no players have joined in the last x days
             if (recentPlayers.isEmpty()) {
-                player.sendMessage(Translate.color("&cNo players have joined in the last &e" + days + " &cdays."));
+                player.sendMessage(Translate.color("&cNo players have joined in the last &e" + days + " <red>days."));
                 return true;
             }
 
@@ -110,7 +107,7 @@ public class LastJoinCMD implements CommandExecutor {
                 player.sendMessage(Translate.color("&6" + recentPlayer.getName() + "&a - " + this.api.getTimeSinceLastLogin(recentPlayer) + " ago."));
             }
 
-//             Click to copy
+            // Click to copy
 //            StringBuilder stringBuilder = new StringBuilder();
 //            stringBuilder.append("Players who joined in the last ").append(days).append(" days:\n");
 //            for (OfflinePlayer recentPlayer : recentPlayers) {
@@ -123,7 +120,7 @@ public class LastJoinCMD implements CommandExecutor {
     }
 
     private void openGUI(Player player) {
-        PaginatedGUIMultipageListWindow gui = new PaginatedGUIMultipageListWindow(Translate.color("Last Join"), 0, true, true);
+        PaginatedGUIMultipageListWindow gui = new PaginatedGUIMultipageListWindow(Translate.color("&aLast Join"), 0, true, true);
 
         // Button provider is async
         gui.setButtonProvider(pageNumber -> {
@@ -138,8 +135,7 @@ public class LastJoinCMD implements CommandExecutor {
 
     private void makeGUIButtons(Player player, int pageNumber, Consumer<PaginatedReturn> consumer) {
         OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
-        List<OfflinePlayer> offlinePlayerList = new ArrayList<>();
-        Collections.addAll(offlinePlayerList, offlinePlayers);
+        List<OfflinePlayer> offlinePlayerList = new ArrayList<>(List.of(offlinePlayers));
 
         // Sort
         offlinePlayerList.sort((o1, o2) -> Long.compare(o2.getLastPlayed(), o1.getLastPlayed()));
@@ -202,8 +198,7 @@ class LastJoinGUIButton extends ClickEventButton {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LastJoinGUIButton)) return false;
-        LastJoinGUIButton that = (LastJoinGUIButton) o;
+        if (!(o instanceof LastJoinGUIButton that)) return false;
         if (!super.equals(o)) return false;
 
         if (lastTimePlayed != that.lastTimePlayed) return false;

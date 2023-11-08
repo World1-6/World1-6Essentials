@@ -34,7 +34,7 @@ public class NightCMD implements CommandExecutor {
         }
 
         p.getLocation().getWorld().setTime(13000);
-        p.sendMessage(Translate.chat("&6The time was set to &9night&r."));
+        p.sendMessage(Translate.color("&6The time was set to &9night&r."));
         return true;
     }
 }

@@ -113,7 +113,7 @@ public class LoreShifterButton extends CloneableGUIButton {
         List<String> list = this.beforeLoreList == null ? this.loreList : this.beforeLoreList;
 
         if (this.beforeLoreList != null) {
-            list.add("\n\r");
+            list.add("\n");
             list.addAll(this.loreList);
         }
 

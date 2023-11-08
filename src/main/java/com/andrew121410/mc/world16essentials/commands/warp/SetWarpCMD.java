@@ -3,6 +3,7 @@ package com.andrew121410.mc.world16essentials.commands.warp;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 public class SetWarpCMD implements CommandExecutor {
 
-    private final Map<String, Location> warpsMap;
+    private final Map<String, UnlinkedWorldLocation> warpsMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -22,39 +23,37 @@ public class SetWarpCMD implements CommandExecutor {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
 
-        this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
+        this.warpsMap = this.plugin.getMemoryHolder().getWarpsMap();
 
         this.plugin.getCommand("setwarp").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player p = (Player) sender;
 
-        if (!p.hasPermission("world16.setwarp")) {
-            api.sendPermissionErrorMessage(p);
+        if (!player.hasPermission("world16.setwarp")) {
+            api.sendPermissionErrorMessage(player);
             return true;
         }
 
-        if (args.length == 0) {
-            p.sendMessage(Translate.chat("&cUsage: &6/setwarp <Name>"));
-            return true;
-        } else if (args.length == 1) {
+        if (args.length == 1) {
             String name = args[0].toLowerCase();
-            Location location = p.getLocation();
+            Location location = player.getLocation();
 
             if (this.warpsMap.containsKey(name)) {
-                p.sendMessage(Translate.chat("Looks like there is already a warp with that name..."));
+                player.sendMessage(Translate.color("&cThe warp &9" + name + " &calready exists."));
                 return true;
             }
 
             this.plugin.getWarpManager().add(name, location);
-            p.sendMessage(Translate.chat("&6The warp: " + name + " has been set."));
+            player.sendMessage(Translate.color("&2Warp &9" + name + " &2has been set."));
             return true;
+        } else {
+            player.sendMessage(Translate.color("&cUsage: &6/setwarp <Name>"));
         }
         return true;
     }

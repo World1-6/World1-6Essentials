@@ -1,6 +1,5 @@
 package com.andrew121410.mc.world16utils.chat;
 
-import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.World16Utils;
 import com.destroystokyo.paper.Title;
 import org.bukkit.entity.Player;
@@ -14,18 +13,14 @@ import java.util.function.BiConsumer;
 
 public class ChatResponseManager {
 
-    private final World16Essentials plugin;
+    private final World16Utils plugin;
     private boolean running;
 
     private final Map<UUID, Response> responseMap;
 
-    public ChatResponseManager(World16Essentials plugin) {
+    public ChatResponseManager(World16Utils plugin) {
         this.plugin = plugin;
         this.responseMap = new HashMap<>();
-    }
-
-    public boolean create(Player player, BiConsumer<Player, String> consumer) {
-        return create(player, (String) null, null, consumer);
     }
 
     public boolean create(Player player, String title, String subtitle, BiConsumer<Player, String> consumer) {
@@ -41,7 +36,7 @@ public class ChatResponseManager {
 
     public BiConsumer<Player, String> get(Player player) {
         if (!this.responseMap.containsKey(player.getUniqueId())) return null;
-        return this.responseMap.get(player.getUniqueId()).getConsumer();
+        return this.responseMap.get(player.getUniqueId()).consumer();
     }
 
     public void remove(UUID uuid) {
@@ -64,57 +59,31 @@ public class ChatResponseManager {
                     UUID uuid = entry.getKey();
                     Response response = entry.getValue();
 
-                    Player player = World16Essentials.getPlugin().getServer().getPlayer(uuid);
+                    Player player = plugin.getServer().getPlayer(uuid);
                     if (player == null) {
                         iterator.remove();
                         return;
                     }
 
-                    String title = response.getTitle() != null ? response.getTitle() : Translate.color("&bType in response");
-                    String subtitle = response.getSubtile() != null ? response.getSubtile() : "";
+                    String title = response.title() != null ? response.title() : Translate.color("&bType in response");
+                    String subtitle = response.subtitle() != null ? response.subtitle() : "";
 
-                    player.sendTitle(new Title(title, subtitle, 0, 61, 0));
+                    Title title1 = Title.builder()
+                            .title(Translate.color(title))
+                            .subtitle(Translate.color(subtitle))
+                            .fadeIn(0)
+                            .stay(61)
+                            .fadeOut(0)
+                            .build();
+
+                    player.getPlayer().sendTitle(title1);
 
                     player.sendActionBar(Translate.color("&eType &ccancel &eto stop!"));
                 }
             }
-        }.runTaskTimer(World16Essentials.getPlugin(), 0L, 60L);
+        }.runTaskTimer(this.plugin, 0L, 60L);
     }
 }
 
-class Response {
-    String title;
-    String subtile;
-    BiConsumer<Player, String> consumer;
-
-    public Response(String title, String subtile, BiConsumer<Player, String> consumer) {
-        this.title = title;
-        this.subtile = subtile;
-        this.consumer = consumer;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSubtile() {
-        return subtile;
-    }
-
-    public void setSubtile(String subtile) {
-        this.subtile = subtile;
-    }
-
-    public BiConsumer<Player, String> getConsumer() {
-        return consumer;
-    }
-
-    public void setConsumer(BiConsumer<Player, String> consumer) {
-        this.consumer = consumer;
-    }
+record Response(String title, String subtitle, BiConsumer<Player, String> consumer) {
 }
-

@@ -5,13 +5,17 @@ import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
 import com.andrew121410.mc.world16utils.utils.Utils;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
-public class ConfigCMD implements CommandExecutor {
+public class ConfigCMD implements CommandExecutor, TabExecutor {
 
     private final World16Essentials plugin;
     private final API api;
@@ -21,48 +25,47 @@ public class ConfigCMD implements CommandExecutor {
         this.api = this.plugin.getApi();
 
         this.plugin.getCommand("config1-6").setExecutor(this);
-        this.plugin.getCommand("config1-6").setTabCompleter((sender, command, s, args) -> {
-            if (!(sender instanceof Player)) return null;
+        this.plugin.getCommand("config1-6").setTabCompleter(this);
+    }
 
-            Player player = (Player) sender;
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player player)) return null;
+        if (!player.hasPermission("world16.config")) return null;
 
-            if (!player.hasPermission("world16.config")) return null;
-
-            if (args.length == 1) {
-                return TabUtils.getContainsString(args[0], Arrays.asList("signTranslateColors", "preventCropsTrampling", "spawnMobCap", "messages"));
-            } else if (args[0].equalsIgnoreCase("signTranslateColors")
-                    || args[0].equalsIgnoreCase("preventCropsTrampling")) {
-                return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
-            } else if (args[0].equalsIgnoreCase("spawnMobCap")) {
-                return TabUtils.getContainsString(args[1], Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
-            } else if (args[0].equalsIgnoreCase("messages")) {
-                if (args.length == 2) {
-                    return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinedMessage", "leaveMessage", "bedMessage"));
-                } else {
-                    if (args[1].equalsIgnoreCase("prefix")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getPrefix()));
-                    } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getWelcomeBackMessage()));
-                    } else if (args[1].equalsIgnoreCase("firstJoinedMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getFirstJoinedMessage()));
-                    } else if (args[1].equalsIgnoreCase("leaveMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getLeaveMessage()));
-                    } else if (args[1].equalsIgnoreCase("bedMessage")) {
-                        return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getBedMessage()));
-                    }
+        if (args.length == 1) {
+            return TabUtils.getContainsString(args[0], Arrays.asList("showLastUpdatedMessageToOPs", "signTranslateColors", "preventCropsTrampling", "spawnMobCap", "saveInventoryOnDeath", "moreAccurateDiskInfo", "messages"));
+        } else if (args[0].equalsIgnoreCase("showLastUpdatedMessageToOPs")
+                || args[0].equalsIgnoreCase("signTranslateColors")
+                || args[0].equalsIgnoreCase("preventCropsTrampling")
+                || args[0].equalsIgnoreCase("saveInventoryOnDeath")
+                || args[0].equalsIgnoreCase("moreAccurateDiskInfo")) {
+            return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
+        } else if (args[0].equalsIgnoreCase("spawnMobCap")) {
+            return TabUtils.getContainsString(args[1], Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
+        } else if (args[0].equalsIgnoreCase("messages")) {
+            if (args.length == 2) {
+                return TabUtils.getContainsString(args[1], Arrays.asList("prefix", "welcomeBackMessage", "firstJoinMessage", "leaveMessage"));
+            } else {
+                if (args[1].equalsIgnoreCase("prefix")) {
+                    return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getPrefix()));
+                } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
+                    return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getWelcomeBackMessage()));
+                } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
+                    return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getFirstJoinMessage()));
+                } else if (args[1].equalsIgnoreCase("leaveMessage")) {
+                    return TabUtils.getContainsString(args[2], Collections.singletonList(api.getMessagesUtils().getLeaveMessage()));
                 }
             }
-            return null;
-        });
+        }
+        return null;
     }
 
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (!(sender instanceof org.bukkit.entity.Player)) {
+        if (!(sender instanceof org.bukkit.entity.Player player)) {
             sender.sendMessage("This command can only be run by a player.");
             return false;
         }
-
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.config")) {
             this.plugin.getApi().sendPermissionErrorMessage(player);
@@ -72,7 +75,10 @@ public class ConfigCMD implements CommandExecutor {
         if (args.length == 0) {
             player.sendMessage(Translate.color("&cUsage: /config1-6 <config> <value>"));
         } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("signTranslateColors")) {
+            if (args[0].equalsIgnoreCase("showLastUpdatedMessageToOPs")) {
+                api.getConfigUtils().setShowLastUpdatedMessageToOPs(args[1].equalsIgnoreCase("true"));
+                player.sendMessage(Translate.color("&aShow last updated message to OPs set to &6" + args[1]));
+            } else if (args[0].equalsIgnoreCase("signTranslateColors")) {
                 api.getConfigUtils().setSignTranslateColors(args[1].equalsIgnoreCase("true"));
                 player.sendMessage(Translate.color("&aSign translate colors set to &6" + args[1]));
             } else if (args[0].equalsIgnoreCase("preventCropsTrampling")) {
@@ -82,27 +88,39 @@ public class ConfigCMD implements CommandExecutor {
                 int spawnMobCap = Utils.asIntegerOrElse(args[1], 1);
                 api.getConfigUtils().setSpawnMobCap(spawnMobCap);
                 player.sendMessage(Translate.color("&aSpawn mob cap set to &6" + spawnMobCap));
+            } else if (args[0].equalsIgnoreCase("saveInventoryOnDeath")) {
+                api.getConfigUtils().setSaveInventoryOnDeath(args[1].equalsIgnoreCase("true"));
+                player.sendMessage(Translate.color("&aSave inventory on death set to &6" + args[1]));
+            } else if (args[0].equalsIgnoreCase("moreAccurateDiskInfo")) {
+                api.getConfigUtils().setMoreAccurateDiskInfo(args[1].equalsIgnoreCase("true"));
+                player.sendMessage(Translate.color("&aMore accurate disk info set to &6" + args[1]));
             }
         } else if (args.length >= 3 && args[0].equalsIgnoreCase("messages")) {
             String[] ourArgs = Arrays.copyOfRange(args, 2, args.length);
             String message = String.join(" ", ourArgs);
             if (args[1].equalsIgnoreCase("prefix")) {
-                api.getMessagesUtils().setPrefix(args[2]);
-                player.sendMessage(Translate.color("&aPrefix set to &6" + args[2]));
+                api.getMessagesUtils().setPrefix(message);
+                player.sendMessage(Translate.color("&aPrefix has been set"));
+                sendConfigPreview(player, message);
             } else if (args[1].equalsIgnoreCase("welcomeBackMessage")) {
                 api.getMessagesUtils().setWelcomeBackMessage(message);
-                player.sendMessage(Translate.color("&aWelcome back message set to &6" + message));
+                player.sendMessage(Translate.color("&aWelcomeBackMessage has been set"));
+                sendConfigPreview(player, message);
             } else if (args[1].equalsIgnoreCase("firstJoinMessage")) {
-                api.getMessagesUtils().setFirstJoinedMessage(message);
-                player.sendMessage(Translate.color("&aFirst join message set to &6" + message));
+                api.getMessagesUtils().setFirstJoinMessage(message);
+                player.sendMessage(Translate.color("&aFirstJoinMessage has been set"));
+                sendConfigPreview(player, message);
             } else if (args[1].equalsIgnoreCase("leaveMessage")) {
                 api.getMessagesUtils().setLeaveMessage(message);
-                player.sendMessage(Translate.color("&aLeave message set to &6" + message));
-            } else if (args[1].equalsIgnoreCase("bedMessage")) {
-                api.getMessagesUtils().setBedMessage(message);
-                player.sendMessage(Translate.color("&aBed message set to &6" + message));
+                player.sendMessage(Translate.color("&aLeaveMessage has been set"));
+                sendConfigPreview(player, message);
             }
         }
         return true;
+    }
+
+    private void sendConfigPreview(Player player, String message) {
+        String preview = api.parseMessageString(player, message);
+        player.sendMessage(Translate.color("&6Here's a preview &r\"" + preview + "&r\""));
     }
 }

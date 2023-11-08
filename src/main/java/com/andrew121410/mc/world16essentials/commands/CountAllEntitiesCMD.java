@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CountAllEntitiesCMD implements CommandExecutor {
     private final World16Essentials plugin;
@@ -30,7 +29,7 @@ public class CountAllEntitiesCMD implements CommandExecutor {
             if (!sender.hasPermission("world16.countallentities")) return null;
 
             if (args.length == 1) {
-                return TabUtils.getContainsString(args[0], Arrays.stream(EntityType.values()).map(EntityType::name).collect(Collectors.toList()));
+                return TabUtils.getContainsString(args[0], Arrays.stream(EntityType.values()).map(EntityType::name).toList());
             }
             return null;
         });
@@ -38,11 +37,10 @@ public class CountAllEntitiesCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.countallentities")) {
             api.sendPermissionErrorMessage(player);

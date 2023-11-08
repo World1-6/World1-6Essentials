@@ -34,7 +34,7 @@ public class DayCMD implements CommandExecutor {
         }
 
         p.getLocation().getWorld().setTime(500);
-        p.sendMessage(Translate.chat("&6The time was set to &eday&r."));
+        p.sendMessage(Translate.color("&6The time was set to &eday&r."));
         return true;
     }
 }

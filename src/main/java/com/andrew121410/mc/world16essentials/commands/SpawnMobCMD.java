@@ -14,7 +14,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class SpawnMobCMD implements CommandExecutor {
 
@@ -30,7 +29,7 @@ public class SpawnMobCMD implements CommandExecutor {
             if (!sender.hasPermission("world16.spawnmob")) return null;
 
             if (args.length == 1) {
-                return TabUtils.getContainsString(args[0], Arrays.stream(EntityType.values()).map(EntityType::name).collect(Collectors.toList()));
+                return TabUtils.getContainsString(args[0], Arrays.stream(EntityType.values()).map(EntityType::name).toList());
             }
             return null;
         });
@@ -38,12 +37,10 @@ public class SpawnMobCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.spawnmob")) {
             api.sendPermissionErrorMessage(player);
@@ -70,7 +67,7 @@ public class SpawnMobCMD implements CommandExecutor {
             }
 
             if (amount > api.getConfigUtils().getSpawnMobCap()) {
-                player.sendMessage(Translate.color("&cYou Cannot Spawn More Than " + api.getConfigUtils().getSpawnMobCap() + " At Once."));
+                player.sendMessage(Translate.color("&cYou can only spawn &e" + api.getConfigUtils().getSpawnMobCap() + " &centities at a time."));
                 return true;
             }
 
@@ -80,7 +77,7 @@ public class SpawnMobCMD implements CommandExecutor {
 
             player.sendMessage(Translate.color("&aSpawned &e" + amount + " &a" + entityType.name() + "&a."));
         } else {
-            player.sendMessage(Translate.chat("&cUsage: &6/spawnmob <Entity> <Amount>"));
+            player.sendMessage(Translate.color("&cUsage: &6/spawnmob <Entity> <Amount>"));
         }
         return true;
     }

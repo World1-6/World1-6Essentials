@@ -1,10 +1,9 @@
 package com.andrew121410.mc.world16utils.time;
 
-import com.andrew121410.ccutils.utils.StringDataTimeBuilder;
+import com.andrew121410.ccutils.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class CountdownTimer implements Runnable {
@@ -17,14 +16,12 @@ public class CountdownTimer implements Runnable {
     private int secondsLeft;
 
     private final Consumer<CountdownTimer> everySecond;
-    private Runnable beforeTimer;
     private final Runnable afterTimer;
 
-    public CountdownTimer(JavaPlugin plugin, int seconds, Runnable beforeTimer, Runnable afterTimer, Consumer<CountdownTimer> everySecond) {
+    public CountdownTimer(JavaPlugin plugin, int seconds, Runnable afterTimer, Consumer<CountdownTimer> everySecond) {
         this.plugin = plugin;
         this.seconds = seconds;
         this.secondsLeft = seconds;
-        this.beforeTimer = beforeTimer;
         this.afterTimer = afterTimer;
         this.everySecond = everySecond;
     }
@@ -37,15 +34,9 @@ public class CountdownTimer implements Runnable {
         this.everySecond = everySecond;
     }
 
-    /**
-     * Runs the timer once, decrements seconds etc...
-     * Really wish we could make it protected/private so you couldn't access it
-     */
     @Override
     public void run() {
-        // Is the timer up?
         if (secondsLeft < 1) {
-            // Do what was supposed to happen after the timer
             afterTimer.run();
 
             // Cancel timer
@@ -53,13 +44,8 @@ public class CountdownTimer implements Runnable {
             return;
         }
 
-        // Are we just starting?
-        if (secondsLeft == seconds) beforeTimer.run();
-
-        // Do what's supposed to happen every second
         everySecond.accept(this);
 
-        // Decrement the seconds left
         secondsLeft--;
     }
 
@@ -84,12 +70,14 @@ public class CountdownTimer implements Runnable {
         return secondsLeft;
     }
 
-    public String getFancyTimeLeft(boolean shortText) {
-        long secondsM = TimeUnit.SECONDS.toMillis(this.seconds);
-        long secondsLeftM = TimeUnit.SECONDS.toMillis(this.secondsLeft);
+    public String getFancyTimeLeft(boolean shortText, boolean showSeconds) {
+        long currentTime = System.currentTimeMillis();
+        long startTime = currentTime - (secondsLeft * 1000L);
+        return TimeUtils.makeIntoEnglishWords(startTime, currentTime, shortText, showSeconds);
+    }
 
-        // Uses milliseconds
-        return StringDataTimeBuilder.makeIntoEnglishWords(secondsM, secondsLeftM, shortText, true);
+    public String getFancyTimeLeft(boolean shortText) {
+        return getFancyTimeLeft(shortText, true);
     }
 
     public Integer getAssignedTaskId() {

@@ -15,6 +15,8 @@ public class CustomYmlManager {
     private File file;
     private FileConfiguration fileConfiguration;
 
+    private boolean isNew = false;
+
     public CustomYmlManager(JavaPlugin plugin) {
         this.plugin = plugin;
     }
@@ -36,7 +38,9 @@ public class CustomYmlManager {
 
         if (!this.file.exists()) {
             try {
-                if (!this.file.createNewFile()) {
+                if (this.file.createNewFile()) {
+                    this.isNew = true;
+                } else {
                     throw new RuntimeException("Failed to create file: " + this.file.getAbsolutePath());
                 }
             } catch (IOException e) {
@@ -65,5 +69,9 @@ public class CustomYmlManager {
 
     public FileConfiguration getConfig() {
         return this.fileConfiguration;
+    }
+
+    public boolean isNew() {
+        return isNew;
     }
 }

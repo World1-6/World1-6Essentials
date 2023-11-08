@@ -51,7 +51,7 @@ public class AfkCMD implements CommandExecutor {
             }
             return true;
         } else {
-            p.sendMessage(Translate.chat("&cUsage:&9 /afk &aOR &9/afk <Player>"));
+            p.sendMessage(Translate.color("&cUsage:&9 /afk &aOR &9/afk <Player>"));
         }
         return true;
     }

@@ -22,14 +22,8 @@ public class IsAfkCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-        Player player = (Player) sender;
-
-        if (!player.hasPermission("world16.isafk")) {
-            api.sendPermissionErrorMessage(player);
+        if (!sender.hasPermission("world16.isafk")) {
+            api.sendPermissionErrorMessage(sender);
             return true;
         }
 
@@ -37,17 +31,17 @@ public class IsAfkCMD implements CommandExecutor {
             Player playerFromArg = this.plugin.getServer().getPlayerExact(args[0]);
 
             if (playerFromArg == null) {
-                player.sendMessage(Translate.chat("&4Unable to find the player " + args[0]));
+                sender.sendMessage(Translate.color("&4Unable to find the player " + args[0]));
                 return true;
             }
 
             if (api.isAfk(playerFromArg)) {
-                player.sendMessage(Translate.chat("&aThe player " + playerFromArg.getDisplayName() + " is afk!"));
+                sender.sendMessage(Translate.color("&aThe player " + playerFromArg.getDisplayName() + " is afk!"));
             } else {
-                player.sendMessage(Translate.chat("&cThe player " + playerFromArg.getDisplayName() + " is not afk!"));
+                sender.sendMessage(Translate.color("&cThe player " + playerFromArg.getDisplayName() + " is not afk!"));
             }
         } else {
-            player.sendMessage(Translate.chat("&cUsage: /isafk <PlayerName>"));
+            sender.sendMessage(Translate.color("&cUsage: /isafk <PlayerName>"));
         }
         return true;
     }

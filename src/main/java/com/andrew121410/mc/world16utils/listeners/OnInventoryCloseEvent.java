@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16utils.listeners;
 
-import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16utils.World16Utils;
 import com.andrew121410.mc.world16utils.gui.AbstractGUIWindow;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -10,9 +10,9 @@ import org.bukkit.inventory.InventoryHolder;
 
 public class OnInventoryCloseEvent implements Listener {
 
-    public World16Essentials plugin;
+    public World16Utils plugin;
 
-    public OnInventoryCloseEvent(World16Essentials plugin) {
+    public OnInventoryCloseEvent(World16Utils plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }

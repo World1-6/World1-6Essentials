@@ -5,7 +5,7 @@ import com.andrew121410.mc.world16essentials.managers.WarpManager;
 import com.andrew121410.mc.world16essentials.sharedtabcomplete.WarpTab;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
-import org.bukkit.Location;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class DelwarpCMD implements CommandExecutor {
 
-    private final Map<String, Location> warpsMap;
+    private final Map<String, UnlinkedWorldLocation> warpsMap;
 
     private final World16Essentials plugin;
     private final API api;
@@ -26,7 +26,7 @@ public class DelwarpCMD implements CommandExecutor {
         this.api = this.plugin.getApi();
         this.warpManager = this.plugin.getWarpManager();
 
-        this.warpsMap = this.plugin.getSetListMap().getWarpsMap();
+        this.warpsMap = this.plugin.getMemoryHolder().getWarpsMap();
 
         this.plugin.getCommand("delwarp").setExecutor(this);
         this.plugin.getCommand("delwarp").setTabCompleter(new WarpTab(this.plugin));
@@ -34,12 +34,10 @@ public class DelwarpCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.delwarp")) {
             api.sendPermissionErrorMessage(player);
@@ -47,18 +45,18 @@ public class DelwarpCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            player.sendMessage(Translate.chat("&cUsage: &6/delwarp <Name>"));
+            player.sendMessage(Translate.color("&cUsage: &6/delwarp <Name>"));
             return true;
         } else if (args.length == 1) {
             String name = args[0].toLowerCase();
 
             if (!this.warpsMap.containsKey(name)) {
-                player.sendMessage(Translate.chat("&cThat's not a warp."));
+                player.sendMessage(Translate.color("&cThat's not a warp."));
                 return true;
             }
 
             this.warpManager.delete(name);
-            player.sendMessage(Translate.chat("&eThe warp: " + name + " has been deleted."));
+            player.sendMessage(Translate.color("&eThe warp: " + name + " has been deleted."));
             return true;
         }
         return true;

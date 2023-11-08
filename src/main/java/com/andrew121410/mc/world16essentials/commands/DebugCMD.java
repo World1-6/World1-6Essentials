@@ -15,7 +15,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DebugCMD implements CommandExecutor {
 
@@ -30,10 +29,7 @@ public class DebugCMD implements CommandExecutor {
 
         this.plugin.getCommand("debug1-6").setExecutor(this);
         this.plugin.getCommand("debug1-6").setTabCompleter((sender, command, s, args) -> {
-            if (!(sender instanceof Player)) return null;
-
-            Player player = (Player) sender;
-
+            if (!(sender instanceof Player player)) return null;
             if (!player.hasPermission("world16.debug")) return null;
 
             if (args.length == 1) {
@@ -42,7 +38,7 @@ public class DebugCMD implements CommandExecutor {
                 if (args.length == 2) {
                     return TabUtils.getContainsString(args[1], Arrays.asList("from", "to"));
                 } else if (args.length == 3) {
-                    List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).collect(Collectors.toList());
+                    List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).toList();
                     return TabUtils.getContainsString(args[2], typesOfSoftwareList);
                 }
             }
@@ -52,12 +48,10 @@ public class DebugCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.debug")) {
             api.sendPermissionErrorMessage(player);
@@ -65,63 +59,66 @@ public class DebugCMD implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            player.sendMessage(Translate.chat("&6Please use tab complete."));
+            player.sendMessage(Translate.color("&6Please use tab complete."));
             return true;
         } else if (args[0].equalsIgnoreCase("reload")) {
-            player.sendMessage(Translate.chat("Reloading all configs might lag."));
+            player.sendMessage(Translate.color("Reloading all configs might lag."));
             this.customConfigManager.reloadAll();
-            player.sendMessage(Translate.chat("All configs are reloaded."));
+            player.sendMessage(Translate.color("All configs are reloaded."));
             return true;
         } else if (args[0].equalsIgnoreCase("load")) {
             if (args.length == 1) {
-                player.sendMessage(Translate.chat("Loading your data. PLEASE WAIT"));
+                player.sendMessage(Translate.color("Loading your data. PLEASE WAIT"));
                 this.plugin.getPlayerInitializer().unload(player);
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         plugin.getPlayerInitializer().load(player);
-                        player.sendMessage(Translate.chat("Data has been successfully loaded"));
+                        player.sendMessage(Translate.color("Data has been successfully loaded"));
                     }
                 }.runTaskLater(plugin, 20);
                 return true;
             } else if (args.length == 2 && args[1].equalsIgnoreCase("@all")) {
-                player.sendMessage(Translate.chat("&6Loading everyones data. PLEASE WAIT"));
+                player.sendMessage(Translate.color("&6Loading everyones data. PLEASE WAIT"));
                 for (Player onlinePlayer : this.plugin.getServer().getOnlinePlayers()) {
                     this.plugin.getPlayerInitializer().load(onlinePlayer);
-                    onlinePlayer.sendMessage(Translate.chat("Your player data has been &aLOADED&r by [" + player.getDisplayName() + "]"));
+                    onlinePlayer.sendMessage(Translate.color("Your player data has been &aLOADED&r by [" + player.getDisplayName() + "]"));
                 }
-                player.sendMessage(Translate.chat("&aEveryones player data has been loaded."));
+                player.sendMessage(Translate.color("&aEveryones player data has been loaded."));
                 return true;
             }
         } else if (args[0].equalsIgnoreCase("unload")) {
             if (args.length == 1) {
-                player.sendMessage(Translate.chat("Unloading your player data PLEASE WAIT."));
+                player.sendMessage(Translate.color("Unloading your player data PLEASE WAIT."));
                 this.plugin.getPlayerInitializer().unload(player);
-                player.sendMessage(Translate.chat("Your data has been unloaded."));
+                player.sendMessage(Translate.color("Your data has been unloaded."));
                 return true;
             } else if (args.length == 2 && args[1].equalsIgnoreCase("@all")) {
-                player.sendMessage(Translate.chat("Unloading everyones player data PLEASE WAIT."));
+                player.sendMessage(Translate.color("Unloading everyones player data PLEASE WAIT."));
                 for (Player onlinePlayer : this.plugin.getServer().getOnlinePlayers()) {
                     this.plugin.getPlayerInitializer().unload(onlinePlayer);
-                    onlinePlayer.sendMessage(Translate.chat("Your player data has been &cUNLOADED&r by [" + player.getDisplayName() + "]"));
+                    onlinePlayer.sendMessage(Translate.color("Your player data has been &cUNLOADED&r by [" + player.getDisplayName() + "]"));
                 }
-                player.sendMessage(Translate.chat("&aEveryones data has been unloaded."));
+                player.sendMessage(Translate.color("&aEveryones data has been unloaded."));
                 return true;
             }
         } else if (args[0].equalsIgnoreCase("convert")) {
             if (args.length == 3) {
-                DataTranslator dataTranslator = new DataTranslator(this.plugin);
-                Software software = null;
+                Software software;
 
                 try {
                     software = Software.valueOf(args[2]);
                 } catch (Exception ignored) {
+                    List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).toList();
+                    player.sendMessage(Translate.color("&cInvalid software type. Valid types are: " + typesOfSoftwareList));
+                    return true;
                 }
 
-                if (args[1].equalsIgnoreCase("from") && software != null) {
-                    dataTranslator.convertFrom(software);
-                } else if (args[1].equalsIgnoreCase("to") && software != null) {
-                    dataTranslator.convertTo(software);
+                DataTranslator dataTranslator = new DataTranslator(this.plugin);
+                if (args[1].equalsIgnoreCase("from")) {
+                    dataTranslator.convertFrom(player, software);
+                } else if (args[1].equalsIgnoreCase("to")) {
+                    dataTranslator.convertTo(player, software);
                 }
             }
         }
