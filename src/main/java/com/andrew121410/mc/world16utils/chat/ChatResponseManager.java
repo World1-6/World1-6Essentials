@@ -1,5 +1,6 @@
 package com.andrew121410.mc.world16utils.chat;
 
+import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.World16Utils;
 import com.destroystokyo.paper.Title;
 import org.bukkit.entity.Player;
@@ -13,12 +14,12 @@ import java.util.function.BiConsumer;
 
 public class ChatResponseManager {
 
-    private final World16Utils plugin;
+    private final World16Essentials plugin;
     private boolean running;
 
     private final Map<UUID, Response> responseMap;
 
-    public ChatResponseManager(World16Utils plugin) {
+    public ChatResponseManager(World16Essentials plugin) {
         this.plugin = plugin;
         this.responseMap = new HashMap<>();
     }

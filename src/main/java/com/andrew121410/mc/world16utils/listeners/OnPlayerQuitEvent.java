@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16utils.listeners;
 
-import com.andrew121410.mc.world16utils.World16Utils;
+import com.andrew121410.mc.world16essentials.World16Essentials;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,9 +8,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class OnPlayerQuitEvent implements Listener {
 
-    private World16Utils plugin;
+    private World16Essentials plugin;
 
-    public OnPlayerQuitEvent(World16Utils plugin) {
+    public OnPlayerQuitEvent(World16Essentials plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
@@ -18,6 +18,6 @@ public class OnPlayerQuitEvent implements Listener {
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        this.plugin.getChatClickCallbackManager().getMap().remove(player.getUniqueId());
+        this.plugin.getWorld16Utils().getChatClickCallbackManager().getMap().remove(player.getUniqueId());
     }
 }

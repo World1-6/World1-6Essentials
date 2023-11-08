@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16utils.listeners;
 
-import com.andrew121410.mc.world16utils.World16Utils;
+import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.chat.ChatResponseManager;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.Bukkit;
@@ -12,10 +12,10 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class OnAsyncPlayerChatEvent implements Listener {
 
-    private World16Utils plugin;
+    private World16Essentials plugin;
     private ChatResponseManager chatResponseManager;
 
-    public OnAsyncPlayerChatEvent(World16Utils plugin, ChatResponseManager chatResponseManager) {
+    public OnAsyncPlayerChatEvent(World16Essentials plugin, ChatResponseManager chatResponseManager) {
         this.plugin = plugin;
         this.chatResponseManager = chatResponseManager;
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);

@@ -30,6 +30,7 @@ import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16essentials.utils.MemoryHolder;
 import com.andrew121410.mc.world16essentials.utils.OtherPlugins;
 import com.andrew121410.mc.world16essentials.utils.PlayerInitializer;
+import com.andrew121410.mc.world16utils.World16Utils;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -65,6 +66,9 @@ public class World16Essentials extends JavaPlugin {
 
     private API api;
 
+    // 1.12.2 only
+    private World16Utils world16Utils;
+
     public static World16Essentials getPlugin() {
         return plugin;
     }
@@ -72,6 +76,11 @@ public class World16Essentials extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+
+        // 1.12.2 only - Load World1-6Utils
+        this.world16Utils = new World16Utils();
+        this.world16Utils.onEnable(this);
+
         this.memoryHolder = new MemoryHolder();
 
         // Load configs first
@@ -252,6 +261,11 @@ public class World16Essentials extends JavaPlugin {
     private void pluginLoadMessage() {
         String stringBuilder = " \r\n&2" + "__        __         _     _ _        __\n" + "\\ \\      / /__  _ __| | __| / |      / /_\n" + " \\ \\ /\\ / / _ \\| '__| |/ _` | |_____| '_ \\\n" + "  \\ V  V / (_) | |  | | (_| | |_____| (_) |\n" + "   \\_/\\_/ \\___/|_|  |_|\\__,_|_|      \\___/\n" + "\n" + "&6Developer: &dAndrew121410\r\n" + "&3Date of version: &e" + this.api.getDateOfBuild() + "" + " \r\n";
         getServer().getConsoleSender().sendMessage(Translate.color(stringBuilder));
+    }
+
+    // 1.12.2 only
+    public World16Utils getWorld16Utils() {
+        return world16Utils;
     }
 
     public MemoryHolder getMemoryHolder() {

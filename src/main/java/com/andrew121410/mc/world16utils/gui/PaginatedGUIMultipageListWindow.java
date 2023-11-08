@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16utils.gui;
 
-import com.andrew121410.mc.world16utils.World16Utils;
+import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.gui.buttons.AbstractGUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.CloneableGUIButton;
@@ -81,7 +81,7 @@ public class PaginatedGUIMultipageListWindow extends GUIWindow {
                     // Setup waiting timer
                     setupWaitingTimer(player);
 
-                    World16Utils.getInstance().getServer().getScheduler().runTaskAsynchronously(World16Utils.getInstance(), () -> {
+                    World16Essentials.getPlugin().getServer().getScheduler().runTaskAsynchronously(World16Essentials.getPlugin(), () -> {
                         int thePageNumber = this.currentPage;
 
                         // This wait pause this thread until the paginated is returned
@@ -113,7 +113,7 @@ public class PaginatedGUIMultipageListWindow extends GUIWindow {
 
         // If the buttons are null, return
         if (buttons == null) {
-            World16Utils.getInstance().getLogger().log(java.util.logging.Level.WARNING, "Buttons are null, returning...");
+            World16Essentials.getPlugin().getLogger().log(java.util.logging.Level.WARNING, "Buttons are null, returning...");
             return;
         }
 
@@ -220,7 +220,7 @@ public class PaginatedGUIMultipageListWindow extends GUIWindow {
                     this.cancel();
                 }
             }
-        }.runTaskTimer(World16Utils.getInstance(), 0L, 20L);
+        }.runTaskTimer(World16Essentials.getPlugin(), 0L, 20L);
     }
 
     @Override

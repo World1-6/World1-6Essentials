@@ -1,5 +1,6 @@
 package com.andrew121410.mc.world16utils;
 
+import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.chat.ChatClickCallbackManager;
 import com.andrew121410.mc.world16utils.chat.ChatResponseManager;
 import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
@@ -9,50 +10,38 @@ import com.andrew121410.mc.world16utils.listeners.OnInventoryCloseEvent;
 import com.andrew121410.mc.world16utils.listeners.OnPlayerQuitEvent;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Map;
 import java.util.function.Consumer;
 
-public final class World16Utils extends JavaPlugin {
+public final class World16Utils {
 
     static {
         ConfigurationSerialization.registerClass(UnlinkedWorldLocation.class, "UnlinkedWorldLocation");
     }
 
-    public static final String DATE_OF_VERSION = "7/26/2022";
-    public static final String PREFIX = "[&9World1-6Utils&r]";
-    private static World16Utils instance;
-
     private ChatResponseManager chatResponseManager;
     private ChatClickCallbackManager chatClickCallbackManager;
 
-    @Override
-    public void onLoad() {
-    }
+    private World16Essentials plugin;
 
-    @Override
-    public void onEnable() {
-        instance = this;
-        this.chatResponseManager = new ChatResponseManager(this);
+    public void onEnable(World16Essentials plugin) {
+        this.plugin = plugin;
+        this.chatResponseManager = new ChatResponseManager(plugin);
         this.chatClickCallbackManager = new ChatClickCallbackManager(this);
-        registerListeners();
+        registerListeners(plugin);
         registerCommand();
     }
 
-    @Override
-    public void onDisable() {
-    }
-
-    private void registerListeners() {
-        new OnAsyncPlayerChatEvent(this, this.chatResponseManager);
-        new OnInventoryClickEvent(this);
-        new OnInventoryCloseEvent(this);
-        new OnPlayerQuitEvent(this);
+    private void registerListeners(World16Essentials plugin) {
+        new OnAsyncPlayerChatEvent(plugin, this.chatResponseManager);
+        new OnInventoryClickEvent(plugin);
+        new OnInventoryCloseEvent(plugin);
+        new OnPlayerQuitEvent(plugin);
     }
 
     private void registerCommand() {
-        getCommand("world1-6utils").setExecutor((sender, command, s, args) -> {
+        this.plugin.getCommand("world1-6utils").setExecutor((sender, command, s, args) -> {
             if (!sender.hasPermission("world16.world1-6utils")) {
                 sender.sendMessage("You do not have permission to use this command.");
                 return true;
@@ -79,10 +68,6 @@ public final class World16Utils extends JavaPlugin {
             }
             return true;
         });
-    }
-
-    public static World16Utils getInstance() {
-        return instance;
     }
 
     public ChatResponseManager getChatResponseManager() {

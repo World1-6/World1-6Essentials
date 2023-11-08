@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16utils.gui.buttons.defaults;
 
-import com.andrew121410.mc.world16utils.World16Utils;
+import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16utils.gui.buttons.CloneableGUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.events.GUIClickEvent;
 import org.bukkit.entity.Player;
@@ -25,6 +25,6 @@ public class ChatResponseButton extends CloneableGUIButton {
     public void onClick(GUIClickEvent guiClickEvent) {
         Player player = (Player) guiClickEvent.getEvent().getWhoClicked();
         player.closeInventory();
-        World16Utils.getInstance().getChatResponseManager().create(player, this.title, this.subtitle, this.event);
+        World16Essentials.getPlugin().getWorld16Utils().getChatResponseManager().create(player, this.title, this.subtitle, this.event);
     }
 }

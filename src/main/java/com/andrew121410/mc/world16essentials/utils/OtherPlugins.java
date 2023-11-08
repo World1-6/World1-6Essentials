@@ -19,20 +19,9 @@ public class OtherPlugins {
     public OtherPlugins(World16Essentials plugin) {
         this.plugin = plugin;
 
-        // Depend
-        setupWorld16Utils();
-
         // Soft Depend
         setupCMI();
         setupFloodgate();
-    }
-
-    private void setupWorld16Utils() {
-        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("World1-6Utils");
-
-        if (plugin instanceof World16Utils) {
-            this.world16Utils = (World16Utils) plugin;
-        }
     }
 
     private void setupCMI() {

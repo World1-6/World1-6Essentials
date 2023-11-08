@@ -10,6 +10,8 @@ softdepend:
   - floodgate
 
 commands:
+  world1-6utils:
+
   back:
 
   clonehomes:

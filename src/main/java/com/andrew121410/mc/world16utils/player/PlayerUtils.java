@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16utils.player;
 
-import com.andrew121410.mc.world16utils.World16Utils;
+import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -92,7 +92,7 @@ public class PlayerUtils {
     }
 
     public static void getPlayerHead(OfflinePlayer player, Consumer<ItemStack> consumer) {
-        getPlayerHead(player).thenAcceptAsync(consumer, runnable -> Bukkit.getScheduler().runTask(World16Utils.getInstance(), runnable));
+        getPlayerHead(player).thenAcceptAsync(consumer, runnable -> Bukkit.getScheduler().runTask(World16Essentials.getPlugin(), runnable));
     }
 
     public static void getPlayerHeads(List<OfflinePlayer> players, Consumer<Map<OfflinePlayer, ItemStack>> consumer) {
@@ -117,6 +117,6 @@ public class PlayerUtils {
             }
             // Call the consumer with the itemStacks map
             consumer.accept(itemStacks);
-        }, runnable -> Bukkit.getScheduler().runTask(World16Utils.getInstance(), runnable));
+        }, runnable -> Bukkit.getScheduler().runTask(World16Essentials.getPlugin(), runnable));
     }
 }
