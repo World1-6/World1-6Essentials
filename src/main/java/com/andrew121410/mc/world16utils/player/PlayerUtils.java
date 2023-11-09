@@ -33,16 +33,18 @@ public class PlayerUtils {
         return player.getTargetBlock(null, range);
     }
 
-    public static CompletableFuture<ItemStack> getPlayerHead(OfflinePlayer player) {
+    public static CompletableFuture<ItemStack> getPlayerHead(OfflinePlayer offlinePlayer) {
         ItemStack itemStack = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
 
         // Set the display name
-        if (player.getName() != null) {
-            skullMeta.setDisplayName(player.getName());
+        if (offlinePlayer.getName() != null) {
+            skullMeta.setDisplayName(offlinePlayer.getName());
         }
 
-        PlayerProfile playerProfile = player.getPlayer().getPlayerProfile();
+        // Create a new PlayerProfile
+        PlayerProfile playerProfile = World16Essentials.getPlugin().getServer().createProfile(offlinePlayer.getUniqueId());
+
         // PlayerProfile is already completed, meaning the profile has skin data, so let's use that.
         if (playerProfile.hasTextures()) {
             skullMeta.setPlayerProfile(playerProfile);
@@ -51,7 +53,7 @@ public class PlayerUtils {
         }
 
         // If the player is already in cache, then return the head from that
-        ItemStack fromPlayerCache = getPlayerHeadFromCache(player);
+        ItemStack fromPlayerCache = getPlayerHeadFromCache(offlinePlayer);
         if (fromPlayerCache != null) {
             return CompletableFuture.completedFuture(fromPlayerCache);
         }
@@ -65,7 +67,7 @@ public class PlayerUtils {
                     return itemStack;
                 }
 
-                PLAYER_PROFILES_CONCURRENT_HASH_MAP.putIfAbsent(player.getUniqueId(), playerProfile);
+                PLAYER_PROFILES_CONCURRENT_HASH_MAP.putIfAbsent(offlinePlayer.getUniqueId(), playerProfile);
                 skullMeta.setPlayerProfile(playerProfile);
                 itemStack.setItemMeta(skullMeta);
             } catch (Exception e) {
