@@ -11,7 +11,9 @@ plugins {
 group = "com.andrew121410.mc"
 version = "1.0"
 description = "World1-6Essentials"
+
 java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 tasks {
     build {
@@ -28,9 +30,7 @@ tasks {
     }
 
     shadowJar {
-        archiveBaseName.set("World1-6Essentials")
-        archiveClassifier.set("")
-        archiveVersion.set("")
+        archiveFileName.set("World1-6Essentials.jar")
 
         relocate("org.bstats", "com.andrew121410.mc.world16essentials.bstats")
     }
