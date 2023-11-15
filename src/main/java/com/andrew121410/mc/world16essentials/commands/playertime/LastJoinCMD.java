@@ -6,13 +6,16 @@ import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.gui.PaginatedGUIMultipageListWindow;
 import com.andrew121410.mc.world16utils.gui.PaginatedReturn;
 import com.andrew121410.mc.world16utils.gui.buttons.CloneableGUIButton;
+import com.andrew121410.mc.world16utils.gui.buttons.defaults.ChatResponseButton;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
 import com.andrew121410.mc.world16utils.gui.buttons.events.GUIClickEvent;
 import com.andrew121410.mc.world16utils.player.PlayerUtils;
+import com.andrew121410.mc.world16utils.utils.InventoryUtils;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
 import com.andrew121410.mc.world16utils.utils.Utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class LastJoinCMD implements CommandExecutor {
 
@@ -63,7 +67,7 @@ public class LastJoinCMD implements CommandExecutor {
 
         if (args.length == 0) {
             // Open GUI
-            openGUI(player);
+            openGUI(player, null);
             return true;
         } else if (args.length == 1) {
             OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
@@ -121,23 +125,46 @@ public class LastJoinCMD implements CommandExecutor {
         return true;
     }
 
-    private void openGUI(Player player) {
-        PaginatedGUIMultipageListWindow gui = new PaginatedGUIMultipageListWindow(Translate.miniMessage("<green>Last Join"), 0, true, true);
+    private void openGUI(Player player, String toFilter) {
+        Component title = toFilter == null ? Translate.miniMessage("<green>Last Join!") : Translate.miniMessage("<green>Last Join! <red>Search: <yellow>" + toFilter);
+        PaginatedGUIMultipageListWindow gui = new PaginatedGUIMultipageListWindow(title, 0, true, true);
+
+        Predicate<OfflinePlayer> filter;
+        if (toFilter != null) {
+            // Filter by name
+            filter = (offlinePlayer -> {
+                if (offlinePlayer == null || offlinePlayer.getName() == null) return false;
+                return !offlinePlayer.getName().toLowerCase().contains(toFilter.toLowerCase());
+            });
+        } else { // We have to do this because the lambda has to be effectively final... :(
+            filter = null;
+        }
 
         // Button provider is async
         gui.setButtonProvider(pageNumber -> {
-            makeGUIButtons(player, pageNumber, (paginatedReturn -> {
+            makeGUIButtons(gui, player, pageNumber, (paginatedReturn -> {
                 gui.setPageDone(pageNumber, paginatedReturn);
-            }));
-            return null; // We can return null as we will setPageDone when it is done making the heads and buttons
+            }), filter);
+            return null; // We can return null right now as we will setPageDone when it is done making the heads and buttons
         });
 
         gui.open(player);
     }
 
-    private void makeGUIButtons(Player player, int pageNumber, Consumer<PaginatedReturn> consumer) {
+    private void makeGUIButtons(PaginatedGUIMultipageListWindow gui, Player player, int pageNumber, Consumer<PaginatedReturn> consumer, Predicate<OfflinePlayer> filter) {
         OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
         List<OfflinePlayer> offlinePlayerList = new ArrayList<>(List.of(offlinePlayers));
+
+        // Filter if not null
+        if (filter != null) {
+            offlinePlayerList.removeIf(filter);
+        }
+
+        if (offlinePlayerList.isEmpty()) {
+            player.sendMessage(Translate.miniMessage("<red>No players found!"));
+            consumer.accept(emptyPaginatedReturn());
+            return;
+        }
 
         // Sort
         offlinePlayerList.sort((o1, o2) -> Long.compare(o2.getLastLogin(), o1.getLastLogin()));
@@ -151,6 +178,8 @@ public class LastJoinCMD implements CommandExecutor {
 
         // See if page exists
         if (chunks.size() < pageNumber) {
+            player.sendMessage(Translate.miniMessage("<red>Page <yellow>" + pageNumber + " <red>does not exist!"));
+            consumer.accept(emptyPaginatedReturn());
             return;
         }
 
@@ -173,8 +202,24 @@ public class LastJoinCMD implements CommandExecutor {
             boolean hasNextPage = chunks.size() > pageNumber + 1;
             boolean hasPreviousPage = pageNumber > 0;
 
+            // Add search button if there is no filter
+            if (filter == null) {
+                CloneableGUIButton cloneableGUIButton = new ChatResponseButton(50, InventoryUtils.createItem(Material.COMPASS, 1, Translate.miniMessage("<dark_green>Search!"), Translate.miniMessage("<blue>Name/s to search for")), Translate.miniMessage("<blue>Name/s to search for"), null, (player1, toFilter) -> {
+                    player1.closeInventory();
+
+                    openGUI(player1, toFilter);
+                });
+
+                // Add to the custom bottom buttons
+                gui.getCustomBottomButtons().putIfAbsent(50, cloneableGUIButton);
+            }
+
             consumer.accept(new PaginatedReturn(hasNextPage, hasPreviousPage, cloneableGUIButtons));
         });
+    }
+
+    private PaginatedReturn emptyPaginatedReturn() {
+        return new PaginatedReturn(false, false, new ArrayList<>());
     }
 
     private void sortByLeastToGreatestTime(List<LastJoinGUIButton> guiButtons) {
