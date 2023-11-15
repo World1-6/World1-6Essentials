@@ -211,7 +211,7 @@ public class LastJoinCMD implements CommandExecutor {
                 });
 
                 // Add to the custom bottom buttons
-                gui.getCustomBottomButtons().putIfAbsent(50, cloneableGUIButton);
+                gui.getCustomBottomButtons().add(cloneableGUIButton);
             }
 
             consumer.accept(new PaginatedReturn(hasNextPage, hasPreviousPage, cloneableGUIButtons));
