@@ -28,6 +28,7 @@ public class PaginatedGUIMultipageListWindow extends GUIWindow {
     private int size = 54; // Default size of gui
 
     private Map<Integer, PaginatedReturn> pages = new HashMap<>();
+    private List<CloneableGUIButton> customBottomButtons = new ArrayList<>();
 
     private int currentPage;
 
@@ -72,8 +73,6 @@ public class PaginatedGUIMultipageListWindow extends GUIWindow {
     }
 
     private void handle(Player player) {
-        List<CloneableGUIButton> bottomButtons = new ArrayList<>();
-
         // Call button provider to populate the page
         if (this.buttonProvider != null && this.paginatedReturn == null) {
             if (!this.pages.containsKey(this.currentPage)) {
@@ -108,8 +107,6 @@ public class PaginatedGUIMultipageListWindow extends GUIWindow {
 
         // From the paginated return
         List<CloneableGUIButton> buttons = this.paginatedReturn != null ? this.paginatedReturn.getButtons() : this.pages.get(this.currentPage).getButtons();
-        boolean hasPreviousPage = paginatedReturn != null ? paginatedReturn.hasPreviousPage() : this.currentPage != 0 && this.pages.get(this.currentPage - 1) != null;
-        boolean hasNextPage = paginatedReturn != null ? paginatedReturn.hasNextPage() : this.pages.get(this.currentPage + 1) != null;
 
         // If the buttons are null, return
         if (buttons == null) {
@@ -119,6 +116,27 @@ public class PaginatedGUIMultipageListWindow extends GUIWindow {
 
         // Determine and set the slot numbers for the buttons
         GUIMultipageListWindow.determineSlotNumbers(buttons, 45);
+
+        // Create the bottom buttons
+        List<CloneableGUIButton> bottomButtons = createBottomButtons(player);
+
+        // Combine the buttons
+        List<AbstractGUIButton> guiButtonList = new ArrayList<>();
+        guiButtonList.addAll(buttons);
+        guiButtonList.addAll(bottomButtons);
+
+        this.update(guiButtonList, this.name, this.size);
+        if (!super.isFirst()) {
+            this.refresh(player);
+        }
+    }
+
+    private List<CloneableGUIButton> createBottomButtons(Player player) {
+        boolean hasPreviousPage = paginatedReturn != null ? paginatedReturn.hasPreviousPage() : this.currentPage != 0 && this.pages.get(this.currentPage - 1) != null;
+        boolean hasNextPage = paginatedReturn != null ? paginatedReturn.hasNextPage() : this.pages.get(this.currentPage + 1) != null;
+
+        // Create the bottom buttons list
+        List<CloneableGUIButton> bottomButtons = new ArrayList<>();
 
         // Show previous page button if not on first page and previous page exists
         if (hasPreviousPage) {
@@ -134,21 +152,22 @@ public class PaginatedGUIMultipageListWindow extends GUIWindow {
             }));
         }
 
+        // Show current page button
         int realPageNumber = this.currentPage + 1;
         bottomButtons.add(new NoEventButton(49, InventoryUtils.createItem(Material.PAPER, realPageNumber <= 64 ? realPageNumber : 1, "&5Current Page", "&aCurrent Page: &6" + realPageNumber)));
 
-        List<AbstractGUIButton> guiButtonList = new ArrayList<>();
+        // Add custom bottom buttons
+        for (CloneableGUIButton customBottomButton : this.customBottomButtons) {
+            // Check if the slot is already taken
+            if (bottomButtons.stream().anyMatch(cloneableGUIButton -> cloneableGUIButton.getSlot() == customBottomButton.getSlot())) {
+                World16Essentials.getPlugin().getLogger().log(java.util.logging.Level.WARNING, "Bottom button at slot " + customBottomButton.getSlot() + " already exists, skipping...");
+                continue;
+            }
 
-        // Add the items to the gui
-        guiButtonList.addAll(buttons);
-
-        // Add the bottom buttons
-        guiButtonList.addAll(bottomButtons);
-
-        this.update(guiButtonList, this.name, this.size);
-        if (!super.isFirst()) {
-            this.refresh(player);
+            bottomButtons.add(customBottomButton);
         }
+
+        return bottomButtons;
     }
 
     private void handlePageChange(Player player, GUIClickEvent guiClickEvent, int newPage, PageEventType pageEventType) {
@@ -221,6 +240,22 @@ public class PaginatedGUIMultipageListWindow extends GUIWindow {
                 }
             }
         }.runTaskTimer(World16Essentials.getPlugin(), 0L, 20L);
+    }
+
+    public List<CloneableGUIButton> getCustomBottomButtons() {
+        return customBottomButtons;
+    }
+
+    public void setCustomBottomButtons(List<CloneableGUIButton> customBottomButtons) {
+        this.customBottomButtons = customBottomButtons;
+    }
+
+    public boolean isWaiting() {
+        return isWaiting;
+    }
+
+    public void setWaiting(boolean waiting) {
+        isWaiting = waiting;
     }
 
     @Override

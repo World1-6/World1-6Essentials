@@ -11,4 +11,8 @@ public class Translate {
     public static String chat(String s) {
         return color(s);
     }
+
+    public static String miniMessage(String s) {
+        return Translate.color(MinimotdTranslator.translate(s));
+    }
 }
