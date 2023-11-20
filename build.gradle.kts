@@ -36,7 +36,7 @@ repositories {
 
 dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
-    api("org.xerial:sqlite-jdbc:3.43.2.2") // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    api("org.xerial:sqlite-jdbc:3.44.0.0") // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
 
     // Paper goes first then CraftBukkit
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
