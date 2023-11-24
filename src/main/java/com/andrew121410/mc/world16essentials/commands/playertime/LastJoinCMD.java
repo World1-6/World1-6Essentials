@@ -202,6 +202,9 @@ public class LastJoinCMD implements CommandExecutor {
             boolean hasNextPage = chunks.size() > pageNumber + 1;
             boolean hasPreviousPage = pageNumber > 0;
 
+            // Clear custom bottom buttons
+            gui.getCustomBottomButtons().clear();
+
             // Add search button if there is no filter
             if (filter == null) {
                 CloneableGUIButton cloneableGUIButton = new ChatResponseButton(50, InventoryUtils.createItem(Material.COMPASS, 1, Translate.miniMessage("<dark_green>Search!"), Translate.miniMessage("<blue>Name/s to search for")), Translate.miniMessage("<blue>Name/s to search for"), null, (player1, toFilter) -> {
