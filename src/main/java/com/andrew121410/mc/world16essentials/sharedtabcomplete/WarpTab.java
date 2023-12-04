@@ -28,8 +28,12 @@ public class WarpTab implements TabCompleter {
         if (!(sender instanceof Player player)) return null;
         if (!player.hasPermission("world16.warp")) return null;
 
-        List<String> keys = new ArrayList<>(this.warpsMap.keySet());
-        if (args.length == 1) return TabUtils.getContainsString(args[0], keys);
+        List<String> warpNames = new ArrayList<>(this.warpsMap.keySet());
+
+        // Remove the ones that player doesn't have permission for.
+        warpNames.removeIf(s -> !player.hasPermission("world16.warp." + s));
+
+        if (args.length == 1) return TabUtils.getContainsString(args[0], warpNames);
         return null;
     }
 }

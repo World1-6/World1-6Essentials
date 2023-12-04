@@ -33,19 +33,18 @@ public class WarpCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!sender.hasPermission("world16.warp")) {
+            api.sendPermissionErrorMessage(sender);
+            return true;
+        }
+
         if (args.length == 1) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage("Only Players Can Use This Command.");
                 return true;
             }
 
-            if (!player.hasPermission("world16.warp")) {
-                api.sendPermissionErrorMessage(player);
-                return true;
-            }
-
             String name = args[0].toLowerCase();
-
             toWarp(player, null, name);
             return true;
         } else if (args.length == 2) { // /warp <player> <name>
@@ -61,7 +60,6 @@ public class WarpCMD implements CommandExecutor {
             }
 
             String name = args[1].toLowerCase();
-
             toWarp(target, sender, name);
             return true;
         } else {
@@ -91,6 +89,12 @@ public class WarpCMD implements CommandExecutor {
             return;
         }
 
+        // Check if the player target has permission to use the warp, if run by console, skip this check.
+        if (sender == null && !target.hasPermission("world16.warp." + warp)) {
+            target.sendMessage(Translate.colorc("&cYou don't have permission to use this warp."));
+            return;
+        }
+
         // World may not be loaded, so we need to check.
         if (!warpLocation.isWorldLoaded()) {
             if (sender == null) {
@@ -112,6 +116,9 @@ public class WarpCMD implements CommandExecutor {
         SimpleForm.Builder simpleFormBuilder = SimpleForm.builder().title("Warps").content("List of all warps");
 
         for (String warpName : this.warpsMap.keySet()) {
+            // Check if the player has permission to use this warp, if not, skip it.
+            if (!player.hasPermission("world16.warp." + warpName)) continue;
+
             simpleFormBuilder.button(warpName);
         }
 
@@ -122,7 +129,6 @@ public class WarpCMD implements CommandExecutor {
 
         SimpleForm simpleForm = simpleFormBuilder.build();
 
-        // Did it this way because might want to add permissions to warps in the future.
         if (simpleForm.buttons().isEmpty()) {
             player.sendMessage(Translate.miniMessage("<red>There are no warps."));
             return;
