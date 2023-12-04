@@ -166,6 +166,9 @@ public class LastJoinCMD implements CommandExecutor {
             return;
         }
 
+        // Remove broken players
+        offlinePlayerList.removeIf(offlinePlayer -> offlinePlayer == null || offlinePlayer.getName() == null || offlinePlayer.getName().isEmpty() || offlinePlayer.getName().equals("null"));
+
         // Sort
         offlinePlayerList.sort((o1, o2) -> Long.compare(o2.getLastLogin(), o1.getLastLogin()));
 
