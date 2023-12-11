@@ -69,7 +69,7 @@ repositories {
 
 dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
-    compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:b6e8f2eacb")
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:b6e8f2eacb")
     compileOnly("net.essentialsx:EssentialsX:2.21.0-SNAPSHOT")
