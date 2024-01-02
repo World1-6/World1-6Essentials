@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16essentials.managers;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16essentials.config.CustomConfigManager;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.Location;

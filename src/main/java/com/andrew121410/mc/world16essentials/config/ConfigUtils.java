@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16essentials.utils;
+package com.andrew121410.mc.world16essentials.config;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 

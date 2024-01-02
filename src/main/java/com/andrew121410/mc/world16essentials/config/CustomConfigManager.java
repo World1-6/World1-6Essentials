@@ -1,8 +1,6 @@
-package com.andrew121410.mc.world16essentials.managers;
+package com.andrew121410.mc.world16essentials.config;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.utils.ConfigUtils;
-import com.andrew121410.mc.world16essentials.utils.MessagesUtils;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 
 public class CustomConfigManager {
