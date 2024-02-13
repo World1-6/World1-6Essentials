@@ -115,8 +115,8 @@ public class API {
     }
 
     public void saveFlyingState(Player player) {
-        // Don't save flying state if player is in creative.
-        if (player.getGameMode() == GameMode.CREATIVE) return;
+        // Don't save flying state if player is in creative or spectator.
+        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) return;
 
         // Don't save if player isn't flying.
         if (!player.isFlying()) return;
