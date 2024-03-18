@@ -47,19 +47,19 @@ public class PowerToolCMD implements CommandExecutor {
 
         if (args.length == 0) {
             powerToolObject.deletePowerTool(itemInMainHand.getType());
-            player.sendMessage(Translate.color("&eCommand has been removed from the tool."));
+            player.sendMessage(Translate.miniMessage("<yellow>Removed the power tool from the item in your hand."));
             return true;
         } else {
             String[] command = Arrays.copyOfRange(args, 0, args.length);
             String realCommand = String.join(" ", command);
+            String unmodifiedCommand = realCommand;
 
-            char check = command[0].charAt(0);
-            String s = Character.toString(check);
-            if (s.equalsIgnoreCase("/")) {
-                player.sendMessage(Translate.color("&4It looks like there's a / in the beginning it's supposed to be without a / but if you're doing WorldEdit make sure there's only 1 /"));
+            if (realCommand.startsWith("/")) {
+                realCommand = realCommand.substring(1);
             }
 
             powerToolObject.registerPowerTool(itemInMainHand.getType(), realCommand);
+            player.sendMessage(Translate.miniMessage("<gold>When you left click with this item it will run the command: <white>" + unmodifiedCommand + "<green>."));
             return true;
         }
     }
