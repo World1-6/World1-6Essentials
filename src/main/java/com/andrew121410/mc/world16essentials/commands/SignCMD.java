@@ -2,7 +2,6 @@ package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
-import com.andrew121410.mc.world16utils.blocks.UniversalBlockUtils;
 import com.andrew121410.mc.world16utils.chat.ChatClickCallbackManager;
 import com.andrew121410.mc.world16utils.chat.ChatResponseManager;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -22,6 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -94,7 +94,7 @@ public class SignCMD implements CommandExecutor {
                 return true;
             }
 
-            UniversalBlockUtils.editSign(player, sign);
+            player.openSign(sign, Side.FRONT);
             return true;
         } else {
             player.sendMessage(Translate.colorc("&cUsage: /sign <give|edit|edit-legacy>"));
