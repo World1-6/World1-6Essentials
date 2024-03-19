@@ -22,6 +22,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,6 +30,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,7 +96,9 @@ public class SignCMD implements CommandExecutor {
                 return true;
             }
 
-            player.openSign(sign, Side.FRONT);
+            @NotNull
+            Side side = sign.getInteractableSideFor(player);
+            player.openSign(sign, side);
             return true;
         } else {
             player.sendMessage(Translate.colorc("&cUsage: /sign <give|edit|edit-legacy>"));
@@ -110,9 +114,11 @@ public class SignCMD implements CommandExecutor {
             public void onCreate(Player player) {
                 List<AbstractGUIButton> guiButtons = new ArrayList<>();
 
-                for (int i = 0; i < sign.lines().size(); i++) {
+                SignSide signSide = sign.getTargetSide(player);
+
+                for (int i = 0; i < signSide.lines().size(); i++) {
                     int finalI = i;
-                    Component signLineComponent = sign.line(finalI);
+                    Component signLineComponent = signSide.line(finalI);
                     String currentLineFormatted = isRegular ? LegacyComponentSerializer.legacyAmpersand().serialize(signLineComponent) : MiniMessage.miniMessage().serialize(signLineComponent);
 
                     guiButtons.add(new ClickEventButton(finalI, InventoryUtils.createItem(Material.PAPER, 1, Translate.miniMessage("<dark_green>Edit line <yellow>" + (finalI + 1))), (guiClickEvent -> {
@@ -123,13 +129,13 @@ public class SignCMD implements CommandExecutor {
 
                         chatResponseManager.create(player, (player1, s) -> {
                             // Update with new text.
-                            sign.line(finalI, isRegular ? LegacyComponentSerializer.legacyAmpersand().deserialize(s) : MiniMessage.miniMessage().deserialize(s));
+                            signSide.line(finalI, isRegular ? LegacyComponentSerializer.legacyAmpersand().deserialize(s) : MiniMessage.miniMessage().deserialize(s));
                             sign.update();
                             player1.sendMessage(Translate.miniMessage("<green>Line " + (finalI + 1) + " has been updated."));
 
                             // Way to revert changes
                             player1.sendMessage(Translate.miniMessage("<yellow>Click me to revert change").clickEvent(chatClickCallbackManager.create(player, (player2 -> {
-                                sign.line(finalI, signLineComponent);
+                                signSide.line(finalI, signLineComponent);
                                 sign.update();
                                 player2.sendMessage(Translate.miniMessage("<green>Line " + (finalI + 1) + " has been reverted."));
                             }))));
@@ -141,11 +147,11 @@ public class SignCMD implements CommandExecutor {
                 List<Component> options = Arrays.asList(Translate.miniMessage("<red>off"), Translate.miniMessage("<green>on"));
                 guiButtons.add(new LoreShifterButton(8, InventoryUtils.createItem(Material.GLOW_INK_SAC, 1, Translate.miniMessage("<dark_green><bold>Set Glow").decoration(TextDecoration.ITALIC, false)), options, false, (guiClickEvent, number) -> {
                     if (number == 0) {
-                        sign.setGlowingText(false);
+                        signSide.setGlowingText(false);
                         sign.update();
                         player.sendMessage(Translate.miniMessage("<green>Glowing text has been turned off."));
                     } else {
-                        sign.setGlowingText(true);
+                        signSide.setGlowingText(true);
                         sign.update();
                         player.sendMessage(Translate.miniMessage("<green>Glowing text has been turned on."));
                     }
