@@ -13,8 +13,11 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -148,6 +151,26 @@ public class API {
 
     public Component parseMessage(Player player, String message) {
         return this.getMessagesUtils().parseMessage(player, message);
+    }
+
+    // this is temp, and I'm sure there is a better way to do this, but I'm dumb,
+    // @TODO  (remove method in a couple of months.)
+    public void TEMP_AddunsafeEnchantment_SHARPNESS(ItemStack item) {
+        Enchantment sharpness = null;
+        try {
+            Field sharpnessField = Enchantment.class.getDeclaredField("SHARPNESS");
+            sharpness = (Enchantment) sharpnessField.get(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            try {
+                Field sharpnessField = Enchantment.class.getDeclaredField("DAMAGE_ALL");
+                sharpness = (Enchantment) sharpnessField.get(null);
+            } catch (NoSuchFieldException | IllegalAccessException e1) {
+                e1.printStackTrace();
+            }
+        }
+        if (sharpness == null) return;
+
+        item.addUnsafeEnchantment(sharpness, 1);
     }
 
     public ConfigUtils getConfigUtils() {
