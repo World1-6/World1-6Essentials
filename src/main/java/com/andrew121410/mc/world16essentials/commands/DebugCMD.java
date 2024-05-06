@@ -1,8 +1,6 @@
 package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
-import com.andrew121410.mc.world16essentials.datatranslator.DataTranslator;
-import com.andrew121410.mc.world16essentials.datatranslator.Software;
 import com.andrew121410.mc.world16essentials.managers.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
@@ -14,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class DebugCMD implements CommandExecutor {
 
@@ -33,14 +30,7 @@ public class DebugCMD implements CommandExecutor {
             if (!player.hasPermission("world16.debug")) return null;
 
             if (args.length == 1) {
-                return TabUtils.getContainsString(args[0], Arrays.asList("reload", "load", "unload", "convert"));
-            } else if (args[0].equalsIgnoreCase("convert")) {
-                if (args.length == 2) {
-                    return TabUtils.getContainsString(args[1], Arrays.asList("from", "to"));
-                } else if (args.length == 3) {
-                    List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).toList();
-                    return TabUtils.getContainsString(args[2], typesOfSoftwareList);
-                }
+                return TabUtils.getContainsString(args[0], Arrays.asList("reload", "load", "unload"));
             }
             return null;
         });
@@ -101,25 +91,6 @@ public class DebugCMD implements CommandExecutor {
                 }
                 player.sendMessage(Translate.color("&aEveryones data has been unloaded."));
                 return true;
-            }
-        } else if (args[0].equalsIgnoreCase("convert")) {
-            if (args.length == 3) {
-                Software software;
-
-                try {
-                    software = Software.valueOf(args[2]);
-                } catch (Exception ignored) {
-                    List<String> typesOfSoftwareList = Arrays.stream(Software.values()).map(Enum::name).toList();
-                    player.sendMessage(Translate.color("&cInvalid software type. Valid types are: " + typesOfSoftwareList));
-                    return true;
-                }
-
-                DataTranslator dataTranslator = new DataTranslator(this.plugin);
-                if (args[1].equalsIgnoreCase("from")) {
-                    dataTranslator.convertFrom(player, software);
-                } else if (args[1].equalsIgnoreCase("to")) {
-                    dataTranslator.convertTo(player, software);
-                }
             }
         }
         return true;

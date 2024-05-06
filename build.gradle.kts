@@ -5,9 +5,9 @@ import java.util.*
 plugins {
     `java-library`
     `maven-publish`
-    id("io.freefair.lombok") version "8.4" // https://plugins.gradle.org/plugin/io.freefair.lombok
-    id("com.github.johnrengelman.shadow") version "8.1.1" // https://github.com/johnrengelman/shadow
-    id("net.raphimc.java-downgrader") version "1.1.1" // https://github.com/RaphiMC/JavaDowngrader
+    id("io.freefair.lombok") version "8.6" // https://plugins.gradle.org/plugin/io.freefair.lombok
+    id("io.github.goooler.shadow") version "8.1.7" // https://github.com/johnrengelman/shadow/pull/876 https://github.com/Goooler/shadow https://plugins.gradle.org/plugin/io.github.goooler.shadow
+    id("net.raphimc.java-downgrader") version "1.1.2" // https://github.com/RaphiMC/JavaDowngrader
     id("net.kyori.blossom") version "2.1.0" // https://github.com/KyoriPowered/blossom
 }
 
@@ -36,13 +36,11 @@ repositories {
 
 dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
-    api("org.xerial:sqlite-jdbc:3.44.1.0") // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    api("org.xerial:sqlite-jdbc:3.45.3.0") // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
 
     // Paper goes first then CraftBukkit
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("org.bukkit:craftbukkit:1.12.2-R0.1-SNAPSHOT")
-
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:a1c6ad2df7")
 }
 
 tasks {
