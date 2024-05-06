@@ -2,7 +2,7 @@ package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
-import com.andrew121410.mc.world16essentials.utils.ConfigUtils;
+import com.andrew121410.mc.world16essentials.config.ConfigUtils;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
