@@ -127,16 +127,7 @@ public class LastJoinCMD implements CommandExecutor {
         String title = toFilter == null ? Translate.miniMessage("<green>Last Join!") : Translate.miniMessage("<green>Last Join! <red>Search: <yellow>" + toFilter);
         PaginatedGUIMultipageListWindow gui = new PaginatedGUIMultipageListWindow(title, 0, true, true);
 
-        Predicate<OfflinePlayer> filter;
-        if (toFilter != null) {
-            // Filter by name
-            filter = (offlinePlayer -> {
-                if (offlinePlayer == null || offlinePlayer.getName() == null) return false;
-                return !offlinePlayer.getName().toLowerCase().contains(toFilter.toLowerCase());
-            });
-        } else { // We have to do this because the lambda has to be effectively final... :(
-            filter = null;
-        }
+        Predicate<OfflinePlayer> filter = getFilterPredicate(toFilter);
 
         // Button provider is async
         gui.setButtonProvider(pageNumber -> {
@@ -149,6 +140,31 @@ public class LastJoinCMD implements CommandExecutor {
         gui.open(player);
     }
 
+    /**
+     * Generates a predicate for filtering OfflinePlayers based on specified player names.
+     *
+     * @param toFilter A string of player names to filter by. Names are separated by commas.
+     * @return The generated predicate for filtering OfflinePlayers.
+     */
+    private Predicate<OfflinePlayer> getFilterPredicate(String toFilter) {
+        if (toFilter == null) return null;
+
+        // Remove spaces in between commas if there are any
+        toFilter = toFilter.replaceAll(", ", ",");
+
+        String[] playerNames = toFilter.split(",");
+
+        return (offlinePlayer -> {
+            if (offlinePlayer == null || offlinePlayer.getName() == null) return false;
+            String playerNameLower = offlinePlayer.getName().toLowerCase();
+            for (String name : playerNames) {
+                if (playerNameLower.contains(name.toLowerCase())) {
+                    return false; // Player name matches one of the specified names keep it
+                }
+            }
+            return true; // Player name does not match any of the specified names remove it
+        });
+    }
 
     private void makeGUIButtons(PaginatedGUIMultipageListWindow gui, Player player, int pageNumber, Consumer<PaginatedReturn> consumer, Predicate<OfflinePlayer> filter) {
         OfflinePlayer[] offlinePlayers = this.plugin.getServer().getOfflinePlayers();
