@@ -26,6 +26,7 @@ import org.bukkit.block.sign.SignSide;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
@@ -68,8 +69,7 @@ public class SignCMD implements CommandExecutor {
 
         if (args.length == 1 && args[0].equalsIgnoreCase("give")) {
             ItemStack itemStack = new ItemStack(Material.OAK_SIGN, 1);
-//            itemStack.addUnsafeEnchantment(Enchantment.SHARPNESS, 1);
-            api.TEMP_AddunsafeEnchantment_SHARPNESS(itemStack);
+            itemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
             player.getInventory().addItem(itemStack);
             return true;
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("edit")) {

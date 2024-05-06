@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -36,8 +37,7 @@ public class CommandBlockCMD implements CommandExecutor {
         }
 
         ItemStack item = InventoryUtils.createItem(Material.COMMAND_BLOCK, 1, "&cCommand Block&r", "New Fresh Command Block");
-//        item.addUnsafeEnchantment(Enchantment.SHARPNESS, 1);
-        api.TEMP_AddunsafeEnchantment_SHARPNESS(item);
+        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
         p.getInventory().addItem(item);
         return true;
     }
