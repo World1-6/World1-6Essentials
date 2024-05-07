@@ -31,12 +31,11 @@ jobs:
         run: sha256sum build/libs/World1-6Essentials.jar >> hash.txt
 
       - name: Deploy Release With Artifact
-        uses: "softprops/action-gh-release@v2.0.4" # https://github.com/softprops/action-gh-release old version: https://github.com/marvinpinto/action-automatic-releases
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          tag_name: "latest"
-          make_latest: true
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
           prerelease: false
-          generate_release_notes: true
           files: |
             build/libs/World1-6Essentials.jar
             hash.txt
