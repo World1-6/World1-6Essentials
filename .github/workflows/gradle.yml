@@ -33,8 +33,8 @@ jobs:
       - name: Deploy Release With Artifact
         uses: "softprops/action-gh-release@v2.0.4" # https://github.com/softprops/action-gh-release old version: https://github.com/marvinpinto/action-automatic-releases
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
           tag_name: "latest"
+          make_latest: true
           prerelease: false
           files: |
             build/libs/World1-6Essentials.jar
