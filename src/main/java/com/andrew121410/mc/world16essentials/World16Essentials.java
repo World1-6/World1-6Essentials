@@ -208,9 +208,10 @@ public class World16Essentials extends JavaPlugin {
     }
 
     private void registerMainConfig() {
-        this.getConfig().options().copyDefaults(true);
-        this.saveConfig();
-        this.reloadConfig();
+        saveDefaultConfig(); // Saves the default config.yml with comments if config.yml doesn't exist
+        this.getConfig().options().copyDefaults(true); // Ensures all defaults are in place
+        this.saveConfig(); // Saves the config again
+        this.reloadConfig(); // Reloads the config, including any new defaults
     }
 
     private void registerManagers() {
