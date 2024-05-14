@@ -1,6 +1,11 @@
 # World1-6Essentials
 This is an essentials plugin that I've made for a Private Minecraft Server called World1-6.
 
+### Current Supported Minecraft Versions:
+- 1.12.2 (needs to use the 1.12.2 branch)
+- 1.20.4 (latest version)
+- 1.20.6 (latest version)
+
 I only support the latest and greatest version of Minecraft. I will not support older versions of Minecraft.
 Except for 1.12.2; occasionally I will update that version.
 
