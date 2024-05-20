@@ -25,44 +25,52 @@ public class DataTranslator {
     }
 
     public void convertFrom(Player player, Software software) {
-        IDataTranslator iDataTranslator = getDataTranslator(player, software);
-        if (iDataTranslator == null) return;
+        try {
+            IDataTranslator iDataTranslator = getDataTranslator(player, software);
+            if (iDataTranslator == null) return;
 
-        // Start timer
-        Instant start = Instant.now();
+            // Start timer
+            Instant start = Instant.now();
 
-        // Convert
-        iDataTranslator.convertFrom(player);
+            // Convert
+            iDataTranslator.convertFrom(player);
 
-        // End timer
-        Instant finish = Instant.now();
-        long timeElapsed = Duration.between(start, finish).toMillis();
+            // End timer
+            Instant finish = Instant.now();
+            long timeElapsed = Duration.between(start, finish).toMillis();
 
-        if (player != null) {
-            player.sendMessage(Translate.miniMessage("<green>Converted from " + software.name() + " took " + timeElapsed + "Ms"));
-        } else {
-            Bukkit.broadcastMessage("World1-6DataTranslator: converted from " + software.name() + " took " + timeElapsed + "Ms");
+            if (player != null) {
+                player.sendMessage(Translate.miniMessage("<green>Converted from " + software.name() + " took " + timeElapsed + "Ms"));
+            } else {
+                Bukkit.broadcastMessage("World1-6DataTranslator: converted from " + software.name() + " took " + timeElapsed + "Ms");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void convertTo(Player player, Software software) {
-        IDataTranslator iDataTranslator = getDataTranslator(player, software);
-        if (iDataTranslator == null) return;
+        try {
+            IDataTranslator iDataTranslator = getDataTranslator(player, software);
+            if (iDataTranslator == null) return;
 
-        // Start timer
-        Instant start = Instant.now();
+            // Start timer
+            Instant start = Instant.now();
 
-        // Convert
-        iDataTranslator.convertTo(player);
+            // Convert
+            iDataTranslator.convertTo(player);
 
-        // End timer
-        Instant finish = Instant.now();
-        long timeElapsed = Duration.between(start, finish).toMillis();
+            // End timer
+            Instant finish = Instant.now();
+            long timeElapsed = Duration.between(start, finish).toMillis();
 
-        if (player != null) {
-            player.sendMessage(Translate.miniMessage("<green>Converted to " + software.name() + " took " + timeElapsed + "Ms"));
-        } else {
-            Bukkit.broadcastMessage("World1-6DataTranslator: converted to " + software.name() + " took " + timeElapsed + "Ms");
+            if (player != null) {
+                player.sendMessage(Translate.miniMessage("<green>Converted to " + software.name() + " took " + timeElapsed + "Ms"));
+            } else {
+                Bukkit.broadcastMessage("World1-6DataTranslator: converted to " + software.name() + " took " + timeElapsed + "Ms");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

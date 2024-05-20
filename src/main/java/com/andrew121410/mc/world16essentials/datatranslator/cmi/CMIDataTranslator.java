@@ -78,16 +78,60 @@ public class CMIDataTranslator implements IDataTranslator {
 
     private void kitsFrom() {
         this.cmi.getKitsManager().getKitMap().forEach((kitName, kit) -> {
-            List<ItemStack> kitItems = kit.getItems();
-            List<ItemStack> extraItems = CMIDataHelper.getExtraItems(kit);
+            List<ItemStack> originalKitItems = kit.getItems();
 
-            // Reverse the list
+            // Copy the items to a new list (need to clone the items)
+            List<ItemStack> kitItems = new ArrayList<>();
+            for (ItemStack originalKitItem : originalKitItems) {
+                if (originalKitItem == null || originalKitItem.getType() == Material.AIR) {
+                    kitItems.add(null);
+                    continue;
+                }
+                kitItems.add(originalKitItem.clone());
+            }
+
+            // Reverse the order of the items
             Collections.reverse(kitItems);
 
-            kitItems.addAll(extraItems);
+            // Then split the items into the hot bar and the rest of the inventory
+            List<ItemStack> hotBar = new ArrayList<>();
+            List<ItemStack> inventory = new ArrayList<>();
+            for (int i = 0; i < 9; i++) {
+                hotBar.add(kitItems.get(i));
+            }
+            for (int i = 9; i < kitItems.size(); i++) {
+                inventory.add(kitItems.get(i));
+            }
+
+            // Reverse the order of the hot bar items
+            Collections.reverse(hotBar);
+
+            // Reverse the order of the inventory items
+            Collections.reverse(inventory);
+
+            // Clear the kit items list
+            kitItems.clear();
+
+            // Add the hot bar items and the inventory items to the kit items list
+            kitItems.addAll(hotBar);
+            kitItems.addAll(inventory);
+
+            List<ItemStack> originalKitExtraItems = CMIDataHelper.getExtraItems(kit);
+
+            // Copy the items to a new list (need to clone the items)
+            List<ItemStack> kitExtraItems = new ArrayList<>();
+            for (ItemStack originalKitExtraItem : originalKitExtraItems) {
+                if (originalKitExtraItem == null || originalKitExtraItem.getType() == Material.AIR) {
+                    kitExtraItems.add(null);
+                    continue;
+                }
+                kitExtraItems.add(originalKitExtraItem.clone());
+            }
+
+            kitItems.addAll(kitExtraItems);
 
             String normal = BukkitSerialization.itemStackArrayToBase64(kitItems.toArray(new ItemStack[0]));
-            String armor = BukkitSerialization.itemStackArrayToBase64(extraItems.toArray(new ItemStack[0]));
+            String armor = BukkitSerialization.itemStackArrayToBase64(kitExtraItems.toArray(new ItemStack[0]));
             this.plugin.getKitManager().addKit(null, kitName, new String[]{normal, armor});
         });
     }
@@ -101,8 +145,17 @@ public class CMIDataTranslator implements IDataTranslator {
             if (savedInventories == null) continue;
 
             savedInventories.getInventories().forEach((inventoryId, inventory) -> {
+                // Populate a fake full inventory with null this includes armor and offhand. So 0 to 40
+                List<ItemStack> items = new ArrayList<>();
+                for (int i = 0; i < 41; i++) {
+                    items.add(null);
+                }
+
+                // Replace null with the actual items.
+                inventory.getItems().forEach(items::set);
+
                 String[] data = new String[]{
-                        BukkitSerialization.itemStackArrayToBase64(inventory.getItems().values().toArray(new ItemStack[0])),
+                        BukkitSerialization.itemStackArrayToBase64(items.toArray(new ItemStack[0])),
                         BukkitSerialization.itemStackArrayToBase64(new ItemStack[]{new ItemStack(Material.AIR)})};
 
                 this.plugin.getSavedInventoriesManager().save(offlinePlayer.getUniqueId(), String.valueOf(inventoryId), data);
@@ -146,9 +199,10 @@ public class CMIDataTranslator implements IDataTranslator {
             }
 
             List<ItemStack> kitItems = new ArrayList<>(Arrays.asList(itemStacks));
-            List<List<ItemStack>> inventory = InventoryUtils.splitInventoryIntoBaseAndExtraContents(kitItems);
-            List<ItemStack> baseContents = inventory.get(0);
-            List<ItemStack> extraContents = inventory.get(1);
+
+            List<List<ItemStack>> listList = InventoryUtils.splitInventoryIntoBaseAndExtraContents(kitItems);
+            List<ItemStack> baseContents = listList.get(0);
+            List<ItemStack> extraContents = listList.get(1);
 
             kit.setItem(baseContents);
             CMIDataHelper.setExtraItems(kit, extraContents);

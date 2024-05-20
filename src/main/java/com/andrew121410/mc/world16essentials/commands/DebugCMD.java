@@ -1,16 +1,19 @@
 package com.andrew121410.mc.world16essentials.commands;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
+import com.andrew121410.mc.world16essentials.config.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.datatranslator.DataTranslator;
 import com.andrew121410.mc.world16essentials.datatranslator.Software;
-import com.andrew121410.mc.world16essentials.config.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.utils.InventoryUtils;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -33,7 +36,7 @@ public class DebugCMD implements CommandExecutor {
             if (!player.hasPermission("world16.debug")) return null;
 
             if (args.length == 1) {
-                return TabUtils.getContainsString(args[0], Arrays.asList("reload", "load", "unload", "convert"));
+                return TabUtils.getContainsString(args[0], Arrays.asList("reload", "load", "unload", "convert", "inventory_numbers"));
             } else if (args[0].equalsIgnoreCase("convert")) {
                 if (args.length == 2) {
                     return TabUtils.getContainsString(args[1], Arrays.asList("from", "to"));
@@ -120,6 +123,11 @@ public class DebugCMD implements CommandExecutor {
                 } else if (args[1].equalsIgnoreCase("to")) {
                     dataTranslator.convertTo(player, software);
                 }
+            }
+        } else if (args[0].equalsIgnoreCase("inventory_numbers")) {
+            for (int i = 0; i < player.getInventory().getSize(); i++) {
+                ItemStack itemStack = InventoryUtils.createItem(Material.PAPER, 1, "&6" + i, "&7This is slot number " + i);
+                player.getInventory().setItem(i, itemStack);
             }
         }
         return true;
