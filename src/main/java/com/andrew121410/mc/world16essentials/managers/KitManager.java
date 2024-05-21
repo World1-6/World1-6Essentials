@@ -41,12 +41,11 @@ public class KitManager {
         columns.add("WhoCreated");
         columns.add("TimeCreated");
         columns.add("RegularInventory");
-        columns.add("ArmorContent");
 
         easySQL.create(columns, true);
     }
 
-    public void addKit(UUID creator, String kitName, String[] data) {
+    public void addKit(UUID creator, String kitName, String data) {
         KitObject kitObject = new KitObject(kitName, this.kitSettingsManager.generateSettings(kitName), creator, System.currentTimeMillis() + "", data);
         this.kitsMap.put(kitName, kitObject);
         saveKit(kitObject);
@@ -58,8 +57,7 @@ public class KitManager {
         map.put("KitName", kitObject.getKitName());
         map.put("WhoCreated", kitObject.getWhoCreatedUUID() != null ? kitObject.getWhoCreatedUUID().toString() : "null");
         map.put("TimeCreated", kitObject.getTimeCreated());
-        map.put("RegularInventory", kitObject.getData()[0]);
-        map.put("ArmorContent", kitObject.getData()[1]);
+        map.put("RegularInventory", kitObject.getData());
 
         try {
             this.easySQL.save(map);
@@ -93,9 +91,8 @@ public class KitManager {
                 String whoCreated = value.get("WhoCreated");
                 String timeCreated = value.get("TimeCreated");
                 String regularInventory = value.get("RegularInventory");
-                String armorContent = value.get("ArmorContent");
 
-                KitObject kitObject = new KitObject(kitName, this.kitSettingsManager.getFromConfig(kitName), !whoCreated.equals("null") ? UUID.fromString(whoCreated) : null, timeCreated, new String[]{regularInventory, armorContent});
+                KitObject kitObject = new KitObject(kitName, this.kitSettingsManager.getFromConfig(kitName), !whoCreated.equals("null") ? UUID.fromString(whoCreated) : null, timeCreated, regularInventory);
                 this.kitsMap.put(kitName, kitObject);
             });
         } catch (SQLException e) {
@@ -105,6 +102,6 @@ public class KitManager {
 
     public void giveKit(Player player, KitObject kitObject) {
         this.plugin.getKitSettingsManager().setLastUsed(player, kitObject);
-        BukkitSerialization.giveFromBase64s(player, kitObject.getData());
+        BukkitSerialization.giveFromBase64(player, kitObject.getData());
     }
 }

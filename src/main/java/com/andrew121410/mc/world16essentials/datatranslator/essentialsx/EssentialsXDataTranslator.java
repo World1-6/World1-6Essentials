@@ -20,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -142,7 +141,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
         for (String kitKey : this.essentials.getKits().getKitKeys()) {
             player.getInventory().clear();
             Bukkit.getServer().dispatchCommand(player, "essentials:kit " + kitKey);
-            this.plugin.getKitManager().addKit(player.getUniqueId(), kitKey, BukkitSerialization.turnInventoryIntoBase64s(player));
+            this.plugin.getKitManager().addKit(player.getUniqueId(), kitKey, BukkitSerialization.turnInventoryIntoBase64(player));
             player.sendMessage(Translate.miniMessage("<green>Translated kit: <yellow>" + kitKey));
         }
 
@@ -154,12 +153,7 @@ public class EssentialsXDataTranslator implements IDataTranslator {
 
     private void kitsTo() {
         this.plugin.getMemoryHolder().getKitsMap().forEach((s, kit) -> {
-            ItemStack[] regularItems;
-            try {
-                regularItems = BukkitSerialization.base64ToItemStackArray(kit.getData()[0]);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            ItemStack[] regularItems = BukkitSerialization.deserialize(kit.getData());
 
             List<String> data = new ArrayList<>();
 

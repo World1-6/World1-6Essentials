@@ -6,27 +6,27 @@ import org.bukkit.entity.Player;
 public class SavedInventoryObject {
 
     private final String name;
-    private final String[] data;
+    private final String data;
 
-    public SavedInventoryObject(String name, String[] data) {
+    public SavedInventoryObject(String name, String data) {
         this.name = name;
         this.data = data;
     }
 
     public static SavedInventoryObject create(Player player, String name) {
-        String[] data = BukkitSerialization.turnInventoryIntoBase64s(player);
+        String data = BukkitSerialization.turnInventoryIntoBase64(player);
         return new SavedInventoryObject(name, data);
     }
 
     public void give(Player player) {
-        BukkitSerialization.giveFromBase64s(player, this.data);
+        BukkitSerialization.giveFromBase64(player, this.data);
     }
 
     public String getName() {
         return name;
     }
 
-    public String[] getData() {
+    public String getData() {
         return data;
     }
 }

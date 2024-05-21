@@ -8,9 +8,9 @@ public class KitObject {
     private final KitSettingsObject settings;
     private final UUID whoCreatedUUID;
     private final String timeCreated;
-    private final String[] data;
+    private final String data;
 
-    public KitObject(String kitName, KitSettingsObject settings, UUID whoCreatedUUID, String timeCreated, String[] data) {
+    public KitObject(String kitName, KitSettingsObject settings, UUID whoCreatedUUID, String timeCreated, String data) {
         this.kitName = kitName;
         this.settings = settings;
         this.whoCreatedUUID = whoCreatedUUID;
@@ -30,7 +30,7 @@ public class KitObject {
         return timeCreated;
     }
 
-    public String[] getData() {
+    public String getData() {
         return data;
     }
 

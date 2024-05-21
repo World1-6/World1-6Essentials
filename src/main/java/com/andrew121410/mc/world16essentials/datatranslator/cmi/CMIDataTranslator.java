@@ -21,7 +21,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.IOException;
 import java.util.*;
 
 public class CMIDataTranslator implements IDataTranslator {
@@ -130,9 +129,8 @@ public class CMIDataTranslator implements IDataTranslator {
 
             kitItems.addAll(kitExtraItems);
 
-            String normal = BukkitSerialization.itemStackArrayToBase64(kitItems.toArray(new ItemStack[0]));
-            String armor = BukkitSerialization.itemStackArrayToBase64(kitExtraItems.toArray(new ItemStack[0]));
-            this.plugin.getKitManager().addKit(null, kitName, new String[]{normal, armor});
+            String normal = BukkitSerialization.serializeWithList(kitItems);
+            this.plugin.getKitManager().addKit(null, kitName, normal);
         });
     }
 
@@ -154,10 +152,7 @@ public class CMIDataTranslator implements IDataTranslator {
                 // Replace null with the actual items.
                 inventory.getItems().forEach(items::set);
 
-                String[] data = new String[]{
-                        BukkitSerialization.itemStackArrayToBase64(items.toArray(new ItemStack[0])),
-                        BukkitSerialization.itemStackArrayToBase64(new ItemStack[]{new ItemStack(Material.AIR)})};
-
+                String data = BukkitSerialization.serializeWithList(items);
                 this.plugin.getSavedInventoriesManager().save(offlinePlayer.getUniqueId(), String.valueOf(inventoryId), data);
             });
         }
@@ -191,14 +186,7 @@ public class CMIDataTranslator implements IDataTranslator {
         for (KitObject value : this.plugin.getMemoryHolder().getKitsMap().values()) {
             Kit kit = new Kit(value.getKitName());
 
-            ItemStack[] itemStacks;
-            try {
-                itemStacks = BukkitSerialization.base64ToItemStackArray(value.getData()[0]);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            List<ItemStack> kitItems = new ArrayList<>(Arrays.asList(itemStacks));
+            List<ItemStack> kitItems = BukkitSerialization.deserializeToList(value.getData());
 
             List<List<ItemStack>> listList = InventoryUtils.splitInventoryIntoBaseAndExtraContents(kitItems);
             List<ItemStack> baseContents = listList.get(0);
@@ -226,24 +214,13 @@ public class CMIDataTranslator implements IDataTranslator {
             if (cmiUser == null) continue;
 
             allSavedInventories.forEach((inventoryName, savedInventoryObject) -> {
-                String[] data = savedInventoryObject.getData();
-                ItemStack[] items;
-                ItemStack[] armor;
-                try {
-                    items = BukkitSerialization.base64ToItemStackArray(data[0]);
-                    armor = BukkitSerialization.base64ToItemStackArray(data[1]);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                List<ItemStack> items = BukkitSerialization.deserializeToList(savedInventoryObject.getData());
 
                 CMIInventory cmiInventory = new CMIInventory(offlinePlayer.getName(), offlinePlayer.getUniqueId());
                 cmiInventory.setMaxHealth(20.0D); // Produces IllegalArgumentException if not set lol.
 
-                List<ItemStack> itemsList = new ArrayList<>(Arrays.asList(items));
-                itemsList.addAll(List.of(armor));
-
-                for (int i = 0; i < itemsList.size(); i++) {
-                    ItemStack itemStack = itemsList.get(i);
+                for (int i = 0; i < items.size(); i++) {
+                    ItemStack itemStack = items.get(i);
                     cmiInventory.getItems().put(i, itemStack);
                 }
 

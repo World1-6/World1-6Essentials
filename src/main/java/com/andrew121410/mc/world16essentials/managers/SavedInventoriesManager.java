@@ -33,7 +33,6 @@ public class SavedInventoriesManager {
         columns.add("UUID");
         columns.add("InventoryName");
         columns.add("RegularInventory");
-        columns.add("ArmorContent");
 
         easySQL.create(columns, false);
     }
@@ -42,7 +41,7 @@ public class SavedInventoriesManager {
         save(uuid, savedInventoryObject.getName(), savedInventoryObject.getData());
     }
 
-    public void save(UUID uuid, String name, String[] data) {
+    public void save(UUID uuid, String name, String data) {
         addToMapIfNotPresent(uuid);
         this.savedInventoryMap.get(uuid).add(name);
 
@@ -50,8 +49,7 @@ public class SavedInventoriesManager {
 
         map.put("UUID", uuid.toString());
         map.put("InventoryName", name);
-        map.put("RegularInventory", data[0]);
-        map.put("ArmorContent", data[1]);
+        map.put("RegularInventory", data);
 
         try {
             this.easySQL.save(map);
@@ -77,10 +75,8 @@ public class SavedInventoriesManager {
         SQLDataStore sqlDataStore = multimap.values().stream().findFirst().get();
 
         String regularInventory = sqlDataStore.get("RegularInventory");
-        String armorContent = sqlDataStore.get("ArmorContent");
-        String[] data = new String[]{regularInventory, armorContent};
 
-        return new SavedInventoryObject(inventoryName, data);
+        return new SavedInventoryObject(inventoryName, regularInventory);
     }
 
     // Used in CMIDataTranslator
@@ -101,10 +97,8 @@ public class SavedInventoriesManager {
         for (SQLDataStore sqlDataStore : multimap.values()) {
             String inventoryName = sqlDataStore.get("InventoryName");
             String regularInventory = sqlDataStore.get("RegularInventory");
-            String armorContent = sqlDataStore.get("ArmorContent");
-            String[] data = new String[]{regularInventory, armorContent};
 
-            savedInventoryObjectMap.put(inventoryName, new SavedInventoryObject(inventoryName, data));
+            savedInventoryObjectMap.put(inventoryName, new SavedInventoryObject(inventoryName, regularInventory));
         }
 
         return savedInventoryObjectMap;
