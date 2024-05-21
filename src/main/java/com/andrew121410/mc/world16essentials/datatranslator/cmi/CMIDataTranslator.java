@@ -192,7 +192,10 @@ public class CMIDataTranslator implements IDataTranslator {
             List<ItemStack> baseContents = listList.get(0);
             List<ItemStack> extraContents = listList.get(1);
 
-            kit.setItem(baseContents);
+            // Adjust baseContents for CMI
+            List<ItemStack> adjustedBaseContents = CMIDataHelper.adjustItemsForCMIKits(baseContents);
+
+            kit.setItem(adjustedBaseContents);
             CMIDataHelper.setExtraItems(kit, extraContents);
 
             kit.setDelay(10L);
@@ -200,6 +203,8 @@ public class CMIDataTranslator implements IDataTranslator {
 
             this.cmi.getKitsManager().addKit(kit);
         }
+
+        this.cmi.getKitsManager().safeSave();
     }
 
     private void savedInventoriesTo() {
@@ -226,6 +231,8 @@ public class CMIDataTranslator implements IDataTranslator {
 
                 this.cmi.getSavedInventoryManager().addInventory(cmiUser, cmiInventory);
             });
+
+            this.cmi.getSavedInventoryManager().saveAllInventories(uuid);
         }
     }
 }

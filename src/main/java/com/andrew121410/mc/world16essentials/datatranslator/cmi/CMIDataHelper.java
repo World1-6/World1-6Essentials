@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,5 +39,29 @@ public class CMIDataHelper {
         kit.setExtraItem(CMIPlayerInventory.CMIInventorySlot.Helmet, itemStacks.get(3));
 
         kit.setExtraItem(CMIPlayerInventory.CMIInventorySlot.OffHand, itemStacks.get(4));
+    }
+
+    public static List<ItemStack> adjustItemsForCMIKits(List<ItemStack> items) {
+        List<ItemStack> adjustedItems = new ArrayList<>(Collections.nCopies(36, null));
+
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack item = items.get(i);
+            if (item == null) continue;
+            int cmiSlot = getCMISlot(i);
+            adjustedItems.set(cmiSlot, item);
+        }
+
+        return adjustedItems;
+    }
+
+    private static int getCMISlot(int minecraftSlot) {
+        if (minecraftSlot >= 0 && minecraftSlot <= 8) {
+            // Hotbar: Minecraft 0-8 -> CMI 27-35
+            return minecraftSlot + 27;
+        } else if (minecraftSlot >= 9 && minecraftSlot <= 35) {
+            // Main Inventory: Minecraft 9-35 -> CMI 0-26
+            return minecraftSlot - 9;
+        }
+        throw new IllegalArgumentException("Invalid Minecraft slot: " + minecraftSlot);
     }
 }
