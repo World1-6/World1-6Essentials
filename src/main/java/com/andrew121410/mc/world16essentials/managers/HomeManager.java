@@ -10,6 +10,7 @@ import com.andrew121410.mc.world16utils.utils.ccutils.storage.SQLite;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.MultiTableEasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.SQLDataStore;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -148,7 +149,53 @@ public class HomeManager {
         String stringPitch = sqlDataStore.get("PITCH");
         String stringWorld = sqlDataStore.get("World");
 
-        return new UnlinkedWorldLocation(stringWorld, Double.parseDouble(stringX), Double.parseDouble(stringY), Double.parseDouble(stringZ), Float.parseFloat(stringYaw), Float.parseFloat(stringPitch));
+        // Convert old data if needed.
+        UUID worldUUID = convertOldDataIfNeeded(sqlDataStore);
+
+        return new UnlinkedWorldLocation(worldUUID, Double.parseDouble(stringX), Double.parseDouble(stringY), Double.parseDouble(stringZ), Float.parseFloat(stringYaw), Float.parseFloat(stringPitch));
+    }
+
+    private UUID convertOldDataIfNeeded(SQLDataStore sqlDataStore) {
+        String stringX = sqlDataStore.get("X");
+        String stringY = sqlDataStore.get("Y");
+        String stringZ = sqlDataStore.get("Z");
+        String stringYaw = sqlDataStore.get("YAW");
+        String stringPitch = sqlDataStore.get("PITCH");
+        String stringWorld = sqlDataStore.get("World");
+
+        UUID worldUUID = null;
+
+        // Test to see if the world is a UUID or a string.
+        try {
+            worldUUID = UUID.fromString(stringWorld);
+        } catch (IllegalArgumentException e) {
+            Location location = new Location(this.plugin.getServer().getWorld(stringWorld), Double.parseDouble(stringX), Double.parseDouble(stringY), Double.parseDouble(stringZ), Float.parseFloat(stringYaw), Float.parseFloat(stringPitch));
+
+            // Delete the old data.
+            SQLDataStore toDelete = new SQLDataStore();
+            toDelete.put("UUID", sqlDataStore.get("UUID"));
+            toDelete.put("HomeName", sqlDataStore.get("HomeName"));
+            try {
+                easySQL.delete(toDelete);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            // Save the new data.
+            SQLDataStore newData = makeSQLDataStore(UUID.fromString(sqlDataStore.get("UUID")), sqlDataStore.get("PlayerName"), sqlDataStore.get("HomeName"), new UnlinkedWorldLocation(location));
+            try {
+                easySQL.save(newData);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            this.plugin.getServer().getLogger().info("Converted old home data for " + sqlDataStore.get("PlayerName") + " for home " + sqlDataStore.get("HomeName") + " to the new format.");
+
+            // Set the worldUUID to the new world.
+            worldUUID = location.getWorld().getUID();
+        }
+
+        return worldUUID;
     }
 
     public SQLDataStore makeSQLDataStore(UUID uuid, String playerName, String homeName, UnlinkedWorldLocation location) {
@@ -162,7 +209,7 @@ public class HomeManager {
         sqlDataStore.put("Z", String.valueOf(location.getZ()));
         sqlDataStore.put("YAW", String.valueOf(location.getYaw()));
         sqlDataStore.put("PITCH", String.valueOf(location.getPitch()));
-        sqlDataStore.put("World", location.getWorldName());
+        sqlDataStore.put("World", String.valueOf(location.getWorldUUID()));
         return sqlDataStore;
     }
 
