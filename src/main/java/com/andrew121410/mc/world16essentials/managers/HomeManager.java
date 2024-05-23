@@ -10,8 +10,8 @@ import com.andrew121410.mc.world16utils.utils.ccutils.storage.SQLite;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.MultiTableEasySQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.SQLDataStore;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
@@ -24,28 +24,59 @@ public class HomeManager {
 
     private final World16Essentials plugin;
 
-    private final EasySQL easySQL;
     private final ISQL isql;
+    private final MultiTableEasySQL multiTableEasySQL;
+    private final EasySQL easySQL;
 
     public HomeManager(World16Essentials plugin) {
         this.plugin = plugin;
         this.homesMap = this.plugin.getMemoryHolder().getHomesMap();
 
         this.isql = new SQLite(this.plugin.getDataFolder(), "Homes");
-        this.easySQL = new EasySQL("Homes", new MultiTableEasySQL(this.isql));
+        this.multiTableEasySQL = new MultiTableEasySQL(this.isql);
+        this.easySQL = new EasySQL("Homes2", this.multiTableEasySQL);
 
         List<String> columns = new ArrayList<>();
         columns.add("UUID");
-        columns.add("Date");
-        columns.add("PlayerName");
         columns.add("HomeName");
+        columns.add("Date");
+        columns.add("WorldUUID");
         columns.add("X");
         columns.add("Y");
         columns.add("Z");
         columns.add("YAW");
         columns.add("PITCH");
-        columns.add("World");
+        columns.add("WorldName"); // Not needed but just in case store it.
+
         easySQL.create(columns, false);
+
+        try {
+            convertToNewHomesIfNeeded();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void convertToNewHomesIfNeeded() throws Exception {
+        List<String> tables = this.multiTableEasySQL.getAllTables();
+
+        // Do nothing if the table doesn't exist.
+        if (!tables.contains("Homes")) return;
+
+        OldHomeManager oldHomeManager = new OldHomeManager(this.plugin, this.multiTableEasySQL);
+
+        // Load all homes from the old database.
+        Map<UUID, Map<String, UnlinkedWorldLocation>> oldHomes = oldHomeManager.loadAllHomesFromDatabase();
+
+        // Save all homes to the new table.
+        for (Map.Entry<UUID, Map<String, UnlinkedWorldLocation>> entry : oldHomes.entrySet()) {
+            this.saveBulk(entry.getKey(), entry.getValue());
+        }
+
+        // Delete the old table.
+        this.multiTableEasySQL.deleteTable("Homes");
+
+        this.plugin.getServer().getLogger().info("HomeManager - Converted old home data to the new format successfully.");
     }
 
     public void load(OfflinePlayer player) {
@@ -81,7 +112,7 @@ public class HomeManager {
             this.homesMap.get(offlinePlayer.getUniqueId()).put(homeName, location);
         }
 
-        save(makeSQLDataStore(offlinePlayer.getUniqueId(), offlinePlayer.getName(), homeName, location));
+        save(createSQLDataStore(offlinePlayer.getUniqueId(), homeName, location));
     }
 
     public void add(OfflinePlayer offlinePlayer, Map<String, UnlinkedWorldLocation> map) {
@@ -131,7 +162,7 @@ public class HomeManager {
         for (Map.Entry<String, UnlinkedWorldLocation> entry : map.entrySet()) {
             String homeName = entry.getKey();
             UnlinkedWorldLocation location = entry.getValue();
-            multimap.put(String.valueOf(uuid), makeSQLDataStore(uuid, "na", homeName, location));
+            multimap.put(String.valueOf(uuid), createSQLDataStore(uuid, homeName, location));
         }
 
         try {
@@ -142,74 +173,39 @@ public class HomeManager {
     }
 
     public UnlinkedWorldLocation getLocation(SQLDataStore sqlDataStore) {
+        String stringWorldUUID = sqlDataStore.get("WorldUUID");
         String stringX = sqlDataStore.get("X");
         String stringY = sqlDataStore.get("Y");
         String stringZ = sqlDataStore.get("Z");
         String stringYaw = sqlDataStore.get("YAW");
         String stringPitch = sqlDataStore.get("PITCH");
-        String stringWorld = sqlDataStore.get("World");
+        String stringWorldName = sqlDataStore.getOrDefault("WorldName", null);
 
-        // Convert old data if needed.
-        UUID worldUUID = convertOldDataIfNeeded(sqlDataStore);
+        UUID worldUUID = null;
+        try {
+            worldUUID = UUID.fromString(stringWorldUUID);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
 
         return new UnlinkedWorldLocation(worldUUID, Double.parseDouble(stringX), Double.parseDouble(stringY), Double.parseDouble(stringZ), Float.parseFloat(stringYaw), Float.parseFloat(stringPitch));
     }
 
-    private UUID convertOldDataIfNeeded(SQLDataStore sqlDataStore) {
-        String stringX = sqlDataStore.get("X");
-        String stringY = sqlDataStore.get("Y");
-        String stringZ = sqlDataStore.get("Z");
-        String stringYaw = sqlDataStore.get("YAW");
-        String stringPitch = sqlDataStore.get("PITCH");
-        String stringWorld = sqlDataStore.get("World");
-
-        UUID worldUUID = null;
-
-        // Test to see if the world is a UUID or a string.
-        try {
-            worldUUID = UUID.fromString(stringWorld);
-        } catch (IllegalArgumentException e) {
-            Location location = new Location(this.plugin.getServer().getWorld(stringWorld), Double.parseDouble(stringX), Double.parseDouble(stringY), Double.parseDouble(stringZ), Float.parseFloat(stringYaw), Float.parseFloat(stringPitch));
-
-            // Delete the old data.
-            SQLDataStore toDelete = new SQLDataStore();
-            toDelete.put("UUID", sqlDataStore.get("UUID"));
-            toDelete.put("HomeName", sqlDataStore.get("HomeName"));
-            try {
-                easySQL.delete(toDelete);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-
-            // Save the new data.
-            SQLDataStore newData = makeSQLDataStore(UUID.fromString(sqlDataStore.get("UUID")), sqlDataStore.get("PlayerName"), sqlDataStore.get("HomeName"), new UnlinkedWorldLocation(location));
-            try {
-                easySQL.save(newData);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-
-            this.plugin.getServer().getLogger().info("Converted old home data for " + sqlDataStore.get("PlayerName") + " for home " + sqlDataStore.get("HomeName") + " to the new format.");
-
-            // Set the worldUUID to the new world.
-            worldUUID = location.getWorld().getUID();
-        }
-
-        return worldUUID;
-    }
-
-    public SQLDataStore makeSQLDataStore(UUID uuid, String playerName, String homeName, UnlinkedWorldLocation location) {
+    public SQLDataStore createSQLDataStore(UUID playerUUID, String homeName, UnlinkedWorldLocation location) {
         SQLDataStore sqlDataStore = new SQLDataStore();
-        sqlDataStore.put("UUID", String.valueOf(uuid));
-        sqlDataStore.put("Date", String.valueOf(System.currentTimeMillis()));
-        sqlDataStore.put("PlayerName", playerName);
+        sqlDataStore.put("UUID", String.valueOf(playerUUID));
         sqlDataStore.put("HomeName", homeName.toLowerCase());
+        sqlDataStore.put("Date", String.valueOf(System.currentTimeMillis()));
+        sqlDataStore.put("WorldUUID", String.valueOf(location.getWorldUUID()));
         sqlDataStore.put("X", String.valueOf(location.getX()));
         sqlDataStore.put("Y", String.valueOf(location.getY()));
         sqlDataStore.put("Z", String.valueOf(location.getZ()));
         sqlDataStore.put("YAW", String.valueOf(location.getYaw()));
         sqlDataStore.put("PITCH", String.valueOf(location.getPitch()));
-        sqlDataStore.put("World", String.valueOf(location.getWorldUUID()));
+        // World name is not needed but just in case store it, well if we can.
+        World world = location.isWorldLoaded() ? location.getWorld() : null;
+        sqlDataStore.put("WorldName", world == null ? "na" : world.getName());
+
         return sqlDataStore;
     }
 
