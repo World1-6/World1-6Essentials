@@ -1,7 +1,13 @@
 package com.andrew121410.mc.world16essentials;
 
 import com.andrew121410.mc.world16essentials.commands.*;
+import com.andrew121410.mc.world16essentials.commands.afk.AfkCMD;
+import com.andrew121410.mc.world16essentials.commands.afk.IsAfkCMD;
 import com.andrew121410.mc.world16essentials.commands.back.BackCMD;
+import com.andrew121410.mc.world16essentials.commands.fly.FlyCMD;
+import com.andrew121410.mc.world16essentials.commands.fly.FlySpeedCMD;
+import com.andrew121410.mc.world16essentials.commands.hide.HideCMD;
+import com.andrew121410.mc.world16essentials.commands.hide.UnhideCMD;
 import com.andrew121410.mc.world16essentials.commands.home.*;
 import com.andrew121410.mc.world16essentials.commands.kit.CreateKitCMD;
 import com.andrew121410.mc.world16essentials.commands.kit.DelKitCMD;
