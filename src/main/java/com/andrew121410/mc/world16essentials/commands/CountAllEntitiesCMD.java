@@ -10,7 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,13 +36,8 @@ public class CountAllEntitiesCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-
-        if (!player.hasPermission("world16.countallentities")) {
-            api.sendPermissionErrorMessage(player);
+        if (!sender.hasPermission("world16.countallentities")) {
+            api.sendPermissionErrorMessage(sender);
             return true;
         }
 
@@ -53,7 +47,7 @@ public class CountAllEntitiesCMD implements CommandExecutor {
                 allEntities.addAll(world.getEntities());
             }
 
-            player.sendMessage(Translate.color("&aThere are &e" + allEntities.size() + " &aentities on the server."));
+            sender.sendMessage(Translate.color("&aThere are &e" + allEntities.size() + " &aentities on the server."));
         } else {
             EntityType entityType = null;
             try {
@@ -62,7 +56,7 @@ public class CountAllEntitiesCMD implements CommandExecutor {
             }
 
             if (entityType == null) {
-                player.sendMessage(Translate.color("&cInvalid Entity Type."));
+                sender.sendMessage(Translate.color("&cInvalid Entity Type."));
                 return true;
             }
 
@@ -74,7 +68,7 @@ public class CountAllEntitiesCMD implements CommandExecutor {
                 entities.addAll(world.getEntitiesByClass(entityType.getEntityClass()));
             }
 
-            player.sendMessage(Translate.color("&a&lTotal Entities: &f" + entities.size() + " &aof type &f" + entityType.name()));
+            sender.sendMessage(Translate.color("&a&lTotal Entities: &f" + entities.size() + " &aof type &f" + entityType.name()));
         }
         return true;
     }
