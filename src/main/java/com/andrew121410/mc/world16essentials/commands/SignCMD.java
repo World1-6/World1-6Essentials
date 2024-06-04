@@ -47,8 +47,16 @@ public class SignCMD implements CommandExecutor {
         this.api = this.plugin.getApi();
         this.plugin.getCommand("sign").setExecutor(this);
         this.plugin.getCommand("sign").setTabCompleter((commandSender, command, s, args) -> {
-            if (args.length == 1)
-                return TabUtils.getContainsString(args[0], Arrays.asList("give", "edit", "edit-legacy"));
+            if (args.length == 1) {
+                List<String> list = new ArrayList<>();
+
+                // Only give them the correct tab completion, if they have the correct permission.
+                if (commandSender.hasPermission("world16.sign.give")) list.add("give");
+                if (commandSender.hasPermission("world16.sign.edit")) list.add("edit");
+                if (commandSender.hasPermission("world16.sign.edit")) list.add("edit-legacy");
+
+                return TabUtils.getContainsString(args[0], list);
+            }
             if (args.length == 2 && args[0].equalsIgnoreCase("edit"))
                 return TabUtils.getContainsString(args[1], Arrays.asList("@regular", "@minimessage"));
             return null;
@@ -68,11 +76,21 @@ public class SignCMD implements CommandExecutor {
         }
 
         if (args.length == 1 && args[0].equalsIgnoreCase("give")) {
+            if (!player.hasPermission("world16.sign.give")) {
+                api.sendPermissionErrorMessage(player);
+                return true;
+            }
+
             ItemStack itemStack = new ItemStack(Material.OAK_SIGN, 1);
             itemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
             player.getInventory().addItem(itemStack);
             return true;
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("edit")) {
+            if (!player.hasPermission("world16.sign.edit")) {
+                api.sendPermissionErrorMessage(player);
+                return true;
+            }
+
             Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
             BlockState state = block.getState();
 
@@ -88,6 +106,11 @@ public class SignCMD implements CommandExecutor {
             }
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("edit-legacy")) {
+            if (!player.hasPermission("world16.sign.edit")) {
+                api.sendPermissionErrorMessage(player);
+                return true;
+            }
+
             Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
             BlockState state = block.getState();
 
