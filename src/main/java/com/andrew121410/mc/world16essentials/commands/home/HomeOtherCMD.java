@@ -17,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HomeOtherCMD implements CommandExecutor, TabExecutor {
 
@@ -37,7 +39,18 @@ public class HomeOtherCMD implements CommandExecutor, TabExecutor {
         if (!player.hasPermission("world16.homeother")) return null;
 
         if (args.length == 1) {
-            List<String> offlineNames = Arrays.stream(this.plugin.getServer().getOfflinePlayers()).map(OfflinePlayer::getName).toList();
+            // Get the array of OfflinePlayers
+            OfflinePlayer[] playersArray = this.plugin.getServer().getOfflinePlayers();
+
+            // Filter out broken players and collect names into a list
+            List<String> offlineNames = Arrays.stream(playersArray)
+                    .filter(Objects::nonNull) // Filter out null OfflinePlayers
+                    .filter(offlinePlayer -> offlinePlayer.getName() != null) // Filter out players with null names
+                    .filter(offlinePlayer -> !offlinePlayer.getName().isEmpty()) // Filter out players with empty names
+                    .filter(offlinePlayer -> !offlinePlayer.getName().equals("null")) // Filter out players with "null" as their name
+                    .map(OfflinePlayer::getName) // Map to player names
+                    .collect(Collectors.toList()); // Collect names into a list
+
             return TabUtils.getContainsString(args[0], offlineNames);
         } else if (args.length == 2) {
             List<String> homeNames = getHomes(getPlayer(args[0])).keySet().stream().toList();
