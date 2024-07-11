@@ -33,11 +33,8 @@ public class AfkCMD implements CommandExecutor {
             return true;
         }
 
-        String color = "&7";
-
         if (args.length == 0) {
-            if (p.isOp()) color = "&4";
-            api.doAfk(p, color);
+            api.doAfk(p, null, true);
             return true;
         } else if (args.length == 1) {
             if (!p.hasPermission("world16.afk.other")) {
@@ -46,8 +43,7 @@ public class AfkCMD implements CommandExecutor {
             }
             Player target = plugin.getServer().getPlayerExact(args[0]);
             if (target != null && target.isOnline()) {
-                if (target.isOp()) color = "&4";
-                api.doAfk(target, color);
+                api.doAfk(target, null, true);
             }
             return true;
         } else {

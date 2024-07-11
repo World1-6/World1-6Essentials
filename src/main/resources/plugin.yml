@@ -92,6 +92,8 @@ commands:
 
   afk:
     permission: world16.afk
+  ignoreafk:
+    permission: world16.ignoreafk
   bed:
     permission: world16.bed
   broadcast:
@@ -255,6 +257,9 @@ permissions:
 
   world16.afk:
     description: Allows you to use afk cmd
+    default: op
+  world16.ignoreafk:
+    description: Allows you to use ignoreafk cmd
     default: op
   world16.bed:
     description: Allows you to use bed cmd

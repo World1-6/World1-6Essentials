@@ -2,6 +2,7 @@ package com.andrew121410.mc.world16essentials;
 
 import com.andrew121410.mc.world16essentials.commands.*;
 import com.andrew121410.mc.world16essentials.commands.afk.AfkCMD;
+import com.andrew121410.mc.world16essentials.commands.afk.IgnoreAfkCMD;
 import com.andrew121410.mc.world16essentials.commands.afk.IsAfkCMD;
 import com.andrew121410.mc.world16essentials.commands.back.BackCMD;
 import com.andrew121410.mc.world16essentials.commands.fly.FlyCMD;
@@ -195,6 +196,7 @@ public class World16Essentials extends JavaPlugin {
         new UUIDCMD(this);
         new WorkBenchCMD(this);
         new XyzdxdydzCMD(this);
+        new IgnoreAfkCMD(this);
     }
 
     private void registerListeners() {

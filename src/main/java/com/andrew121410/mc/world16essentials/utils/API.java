@@ -105,14 +105,27 @@ public class API {
         return configurationSection;
     }
 
-    public void doAfk(Player player, String color) {
+    public boolean doAfk(Player player, String color, boolean announce) {
+        if (color == null) {
+            color = "<gray>";
+            if (player.isOp()) color = "<dark_red>";
+        }
+
         AfkObject afkObject = this.afkMap.get(player.getUniqueId());
         if (afkObject.isAfk()) {
-            this.plugin.getServer().broadcastMessage(Translate.color("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
+            if (announce) {
+//                this.plugin.getServer().broadcastMessage(Translate.color("&7*" + color + " " + player.getDisplayName() + "&r&7 is no longer AFK."));
+                this.plugin.getServer().broadcast(Translate.miniMessage("<gray>* " + color + player.getName() + " <reset><gray>is no longer AFK."));
+            }
             afkObject.restart(player);
+            return false;
         } else {
-            this.plugin.getServer().broadcastMessage(Translate.color("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
+            if (announce) {
+//                this.plugin.getServer().broadcastMessage(Translate.color("&7* " + color + player.getDisplayName() + "&r&7" + " is now AFK."));
+                this.plugin.getServer().broadcast(Translate.miniMessage("<gray>* " + color + player.getName() + " <reset><gray>is now AFK."));
+            }
             afkObject.setAfk(true, player.getLocation());
+            return true;
         }
     }
 
