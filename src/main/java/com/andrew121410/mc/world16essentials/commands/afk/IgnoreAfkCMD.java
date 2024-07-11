@@ -36,6 +36,11 @@ public class IgnoreAfkCMD implements CommandExecutor {
 
             handleIgnoreAfk(sender, null);
         } else if (args.length == 1) { // /ignoreafk <player>
+            if (!sender.hasPermission("world16.ignoreafk.other")) {
+                api.sendPermissionErrorMessage(sender);
+                return true;
+            }
+
             Player target = this.plugin.getServer().getPlayerExact(args[0]);
             if (target == null) {
                 sender.sendMessage(Translate.miniMessage("<red>Player not found."));
