@@ -142,6 +142,8 @@ commands:
     aliases:
       - gc
     permission: world16.ram
+  renderinfo:
+    permission: world16.renderinfo
   saveinventory:
     permission: world16.saveinventory
   keepspawnloaded:
@@ -328,6 +330,9 @@ permissions:
     default: op
   world16.ram:
     description: Allows you to use ram cmd
+    default: op
+  world16.renderinfo:
+    description: Allows you to use renderinfo cmd
     default: op
   world16.saveinventory:
     description: Allows you to use saveinventory cmd
