@@ -20,6 +20,8 @@ java.targetCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenLocal()
+    mavenCentral()
+
     maven {
         url = uri("https://repo.papermc.io/repository/maven-public/")
     }
@@ -35,7 +37,7 @@ repositories {
 
 dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
-    api("org.xerial:sqlite-jdbc:3.45.3.0") // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    api("org.xerial:sqlite-jdbc:3.46.0.1") // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
 
     // Paper goes first then CraftBukkit
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
