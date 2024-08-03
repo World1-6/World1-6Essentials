@@ -1,4 +1,3 @@
-import net.raphimc.javadowngrader.gradle.task.DowngradeJarTask
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -6,9 +5,9 @@ plugins {
     `java-library`
     `maven-publish`
     id("io.freefair.lombok") version "8.6" // https://plugins.gradle.org/plugin/io.freefair.lombok
-    id("io.github.goooler.shadow") version "8.1.7" // https://github.com/johnrengelman/shadow/pull/876 https://github.com/Goooler/shadow https://plugins.gradle.org/plugin/io.github.goooler.shadow
-    id("net.raphimc.java-downgrader") version "1.1.2" // https://github.com/RaphiMC/JavaDowngrader
+    id("io.github.goooler.shadow") version "8.1.8" // https://github.com/johnrengelman/shadow/pull/876 https://github.com/Goooler/shadow https://plugins.gradle.org/plugin/io.github.goooler.shadow
     id("net.kyori.blossom") version "2.1.0" // https://github.com/KyoriPowered/blossom
+    id("xyz.wagyourtail.jvmdowngrader") version "1.0.0" // https://plugins.gradle.org/plugin/xyz.wagyourtail.jvmdowngrader // https://github.com/unimined/JvmDowngrader
 }
 
 group = "com.andrew121410.mc"
@@ -16,8 +15,8 @@ version = "1.0"
 description = "World1-6Essentials"
 
 // Set to Java 17
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.targetCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenLocal()
@@ -45,9 +44,8 @@ dependencies {
 
 tasks {
     build {
-        dependsOn(shadowJar)
+        dependsOn("ourShadeDowngradedApi")
         dependsOn("processResources")
-        finalizedBy("java8Jar")
     }
 
     jar {
@@ -63,16 +61,26 @@ tasks {
 
         relocate("org.bstats", "com.andrew121410.mc.world16essentials.bstats")
     }
-}
 
-// Downgrade to Java 8
-tasks.register<DowngradeJarTask>("java8Jar") {
-    input = tasks.shadowJar.get().archiveFile.get().asFile
-    outputSuffix.set("+java8")
-    // Set compile classpath to the same as the main source set
-    compileClassPath = project.sourceSets["main"].compileClasspath
-}.configure {
-    dependsOn("build")
+    // Downgrade the jar to Java 8
+    val ourDowngradeJar by creating(xyz.wagyourtail.jvmdg.gradle.task.DowngradeJar::class) {
+        dependsOn(shadowJar)
+        inputFile = shadowJar.get().archiveFile.get().asFile
+        downgradeTo = JavaVersion.VERSION_1_8
+        archiveClassifier.set("downgraded-8")
+    }
+    val ourShadeDowngradedApi by creating(xyz.wagyourtail.jvmdg.gradle.task.ShadeJar::class) {
+        dependsOn(ourDowngradeJar)
+        inputFile = ourDowngradeJar.archiveFile.get().asFile
+
+        // Delete the downgraded-8 jar and the original jar.
+        doLast {
+            ourDowngradeJar.archiveFile.get().asFile.delete()
+            shadowJar.get().archiveFile.get().asFile.delete()
+        }
+
+        archiveFileName.set("World1-6Essentials+java8.jar")
+    }
 }
 
 var formattedDate: String = SimpleDateFormat("M/d/yyyy").format(Date())
@@ -89,7 +97,7 @@ sourceSets {
 publishing {
     publications {
         create<MavenPublication>("shadow") {
-            artifact(tasks.named("shadowJar"))
+            artifact(tasks.named("ourShadeDowngradedApi"))
         }
     }
 }
