@@ -5,7 +5,7 @@ plugins {
     `java-library`
     `maven-publish`
     id("io.freefair.lombok") version "8.6" // https://plugins.gradle.org/plugin/io.freefair.lombok
-    id("io.github.goooler.shadow") version "8.1.8" // https://github.com/johnrengelman/shadow/pull/876 https://github.com/Goooler/shadow https://plugins.gradle.org/plugin/io.github.goooler.shadow
+    id("io.github.goooler.shadow") version "8.1.7" // https://github.com/johnrengelman/shadow/pull/876 https://github.com/Goooler/shadow https://plugins.gradle.org/plugin/io.github.goooler.shadow
     id("net.kyori.blossom") version "2.1.0" // https://github.com/KyoriPowered/blossom
     id("xyz.wagyourtail.jvmdowngrader") version "1.0.0" // https://plugins.gradle.org/plugin/xyz.wagyourtail.jvmdowngrader // https://github.com/unimined/JvmDowngrader
 }
