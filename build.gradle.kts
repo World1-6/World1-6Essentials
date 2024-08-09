@@ -2,8 +2,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 plugins {
-//    id("com.github.johnrengelman.shadow") version "8.1.1" // https://github.com/johnrengelman/shadow
-    id("io.github.goooler.shadow") version "8.1.7" // https://github.com/johnrengelman/shadow/pull/876 https://github.com/Goooler/shadow https://plugins.gradle.org/plugin/io.github.goooler.shadow
+    id("com.gradleup.shadow") version "8.3.0" // https://github.com/GradleUp/shadow
     id("net.kyori.blossom") version "2.1.0" // https://github.com/KyoriPowered/blossom
     `java-library`
     `maven-publish`
@@ -31,7 +30,14 @@ tasks {
     }
 
     shadowJar {
+        // Since we don't need to publish the shadow jar, we can just set the archiveFileName
         archiveFileName.set("World1-6Essentials.jar")
+
+        // If we want to publish the shadow jar in the future, you can use the following code.
+        // Yes all three of these are needed for JitPack to work.
+//        archiveBaseName.set("World1-6Essentials")
+//        archiveClassifier.set("")
+//        archiveVersion.set("")
 
         relocate("org.bstats", "com.andrew121410.mc.world16essentials.bstats")
     }
