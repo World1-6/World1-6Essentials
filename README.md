@@ -2,7 +2,7 @@
 This is an essentials plugin that I've made for a Private Minecraft Server called World1-6.
 
 ### Current Supported Minecraft Versions:
-- 1.12.2 (needs to use the 1.12.2 branch)
+- 1.12.2 (need to use [Legacy-World1-6Essentials](https://github.com/World1-6/Legacy-World1-6Essentials))
 - 1.20.4 (latest version)
 - 1.20.6 (latest version)
 - 1.21 (latest version)
