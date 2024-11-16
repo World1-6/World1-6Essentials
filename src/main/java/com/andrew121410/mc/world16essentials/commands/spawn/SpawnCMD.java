@@ -5,6 +5,7 @@ import com.andrew121410.mc.world16essentials.config.CustomConfigManager;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,8 +36,10 @@ public class SpawnCMD implements CommandExecutor {
 
         Location spawn = this.api.getLocationFromFile(this.shitYml, "Spawn.default");
         if (spawn == null) {
-            Location defaultSpawn = this.plugin.getServer().getWorlds().get(0).getSpawnLocation();
-            this.api.setLocationToFile(this.shitYml, "Spawn.default", defaultSpawn);
+            Location defaultSpawn = this.plugin.getServer().getWorlds().getFirst().getSpawnLocation();
+            UnlinkedWorldLocation unlinkedWorldLocation = new UnlinkedWorldLocation(defaultSpawn);
+
+            this.api.setLocationToFile(this.shitYml, "Spawn.default", unlinkedWorldLocation);
             spawn = defaultSpawn;
         }
 
