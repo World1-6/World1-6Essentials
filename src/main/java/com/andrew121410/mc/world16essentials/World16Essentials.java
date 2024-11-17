@@ -198,6 +198,7 @@ public class World16Essentials extends JavaPlugin {
         new XyzdxdydzCMD(this);
         new IgnoreAfkCMD(this);
         new RenderInfoCMD(this);
+        new OfflineLocationCMD(this);
     }
 
     private void registerListeners() {
