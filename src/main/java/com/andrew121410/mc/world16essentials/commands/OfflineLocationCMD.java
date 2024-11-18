@@ -3,9 +3,8 @@ package com.andrew121410.mc.world16essentials.commands;
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import com.andrew121410.mc.world16utils.utils.TabUtils;
-import net.kyori.adventure.text.event.ClickEvent;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -47,23 +46,25 @@ public class OfflineLocationCMD implements CommandExecutor {
                 sender.sendMessage(Translate.miniMessage("<red>Player has never played before!"));
                 return true;
             }
-
             if (target.isOnline()) {
                 sender.sendMessage(Translate.miniMessage("<green>That player is online."));
                 target = target.getPlayer();
             }
 
-            Location location = target.getLocation();
-            if (location == null) {
-                sender.sendMessage(Translate.miniMessage("<red>Player has never played before!"));
-                return true;
-            }
+            UnlinkedWorldLocation location = new UnlinkedWorldLocation(target.getLocation());
 
             // Clickable message to teleport to the location.
             if (sender instanceof Player player) {
                 sender.sendMessage(Translate.miniMessage("<yellow>Player: " + target.getName()));
                 player.sendMessage(Translate.miniMessage("<yellow>World: " + location.getWorld().getName()));
-                player.sendMessage(Translate.miniMessage("<yellow><u>Click me to teleport to the location!").clickEvent(ClickEvent.runCommand("/tp " + location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ())));
+                player.sendMessage(Translate.miniMessage("<yellow><u>Click me to teleport to the location!").clickEvent(this.plugin.getOtherPlugins().getWorld16Utils().getChatClickCallbackManager().create(player, (player1) -> {
+                    if (!location.isWorldLoaded()) {
+                        player.sendMessage(Translate.miniMessage("<red>Was unable to teleport to the location because the world isn't loaded."));
+                        return;
+                    }
+                    player.teleportAsync(location);
+                    player.sendMessage(Translate.miniMessage("<gold>You have been teleported to the location!"));
+                })));
             } else {
                 sender.sendMessage("Player: " + target.getName());
                 sender.sendMessage("World: " + location.getWorld().getName());
