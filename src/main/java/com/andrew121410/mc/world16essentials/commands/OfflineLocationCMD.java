@@ -12,11 +12,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 public class OfflineLocationCMD implements CommandExecutor {
 
     private final World16Essentials plugin;
@@ -31,20 +26,8 @@ public class OfflineLocationCMD implements CommandExecutor {
             if (!(sender instanceof Player player)) return null;
             if (!player.hasPermission("world16.offlinelocation")) return null;
 
-            if (args.length == 1) {
-                // Get the array of OfflinePlayers
-                OfflinePlayer[] playersArray = this.plugin.getServer().getOfflinePlayers();
-
-                // Filter out broken players and collect names into a list
-                List<String> offlineNames = Arrays.stream(playersArray)
-                        .filter(Objects::nonNull) // Filter out null OfflinePlayers
-                        .filter(offlinePlayer -> offlinePlayer.getName() != null) // Filter out players with null names
-                        .filter(offlinePlayer -> !offlinePlayer.getName().isEmpty()) // Filter out players with empty names
-                        .filter(offlinePlayer -> !offlinePlayer.getName().equals("null")) // Filter out players with "null" as their name
-                        .map(OfflinePlayer::getName) // Map to player names
-                        .collect(Collectors.toList()); // Collect names into a list
-
-                return TabUtils.getContainsString(args[0], offlineNames);
+            if (args.length == 1 && this.plugin.getApi().getConfigUtils().isOfflinePlayersTabCompletion()) {
+                return TabUtils.getContainsString(args[0], TabUtils.getOfflinePlayerNames(this.plugin.getServer().getOfflinePlayers()));
             }
 
             return null;

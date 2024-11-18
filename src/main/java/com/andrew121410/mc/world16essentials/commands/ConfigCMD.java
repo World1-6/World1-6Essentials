@@ -36,12 +36,13 @@ public class ConfigCMD implements CommandExecutor, TabExecutor {
         if (!player.hasPermission("world16.config")) return null;
 
         if (args.length == 1) {
-            return TabUtils.getContainsString(args[0], Arrays.asList("showLastUpdatedMessageToOPs", "signTranslateColors", "preventCropsTrampling", "spawnMobCap", "saveInventoryOnDeath", "moreAccurateDiskInfo", "messages"));
+            return TabUtils.getContainsString(args[0], Arrays.asList("showLastUpdatedMessageToOPs", "signTranslateColors", "preventCropsTrampling", "spawnMobCap", "saveInventoryOnDeath", "moreAccurateDiskInfo", "offlinePlayersTabCompletion", "messages"));
         } else if (args[0].equalsIgnoreCase("showLastUpdatedMessageToOPs")
                 || args[0].equalsIgnoreCase("signTranslateColors")
                 || args[0].equalsIgnoreCase("preventCropsTrampling")
                 || args[0].equalsIgnoreCase("saveInventoryOnDeath")
-                || args[0].equalsIgnoreCase("moreAccurateDiskInfo")) {
+                || args[0].equalsIgnoreCase("moreAccurateDiskInfo")
+                || args[0].equalsIgnoreCase("offlinePlayersTabCompletion")) {
             return TabUtils.getContainsString(args[1], Arrays.asList("true", "false"));
         } else if (args[0].equalsIgnoreCase("spawnMobCap")) {
             return TabUtils.getContainsString(args[1], Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
@@ -96,6 +97,9 @@ public class ConfigCMD implements CommandExecutor, TabExecutor {
             } else if (args[0].equalsIgnoreCase("moreAccurateDiskInfo")) {
                 api.getConfigUtils().setMoreAccurateDiskInfo(args[1].equalsIgnoreCase("true"));
                 player.sendMessage(Translate.color("&aMore accurate disk info set to &6" + args[1]));
+            } else if (args[0].equalsIgnoreCase("offlinePlayersTabCompletion")) {
+                api.getConfigUtils().setOfflinePlayersTabCompletion(args[1].equalsIgnoreCase("true"));
+                player.sendMessage(Translate.color("&aOffline players tab completion set to &6" + args[1]));
             }
         } else if (args.length >= 3 && args[0].equalsIgnoreCase("messages")) {
             String[] ourArgs = Arrays.copyOfRange(args, 2, args.length);
