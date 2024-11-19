@@ -53,10 +53,10 @@ public class OfflineLocationCMD implements CommandExecutor {
 
             UnlinkedWorldLocation location = new UnlinkedWorldLocation(target.getLocation());
 
-            // Clickable message to teleport to the location.
+            sender.sendMessage(Translate.miniMessage("<yellow>Player: " + target.getName()));
+            sender.sendMessage(Translate.miniMessage("<yellow>World: " + location.getWorld().getName()));
+            sender.sendMessage(Translate.miniMessage("<yellow>There location is " + location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ()));
             if (sender instanceof Player player) {
-                sender.sendMessage(Translate.miniMessage("<yellow>Player: " + target.getName()));
-                player.sendMessage(Translate.miniMessage("<yellow>World: " + location.getWorld().getName()));
                 player.sendMessage(Translate.miniMessage("<yellow><u>Click me to teleport to the location!").clickEvent(this.plugin.getOtherPlugins().getWorld16Utils().getChatClickCallbackManager().create(player, (player1) -> {
                     if (!location.isWorldLoaded()) {
                         player.sendMessage(Translate.miniMessage("<red>Was unable to teleport to the location because the world isn't loaded."));
@@ -65,10 +65,6 @@ public class OfflineLocationCMD implements CommandExecutor {
                     player.teleportAsync(location);
                     player.sendMessage(Translate.miniMessage("<gold>You have been teleported to the location!"));
                 })));
-            } else {
-                sender.sendMessage("Player: " + target.getName());
-                sender.sendMessage("World: " + location.getWorld().getName());
-                sender.sendMessage("There location is " + location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ());
             }
             return true;
         } else {
