@@ -57,9 +57,9 @@ public class EChestCMD implements CommandExecutor {
     private void openEChest(Player target, CommandSender sender) {
         target.openInventory(target.getEnderChest());
         target.playSound(target.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 10.0f, 1.0f);
-        target.sendMessage(Translate.miniMessage("<purple>Opening Ender Chest..."));
+        target.sendMessage(Translate.miniMessage("<dark_purple>Opening Ender Chest..."));
         if (sender != null) {
-            sender.sendMessage(Translate.miniMessage("<purple>Opening Ender Chest for <white>" + target.getName() + "<purple>..."));
+            sender.sendMessage(Translate.miniMessage("<dark_purple>Opening <white>" + target.getName() + "'s <dark_purple>Ender Chest..."));
         }
     }
 }
