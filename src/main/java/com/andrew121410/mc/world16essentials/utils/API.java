@@ -86,13 +86,24 @@ public class API {
         return minutes < 1;
     }
 
+    // Used in SpawnCMD and SetSpawnCMD
     public UnlinkedWorldLocation getLocationFromFile(CustomYmlManager customYmlManager, String path) {
         if (customYmlManager == null || path == null) return null;
-        return (UnlinkedWorldLocation) customYmlManager.getConfig().get(path);
+
+        Object locationObject = customYmlManager.getConfig().get(path);
+        if (locationObject instanceof UnlinkedWorldLocation) {
+            return (UnlinkedWorldLocation) locationObject;
+        } else if (locationObject instanceof Location location) {
+            setLocationToFile(customYmlManager, path, new UnlinkedWorldLocation(location));
+            this.plugin.getLogger().info("getLocationFromFile: Converted Location to UnlinkedWorldLocation.");
+            return new UnlinkedWorldLocation(location);
+        }
+        return null;
     }
 
+    // Used in SpawnCMD and SetSpawnCMD
     public void setLocationToFile(CustomYmlManager customYmlManager, String path, UnlinkedWorldLocation location) {
-        if (customYmlManager == null || path == null || location == null) {
+        if (customYmlManager == null || path == null) {
             return;
         }
         customYmlManager.getConfig().set(path, location);
