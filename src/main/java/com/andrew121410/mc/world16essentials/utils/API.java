@@ -94,9 +94,10 @@ public class API {
         if (locationObject instanceof UnlinkedWorldLocation) {
             return (UnlinkedWorldLocation) locationObject;
         } else if (locationObject instanceof Location location) {
-            setLocationToFile(customYmlManager, path, new UnlinkedWorldLocation(location));
+            UnlinkedWorldLocation unlinkedWorldLocation = new UnlinkedWorldLocation(location);
+            setLocationToFile(customYmlManager, path, unlinkedWorldLocation);
             this.plugin.getLogger().info("getLocationFromFile: Converted Location to UnlinkedWorldLocation.");
-            return new UnlinkedWorldLocation(location);
+            return unlinkedWorldLocation;
         }
         return null;
     }
