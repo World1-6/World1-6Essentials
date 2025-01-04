@@ -58,10 +58,6 @@ repositories {
     }
 
     maven {
-        url = uri("https://jitpack.io")
-    }
-
-    maven {
         url = uri("https://repo.essentialsx.net/releases/")
     }
 
@@ -75,6 +71,10 @@ repositories {
 
     maven {
         url = uri("https://repo.opencollab.dev/main/")
+    }
+
+    maven {
+        url = uri("https://jitpack.io")
     }
 }
 

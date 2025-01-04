@@ -7,8 +7,10 @@ import com.andrew121410.mc.world16essentials.objects.SavedInventoryObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
+import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.yaml.internal.snakeyaml.external.biz.base64Coder.Base64Coder;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import net.ess3.provider.SerializationProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,7 +19,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.File;
 import java.util.*;
@@ -154,19 +155,28 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     private void kitsTo() {
         this.plugin.getMemoryHolder().getKitsMap().forEach((s, kit) -> {
             ItemStack[] regularItems = BukkitSerialization.deserialize(kit.getData());
-
             List<String> data = new ArrayList<>();
 
-            // Just took this from EssentialsX
-            ItemStack[] var11 = regularItems;
-            int var12 = regularItems.length;
-            for (int var13 = 0; var13 < var12; ++var13) {
-                ItemStack is = var11[var13];
+            // Just took this from EssentialsX (https://github.com/EssentialsX/Essentials/blob/2.x/Essentials/src/main/java/com/earth2me/essentials/commands/Commandcreatekit.java)
+            // Does this break the license? I don't know. Let me know if it does.
+            final SerializationProvider serializationProvider = essentials.provider(SerializationProvider.class);
+            boolean useSerializationProvider = essentials.getSettings().isUseBetterKits();
+            if (useSerializationProvider && serializationProvider == null) {
+                useSerializationProvider = false;
+            }
+            for (ItemStack is : regularItems) {
                 if (is != null && is.getType() != null && is.getType() != Material.AIR) {
-                    String serialized = "@" + Base64Coder.encodeLines(this.essentials.getSerializationProvider().serializeItem(is));
+                    final String serialized;
+                    if (useSerializationProvider) {
+                        serialized = "@" + Base64Coder.encodeLines(serializationProvider.serializeItem(is));
+                    } else {
+                        serialized = essentials.getItemDb().serialize(is);
+                    }
                     data.add(serialized);
                 }
             }
+            //...
+
             this.essentials.getKits().addKit(kit.getKitName(), data, 1);
         });
     }
