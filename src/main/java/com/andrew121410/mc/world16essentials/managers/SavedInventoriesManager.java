@@ -2,7 +2,7 @@ package com.andrew121410.mc.world16essentials.managers;
 
 import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.SavedInventoryObject;
-import com.andrew121410.mc.world16utils.utils.ccutils.dependencies.google.common.collect.Multimap;
+import com.andrew121410.mc.world16utils.utils.ccutils.dependencies.com.google.common.collect.Multimap;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.ISQL;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.SQLite;
 import com.andrew121410.mc.world16utils.utils.ccutils.storage.easy.EasySQL;
