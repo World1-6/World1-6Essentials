@@ -4,7 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.KitObject;
 import com.andrew121410.mc.world16essentials.objects.KitSettingsObject;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
-import com.andrew121410.mc.world16utils.utils.ccutils.utils.TimeUtils;
+import com.andrew121410.mc.world16utils.dependencies.ccutils.utils.TimeUtils;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.TimeUnit;

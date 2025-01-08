@@ -7,7 +7,7 @@ import com.andrew121410.mc.world16essentials.objects.SavedInventoryObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
 import com.andrew121410.mc.world16utils.utils.BukkitSerialization;
-import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.yaml.internal.snakeyaml.external.biz.base64Coder.Base64Coder;
+import com.andrew121410.mc.world16utils.dependencies.spongepowered.configurate.yaml.internal.snakeyaml.external.biz.base64Coder.Base64Coder;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import net.ess3.provider.SerializationProvider;

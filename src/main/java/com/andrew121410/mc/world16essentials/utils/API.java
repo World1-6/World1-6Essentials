@@ -7,7 +7,7 @@ import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import com.andrew121410.mc.world16utils.config.UnlinkedWorldLocation;
-import com.andrew121410.mc.world16utils.utils.ccutils.utils.TimeUtils;
+import com.andrew121410.mc.world16utils.dependencies.ccutils.utils.TimeUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
