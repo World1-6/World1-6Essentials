@@ -2,7 +2,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 plugins {
-    id("com.gradleup.shadow") version "8.3.5" // https://github.com/GradleUp/shadow
+    id("com.gradleup.shadow") version "8.3.6" // https://github.com/GradleUp/shadow
     id("net.kyori.blossom") version "2.1.0" // https://github.com/KyoriPowered/blossom
     `java-library`
     `maven-publish`
@@ -81,8 +81,8 @@ repositories {
 dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:2f0bf39de7")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:2f0bf39de7")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:6e15f5f6cd")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:6e15f5f6cd")
     compileOnly("net.essentialsx:EssentialsX:2.21.0-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.2.3-SNAPSHOT")
 }

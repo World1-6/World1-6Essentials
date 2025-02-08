@@ -45,7 +45,7 @@ public class LastJoinCMD implements CommandExecutor {
                     if (!player.hasPermission("world16.lastjoin") && !player.hasPermission("world16.lastonline")) return null;
 
                     if (args.length == 1) {
-                        return TabUtils.getContainsString(args[0], Collections.singletonList("get"));
+                        return TabUtils.getContainsString(args[0], Collections.singletonList("recent"));
                     }
 
                     return null;
@@ -78,7 +78,7 @@ public class LastJoinCMD implements CommandExecutor {
             }
 
             player.sendMessage(Translate.color("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("get")) {
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("recent")) {
             Integer days = Utils.asIntegerOrElse(args[1], null);
 
             if (days == null) {
