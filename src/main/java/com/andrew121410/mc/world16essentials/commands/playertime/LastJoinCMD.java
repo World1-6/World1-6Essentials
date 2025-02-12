@@ -78,7 +78,12 @@ public class LastJoinCMD implements CommandExecutor {
             }
 
             player.sendMessage(Translate.color("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("recent")) {
+        } else if (args[0].equalsIgnoreCase("recent")) {
+            if (args.length != 2) {
+                player.sendMessage(Translate.miniMessage("<red>Usage: /lastjoin recent <yellow><days>"));
+                return true;
+            }
+
             Integer days = Utils.asIntegerOrElse(args[1], null);
 
             if (days == null) {

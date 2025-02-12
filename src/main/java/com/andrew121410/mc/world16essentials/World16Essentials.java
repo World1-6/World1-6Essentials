@@ -95,13 +95,14 @@ public class World16Essentials extends JavaPlugin {
         registerListeners();
         registerCommands();
 
+        // I don't know if this is the best way to detect if server was reloaded.
         Collection<? extends Player> playerList = getServer().getOnlinePlayers();
         if (!playerList.isEmpty()) {
-            //Ran when the plugin gets reloaded...
+            // Load all players again.
             for (Player player : playerList) {
                 this.playerInitializer.load(player);
             }
-            Bukkit.getServer().broadcastMessage(Translate.color("&cWorld1-6Essentials was reloaded while this isn't recommend it is supported."));
+            Bukkit.getServer().broadcast(Translate.colorc("&cWorld1-6Essentials was reloaded while this isn't recommend it is supported."));
         }
 
         loadKeepSpawnLoadedStates();
