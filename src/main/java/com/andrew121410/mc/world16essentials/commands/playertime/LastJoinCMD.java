@@ -62,7 +62,8 @@ public class LastJoinCMD implements CommandExecutor {
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
-                sender.sendMessage("Only Players Can Use This Command.");
+                sender.sendMessage(Translate.miniMessage("<red>Usage: /lastjoin <yellow><player>"));
+                sender.sendMessage(Translate.miniMessage("<red>Usage: /lastjoin recent <yellow><days>"));
                 return true;
             }
             openGUI(player, null);
