@@ -55,39 +55,28 @@ public class LastJoinCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("Only Players Can Use This Command.");
-            return true;
-        }
-
-        if (!player.hasPermission("world16.lastjoin") && !player.hasPermission("world16.lastonline")) {
-            this.plugin.getApi().sendPermissionErrorMessage(player);
+        if (!sender.hasPermission("world16.lastjoin") && !sender.hasPermission("world16.lastonline")) {
+            this.plugin.getApi().sendPermissionErrorMessage(sender);
             return true;
         }
 
         if (args.length == 0) {
-            // Open GUI
-            openGUI(player, null);
-            return true;
-        } else if (args.length == 1) {
-            OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
-
-            if (!offlinePlayer.hasPlayedBefore()) {
-                player.sendMessage(Translate.color("&cThis user has never joined before..."));
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("Only Players Can Use This Command.");
                 return true;
             }
-
-            player.sendMessage(Translate.color("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
+            openGUI(player, null);
+            return true;
         } else if (args[0].equalsIgnoreCase("recent")) {
             if (args.length != 2) {
-                player.sendMessage(Translate.miniMessage("<red>Usage: /lastjoin recent <yellow><days>"));
+                sender.sendMessage(Translate.miniMessage("<red>Usage: /lastjoin recent <yellow><days>"));
                 return true;
             }
 
             Integer days = Utils.asIntegerOrElse(args[1], null);
 
             if (days == null) {
-                player.sendMessage(Translate.miniMessage("<red>Invalid number."));
+                sender.sendMessage(Translate.miniMessage("<red>Invalid number."));
                 return true;
             }
 
@@ -109,23 +98,35 @@ public class LastJoinCMD implements CommandExecutor {
 
             // If no players have joined in the last x days
             if (recentPlayers.isEmpty()) {
-                player.sendMessage(Translate.miniMessage("<red>No players have joined in the last <yellow>" + days + " <red>days."));
+                sender.sendMessage(Translate.miniMessage("<red>No players have joined in the last <yellow>" + days + " <red>days."));
                 return true;
             }
 
-            player.sendMessage(Translate.color("&aPlayers who joined in the last " + days + " days:"));
+            sender.sendMessage(Translate.color("&aPlayers who joined in the last " + days + " days:"));
             for (OfflinePlayer recentPlayer : recentPlayers) {
-                player.sendMessage(Translate.color("&6" + recentPlayer.getName() + "&a - " + this.api.getTimeSinceLastLogin(recentPlayer) + " ago."));
+                sender.sendMessage(Translate.color("&6" + recentPlayer.getName() + "&a - " + this.api.getTimeSinceLastLogin(recentPlayer) + " ago."));
             }
 
-            // Click to copy
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Players who joined in the last ").append(days).append(" days:\n");
-            for (OfflinePlayer recentPlayer : recentPlayers) {
-                stringBuilder.append(recentPlayer.getName()).append(" -> ").append(this.api.getTimeSinceLastLogin(recentPlayer)).append(" ago.").append("\n");
+            // Click to copy (only for players)
+            if (sender instanceof Player player) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Players who joined in the last ").append(days).append(" days:\n");
+                for (OfflinePlayer recentPlayer : recentPlayers) {
+                    stringBuilder.append(recentPlayer.getName()).append(" -> ").append(this.api.getTimeSinceLastLogin(recentPlayer)).append(" ago.").append("\n");
+                }
+                Component component = Translate.miniMessage("<green><bold>[Click to copy!]").clickEvent(ClickEvent.copyToClipboard(stringBuilder.toString()));
+                player.sendMessage(component);
             }
-            Component component = Translate.miniMessage("<green><bold>[Click to copy!]").clickEvent(ClickEvent.copyToClipboard(stringBuilder.toString()));
-            player.sendMessage(component);
+        } else if (args.length == 1) {
+            OfflinePlayer offlinePlayer = this.plugin.getServer().getOfflinePlayer(args[0]);
+
+            if (!offlinePlayer.hasPlayedBefore()) {
+                sender.sendMessage(Translate.color("&cThis user has never joined before..."));
+                return true;
+            }
+
+            sender.sendMessage(Translate.color("&aLast join of &6" + offlinePlayer.getName() + "&a was &6" + this.api.getTimeSinceLastLogin(offlinePlayer) + " &aago."));
+            return true;
         }
         return true;
     }
