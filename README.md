@@ -3,11 +3,6 @@ This is an essentials plugin that I've made for a Private Minecraft Server calle
 
 ### Current Supported Minecraft Versions:
 - 1.12.2 (need to use [Legacy-World1-6Essentials](https://github.com/World1-6/Legacy-World1-6Essentials))
-- 1.20.4 (latest version)
-- 1.20.5/1.20.6 (latest version)
-- 1.21 (latest version)
-- 1.21.1 (latest version)
-- 1.21.2/1.21.3 (latest version)
 - 1.21.4 (latest version)
 
 I only support the latest and greatest version of Minecraft. I will not support older versions of Minecraft.

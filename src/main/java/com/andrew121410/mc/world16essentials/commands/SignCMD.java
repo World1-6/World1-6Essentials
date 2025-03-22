@@ -82,7 +82,7 @@ public class SignCMD implements CommandExecutor {
             }
 
             ItemStack itemStack = new ItemStack(Material.OAK_SIGN, 1);
-            itemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+            itemStack.addUnsafeEnchantment(Enchantment.SHARPNESS, 1);
             player.getInventory().addItem(itemStack);
             return true;
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("edit")) {
