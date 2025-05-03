@@ -51,7 +51,23 @@ public class BackCMD implements CommandExecutor {
         }
         Map<BackEnum, UnlinkedWorldLocation> playerBackMap = this.backMap.get(player.getUniqueId());
 
-        if (args.length == 1 && args[0].equalsIgnoreCase("death")) {
+        if (args.length == 0 || (args.length == 1 && "tp".equalsIgnoreCase(args[0]))) {
+            if (!player.hasPermission("world16.back.tp")) {
+                api.sendPermissionErrorMessage(player);
+                return true;
+            }
+            UnlinkedWorldLocation tpLocation = playerBackMap.get(BackEnum.TELEPORT);
+            if (tpLocation == null) {
+                player.sendMessage(Translate.color("&4No tp back location was found..."));
+                return true;
+            }
+            if (!tpLocation.isWorldLoaded()) {
+                player.sendMessage(Translate.miniMessage("<red>World is not loaded..."));
+                return true;
+            }
+            player.teleportAsync(tpLocation);
+            player.sendMessage(Translate.miniMessage("<gold>Teleporting to your last location..."));
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("death")) {
             if (!player.hasPermission("world16.back.death")) {
                 api.sendPermissionErrorMessage(player);
                 return true;
@@ -67,26 +83,10 @@ public class BackCMD implements CommandExecutor {
                 return true;
             }
             player.teleportAsync(deathLocation);
-            player.sendMessage(Translate.color("&6Teleporting..."));
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("tp")) {
-            if (!player.hasPermission("world16.back.tp")) {
-                api.sendPermissionErrorMessage(player);
-                return true;
-            }
-            UnlinkedWorldLocation tpLocation = playerBackMap.get(BackEnum.TELEPORT);
-            if (tpLocation == null) {
-                player.sendMessage(Translate.color("&4No tp back location was found..."));
-                return true;
-            }
-            if (!tpLocation.isWorldLoaded()) {
-                player.sendMessage(Translate.miniMessage("<red>World is not loaded..."));
-                return true;
-            }
-            player.teleportAsync(tpLocation);
-            player.sendMessage(Translate.color("&6Teleporting..."));
+            player.sendMessage(Translate.miniMessage("<gold>Teleporting to your last death location..."));
         } else {
-            player.sendMessage(Translate.color("&6/back death"));
-            player.sendMessage(Translate.color("&6/back tp"));
+            player.sendMessage(Translate.miniMessage("<gold>/back death"));
+            player.sendMessage(Translate.miniMessage("<gold>/back tp"));
         }
         return true;
     }
