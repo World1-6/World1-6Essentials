@@ -66,7 +66,7 @@ public class BackCMD implements CommandExecutor {
                 return true;
             }
             player.teleportAsync(tpLocation);
-            player.sendMessage(Translate.miniMessage("<gold>Teleporting to your last location..."));
+            player.sendMessage(Translate.miniMessage("<gold>Teleporting..."));
         } else if (args.length == 1 && args[0].equalsIgnoreCase("death")) {
             if (!player.hasPermission("world16.back.death")) {
                 api.sendPermissionErrorMessage(player);
@@ -83,7 +83,7 @@ public class BackCMD implements CommandExecutor {
                 return true;
             }
             player.teleportAsync(deathLocation);
-            player.sendMessage(Translate.miniMessage("<gold>Teleporting to your last death location..."));
+            player.sendMessage(Translate.miniMessage("<gold>Teleporting..."));
         } else {
             player.sendMessage(Translate.miniMessage("<gold>/back death"));
             player.sendMessage(Translate.miniMessage("<gold>/back tp"));
