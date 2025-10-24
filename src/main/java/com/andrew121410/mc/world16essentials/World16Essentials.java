@@ -105,7 +105,6 @@ public class World16Essentials extends JavaPlugin {
             Bukkit.getServer().broadcast(Translate.colorc("&cWorld1-6Essentials was reloaded while this isn't recommend it is supported."));
         }
 
-        loadKeepSpawnLoadedStates();
         pluginLoadMessage();
         registerBStats(); // Register bStats last
         getServer().getConsoleSender().sendMessage(Translate.color("&9[&6World1-6Essentials&9] &2World1-6Essentials has been loaded."));
@@ -188,7 +187,6 @@ public class World16Essentials extends JavaPlugin {
         new PowerToolCMD(this);
         new RamCMD(this);
         new SaveInventoryCMD(this);
-        new KeepSpawnLoaded(this);
         new SignCMD(this);
         new SpawnMobCMD(this);
         new SudoCMD(this);
@@ -239,26 +237,6 @@ public class World16Essentials extends JavaPlugin {
         this.savedInventoriesManager = new SavedInventoriesManager(this);
 
         this.afkManager = new AfkManager(this);
-    }
-
-    private void loadKeepSpawnLoadedStates() {
-        //Should we keep spawn chunks in memory
-        ConfigurationSection worldsConfigurationSection = this.customConfigManager.getShitYml().getConfig().getConfigurationSection("Worlds");
-        if (worldsConfigurationSection != null) {
-            for (String worldString : worldsConfigurationSection.getKeys(false)) {
-                ConfigurationSection worldConfigurationSection = worldsConfigurationSection.getConfigurationSection(worldString);
-                if (worldConfigurationSection == null) continue;
-                World world = this.getServer().getWorld(worldString);
-                String shouldWeKeepSpawnChunksInMemory = (String) worldConfigurationSection.get("ShouldKeepSpawnInMemory");
-                if (shouldWeKeepSpawnChunksInMemory != null && world != null) {
-                    if (shouldWeKeepSpawnChunksInMemory.equalsIgnoreCase("true")) {
-                        world.setKeepSpawnInMemory(true);
-                    } else if (shouldWeKeepSpawnChunksInMemory.equalsIgnoreCase("false")) {
-                        world.setKeepSpawnInMemory(false);
-                    }
-                }
-            }
-        }
     }
 
     private void registerBStats() {

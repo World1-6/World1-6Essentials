@@ -146,8 +146,6 @@ commands:
     permission: world16.renderinfo
   saveinventory:
     permission: world16.saveinventory
-  keepspawnloaded:
-    permission: world16.keepspawnloaded
   offlinelocation:
     permission: world16.offlinelocation
   sign:
@@ -338,9 +336,6 @@ permissions:
     default: op
   world16.saveinventory:
     description: Allows you to use saveinventory cmd
-    default: op
-  world16.keepspawnloaded:
-    description: Allows you to use keepspawnloaded cmd
     default: op
   world16.offlinelocation:
     description: Allows you to use offlinelocation cmd
