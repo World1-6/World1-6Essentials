@@ -2,7 +2,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 plugins {
-    id("com.gradleup.shadow") version "9.2.2" // https://github.com/GradleUp/shadow
+    id("com.gradleup.shadow") version "9.3.0" // https://github.com/GradleUp/shadow
     id("net.kyori.blossom") version "2.2.0" // https://github.com/KyoriPowered/blossom
     `java-library`
     `maven-publish`
