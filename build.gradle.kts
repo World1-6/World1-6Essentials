@@ -2,7 +2,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 plugins {
-    id("com.gradleup.shadow") version "9.3.0" // https://github.com/GradleUp/shadow
+    id("com.gradleup.shadow") version "9.3.1" // https://github.com/GradleUp/shadow
     id("net.kyori.blossom") version "2.2.0" // https://github.com/KyoriPowered/blossom
     `java-library`
     `maven-publish`
@@ -12,8 +12,8 @@ group = "com.andrew121410.mc"
 version = "1.0"
 description = "World1-6Essentials"
 
-java.sourceCompatibility = JavaVersion.VERSION_21
-java.targetCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_25
+java.targetCompatibility = JavaVersion.VERSION_25
 
 tasks {
     build {
@@ -27,7 +27,7 @@ tasks {
 
     compileJava {
         options.encoding = "UTF-8"
-        options.release.set(21)
+        options.release.set(25)
     }
 
     shadowJar {
@@ -81,7 +81,7 @@ repositories {
 
 dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
-    compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:6e15f5f6cd")
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:6e15f5f6cd")
     compileOnly("net.essentialsx:EssentialsX:2.22.0-SNAPSHOT") {
