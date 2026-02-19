@@ -82,8 +82,8 @@ repositories {
 dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:6e15f5f6cd")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:6e15f5f6cd")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:cbfa5ab713")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:cbfa5ab713")
     compileOnly("net.essentialsx:EssentialsX:2.22.0-SNAPSHOT") {
         exclude(group = "org.spigotmc", module = "spigot-api")
     }
