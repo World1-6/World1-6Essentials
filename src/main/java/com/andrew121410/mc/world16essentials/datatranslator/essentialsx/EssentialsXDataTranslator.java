@@ -24,7 +24,7 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// As of 7/13/2023 this still works. Tested on EssentialsX 2.20.1-dev+29-6012959
+// As of 3/26/2026 this still works. Tested on 2.22.0-dev+75-8e3b24f
 public class EssentialsXDataTranslator implements IDataTranslator {
 
     private final World16Essentials plugin;
@@ -52,9 +52,17 @@ public class EssentialsXDataTranslator implements IDataTranslator {
     }
 
     private void homesFrom() {
-        if (hasEssentialsConfigFolder() == null) return;
+        if (hasEssentialsConfigFolder() == null) {
+            plugin.getLogger().info("EssentialsX config folder not found, skipping homes data translation (EssentialsX -> World1-6Essentials)");
+            return;
+        }
 
         List<File> userDataFiles = getAllUserDataYmlFiles();
+        if (userDataFiles == null || userDataFiles.isEmpty()) {
+            plugin.getLogger().info("No user data files found, skipping homes data translation (EssentialsX -> World1-6Essentials)");
+            return;
+        }
+
         for (File userDataFile : userDataFiles) {
             String stringUUID = userDataFile.getName().replace(".yml", "");
             UUID uuid = UUID.fromString(stringUUID);
@@ -65,19 +73,24 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 // User has no homes
                 continue;
             }
+
+            // Get all homes from config
+            Map<String, UnlinkedWorldLocation> homes = new HashMap<>();
             for (String homeName : homesSelection.getKeys(false)) {
                 ConfigurationSection homeSelection = homesSelection.getConfigurationSection(homeName);
                 UUID worldUUID = UUID.fromString(homeSelection.getString("world"));
+                String worldName = homeSelection.getString("world-name");
                 double x = homeSelection.getDouble("x");
                 double y = homeSelection.getDouble("y");
                 double z = homeSelection.getDouble("z");
                 float yaw = (float) homeSelection.getDouble("yaw");
                 float pitch = (float) homeSelection.getDouble("pitch");
-                Location location = new Location(Bukkit.getWorld(worldUUID), x, y, z, yaw, pitch);
 
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-                this.plugin.getHomeManager().add(offlinePlayer, homeName, new UnlinkedWorldLocation(location));
+                homes.put(homeName, new UnlinkedWorldLocation(worldUUID, worldName, x, y, z, yaw, pitch));
             }
+
+            // Save in bulk
+            this.plugin.getHomeManager().saveBulk(uuid, homes);
         }
     }
 
@@ -164,13 +177,14 @@ public class EssentialsXDataTranslator implements IDataTranslator {
             if (useSerializationProvider && serializationProvider == null) {
                 useSerializationProvider = false;
             }
-            for (ItemStack is : regularItems) {
+            for (int i = 0; i < regularItems.length; i++) {
+                final ItemStack is = regularItems[i];
                 if (is != null && is.getType() != null && is.getType() != Material.AIR) {
                     final String serialized;
                     if (useSerializationProvider) {
-                        serialized = "@" + Base64Coder.encodeLines(serializationProvider.serializeItem(is));
+                        serialized = "slot:" + i + " @" + Base64Coder.encodeLines(serializationProvider.serializeItem(is));
                     } else {
-                        serialized = essentials.getItemDb().serialize(is);
+                        serialized = "slot:" + i + " " + essentials.getItemDb().serialize(is);
                     }
                     data.add(serialized);
                 }
