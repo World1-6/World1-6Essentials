@@ -2,8 +2,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 plugins {
-    id("com.gradleup.shadow") version "9.3.1" // https://github.com/GradleUp/shadow
+    id("com.gradleup.shadow") version "9.4.0" // https://github.com/GradleUp/shadow
     id("net.kyori.blossom") version "2.2.0" // https://github.com/KyoriPowered/blossom
+    id("xyz.jpenilla.run-paper") version "3.0.2" // https://github.com/jpenilla/run-task
     `java-library`
     `maven-publish`
 }
@@ -41,6 +42,15 @@ tasks {
 //        archiveVersion.set("")
 
         relocate("org.bstats", "com.andrew121410.mc.world16essentials.bstats")
+    }
+
+    runServer {
+        minecraftVersion("1.21.11")
+
+        // Automatically download and install these plugins on the test server
+        downloadPlugins {
+            url("https://github.com/World1-6/World1-6Utils/releases/download/latest/World1-6Utils.jar")
+        }
     }
 }
 
@@ -83,11 +93,13 @@ dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:cbfa5ab713")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils_CMI_API:cbfa5ab713")
+    compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
+    // Needed for data translator
+    compileOnly("com.github.Zrips:CMILib:e4fc1e4e5c")
+    compileOnly("com.github.Zrips:CMI-API:9a2c899c3d")
     compileOnly("net.essentialsx:EssentialsX:2.22.0-SNAPSHOT") {
         exclude(group = "org.spigotmc", module = "spigot-api")
     }
-    compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
 }
 
 publishing {
