@@ -17,6 +17,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -30,7 +31,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,11 +91,9 @@ public class SignCMD implements CommandExecutor {
                 return true;
             }
 
-            Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
-            BlockState state = block.getState();
-
-            if (!(state instanceof Sign sign)) {
-                player.sendMessage(Translate.colorc("&4Please look at a sign."));
+            Sign sign = getSignLookingAt(player);
+            if (sign == null) {
+                // A message is sent in getSignLookingAt if the block isn't a sign or if they aren't looking at a block, so we don't need to send another message here.
                 return true;
             }
 
@@ -111,15 +109,12 @@ public class SignCMD implements CommandExecutor {
                 return true;
             }
 
-            Block block = PlayerUtils.getBlockPlayerIsLookingAt(player);
-            BlockState state = block.getState();
-
-            if (!(state instanceof Sign sign)) {
-                player.sendMessage(Translate.colorc("&4Please look at a sign."));
+            Sign sign = getSignLookingAt(player);
+            if (sign == null) {
+                // A message is sent in getSignLookingAt if the block isn't a sign or if they aren't looking at a block, so we don't need to send another message here.
                 return true;
             }
 
-            @NotNull
             Side side = sign.getInteractableSideFor(player);
             player.openSign(sign, side);
             return true;
@@ -137,7 +132,8 @@ public class SignCMD implements CommandExecutor {
             public void onCreate(Player player) {
                 List<AbstractGUIButton> guiButtons = new ArrayList<>();
 
-                SignSide signSide = sign.getTargetSide(player);
+                Side whatSide = sign.getInteractableSideFor(player);
+                SignSide signSide = sign.getSide(whatSide);
 
                 for (int i = 0; i < signSide.lines().size(); i++) {
                     int finalI = i;
@@ -158,8 +154,16 @@ public class SignCMD implements CommandExecutor {
 
                             // Way to revert changes
                             player1.sendMessage(Translate.miniMessage("<yellow>Click me to revert change").clickEvent(chatClickCallbackManager.create(player, (player2 -> {
-                                signSide.line(finalI, signLineComponent);
-                                sign.update();
+                                // We have to obtain the Sign & SignSide again
+                                Sign newSign = getSign(player2, sign.getLocation());
+                                if (newSign == null) {
+                                    player2.sendMessage(Translate.miniMessage("<red>Something went wrong trying to revert line"));
+                                    return;
+                                }
+                                SignSide newSide = getSignSide(player2, newSign, whatSide);
+
+                                newSide.line(finalI, signLineComponent);
+                                newSign.update();
                                 player2.sendMessage(Translate.miniMessage("<green>Line " + (finalI + 1) + " has been reverted."));
                             }))));
                         });
@@ -190,5 +194,42 @@ public class SignCMD implements CommandExecutor {
         };
 
         guiWindow.open(player);
+    }
+
+    private Sign getSignLookingAt(Player player) {
+        Location location = PlayerUtils.getBlockPlayerIsLookingAt(player).getLocation();
+        return getSign(player, location);
+    }
+
+    private Sign getSign(Player player, Location signLocation) {
+        Block newSignBlock = signLocation.getWorld().getBlockAt(signLocation);
+        BlockState newSignState = newSignBlock.getState();
+        if (!(newSignState instanceof Sign newSign)) {
+            player.sendMessage(Translate.miniMessage("<red>That block is not a sign. Please look at a sign."));
+            return null;
+        }
+
+        return newSign;
+    }
+
+    private SignSide getSignSide(Player player, Sign sign, Side whatSide) {
+        if (sign == null) {
+            // If sign is null get from eye
+            sign = getSign(player, PlayerUtils.getBlockPlayerIsLookingAt(player).getLocation());
+        }
+
+        if (sign == null) {
+            player.sendMessage(Translate.miniMessage("<yellow>Please look at a sign."));
+            return null;
+        }
+
+        SignSide signSide;
+        if (whatSide == null) {
+            signSide = sign.getTargetSide(player);
+        } else {
+            signSide = sign.getSide(whatSide);
+        }
+
+        return signSide;
     }
 }
