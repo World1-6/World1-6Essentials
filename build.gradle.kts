@@ -95,7 +95,7 @@ dependencies {
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:4af59d94be")
     compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
     // Needed for data translator
-    compileOnly("com.github.Zrips:CMILib:e4fc1e4e5c")
+    compileOnly("com.github.Zrips:CMILib:1.5.8.1")
     compileOnly("com.github.Zrips:CMI-API:9a2c899c3d")
     compileOnly("net.essentialsx:EssentialsX:2.22.0-SNAPSHOT") {
         exclude(group = "org.spigotmc", module = "spigot-api")
