@@ -90,7 +90,7 @@ repositories {
 }
 
 dependencies {
-    api("org.bstats:bstats-bukkit:3.0.2")
+    api("org.bstats:bstats-bukkit:3.2.1")
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:4af59d94be")
     compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
