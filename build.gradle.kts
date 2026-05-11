@@ -56,12 +56,13 @@ tasks {
 
 repositories {
     mavenLocal()
-    maven {
-        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    }
 
     maven {
         url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
+
+    maven {
+        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     }
 
     maven {
@@ -91,12 +92,12 @@ repositories {
 
 dependencies {
     api("org.bstats:bstats-bukkit:3.2.1")
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:26.1.2.build.64-stable")
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:4af59d94be")
     compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
     // Needed for data translator
-    compileOnly("com.github.Zrips:CMILib:e4fc1e4e5c")
-    compileOnly("com.github.Zrips:CMI-API:9a2c899c3d")
+    compileOnly("com.github.Zrips:CMILib:1705790e4d")
+    compileOnly("com.github.Zrips:CMI-API:de669b2518")
     compileOnly("net.essentialsx:EssentialsX:2.22.0-SNAPSHOT") {
         exclude(group = "org.spigotmc", module = "spigot-api")
     }
