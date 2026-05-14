@@ -97,11 +97,9 @@ public class SignCMD implements CommandExecutor {
                 return true;
             }
 
-            if (args.length == 2 && args[1].equalsIgnoreCase("@minimessage")) {
-                editGUI(player, sign, false);
-            } else {
-                editGUI(player, sign, true);
-            }
+            // Use regular color codes (&) unless the player explicitly specified @minimessage
+            boolean isRegular = !(args.length == 2 && args[1].equalsIgnoreCase("@minimessage"));
+            editGUI(player, sign, isRegular);
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("edit-legacy")) {
             if (!player.hasPermission("world16.sign.edit")) {
@@ -157,10 +155,14 @@ public class SignCMD implements CommandExecutor {
                                 // We have to obtain the Sign & SignSide again
                                 Sign newSign = getSign(player2, sign.getLocation());
                                 if (newSign == null) {
-                                    player2.sendMessage(Translate.miniMessage("<red>Something went wrong trying to revert line"));
+                                    player2.sendMessage(Translate.miniMessage("<red>(newSign was null) Something went wrong trying to revert change!"));
                                     return;
                                 }
                                 SignSide newSide = getSignSide(player2, newSign, whatSide);
+                                if (newSide == null) {
+                                    player2.sendMessage(Translate.miniMessage("<red>(newSide was null) Something went wrong trying to revert change!"));
+                                    return;
+                                }
 
                                 newSide.line(finalI, signLineComponent);
                                 newSign.update();
@@ -215,7 +217,7 @@ public class SignCMD implements CommandExecutor {
     private SignSide getSignSide(Player player, Sign sign, Side whatSide) {
         if (sign == null) {
             // If sign is null get from eye
-            sign = getSign(player, PlayerUtils.getBlockPlayerIsLookingAt(player).getLocation());
+            sign = getSignLookingAt(player);
         }
 
         if (sign == null) {
