@@ -18,7 +18,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.File;
 import java.util.*;
@@ -182,7 +181,9 @@ public class EssentialsXDataTranslator implements IDataTranslator {
                 if (is != null && is.getType() != null && is.getType() != Material.AIR) {
                     final String serialized;
                     if (useSerializationProvider) {
-                        serialized = "slot:" + i + " @" + Base64Coder.encodeLines(serializationProvider.serializeItem(is));
+                        // Using java.util.Base64 MIME encoder (76-char line wrapping) to replace
+                        // Base64Coder.encodeLines() which was removed from SnakeYAML in 2.3
+                        serialized = "slot:" + i + " @" + Base64.getMimeEncoder().encodeToString(serializationProvider.serializeItem(is));
                     } else {
                         serialized = "slot:" + i + " " + essentials.getItemDb().serialize(is);
                     }

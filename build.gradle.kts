@@ -45,7 +45,7 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("1.21.11")
+        minecraftVersion("26.1.2")
 
         // Automatically download and install these plugins on the test server
         downloadPlugins {
@@ -92,7 +92,7 @@ repositories {
 
 dependencies {
     api("org.bstats:bstats-bukkit:3.2.1")
-    compileOnly("io.papermc.paper:paper-api:26.1.2.build.64-stable")
+    compileOnly("io.papermc.paper:paper-api:26.1.2.build.63-stable")
     compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:4af59d94be")
     compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
     // Needed for data translator
