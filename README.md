@@ -6,6 +6,7 @@ This is an essentials plugin that I've made for a Private Minecraft Server calle
 - 1.21.10 (latest release)
 - 1.21.11 (latest release)
 - 26.1.2 (latest release)
+- 26.2 (latest release)
 
 I only support the latest and greatest version of Minecraft. I will not support older versions of Minecraft.
 Except for 1.12.2; occasionally I will update that version.
