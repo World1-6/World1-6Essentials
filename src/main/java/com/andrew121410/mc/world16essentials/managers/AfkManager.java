@@ -4,6 +4,7 @@ import com.andrew121410.mc.world16essentials.World16Essentials;
 import com.andrew121410.mc.world16essentials.objects.AfkObject;
 import com.andrew121410.mc.world16essentials.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -42,11 +43,11 @@ public class AfkManager {
                     Player player = plugin.getServer().getPlayer(uuid);
                     if (player == null || !player.isOnline()) {
                         iterator.remove();
-                        return;
+                        continue;
                     }
 
                     // Don't run if player is already AFK
-                    if (afkObject.isAfk()) return;
+                    if (afkObject.isAfk()) continue;
 
                     // Checks if the player has not moved in 3 min if not afk them if so restart()
                     if (player.getLocation().equals(afkObject.getLocation()) && !api.didPlayerJustJoin(player)) {
@@ -70,18 +71,30 @@ public class AfkManager {
                     Player player = plugin.getServer().getPlayer(uuid);
                     if (player == null || !player.isOnline()) {
                         iterator.remove();
-                        return;
+                        continue;
                     }
 
                     // If not afk don't run
-                    if (!afkObject.isAfk()) return;
+                    if (!afkObject.isAfk()) continue;
 
                     if (afkObject.isIgnore()) {
                         player.sendActionBar(Translate.miniMessage("<aqua>You are AFK, but it won't be announced."));
                     }
 
+                    Location playerLocation = player.getLocation();
+                    Location afkLocation = afkObject.getLocation();
+                    if (afkLocation == null || playerLocation.getWorld() == null || afkLocation.getWorld() == null) {
+                        afkObject.restart(player);
+                        continue;
+                    }
+                    // If the player is in a different world, they are no longer AFK
+                    if (!playerLocation.getWorld().equals(afkLocation.getWorld())) {
+                        api.doAfk(player, null, !afkObject.isIgnore());
+                        continue;
+                    }
+
                     // Only if the player moves more than 3 blocks
-                    if (player.getLocation().distanceSquared(afkObject.getLocation()) > 9) {
+                    if (playerLocation.distanceSquared(afkLocation) > 9) {
                         api.doAfk(player, null, !afkObject.isIgnore());
                     }
                 }
