@@ -97,7 +97,7 @@ dependencies {
     compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
     // Needed for data translator
     compileOnly("com.github.Zrips:CMILib:1705790e4d")
-    compileOnly("com.github.Zrips:CMI-API:de669b2518")
+    compileOnly("com.github.Zrips:CMI-API:9.8.6.4")
     compileOnly("net.essentialsx:EssentialsX:2.22.0-SNAPSHOT") {
         exclude(group = "org.spigotmc", module = "spigot-api")
     }
